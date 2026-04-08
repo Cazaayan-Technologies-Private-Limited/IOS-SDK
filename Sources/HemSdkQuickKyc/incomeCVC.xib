@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="incomeCVC" id="gTV-IL-0wX" customClass="incomeCVC" customModule="HemSdkQuickKyc">
+            <rect key="frame" x="0.0" y="0.0" width="226" height="136"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="226" height="136"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="82b-CV-TKu">
+                        <rect key="frame" x="2" y="2" width="222" height="132"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mSt-Hy-Z86">
+                                <rect key="frame" x="0.0" y="10" width="212" height="122"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yss-Xo-DlE">
+                                <rect key="frame" x="202" y="0.0" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="aYZ-AI-LwH"/>
+                                    <constraint firstAttribute="height" constant="20" id="kI8-vJ-Fmy"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="multiply.circle.fill" catalog="system" symbolScale="large"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="50y-ZZ-0rw"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Yss-Xo-DlE" firstAttribute="top" secondItem="82b-CV-TKu" secondAttribute="top" id="6Ve-gJ-wiL"/>
+                            <constraint firstItem="mSt-Hy-Z86" firstAttribute="top" secondItem="82b-CV-TKu" secondAttribute="top" constant="10" id="C8z-WG-MNN"/>
+                            <constraint firstItem="mSt-Hy-Z86" firstAttribute="leading" secondItem="82b-CV-TKu" secondAttribute="leading" id="Jlb-Ov-M3Y"/>
+                            <constraint firstAttribute="trailing" secondItem="Yss-Xo-DlE" secondAttribute="trailing" id="VI4-jH-Jcr"/>
+                            <constraint firstAttribute="bottom" secondItem="mSt-Hy-Z86" secondAttribute="bottom" id="tq5-Bq-Qb6"/>
+                            <constraint firstAttribute="trailing" secondItem="mSt-Hy-Z86" secondAttribute="trailing" constant="10" id="w69-b8-rHe"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="82b-CV-TKu" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="2" id="G5w-wQ-2tJ"/>
+                <constraint firstAttribute="bottom" secondItem="82b-CV-TKu" secondAttribute="bottom" constant="2" id="JBD-8P-JgU"/>
+                <constraint firstItem="82b-CV-TKu" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="2" id="Wl9-9A-7jY"/>
+                <constraint firstAttribute="trailing" secondItem="82b-CV-TKu" secondAttribute="trailing" constant="2" id="c7U-nY-zj2"/>
+            </constraints>
+            <size key="customSize" width="226" height="136"/>
+            <connections>
+                <outlet property="deleteButton" destination="Yss-Xo-DlE" id="7gV-J4-M8a"/>
+                <outlet property="imageview" destination="mSt-Hy-Z86" id="g2j-E8-G4v"/>
+            </connections>
+            <point key="canvasLocation" x="268.1159420289855" y="132.58928571428572"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="multiply.circle.fill" catalog="system" width="128" height="123"/>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

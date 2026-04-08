@@ -1,0 +1,42 @@
+{
+  "originHash" : "43ada33c6492a5ec72adec984acc082987f0e53512806ac617cc2d8b303ea0a7",
+  "pins" : [
+    {
+      "identity" : "charts",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielgindi/Charts.git",
+      "state" : {
+        "revision" : "dd9c72e3d7e751e769971092a6bd72d39198ae63",
+        "version" : "5.1.0"
+      }
+    },
+    {
+      "identity" : "iqkeyboardmanager",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hackiftekhar/IQKeyboardManager.git",
+      "state" : {
+        "revision" : "c00b1ae9fa1ad8af4465bb6ca901f6943fc98eba",
+        "version" : "6.5.16"
+      }
+    },
+    {
+      "identity" : "swiftsignatureview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/alankarmisra/SwiftSignatureView.git",
+      "state" : {
+        "revision" : "04ce145272c47d9b87657af3cc3d12bd26de6745",
+        "version" : "3.2.1"
+      }
+    },
+    {
+      "identity" : "tocropviewcontroller",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/TimOliver/TOCropViewController.git",
+      "state" : {
+        "revision" : "d4a6d8100f4b886fdbc8ae399bf144ff3e9afb7e",
+        "version" : "2.8.0"
+      }
+    }
+  ],
+  "version" : 3
+}
