@@ -234,14 +234,14 @@
                                             <constraint firstAttribute="height" constant="40" id="njj-8J-Ogj"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Equity PDF" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpt-KJ-6v8">
-                                        <rect key="frame" x="70" y="15" width="83.666666666666686" height="20.333333333333329"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Aof PDF" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpt-KJ-6v8">
+                                        <rect key="frame" x="70" y="15" width="62" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(E-Signed)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="drG-KM-5gf">
-                                        <rect key="frame" x="163.66666666666666" y="15" width="74.333333333333343" height="18"/>
+                                        <rect key="frame" x="142" y="15" width="74.333333333333314" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" systemColor="systemGreenColor"/>
                                         <nil key="highlightedColor"/>
@@ -261,6 +261,9 @@
                                         <state key="normal" title="View" image="chevron.right" catalog="system">
                                             <color key="titleColor" red="0.0" green="0.50588235290000005" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="aofView:" destination="6rp-4T-yOF" eventType="touchUpInside" id="ix7-O7-qxH"/>
+                                        </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qe9-gC-hkL">
                                         <rect key="frame" x="163" y="75" width="180" height="20"/>
@@ -272,9 +275,6 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="View"/>
-                                                <connections>
-                                                    <action selector="aofView:" destination="6rp-4T-yOF" eventType="touchUpInside" id="dYN-f3-7ZY"/>
-                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B3H-Lm-O5w">
                                                 <rect key="frame" x="80" y="0.0" width="100" height="20"/>
@@ -372,6 +372,9 @@
                                         <state key="normal" title="View" image="chevron.right" catalog="system">
                                             <color key="titleColor" red="0.0" green="0.50588235290000005" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="ddpiView:" destination="6rp-4T-yOF" eventType="touchUpInside" id="kQB-5S-Cwu"/>
+                                        </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X6C-Ok-a38">
                                         <rect key="frame" x="163" y="75" width="180" height="20"/>
@@ -383,9 +386,6 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="View"/>
-                                                <connections>
-                                                    <action selector="ddpiView:" destination="6rp-4T-yOF" eventType="touchUpInside" id="Zeo-Kk-LbZ"/>
-                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GnT-cV-UQO">
                                                 <rect key="frame" x="80" y="0.0" width="100" height="20"/>
@@ -471,14 +471,14 @@
                                             <constraint firstAttribute="height" constant="40" id="i6q-lK-mDF"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Equity PDF" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QCN-Bm-HGf">
-                                        <rect key="frame" x="70" y="15" width="83.666666666666686" height="20.333333333333329"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Ekra PDF" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QCN-Bm-HGf">
+                                        <rect key="frame" x="70" y="15" width="69.666666666666686" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(E-Signed)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xu7-C9-8b8">
-                                        <rect key="frame" x="163.66666666666666" y="15" width="74.333333333333343" height="18"/>
+                                        <rect key="frame" x="149.66666666666666" y="15" width="74.333333333333343" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" systemColor="systemGreenColor"/>
                                         <nil key="highlightedColor"/>
@@ -498,6 +498,9 @@
                                         <state key="normal" title="View" image="chevron.right" catalog="system">
                                             <color key="titleColor" red="0.0" green="0.50588235290000005" blue="0.78039215689999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="ekraView:" destination="6rp-4T-yOF" eventType="touchUpInside" id="cdC-MS-IXq"/>
+                                        </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uCY-0j-XwL">
                                         <rect key="frame" x="163" y="75" width="180" height="20"/>
@@ -509,9 +512,6 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="View"/>
-                                                <connections>
-                                                    <action selector="ekraView:" destination="6rp-4T-yOF" eventType="touchUpInside" id="owR-eT-sVd"/>
-                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k1N-Uq-Cxf">
                                                 <rect key="frame" x="80" y="0.0" width="100" height="20"/>
@@ -592,8 +592,14 @@
                     </view>
                     <connections>
                         <outlet property="aofBtn" destination="B3H-Lm-O5w" id="4Rt-gl-4pW"/>
+                        <outlet property="aofStack" destination="Qe9-gC-hkL" id="YZt-FI-OHA"/>
+                        <outlet property="aofViewBtn" destination="CbJ-Jb-m7c" id="sov-7c-Hlo"/>
                         <outlet property="ddpiBtn" destination="GnT-cV-UQO" id="MMO-dn-LUU"/>
+                        <outlet property="ddpiStack" destination="X6C-Ok-a38" id="qIr-qm-1wC"/>
+                        <outlet property="ddpiViewBtn" destination="6Vd-mk-DHO" id="I4y-Jq-lXB"/>
                         <outlet property="ekraBtn" destination="k1N-Uq-Cxf" id="tSf-E1-BMq"/>
+                        <outlet property="ekraStack" destination="uCY-0j-XwL" id="PJy-r3-Oa1"/>
+                        <outlet property="ekraViewBtn" destination="Aiw-r3-s8t" id="kAG-Zt-55g"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k7z-4w-Yvc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

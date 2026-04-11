@@ -48,6 +48,9 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
     var MD5ByteArray = [UInt8]()
     var OTP : String = ""
     var enteredOTP: String?
+    var txnId: String?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let iphone = UIImage(systemName: "ellipsis.rectangle.fill") {

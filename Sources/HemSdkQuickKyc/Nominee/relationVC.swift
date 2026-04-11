@@ -126,7 +126,7 @@ extension relationVC:UITableViewDelegate,UITableViewDataSource{
         cell.relationLbl.text = relation["Relation"] as? String
         return cell
     }
-    
+ 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedRelation = relations[indexPath.row]
         if let relationType = selectedRelation["Relation"] as? String,

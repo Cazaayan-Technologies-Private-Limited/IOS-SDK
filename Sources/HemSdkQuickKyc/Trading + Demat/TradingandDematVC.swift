@@ -1316,9 +1316,10 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
            // self.insertWeb()
             ViewDPScheme()
             brokeragePlan()
-            equity.isSelected = true
             viewTradingDetails()
+            ValidateToken()
         }
+        equity.isSelected = true
         
         dematYesBtn.setImage(UIImage(systemName: "circle"), for: .normal)
         dematNoBtn.setImage(UIImage(systemName: "circle"), for: .normal)
@@ -1350,6 +1351,10 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
         depositoriesLabel.isHidden = true
         //dematYesBtn(dematYesBtn)
         updateDematSelection(isNew: true)
+        
+        proceedBtn.backgroundColor = .appPrimary
+        dematYesBtn.tintColor = .appPrimary
+        dematNoBtn.tintColor = .appPrimary
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(openDepository))
         depositoryButton.addGestureRecognizer(tap)

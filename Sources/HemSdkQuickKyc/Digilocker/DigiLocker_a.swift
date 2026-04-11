@@ -770,10 +770,15 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
     
     func didDismissDigiLockerVC() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            guard let pan = self.panNo, !pan.isEmpty else {
+                     print("❌ PAN missing, not navigating")
+                     return
+                 }
+            
                 if self.identifier3 == "DigiLockerA" {
                     let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
                     let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-                    vc.panNo = self.panNo
+                    vc.panNo = pan
                     vc.regId = self.RegId
                     
                     self.navigationController?.pushViewController(vc, animated: true)

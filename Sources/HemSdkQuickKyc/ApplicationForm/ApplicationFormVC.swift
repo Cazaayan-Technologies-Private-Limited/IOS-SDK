@@ -55,6 +55,7 @@ class ApplicationFormVC: UIViewController {
     var networth: String?
     var networthDate: String?
     private var steps: [StepItem] = []
+    var isDataLoaded = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +67,8 @@ class ApplicationFormVC: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .appBackground
     }
+    
+    
     
     private func reloadSteps(_ steps: [StepItem]) {
         self.steps = steps
@@ -95,12 +98,24 @@ class ApplicationFormVC: UIViewController {
 //        }
 
        //  ✅ Approved OR Rejected → allow navigation
+        
+        guard isDataLoaded else {
+             showAlert("Please wait, loading data...")
+             return
+         }
+        
        navigateToStep(step)
     }
     
     private func navigateToStep(_ step: StepItem) {
         
-        let vc: UIViewController
+        guard let pan = panNo, !pan.isEmpty,
+               let reg = regId, !reg.isEmpty else {
+             showAlert("PAN or RegId missing. Please wait.")
+             return
+         }
+
+         let vc: UIViewController
         
         switch step.title {
         case "Basic":
@@ -410,6 +425,7 @@ extension ApplicationFormVC {
                 self.fetchedSessionID = sessionID
                 self.decodeArray = decodeByteArrayString
                 print("UserID: \(userId), SessionID: \(sessionID)")
+               
             } else {
                 print("No UserID or SessionID found.")
             }
@@ -482,6 +498,7 @@ extension ApplicationFormVC {
                                 self.regId = jsonResponse["RegId"] as? String
                                 self.PANName = jsonResponse["PANName"] as? String
                                 self.nameLabel.text = jsonResponse["PANName"] as? String ?? "-"
+                                self.isDataLoaded = true 
                                 
                                 let steps: [StepItem] = [
                                     StepItem(title: "Basic", index: 1,

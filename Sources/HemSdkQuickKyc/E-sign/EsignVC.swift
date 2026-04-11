@@ -32,6 +32,12 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     @IBOutlet weak var ekraBtn: UIButton!
     @IBOutlet weak var aofBtn: UIButton!
     @IBOutlet weak var ddpiBtn: UIButton!
+    @IBOutlet weak var ekraViewBtn: UIButton!
+    @IBOutlet weak var aofViewBtn: UIButton!
+    @IBOutlet weak var ddpiViewBtn: UIButton!
+    @IBOutlet weak var ekraStack: UIStackView!
+    @IBOutlet weak var ddpiStack: UIStackView!
+    @IBOutlet weak var aofStack: UIStackView!
     
     var fetchedUserId: String?
     var fetchedSessionID: String?
@@ -64,6 +70,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     var esignType: String?
     var currentEsignSegment: String?
     public var onStartEsign: (() -> Void)?
+    public var onSDKClose: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -160,11 +167,20 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     }
     
     private func handleSegmentBasedOnSignValue(segmentName: String, signKey: String) {
+//        let signValue = getSignValue(forKey: signKey)
+//        
+//        if signValue == "0" {
+//            // If eSign value is 0, present the terms screen
+//            presentTermsScreen(segmentName: segmentName, signKey: signKey)
+//        } else {
+//            // Otherwise, directly handle the segment
+//            handleSegmentTap(segmentName: segmentName, signKey: signKey)
+//        }
         let signValue = getSignValue(forKey: signKey)
         
         if signValue == "0" {
             // If eSign value is 0, present the terms screen
-            presentTermsScreen(segmentName: segmentName, signKey: signKey)
+            NSDLEsign(segmentName: segmentName, signKey: signKey)
         } else {
             // Otherwise, directly handle the segment
             handleSegmentTap(segmentName: segmentName, signKey: signKey)
@@ -258,10 +274,23 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         self.navigationController?.popViewController(animated: true)
     }
     
+//    @IBAction func ekraView(_ sender: UIButton) {
+//        openPDF(segmentName: "EKRA")
+//    }
+//
+//    @IBAction func aofView(_ sender: UIButton) {
+//        openPDF(segmentName: "E")
+//    }
+    
+//    @IBAction func ddpiView(_ sender: UIButton) {
+//        openPDF(segmentName: "DDPI")
+//    }
+    
+    
     @IBAction func ekraView(_ sender: UIButton) {
         openPDF(segmentName: "EKRA")
     }
-
+    
     @IBAction func aofView(_ sender: UIButton) {
         openPDF(segmentName: "E")
     }
@@ -269,42 +298,6 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     @IBAction func ddpiView(_ sender: UIButton) {
         openPDF(segmentName: "DDPI")
     }
-    
-//    func openPDF(segmentName: String) {
-//        
-//        guard let regId = RegId,
-//              let userId = fetchedUserId,
-//              let panNo = PanNo,
-//              let dynamicID = getDynamicID(forSegment: segmentName) else {
-//            print("Missing parameters")
-//            return
-//        }
-//
-//        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [weak self] tokenId in
-//            guard let self = self else { return }
-//            
-//            guard let tokenId = tokenId else {
-//                CoreDataHelper.generateToken(
-//                    decodeByteArrayToString: self.decodeArray ?? "",
-//                    USERID: self.fetchedUserId ?? "",
-//                    SessionId: self.fetchedSessionID ?? "",
-//                    entityName: "TokenMobile",
-//                    deviceType: "W",
-//                    in: self.view
-//                ) { success in
-//                    if success {
-//                        self.openPDF(segmentName: segmentName)
-//                    }
-//                }
-//                return
-//            }
-//
-//            let baseUrl = "https://signup.hemnxt.com:84/V4.0.0/api/MultiPartImageUpload/PDFDownload"
-//            let urlString = "\(baseUrl)?id=\(dynamicID)&RegId=\(regId)&UserId=\(userId)&PanNo=\(panNo)&PDFSegment=\(segmentName)&TokenId=\(tokenId)"
-//
-//            self.openURLInSystemBrowser(urlString: urlString)
-//        }
-//    }
     
     func openPDF(segmentName: String) {
         
@@ -686,6 +679,65 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                     if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000000" {
                         if let pdfList = jsonResponse["PDFForEsignList"] as? [[String: Any]] {
                             self.pdfDataList = pdfList
+                            
+                            //////////////******************static ddpi = 1**//////////////////
+//                            for item in pdfList {
+//                                
+//                                let segment = item["PDFSegment"] as? String
+//
+//                                   // 👇 Force DDPI as signed
+//                                   let isSigned: Int
+//
+//                                   if segment == "DDPI" {
+//                                       isSigned = 1   // ✅ STATIC VALUE
+//                                   } else {
+//                                       isSigned = item["IsPDFSign"] as? Int ??
+//                                                  Int(item["IsPDFSign"] as? String ?? "0") ?? 0
+//                                   }
+//
+//                                   if segment == "DDPI" && isSigned == 1 {
+//                                       print("✅ DDPI Forced Signed → Closing SDK")
+//
+//                                       DispatchQueue.main.async {
+//                                           self.closeSDK()
+//                                       }
+//                                       return
+//                                   }
+//                               }
+                                
+                                
+
+//                                let segment = item["PDFSegment"] as? String
+//                                let isSigned = item["IsPDFSign"] as? Int ?? Int(item["IsPDFSign"] as? String ?? "0")
+//
+//                                if segment == "DDPI" && isSigned == 1 {
+//
+//                                    print("✅ DDPI Signed → Closing SDK")
+//
+//                                    DispatchQueue.main.async {
+//                                        self.closeSDK()
+//                                    }
+//                                    return   // ✅ VERY IMPORTANT (stop further execution)
+//                                }
+//                            }
+                            for item in pdfList {
+                                
+                                let segment = item["PDFSegment"] as? String
+                                
+                                let isSigned = item["IsPDFSign"] as? Int ??
+                                               Int(item["IsPDFSign"] as? String ?? "0") ?? 0
+
+                                // ✅ Only close when DDPI is actually signed from API
+                                if segment == "DDPI" && isSigned == 1 {
+                                    print("✅ DDPI Signed from API → Closing SDK")
+
+                                    DispatchQueue.main.async {
+                                        self.closeSDK()
+                                    }
+                                    return   // ✅ STOP further execution
+                                }
+                            }
+                            
                             DispatchQueue.main.async {
                                 // Default state: hide all views
 //                                self.holderview1.isHidden = true
@@ -699,33 +751,19 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                        let id = pdf["Id"] as? String {
                                         switch pdfSegment {
                                         case "EKRA":
-                                            //self.holderview1.isHidden = false
+                                           
                                             self.ekraSign = isPDFSign
                                             self.ekraID = id
-//                                            if isPDFSign == "1" {
-//                                                self.ekraBtn.setImage(UIImage(named: "Icon-29", in: Bundle.module, compatibleWith: nil),
-//                                                for: .normal)
-//                                                //self.ekraBtn.isUserInteractionEnabled = false
-//                                            }
+                                            self.ekraStack.isHidden = (isPDFSign == "1")
                                         case "E":
-//                                            self.holderview2.isHidden = false
                                             self.aofSign = isPDFSign
                                             self.aofID = id
-//                                            if isPDFSign == "1" {
-//                                                //self.aofBtn.imageView?.contentMode = .scaleToFill
-//                                                self.aofBtn.setImage(UIImage(named: "Icon-29", in: Bundle.module, compatibleWith: nil),
-//                                                                     for: .normal)
-//                                                //self.aofBtn.isUserInteractionEnabled = false
-//                                            }
+                                            self.aofStack.isHidden = (isPDFSign == "1")
                                         case "DDPI":
-                                            //self.holderview3.isHidden = false
+                                            
                                             self.ddpiSign = isPDFSign
                                             self.ddpiID = id
-//                                            if isPDFSign == "1" {
-//                                                self.ddpiBtn.setImage(UIImage(named: "Icon-29", in: Bundle.module, compatibleWith: nil),
-//                                                                      for: .normal)
-//                                                //self.ddpiBtn.isUserInteractionEnabled = false
-//                                            }
+                                            self.ddpiStack.isHidden = (isPDFSign == "1")
                                         default:
                                             break
                                         }
@@ -742,6 +780,26 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
             }
         }
     }
+    
+    func closeSDK() {
+        print("🚀 Closing SDK")
+
+        DispatchQueue.main.async {
+            
+            // ✅ Notify host app first
+            self.onSDKClose?()
+            
+            // ✅ Close full SDK (important)
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = windowScene.windows.first {
+                
+                window.rootViewController?.dismiss(animated: true)
+            } else {
+                self.view.window?.rootViewController?.dismiss(animated: true)
+            }
+        }
+    }
+    
 }
 
 extension ApplicationStatusVC {
@@ -842,48 +900,3 @@ extension ApplicationStatusVC {
         }
     }
 }
-    
-//    func updateUIFromSixthAPI(_ json: [String: Any]) {
-//        
-//        DispatchQueue.main.async {
-//            
-//            // MARK: - Name
-//            self.nameLbl.text = json["PANName"] as? String ?? "-"
-//            
-//            // MARK: - Dates
-//            self.onBordingDateLbl.text = json["OnBoardingStartedOn"] as? String ?? "-"
-//            self.applicationDateLbl.text = json["ApplicationSubmittedOn"] as? String ?? "-"
-//            self.waitingDateLbl.text = json["WaitingForVerificationOn"] as? String ?? "-"
-//            self.approveDateLbl.text = json["ApplicationApprovedOn"] as? String ?? "-"
-//            
-//            // MARK: - Status Color Handling
-//            self.resetAllStepColors()
-//            
-//            let finalStatus = "\(json["FinalStatus"] ?? "")"
-//            
-//            switch finalStatus {
-//            case "3":
-//                // Waiting
-//                self.waitingView.backgroundColor = UIColor.systemYellow
-//                self.approveView.backgroundColor = UIColor.gray
-//                
-//            case "4":
-//                // Approved
-//                self.approveView.backgroundColor = UIColor.systemYellow
-//                self.pdfLbl.isHidden = false
-//                self.secondView.isHidden = false
-//                
-//            default:
-//                break
-//            }
-//        }
-//    }
-//    
-//    func resetAllStepColors() {
-//        let defaultColor = UIColor.blue
-//        onBordingView.backgroundColor = defaultColor
-//        applicationView.backgroundColor = defaultColor
-//        waitingView.backgroundColor = defaultColor
-//        approveView.backgroundColor = defaultColor
-//    }
-//}

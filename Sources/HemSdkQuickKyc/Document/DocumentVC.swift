@@ -636,6 +636,8 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         
 //        IncomeProofBtn.isSelected = true
 //        IncomeProof(shouldShow: true)
+        
+       // IncomeProof(shouldShow: true)
     
     }
     
@@ -1109,43 +1111,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                     {
                         unverifiedSections.append("Demat")
                     }
-                    
-//                case "NomineeDetails1":
-//                    if let nominee = jsonResponse["NOMINEE_1Images_Verify"]
-//                        as? String, nominee != "1" && nominee != "2"
-//                    {
-//                        unverifiedSections.append("Nominee 1 Details")
-//                    } else if let nominee = jsonResponse[
-//                        "NOMINEE_1Images_Verify"] as? Int,
-//                              nominee != 1 && nominee != 2
-//                    {
-//                        unverifiedSections.append("Nominee 1 Details")
-//                    }
-//
-//                case "NomineeDetails2":
-//                    if let nominee = jsonResponse["NOMINEE_2Images_Verify"]
-//                        as? String, nominee != "1" && nominee != "2"
-//                    {
-//                        unverifiedSections.append("Nominee 2 Details")
-//                    } else if let nominee = jsonResponse[
-//                        "NOMINEE_2Images_Verify"] as? Int,
-//                              nominee != 1 && nominee != 2
-//                    {
-//                        unverifiedSections.append("Nominee 2 Details")
-//                    }
-//
-//                case "NomineeDetails3":
-//                    if let nominee = jsonResponse["NOMINEE_3Images_Verify"]
-//                        as? String, nominee != "1" && nominee != "2"
-//                    {
-//                        unverifiedSections.append("Nominee 3 Details")
-//                    } else if let nominee = jsonResponse[
-//                        "NOMINEE_3Images_Verify"] as? Int,
-//                              nominee != 1 && nominee != 2
-//                    {
-//                        unverifiedSections.append("Nominee 3 Details")
-//                    }
-                    
+ 
                 default:
                     break
                 }
@@ -1688,9 +1654,9 @@ extension DocumentVC {
 //            sender.isSelected = true
 //            IncomeProof(shouldShow: true)
 //        }
-        sender.isSelected = true
         IncomeProof(shouldShow: true)
     }
+    
     @IBAction func BankProofBtn(_ sender: UIButton) {
         if sender.isSelected {
             sender.isSelected = false
@@ -2312,26 +2278,33 @@ extension DocumentVC {
             {
                 // If the value is 0, show the buttons, otherwise hide t
                 self.SignatureImage_Verify = SignatureImage_Verify
-                //                if SignatureImage_Verify == "0" {
-                //                    signatureAttemptLabel.isHidden = false
-                //                    CSStackView1.isHidden = false
-                //                    CurrentSignBtn.isHidden = false
-                //                    CSDocumentView.isHidden = true
-                //                } else {
-                //                    signatureAttemptLabel.isHidden = true
-                //                    CSStackView1.isHidden = true
-                //                    CurrentSignBtn.isHidden = true
-                //                    CSDocumentView.isHidden = false
-                //                }
-            } else {
-                // Handle the case where the key is not present or is not an integer
-                print("NOMINEE_1Images_Verify key not found or invalid type")
-            }
-        } else {
-            DispatchQueue.main.async {
-                //                self.signatureImageview.image = UIImage(systemName: "person.crop.circle.badge.xmark")
-            }
-        }
+                DispatchQueue.main.async {
+                               if SignatureImage_Verify == "0" {
+                                   // Pending - show upload buttons
+                                   self.CSStackView1.isHidden = false
+                                   self.CSDocumentView.isHidden = true
+                                   self.CurrentSignBtn.isHidden = false
+                                   self.drawBtn.isHidden = false
+                               } else {
+                                   // Verified or Rejected - show the image
+                                   self.CSStackView1.isHidden = true
+                                   self.CSDocumentView.isHidden = false
+                                   self.CurrentSignBtn.isHidden = true
+                                   self.drawBtn.isHidden = true
+                               }
+                           }
+                       }
+                   } else {
+                       // No signature exists - show upload buttons
+                       DispatchQueue.main.async {
+                           self.CSStackView1.isHidden = false
+                           self.CSDocumentView.isHidden = true
+                           self.CurrentSignBtn.isHidden = false
+                           self.drawBtn.isHidden = false
+                           self.signatureImageview.image = nil
+                       }
+                   
+        } 
         
         // Update NOMINEE_1ImageID Image
         if let NOMINEE_1ImageID = response["NOMINEE_1ImageID"] as? String,
@@ -4482,56 +4455,104 @@ extension DocumentVC {
 }
 
 extension DocumentVC {
+//    func IncomeProof(shouldShow: Bool) {
+//        IPLabel1.isHidden = !shouldShow
+//        IpView1.isHidden = !shouldShow
+//        IPLabel2.isHidden = !shouldShow
+//        IPStackView1.isHidden = !shouldShow
+//        incomeProofmsg.isHidden = !shouldShow
+//        //IPStackView2.isHidden = !shouldShow
+//        IPCollectionView.isHidden = false
+//        //IPDocumentView.isHidden = !shouldShow
+//        if let documentType = incomeproofDocumenttype, !documentType.isEmpty {
+//            IPStackView2.isHidden = !shouldShow
+//        } else {
+//            IPStackView2.isHidden = true
+//        }
+//        
+//        // Conditionally hide or show additional elements based on incomeproofDocumenttypetext
+//        if let documentTypeText = incomeproofDocumenttypetext,
+//           !documentTypeText.isEmpty,
+//           documentTypeText == "Latest ITR" || documentTypeText == "Form 16"
+//        {
+//            
+//            // Show the relevant elements if conditions are met
+//            iplabel3.isHidden = !shouldShow
+//           // yearBtn.isHidden = !shouldShow
+//            // incomeProofVerifyBtn.isHidden = !shouldShow // Uncomment if needed
+//        } else {
+//            // Hide the elements if conditions are not met
+//            iplabel3.isHidden = true
+//            yearBtn.isHidden = true
+//            // incomeProofVerifyBtn.isHidden = true // Uncomment if needed
+//        }
+//        
+//        // New condition to check imageUrls count and set visibility for IPCollectionView and IPDocumentView
+//        self.counts(shouldShow: shouldShow)
+//        if imageUrls.isEmpty {
+//            IPCollectionView.isHidden = true
+//            IPDocumentView.isHidden = true
+//        } else {
+//            IPCollectionView.isHidden = !shouldShow
+//            IPDocumentView.isHidden = !shouldShow
+//        }
+//        if ipverify == "Y" {
+//            self.verifyIP()
+//        }
+//        
+//        if DerivativeImages_Verify == "0" {
+//            print("varify is pending")
+//        } else {
+//            IPDocumentView.isHidden = true
+//        }
+//    }
+    
     func IncomeProof(shouldShow: Bool) {
+        
         IPLabel1.isHidden = !shouldShow
         IpView1.isHidden = !shouldShow
         IPLabel2.isHidden = !shouldShow
         IPStackView1.isHidden = !shouldShow
         incomeProofmsg.isHidden = !shouldShow
-        //IPStackView2.isHidden = !shouldShow
-        IPCollectionView.isHidden = false
-        //IPDocumentView.isHidden = !shouldShow
+        
+        // StackView2 logic
         if let documentType = incomeproofDocumenttype, !documentType.isEmpty {
             IPStackView2.isHidden = !shouldShow
         } else {
             IPStackView2.isHidden = true
         }
         
-        // Conditionally hide or show additional elements based on incomeproofDocumenttypetext
+        // Document type condition
         if let documentTypeText = incomeproofDocumenttypetext,
-           !documentTypeText.isEmpty,
-           documentTypeText == "Latest ITR" || documentTypeText == "Form 16"
-        {
+           documentTypeText == "Latest ITR" || documentTypeText == "Form 16" {
             
-            // Show the relevant elements if conditions are met
             iplabel3.isHidden = !shouldShow
-           // yearBtn.isHidden = !shouldShow
-            // incomeProofVerifyBtn.isHidden = !shouldShow // Uncomment if needed
+            yearBtn.isHidden = !shouldShow
         } else {
-            // Hide the elements if conditions are not met
             iplabel3.isHidden = true
             yearBtn.isHidden = true
-            // incomeProofVerifyBtn.isHidden = true // Uncomment if needed
         }
         
-        // New condition to check imageUrls count and set visibility for IPCollectionView and IPDocumentView
-        self.counts(shouldShow: shouldShow)
+        // Collection view visibility
         if imageUrls.isEmpty {
             IPCollectionView.isHidden = true
             IPDocumentView.isHidden = true
         } else {
-            IPCollectionView.isHidden = !shouldShow
-            IPDocumentView.isHidden = !shouldShow
+            IPCollectionView.isHidden = false
+            IPDocumentView.isHidden = false
         }
+        
+        // Verification logic
         if ipverify == "Y" {
             self.verifyIP()
         }
-        
-        if DerivativeImages_Verify == "0" {
-            print("varify is pending")
-        } else {
-            IPDocumentView.isHidden = true
-        }
+//        if DerivativeImages_Verify != "0" {
+//            IPDocumentView.isHidden = false
+//        }
+//        if !imageUrls.isEmpty {
+//               IPCollectionView.isHidden = false
+//               IPDocumentView.isHidden = false
+//           }
     }
     
     func counts(shouldShow: Bool) {
@@ -4694,23 +4715,45 @@ extension DocumentVC {
     
     func CurrentSignature(shouldShow: Bool) {
         CSLabel1.isHidden = !shouldShow
-        //        CSStackView1.isHidden = !shouldShow
-        // CsCollectionView.isHidden = !shouldShow
-        //CSDocumentView.isHidden = !shouldShow
-        if SignatureImage_Verify == nil {
-            print("varify is pending")
-            CSDocumentView.isHidden = true
-            CSStackView1.isHidden = !shouldShow
+        
+        // Check if signature exists and is verified from the API response
+        if let signatureVerifyStatus = SignatureImage_Verify {
+            // Signature has been uploaded and has a status (1 = approved, 2 = rejected, etc.)
+            if signatureVerifyStatus == "0" {
+                // Pending verification - show upload buttons
+                CSStackView1.isHidden = false
+                CSDocumentView.isHidden = true
+            } else {
+                // Already uploaded (verified or rejected) - show the image
+                CSStackView1.isHidden = true
+                CSDocumentView.isHidden = !shouldShow
+            }
         } else {
-            CSDocumentView.isHidden = !shouldShow
-            CSStackView1.isHidden = true
+            // No signature uploaded yet - show upload buttons
+            CSStackView1.isHidden = !shouldShow
+            CSDocumentView.isHidden = true
         }
-        //        if panCopyDocumentType == ""{
-        //            CSStackView1.isHidden = true
-        //        }else{
-        //            CSStackView1.isHidden = !shouldShow
-        //        }
     }
+    
+//    func CurrentSignature(shouldShow: Bool) {
+//        CSLabel1.isHidden = !shouldShow
+//        //        CSStackView1.isHidden = !shouldShow
+//        // CsCollectionView.isHidden = !shouldShow
+//        //CSDocumentView.isHidden = !shouldShow
+//        if SignatureImage_Verify == nil {
+//            print("varify is pending")
+//            CSDocumentView.isHidden = true
+//            CSStackView1.isHidden = !shouldShow
+//        } else {
+//            CSDocumentView.isHidden = !shouldShow
+//            CSStackView1.isHidden = true
+//        }
+//        //        if panCopyDocumentType == ""{
+//        //            CSStackView1.isHidden = true
+//        //        }else{
+//        //            CSStackView1.isHidden = !shouldShow
+//        //        }
+//    }
     func PANCopy(shouldShow: Bool) {
         PCLabel1.isHidden = !shouldShow
         PCLabel2.isHidden = !shouldShow
@@ -5775,19 +5818,6 @@ extension DocumentVC {
                         DispatchQueue.main.async { [self] in
                             print("API is running")
                             openCamera()
-                            
-                            //                            let vc = self.storyboard?.instantiateViewController(identifier: "WebViewVC") as! WebViewVC
-                            //                            vc.userId = self.fetchedUserId
-                            //                            vc.panNo = self.PanNo
-                            //                            vc.regID = self.RegId
-                            //                            vc.transactionId = TransactionID
-                            //                            vc.latitude = self.Latitude
-                            //                            vc.longitude = self.Longitude
-                            //                            vc.url = URL ?? ""
-                            //                            vc.location = location
-                            //                            vc.delegate = self
-                            //                            vc.ocrCount = self.webcount
-                            //                            self.navigationController?.pushViewController(vc, animated: true)
                         }
                     case "000023" :
                         DispatchQueue.main.async {
