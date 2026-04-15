@@ -50,11 +50,11 @@ class RejectionCVC: UICollectionViewCell {
             // Navigate to DocumentVC
             let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
             if let nextVC = storyboard.instantiateViewController(withIdentifier: "DocumentVC") as? DocumentVC {
-//                nextVC.PanNo = panNo
-//                nextVC.rejection = "Rejection"
-//                nextVC.RegId = regId
-//                nextVC.delegate = delegate
-//                nextVC.isFromRejectionFlow = true
+                nextVC.PanNo = panNo
+                nextVC.rejection = "Rejection"
+                nextVC.RegId = regId
+                nextVC.delegate = delegate
+                nextVC.isFromRejectionFlow = true
                 navigationController?.pushViewController(nextVC, animated: true)
             }
         default:

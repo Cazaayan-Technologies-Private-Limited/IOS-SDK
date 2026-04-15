@@ -71,6 +71,8 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     var currentEsignSegment: String?
     public var onStartEsign: (() -> Void)?
     public var onSDKClose: (() -> Void)?
+    var documentId: String?
+    var pollingTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -261,7 +263,24 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         } else {
             handleSegmentBasedOnSignValue(segmentName: "DDPI", signKey: "ddpiSign")
         }
+        if let docId = documentId {
+            startEsignDonePolling(documentId: docId)
+        }
     }
+    
+    func startEsignDonePolling(documentId: String) {
+        stopEsignPolling() // prevent duplicate timers
+
+        pollingTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+            self?.checkDDPIEsignStatus(documentId: documentId)
+        }
+    }
+    
+    func stopEsignPolling() {
+        pollingTimer?.invalidate()
+        pollingTimer = nil
+    }
+    
     func showAlert(message: String) {
         let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -452,9 +471,22 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                     let requestURL = jsonResponse["RquestURL"] as? String ?? ""
                     self.companyName = jsonResponse["CompanyName"] as? String
                     self.currentEsignSegment = segmentName
+                    self.documentId = jsonResponse["DocumentId"] as? String
                     if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
                         case "000000":
+                            
+                            let isDDPIEsign = jsonResponse["IsDDPIEsign"] as? Int ??
+                                                Int(jsonResponse["IsDDPIEsign"] as? String ?? "0") ?? 0
+
+                              // ✅ If DDPI already signed → close SDK immediately
+                              if segmentName == "DDPI" && isDDPIEsign == 1 {
+                                  DispatchQueue.main.async {
+                                      print("✅ DDPI already eSigned → Closing SDK")
+                                      self.closeSDK()
+                                  }
+                                  return
+                              }
                             
                             if segmentName == "DDPI", self.msg == nil {
                                 if !esignUrl.isEmpty {
@@ -582,6 +614,64 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
             }
         }
     }
+    
+    func checkDDPIEsignStatus(documentId: String) {
+        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [weak self] tokenId in
+            guard let self = self else { return }
+            
+            guard let tokenId = tokenId else {
+                CoreDataHelper.generateToken(
+                    decodeByteArrayToString: self.decodeArray ?? "",
+                    USERID: self.fetchedUserId ?? "",
+                    SessionId: self.fetchedSessionID ?? "",
+                    entityName: "TokenMobile",
+                    deviceType: "W",
+                    in: self.view
+                ) { success in
+                    if success {
+                        self.checkDDPIEsignStatus(documentId: documentId)
+                    }
+                }
+                return
+            }
+
+            let parameters: [String: Any] = [
+                "documentId": documentId
+            ]
+
+            let url = "NSDLEsignController/ValidateIsDDPIEsignDone"
+
+            apiCall(url: url, method: "POST", parameters: parameters, view: self.view) { result in
+                switch result {
+                case .success(let jsonResponse):
+                    print("📩 DDPI Status Response: \(jsonResponse)")
+
+                    if let errorCode = jsonResponse["ErrorCode"] as? String,
+                       errorCode == "000000" {
+
+                        let isDone = jsonResponse["IsEsignDone"] as? Int ??
+                                     Int(jsonResponse["IsEsignDone"] as? String ?? "0") ?? 0
+
+                        print("🔍 DDPI isDone: \(isDone)")
+
+                        if isDone == 1 {
+                            DispatchQueue.main.async {
+                                print("✅ DDPI eSign Completed → Closing SDK")
+
+                                self.stopEsignPolling()   // stop timer
+                                self.closeSDK()           // close SDK
+                            }
+                        }
+                    }
+
+                case .failure(let error):
+                    print("❌ DDPI Status API Failed: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+
     
     func NSDLEsignResponse(decodedResponse: String){
         
@@ -720,55 +810,92 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
 //                                    return   // ✅ VERY IMPORTANT (stop further execution)
 //                                }
 //                            }
-                            for item in pdfList {
-                                
-                                let segment = item["PDFSegment"] as? String
-                                
-                                let isSigned = item["IsPDFSign"] as? Int ??
-                                               Int(item["IsPDFSign"] as? String ?? "0") ?? 0
-
-                                // ✅ Only close when DDPI is actually signed from API
-                                if segment == "DDPI" && isSigned == 1 {
-                                    print("✅ DDPI Signed from API → Closing SDK")
-
-                                    DispatchQueue.main.async {
-                                        self.closeSDK()
-                                    }
-                                    return   // ✅ STOP further execution
-                                }
-                            }
+//                            for item in pdfList {
+//                                
+//                                let segment = item["PDFSegment"] as? String
+//                                
+//                                let isSigned = item["IsPDFSign"] as? Int ??
+//                                               Int(item["IsPDFSign"] as? String ?? "0") ?? 0
+//
+//                                // ✅ Only close when DDPI is actually signed from API
+//                                if segment == "DDPI" && isSigned == 1 {
+//                                    print("✅ DDPI Signed from API → Closing SDK")
+//
+//                                    DispatchQueue.main.async {
+//                                        self.closeSDK()
+//                                    }
+//                                    return   // ✅ STOP further execution
+//                                }
+//                            }
+                            
+//                            DispatchQueue.main.async {
+//                                // Default state: hide all views
+////                                self.holderview1.isHidden = true
+////                                self.holderview2.isHidden = true
+////                                self.holderview3.isHidden = true
+//                                
+//                                // Iterate through the PDF list
+//                                for pdf in pdfList {
+//                                    if let pdfSegment = pdf["PDFSegment"] as? String,
+//                                       let isPDFSign = pdf["IsPDFSign"] as? String,
+//                                       let id = pdf["Id"] as? String {
+//                                        switch pdfSegment {
+//                                        case "EKRA":
+//                                           
+//                                            self.ekraSign = isPDFSign
+//                                            self.ekraID = id
+//                                            self.ekraStack.isHidden = (isPDFSign == "1")
+//                                        case "E":
+//                                            self.aofSign = isPDFSign
+//                                            self.aofID = id
+//                                            self.aofStack.isHidden = (isPDFSign == "1")
+//                                        case "DDPI":
+//                                            
+//                                            self.ddpiSign = isPDFSign
+//                                            self.ddpiID = id
+//                                            self.ddpiStack.isHidden = (isPDFSign == "1")
+//                                        default:
+//                                            break
+//                                        }
+//                                    }
+//                                }
+//                            }
                             
                             DispatchQueue.main.async {
-                                // Default state: hide all views
-//                                self.holderview1.isHidden = true
-//                                self.holderview2.isHidden = true
-//                                self.holderview3.isHidden = true
-                                
-                                // Iterate through the PDF list
+
                                 for pdf in pdfList {
                                     if let pdfSegment = pdf["PDFSegment"] as? String,
                                        let isPDFSign = pdf["IsPDFSign"] as? String,
                                        let id = pdf["Id"] as? String {
+
                                         switch pdfSegment {
                                         case "EKRA":
-                                           
                                             self.ekraSign = isPDFSign
                                             self.ekraID = id
                                             self.ekraStack.isHidden = (isPDFSign == "1")
+
                                         case "E":
                                             self.aofSign = isPDFSign
                                             self.aofID = id
                                             self.aofStack.isHidden = (isPDFSign == "1")
+
                                         case "DDPI":
-                                            
+                                            // ✅ FORCE STATIC
                                             self.ddpiSign = isPDFSign
                                             self.ddpiID = id
                                             self.ddpiStack.isHidden = (isPDFSign == "1")
+
                                         default:
                                             break
                                         }
                                     }
                                 }
+
+                                // ✅ FINAL CHECK (ONLY HERE)
+//                                if self.ddpiSign == "1"{
+//                                    print("✅ EKRA & AOF signed → Closing SDK")
+//                                    self.closeSDK()
+//                                }
                             }
                         }
                     } else {

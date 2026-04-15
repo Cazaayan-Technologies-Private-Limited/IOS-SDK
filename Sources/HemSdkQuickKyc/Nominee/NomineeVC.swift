@@ -540,6 +540,17 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         }
     }
     
+    
+    @IBAction func backBtn(_ sender: UIButton) {
+          let vc = ApplicationFormVC()
+          vc.panNo = panNo
+          vc.regId = regId
+          vc.PANName = PANName
+          vc.EmailId = EmailId
+
+          navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func nomineeFieldsHide() {
         nomineeAddressViews1 = [
                 addressLblFirst1, addressTxtFirst1,
@@ -1779,11 +1790,11 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         default:
             return
         }
-        
-        guard !panNo.isEmpty, !name.isEmpty, !dob.isEmpty else {
-            showAlert(message: "Please enter Guardian details.")
-            return
-        }
+//        
+//        guard !panNo.isEmpty, !name.isEmpty, !dob.isEmpty else {
+//            showAlert(message: "Please enter Guardian details.")
+//            return
+//        }
         
         if let age = calculateAge(from: dob) {
             toggleGuardianFields(for: index, show: age < 18)
@@ -1841,6 +1852,47 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     }
     
     @IBAction func proceedBtn(_ sender: UIButton) {
+        if optOutBtn.isSelected {
+              // Opt-Out selected - submit directly
+              print("User opted out, submitting without nominee validation")
+              NomineeType = "N"
+              insertUpdateNomineeDetailsWebWithMinimalParams()
+              return
+          }
+        guard nomineeCount > 0 else {
+            showAlert(message: "Please add at least one nominee before proceeding.")
+            return
+        }
+        
+        // Validate each nominee based on count
+//        var validationErrors: [String] = []
+//         bnnn
+//        // Check each nominee that should exist
+//        for index in 1...nomineeCount {
+//            switch index {
+//            case 1:
+//                if let error = validateNomineeFields(index: 1) {
+//                    validationErrors.append("Nominee 1: \(error)")
+//                }
+//            case 2:
+//                if let error = validateNomineeFields(index: 2) {
+//                    validationErrors.append("Nominee 2: \(error)")
+//                }
+//            case 3:
+//                if let error = validateNomineeFields(index: 3) {
+//                    validationErrors.append("Nominee 3: \(error)")
+//                }
+//            default:
+//                break
+//            }
+//        }
+        
+        // Show validation errors if any
+//        if !validationErrors.isEmpty {
+//            let errorMessage = validationErrors.joined(separator: "\n")
+//            showAlert(message: errorMessage)
+//            return
+//        }
         var panSet = Set<String>()
         var nameSet = Set<String>()
         for nominee in nomineeDetailsArray {
@@ -2224,6 +2276,2627 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     }
 }
 
+
+
+//import UIKit
+//
+//class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor VerticsVCDelegate, @MainActor CalenderVCDelegate, @MainActor DigiLocker_b_VCDelegate1, @MainActor ReloadPageDelegate, @MainActor RelationshipScheme {
+//    func didSelectDepository(type: String, identifier: String) {
+//        print("🔵 [didSelectDepository] Called → Type: \(type) | Identifier: \(identifier)")
+//        
+//        switch identifier {
+//            
+//            // MARK: - Nominee Documents
+//        case "NomineeDocument1":
+//            DispatchQueue.main.async {
+//                     print("   → Setting Nominee 1 button to \(type)")
+//                     self.updateButtonTitle(self.documentTypeBtn1, title: type)
+//                     self.nomineedocumentType1 = type
+//                     if type == "Aadhaar" {
+//                         self.saveDigiLocker(identifier1: "NomineeDocument1")
+//                     }
+//                 }
+//            
+//        case "NomineeDocument2":
+//            print("   → Setting Nominee 2 button to \(type)")
+//            if #available(iOS 15.0, *) {
+//                self.documentTypeBtn2.configuration?.title = type
+//            } else {
+//                self.documentTypeBtn2.setTitle(type, for: .normal)
+//            }
+//            
+//            nomineedocumentType2 = type
+//            if type == "Aadhaar" {
+//                saveDigiLocker(identifier1: "NomineeDocument2")
+//            }
+//            
+//        case "NomineeDocument3":
+//            print("   → Setting Nominee 3 button to \(type)")
+//            if #available(iOS 15.0, *) {
+//                self.documentTypeBtn3.configuration?.title = type
+//            } else {
+//                self.documentTypeBtn3.setTitle(type, for: .normal)
+//            }
+//            nomineedocumentType3 = type
+//            if type == "Aadhaar" {
+//                saveDigiLocker(identifier1: "NomineeDocument3")
+//            }
+//            
+//            // MARK: - Guardian Documents (Fixed wrong button names)
+//        case "guardianDocument1":
+//            print("   → Setting Guardian 1 button to \(type)")
+//            if #available(iOS 15.0, *) {
+//                self.guardianDocumentTypeBtn1.configuration?.title = type
+//            } else {
+//                self.guardianDocumentTypeBtn1.setTitle(type, for: .normal)
+//            }
+//            
+//            guardiandocumentType1 = type
+//            if type == "Aadhaar" {
+//                saveDigiLocker(identifier1: "guardianDocument1")
+//            }
+//            
+//        case "guardianDocument2":
+//            print("   → Setting Guardian 2 button to \(type)")
+//            if #available(iOS 15.0, *) {
+//                self.guardianDocumentTypeBtn2.configuration?.title = type
+//            } else {
+//                self.guardianDocumentTypeBtn2.setTitle(type, for: .normal)
+//            }
+//            
+//            guardiandocumentType2 = type
+//            if type == "Aadhaar" {
+//                saveDigiLocker(identifier1: "guardianDocument2")
+//            }
+//            
+//        case "guardianDocument3":
+//            print("   → Setting Guardian 3 button to \(type)")
+//            if #available(iOS 15.0, *) {
+//                self.guardianDocumentTypeBtn3.configuration?.title = type
+//            } else {
+//                self.guardianDocumentTypeBtn3.setTitle(type, for: .normal)
+//            }
+//            
+//            guardiandocumentType3 = type
+//            if type == "Aadhaar" {
+//                saveDigiLocker(identifier1: "guardianDocument3")
+//            }
+//            
+//        default:
+//            print("→ Unknown identifier: \(identifier)")
+//            break
+//        }
+//    }
+//    
+//    func updateButtonTitle(_ button: UIButton, title: String) {
+//        if #available(iOS 15.0, *) {
+//            if var config = button.configuration {
+//                config.title = title
+//                button.configuration = config
+//            } else {
+//                // Fallback if configuration is nil
+//                button.setTitle(title, for: .normal)
+//            }
+//        } else {
+//            button.setTitle(title, for: .normal)
+//        }
+//    }
+//
+//    func didReceiveApiResponse(data: [String : Any], identifier1: String, identifier3: String) {
+//        DispatchQueue.main.async {
+//            
+//            print("🔥 identifier1 received:", identifier1)
+//            print("🔥 API DATA:", data)
+//            // 1. Auto-fill the correct nominee's fields
+//            switch identifier1 {
+//            case "NomineeDocument1":
+//                self.fillNomineeFields(data: data, index: 1)
+//            case "NomineeDocument2":
+//                self.fillNomineeFields(data: data, index: 2)
+//            case "NomineeDocument3":
+//                self.fillNomineeFields(data: data, index: 3)
+//                
+//            case "guardianDocument1":
+//                self.fillGuardianFields(data: data, index: 1)
+//                
+//            case "guardianDocument2":
+//                self.fillGuardianFields(data: data, index: 2)
+//                
+//            case "guardianDocument3":
+//                self.fillGuardianFields(data: data, index: 3)
+//            default:
+//                print("Unknown identifier: \(identifier1)")
+//            }
+//        }
+//    }
+//    
+//    
+//    func didSelectDate(_ date: String, identifier: String) {
+//        
+//        switch identifier {
+//            
+//        case "nomineeDOB1":
+//            nomineeDob1.text = date
+//            if let age = calculateAge(from: date) {
+//                toggleGuardianFields(for: 1, show: age < 18)
+//            }
+//            
+//        case "nomineeDOB2":
+//            nomineeDob2.text = date
+//            if let age = calculateAge(from: date) {
+//                toggleGuardianFields(for: 2, show: age < 18)
+//            }
+//            
+//        case "nomineeDOB3":
+//            nomineeDob3.text = date
+//            if let age = calculateAge(from: date) {
+//                toggleGuardianFields(for: 3, show: age < 18)
+//                NomineeMinor = age < 18 ? "Y" : "N"
+//            }
+//            
+//        case "guardianDOB1":
+//            guardianDobTxt1.text = date
+//            if let age = calculateAge(from: date) {
+//                // toggleGuardianHolderViews(show: age < 18)
+//                NomineeMinor = "Y"
+//            }
+//            
+//        case "guardianDOB2":
+//            guardianDobTxt2.text = date
+//            if let age = calculateAge(from: date) {
+//                // toggleGuardianHolderViews(show: age < 18)
+//                NomineeMinor = "Y"
+//            }
+//            
+//        case "guardianDOB3":
+//            guardianDobTxt3.text = date
+//            if let age = calculateAge(from: date) {
+//                // toggleGuardianHolderViews(show: age < 18)
+//                NomineeMinor = "Y"
+//            }
+//            
+//        default:
+//            break
+//        }
+//    }
+//    
+//    func didDismissDigiLockerVC() {
+//        self.dismiss(animated: true)
+//    }
+//    
+//    func reloadPageData() {
+//        self.ViewAllNomineeDetails()
+//    }
+//    
+//    func didSelectRelation(type: String, id: String, identifier: String) {
+//        switch identifier {
+//        case "nomineeRelation1":
+//            self.updateButtonTitle(self.relationBtn1, title: type)
+//                  self.relationID1 = id
+//                  print("✅ Set relation for nominee 1: \(type) (ID: \(id))")
+//        case "nomineeRelation2":
+//            relationBtn2.setTitle(type, for: .normal)
+//            relationID2 = id
+//        case "nomineeRelation3":
+//            relationBtn3.setTitle(type, for: .normal)
+//            relationID3 = id
+//        case "guardianRelation1":
+//            guardianRelationBtn1.setTitle(type, for: .normal)
+//            guardianRelationID1 = id
+//        case "guardianRelation2":
+//            guardianRelationBtn2.setTitle(type, for: .normal)
+//            guardianRelationID2 = id
+//        case "guardianRelation3":
+//            guardianRelationBtn3.setTitle(type, for: .normal)
+//            guardianRelationID3 = id
+//        default:
+//            break
+//        }
+//    }
+//    
+//    
+//    @IBOutlet weak var optInBtn: UIButton!
+//    @IBOutlet weak var optOutBtn: UIButton!
+//    @IBOutlet weak var addNomineeBtn: UIButton!
+//    @IBOutlet weak var nominee1Stack: UIStackView!
+//    @IBOutlet weak var nomineeView1: UIView!
+//    @IBOutlet weak var nomineeBtn1: UIButton!
+//    @IBOutlet weak var documentTypeLbl1: UILabel!
+//    @IBOutlet weak var view1: UIView!
+//    @IBOutlet weak var documentLbl1: UILabel!
+//    @IBOutlet weak var dobLabel1: UILabel!
+//    @IBOutlet weak var nomineeMobileLbl1: UILabel!
+//    @IBOutlet weak var nomineeEmailLbl1: UILabel!
+//    @IBOutlet weak var documentTypeBtn1: UIButton!
+//    @IBOutlet weak var documentId1: UITextField!
+//    @IBOutlet weak var documentVerifyBtn1: UIButton!
+//    @IBOutlet weak var nomineeName1: UITextField!
+//    @IBOutlet weak var nomineeNameTxt1: UITextField!
+//    @IBOutlet weak var nomineeDob1: UITextField!
+//    @IBOutlet weak var nomineeDobBtn1: UIButton!
+//    @IBOutlet weak var nomineeMobile1: UITextField!
+//    @IBOutlet weak var nomineeEmail1: UITextField!
+//    @IBOutlet weak var addressSameAsApplicantBtn1: UIButton!
+//    @IBOutlet weak var addressLblFirst1: UILabel!
+//    @IBOutlet weak var addressTxtFirst1: UITextField!
+//    @IBOutlet weak var addressLblSecond1: UILabel!
+//    @IBOutlet weak var addressTxtSecond1: UITextField!
+//    @IBOutlet weak var addressLblThird1: UILabel!
+//    @IBOutlet weak var addressTxtThird1: UITextField!
+//    @IBOutlet weak var pinCodeLbl1: UILabel!
+//    @IBOutlet weak var pinCodeTxt1: UITextField!
+//    @IBOutlet weak var cityLbl1: UILabel!
+//    @IBOutlet weak var cityTxt1: UITextField!
+//    @IBOutlet weak var stateLbl1: UILabel!
+//    @IBOutlet weak var stateTxt1: UITextField!
+//    @IBOutlet weak var relationApplicantLbl1: UILabel!
+//    @IBOutlet weak var relationBtn1: UIButton!
+//    @IBOutlet weak var shareLbl1: UILabel!
+//    @IBOutlet weak var shareTxt1: UITextField!
+//    @IBOutlet weak var gurdianLbl1: UILabel!
+//    @IBOutlet weak var guardianTypeLbl1: UILabel!
+//    @IBOutlet weak var guardianDocumentTypeBtn1: UIButton!
+//    @IBOutlet weak var minorNameLbl1: UILabel!
+//    @IBOutlet weak var minorNameTxt1: UITextField!
+//    @IBOutlet weak var guardianDobLbl1: UILabel!
+//    @IBOutlet weak var guardianNameTxt1: UITextField!
+//    @IBOutlet weak var guardianDobBtn1: UIButton!
+//    @IBOutlet weak var guardianDobTxt1: UITextField!
+//    @IBOutlet weak var guardianIDLbl1: UILabel!
+//    @IBOutlet weak var guardianIdTxt1: UITextField!
+//    @IBOutlet weak var guardianVerifyBtn1: UIButton!
+//    @IBOutlet weak var guardianMobileLbl1: UILabel!
+//    @IBOutlet weak var guardianMobileTxt1: UITextField!
+//    @IBOutlet weak var guardianEmailLbl1: UILabel!
+//    @IBOutlet weak var guardianEmailTxt1: UITextField!
+//    @IBOutlet weak var guardianRelationLbl1: UILabel!
+//    @IBOutlet weak var guardianRelationBtn1: UIButton!
+//    @IBOutlet weak var nomineeSameAsBtn1: UIButton!
+//    @IBOutlet weak var guardianAddressLblFirst1: UILabel!
+//    @IBOutlet weak var guardianAddressTxtFirst1: UITextField!
+//    @IBOutlet weak var guardianAddressLblSecond1: UILabel!
+//    @IBOutlet weak var guardianAddressTxtSecond1: UITextField!
+//    @IBOutlet weak var guardianAddressLblThird1: UILabel!
+//    @IBOutlet weak var guardianAddressTxtThird1: UITextField!
+//    @IBOutlet weak var guardianPinCodeLbl1: UILabel!
+//    @IBOutlet weak var guardianPinCodeTxt1: UITextField!
+//    @IBOutlet weak var guardianCityLbl1: UILabel!
+//    @IBOutlet weak var guardianCityTxt1: UITextField!
+//    @IBOutlet weak var guardianStateLbl1: UILabel!
+//    @IBOutlet weak var guardianStateTxt1: UITextField!
+//    
+//    @IBOutlet weak var nominee2Stack: UIStackView!
+//    @IBOutlet weak var nomineeView2: UIView!
+//    @IBOutlet weak var nomineeBtn2: UIButton!
+//    @IBOutlet weak var documentTypeLbl2: UILabel!
+//    @IBOutlet weak var documentTypeBtn2: UIButton!
+//    @IBOutlet weak var documentId2: UITextField!
+//    @IBOutlet weak var documentVerifyBtn2: UIButton!
+//    @IBOutlet weak var nomineeName2: UITextField!
+//    @IBOutlet weak var view2: UIView!
+//    @IBOutlet weak var documentLbl2: UILabel!
+//    @IBOutlet weak var dobLabel2: UILabel!
+//    @IBOutlet weak var nomineeMobileLbl2: UILabel!
+//    @IBOutlet weak var nomineeEmailLbl2: UILabel!
+//    @IBOutlet weak var nomineeNameTxt2: UITextField!
+//    @IBOutlet weak var nomineeDob2: UITextField!
+//    @IBOutlet weak var nomineeDobBtn2: UIButton!
+//    @IBOutlet weak var nomineeMobile2: UITextField!
+//    @IBOutlet weak var nomineeEmail2: UITextField!
+//    @IBOutlet weak var addressSameAsApplicantBtn2: UIButton!
+//    @IBOutlet weak var addressLblFirst2: UILabel!
+//    @IBOutlet weak var addressTxtFirst2: UITextField!
+//    @IBOutlet weak var addressLblSecond2: UILabel!
+//    @IBOutlet weak var addressTxtSecond2: UITextField!
+//    @IBOutlet weak var addressLblThird2: UILabel!
+//    @IBOutlet weak var addressTxtThird2: UITextField!
+//    @IBOutlet weak var pinCodeLbl2: UILabel!
+//    @IBOutlet weak var pinCodeTxt2: UITextField!
+//    @IBOutlet weak var cityLbl2: UILabel!
+//    @IBOutlet weak var cityTxt2: UITextField!
+//    @IBOutlet weak var stateLbl2: UILabel!
+//    @IBOutlet weak var stateTxt2: UITextField!
+//    @IBOutlet weak var relationApplicantLbl2: UILabel!
+//    @IBOutlet weak var relationBtn2: UIButton!
+//    @IBOutlet weak var shareLbl2: UILabel!
+//    @IBOutlet weak var shareTxt2: UITextField!
+//    @IBOutlet weak var gurdianLbl2: UILabel!
+//    @IBOutlet weak var guardianTypeLbl2: UILabel!
+//    @IBOutlet weak var guardianDocumentTypeBtn2: UIButton!
+//    @IBOutlet weak var minorNameLbl2: UILabel!
+//    @IBOutlet weak var minorNameTxt2: UITextField!
+//    @IBOutlet weak var guardianDobLbl2: UILabel!
+//    @IBOutlet weak var guardianNameTxt2: UITextField!
+//    @IBOutlet weak var guardianDobBtn2: UIButton!
+//    @IBOutlet weak var guardianDobTxt2: UITextField!
+//    @IBOutlet weak var guardianIDLbl2: UILabel!
+//    @IBOutlet weak var guardianIdTxt2: UITextField!
+//    @IBOutlet weak var guardianVerifyBtn2: UIButton!
+//    @IBOutlet weak var guardianMobileLbl2: UILabel!
+//    @IBOutlet weak var guardianMobileTxt2: UITextField!
+//    @IBOutlet weak var guardianEmailLbl2: UILabel!
+//    @IBOutlet weak var guardianEmailTxt2: UITextField!
+//    @IBOutlet weak var guardianRelationLbl2: UILabel!
+//    @IBOutlet weak var guardianRelationBtn2: UIButton!
+//    @IBOutlet weak var nomineeSameAsBtn2: UIButton!
+//    @IBOutlet weak var guardianAddressLblFirst2: UILabel!
+//    @IBOutlet weak var guardianAddressTxtFirst2: UITextField!
+//    @IBOutlet weak var guardianAddressLblSecond2: UILabel!
+//    @IBOutlet weak var guardianAddressTxtSecond2: UITextField!
+//    @IBOutlet weak var guardianAddressLblThird2: UILabel!
+//    @IBOutlet weak var guardianAddressTxtThird2: UITextField!
+//    @IBOutlet weak var guardianPinCodeLbl2: UILabel!
+//    @IBOutlet weak var guardianPinCodeTxt2: UITextField!
+//    @IBOutlet weak var guardianCityLbl2: UILabel!
+//    @IBOutlet weak var guardianCityTxt2: UITextField!
+//    @IBOutlet weak var guardianStateLbl2: UILabel!
+//    @IBOutlet weak var guardianStateTxt2: UITextField!
+//    
+//    @IBOutlet weak var nominee3Stack: UIStackView!
+//    @IBOutlet weak var nomineeView3: UIView!
+//    @IBOutlet weak var nomineeBtn3: UIButton!
+//    @IBOutlet weak var documentTypeLbl3: UILabel!
+//    @IBOutlet weak var documentTypeBtn3: UIButton!
+//    @IBOutlet weak var documentId3: UITextField!
+//    @IBOutlet weak var documentVerifyBtn3: UIButton!
+//    @IBOutlet weak var nomineeName3: UILabel!
+//    @IBOutlet weak var view3: UIView!
+//    @IBOutlet weak var documentLbl3: UILabel!
+//    @IBOutlet weak var dobLabel3: UILabel!
+//    @IBOutlet weak var nomineeMobileLbl3: UILabel!
+//    @IBOutlet weak var nomineeEmailLbl3: UILabel!
+//    @IBOutlet weak var nomineeNameTxt3: UITextField!
+//    @IBOutlet weak var nomineeDob3: UITextField!
+//    @IBOutlet weak var nomineeDobBtn3: UIButton!
+//    @IBOutlet weak var nomineeMobile3: UITextField!
+//    @IBOutlet weak var nomineeEmail3: UITextField!
+//    @IBOutlet weak var guardianRelationLbl3: UILabel!
+//    @IBOutlet weak var guardianRelationBtn3: UIButton!
+//    @IBOutlet weak var addressSameAsApplicantBtn3: UIButton!
+//    @IBOutlet weak var addressLblFirst3: UILabel!
+//    @IBOutlet weak var addressTxtFirst3: UITextField!
+//    @IBOutlet weak var addressLblSecond3: UILabel!
+//    @IBOutlet weak var addressTxtSecond3: UITextField!
+//    @IBOutlet weak var addressLblThird3: UILabel!
+//    @IBOutlet weak var addressTxtThird3: UITextField!
+//    @IBOutlet weak var pinCodeLbl3: UILabel!
+//    @IBOutlet weak var pinCodeTxt3: UITextField!
+//    @IBOutlet weak var cityLbl3: UILabel!
+//    @IBOutlet weak var cityTxt3: UITextField!
+//    @IBOutlet weak var stateLbl3: UILabel!
+//    @IBOutlet weak var stateTxt3: UITextField!
+//    @IBOutlet weak var relationApplicantLbl3: UILabel!
+//    @IBOutlet weak var relationBtn3: UIButton!
+//    @IBOutlet weak var shareLbl3: UILabel!
+//    @IBOutlet weak var shareTxt3: UITextField!
+//    @IBOutlet weak var gurdianLbl3: UILabel!
+//    @IBOutlet weak var guardianTypeLbl3: UILabel!
+//    @IBOutlet weak var guardianDocumentTypeBtn3: UIButton!
+//    @IBOutlet weak var minorNameLbl3: UILabel!
+//    @IBOutlet weak var minorNameTxt3: UITextField!
+//    @IBOutlet weak var guardianDobLbl3: UILabel!
+//    @IBOutlet weak var guardianNameTxt3: UITextField!
+//    @IBOutlet weak var guardianDobBtn3: UIButton!
+//    @IBOutlet weak var guardianDobTxt3: UITextField!
+//    @IBOutlet weak var guardianIDLbl3: UILabel!
+//    @IBOutlet weak var guardianIdTxt3: UITextField!
+//    @IBOutlet weak var guardianVerifyBtn3: UIButton!
+//    @IBOutlet weak var guardianMobileLbl3: UILabel!
+//    @IBOutlet weak var guardianMobileTxt3: UITextField!
+//    @IBOutlet weak var guardianEmailLbl3: UILabel!
+//    @IBOutlet weak var guardianEmailTxt3: UITextField!
+//    @IBOutlet weak var nomineeSameAsBtn3: UIButton!
+//    @IBOutlet weak var guardianAddressLblFirst3: UILabel!
+//    @IBOutlet weak var guardianAddressTxtFirst3: UITextField!
+//    @IBOutlet weak var guardianAddressLblSecond3: UILabel!
+//    @IBOutlet weak var guardianAddressTxtSecond3: UITextField!
+//    @IBOutlet weak var guardianAddressLblThird3: UILabel!
+//    @IBOutlet weak var guardianAddressTxtThird3: UITextField!
+//    @IBOutlet weak var guardianPinCodeLbl3: UILabel!
+//    @IBOutlet weak var guardianPinCodeTxt3: UITextField!
+//    @IBOutlet weak var guardianCityLbl3: UILabel!
+//    @IBOutlet weak var guardianCityTxt3: UITextField!
+//    @IBOutlet weak var guardianStateLbl3: UILabel!
+//    @IBOutlet weak var guardianStateTxt3: UITextField!
+//    @IBOutlet weak var submitBtn: UIButton!
+//    
+//    var nomineeCount = 0
+//    var nominee1Fields: [UIView] = []
+//    var nominee2Fields: [UIView] = []
+//    var nominee3Fields: [UIView] = []
+//    var isNominee1Expanded = false
+//    var isNominee2Expanded = false
+//    var isNominee3Expanded = false
+//    var NomineeType: String = "N"
+//    var nomineedocumentType1 : String?
+//    var nomineedocumentType2 : String?
+//    var nomineedocumentType3 : String?
+//    var guardiandocumentType1 : String?
+//    var guardiandocumentType2 : String?
+//    var guardiandocumentType3 : String?
+//    var fetchedUserId: String?
+//    var fetchedSessionID: String?
+//    var mobiledecodeArray: String?
+//    var identifier: String = ""
+//    var RegId: String?
+//    var panNo: String?
+//    var isNomineeVerified = false
+//    var NomineeMinor : String?
+//    var regId: String?
+//    var PANName: String?
+//    var EmailId: String?
+//    var digiIdentifier: String?
+//    var relationID1:String?
+//    var relationID2:String?
+//    var relationID3:String?
+//    var guardianRelationID1: String?
+//    var guardianRelationID2: String?
+//    var guardianRelationID3: String?
+//    var nomineeDetailsArray: [[String: Any]] = []
+//    var nominee1Allocation: String = ""
+//    var nominee2Allocation: String = ""
+//    var nominee3Allocation: String = ""
+//    var nomineeAddressViews1: [UIView] = []
+//    var guardianAddressViews1: [UIView] = []
+//    var nomineeAddressViews2: [UIView] = []
+//    var guardianAddressViews2: [UIView] = []
+//    var nomineeAddressViews3: [UIView] = []
+//    var guardianAddressViews3: [UIView] = []
+//    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        addNomineeBtn.isHidden = true
+//        
+//        nominee1Stack.isHidden = true
+//        nominee2Stack.isHidden = true
+//        nominee3Stack.isHidden = true
+//        
+//        nominee1Fields.forEach { $0.isHidden = true }
+//        nominee2Fields.forEach { $0.isHidden = true }
+//        nominee3Fields.forEach { $0.isHidden = true }
+//        
+//        nominee1Stack.layer.cornerRadius = 10
+//        nominee1Stack.layer.borderWidth = 1
+//        nominee1Stack.layer.borderColor = UIColor.lightGray.cgColor
+//        
+//        nominee2Stack.layer.cornerRadius = 10
+//        nominee2Stack.layer.borderWidth = 1
+//        nominee2Stack.layer.borderColor = UIColor.lightGray.cgColor
+//        
+//        nominee3Stack.layer.cornerRadius = 10
+//        nominee3Stack.layer.borderWidth = 1
+//        nominee3Stack.layer.borderColor = UIColor.lightGray.cgColor
+//        
+//         nomineeFieldsHide()
+//        
+//        nominee1Stack.isLayoutMarginsRelativeArrangement = true
+//        nominee1Stack.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 16)
+//        
+//        nominee2Stack.isLayoutMarginsRelativeArrangement = true
+//        nominee2Stack.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 16)
+//        
+//        nominee3Stack.isLayoutMarginsRelativeArrangement = true
+//        nominee3Stack.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 16)
+//        
+//        toggleGuardianFields(for: 1, show: false)
+//        toggleGuardianFields(for: 2, show: false)
+//        toggleGuardianFields(for: 3, show: false)
+//        
+//        submitBtn.backgroundColor = .appPrimary
+//        optInBtn.tintColor = .appPrimary
+//        optOutBtn.tintColor = .appPrimary
+//        addNomineeBtn.tintColor = .appPrimary
+//        
+//        CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
+//            guard let self = self else { return }
+//            
+//            if let userId = userId, let sessionID = sessionID {
+//                self.fetchedUserId = userId
+//                self.fetchedSessionID = sessionID
+//                self.mobiledecodeArray = decodeByteArrayString
+//                print("UserID: \(userId), SessionID: \(sessionID)")
+//                 self.ViewAllNomineeDetails()
+//            } else {
+//                print("No UserID or SessionID found.")
+//            }
+//        }
+//        //populateNomineeFieldsArrays()
+//    }
+//    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        
+//        // Only fetch nominee details if user has opted in
+//        if optInBtn.isSelected {
+//            ViewAllNomineeDetails()
+//        }
+//    }
+//    
+//    
+//    @IBAction func backBtn(_ sender: UIButton) {
+//          let vc = ApplicationFormVC()
+//          vc.panNo = panNo
+//          vc.regId = regId
+//          vc.PANName = PANName
+//          vc.EmailId = EmailId
+//
+//          navigationController?.pushViewController(vc, animated: true)
+//    }
+//    
+//    func nomineeFieldsHide() {
+//        nomineeAddressViews1 = [
+//                addressLblFirst1, addressTxtFirst1,
+//                addressLblSecond1, addressTxtSecond1,
+//                addressLblThird1, addressTxtThird1,
+//                pinCodeLbl1, pinCodeTxt1,
+//                cityLbl1, cityTxt1,
+//                stateLbl1, stateTxt1
+//            ]
+//            
+//            guardianAddressViews1 = [
+//                guardianAddressLblFirst1, guardianAddressTxtFirst1,
+//                guardianAddressLblSecond1, guardianAddressTxtSecond1,
+//                guardianAddressLblThird1, guardianAddressTxtThird1,
+//                guardianPinCodeLbl1, guardianPinCodeTxt1,
+//                guardianCityLbl1, guardianCityTxt1,
+//                guardianStateLbl1, guardianStateTxt1
+//            ]
+//        
+//        nomineeAddressViews2 = [
+//                addressLblFirst2, addressTxtFirst2,
+//                addressLblSecond2, addressTxtSecond2,
+//                addressLblThird2, addressTxtThird2,
+//                pinCodeLbl2, pinCodeTxt2,
+//                cityLbl2, cityTxt2,
+//                stateLbl2, stateTxt2
+//            ]
+//            
+//            guardianAddressViews2 = [
+//                guardianAddressLblFirst2, guardianAddressTxtFirst2,
+//                guardianAddressLblSecond2, guardianAddressTxtSecond2,
+//                guardianAddressLblThird2, guardianAddressTxtThird2,
+//                guardianPinCodeLbl2, guardianPinCodeTxt2,
+//                guardianCityLbl2, guardianCityTxt2,
+//                guardianStateLbl2, guardianStateTxt2
+//            ]
+//        
+//        nomineeAddressViews3 = [
+//                addressLblFirst3, addressTxtFirst3,
+//                addressLblSecond3, addressTxtSecond3,
+//                addressLblThird3, addressTxtThird3,
+//                pinCodeLbl3, pinCodeTxt3,
+//                cityLbl3, cityTxt3,
+//                stateLbl3, stateTxt3
+//            ]
+//            
+//            guardianAddressViews3 = [
+//                guardianAddressLblFirst3, guardianAddressTxtFirst3,
+//                guardianAddressLblSecond3, guardianAddressTxtSecond3,
+//                guardianAddressLblThird3, guardianAddressTxtThird3,
+//                guardianPinCodeLbl3, guardianPinCodeTxt3,
+//                guardianCityLbl3, guardianCityTxt3,
+//                guardianStateLbl3, guardianStateTxt3
+//            ]
+//    }
+//    
+//    func hideNomineeAddress1(_ hide: Bool) {
+//        nomineeAddressViews1.forEach { $0.isHidden = hide }
+//    }
+//
+//    func hideGuardianAddress1(_ hide: Bool) {
+//        guardianAddressViews1.forEach { $0.isHidden = hide }
+//    }
+//    
+//    func hideNomineeAddress2(_ hide: Bool) {
+//        nomineeAddressViews2.forEach { $0.isHidden = hide }
+//    }
+//
+//    func hideGuardianAddress2(_ hide: Bool) {
+//        guardianAddressViews2.forEach { $0.isHidden = hide }
+//    }
+//    
+//    func hideNomineeAddress3(_ hide: Bool) {
+//        nomineeAddressViews3.forEach { $0.isHidden = hide }
+//    }
+//
+//    func hideGuardianAddress3(_ hide: Bool) {
+//        guardianAddressViews3.forEach { $0.isHidden = hide }
+//    }
+//    
+//    
+//    @IBAction func addNomineeBtnTApped(_ sender: UIButton) {
+//        guard nomineeCount < 3 else { return }
+//        
+//        nomineeCount += 1
+//        
+//        if nomineeCount == 1 {
+//            nominee1Stack.isHidden = false
+//        } else if nomineeCount == 2 {
+//            nominee2Stack.isHidden = false
+//        } else if nomineeCount == 3 {
+//            nominee3Stack.isHidden = false
+//            addNomineeBtn.isHidden = true // hide after 3
+//        }
+//    }
+//    
+//    @IBAction func optInTapped(_ sender: UIButton) {
+//        optInBtn.isSelected = true
+//        optOutBtn.isSelected = false
+//        
+//        addNomineeBtn.isHidden = false
+//    }
+//    
+//    @IBAction func optOutTapped(_ sender: UIButton) {
+//        optInBtn.isSelected = false
+//        optOutBtn.isSelected = true
+//        
+//        addNomineeBtn.isHidden = true
+//        
+//        // Hide all nominee stacks
+//        nominee1Stack.isHidden = true
+//        nominee2Stack.isHidden = true
+//        nominee3Stack.isHidden = true
+//        
+//        nomineeCount = 0
+//    }
+//    
+//    
+//    @IBAction func Nominee1Btn(_ sender: UIButton) {
+//        isNominee1Expanded.toggle()
+//         
+//         // Hide/show all arranged subviews except the first one (the header button)
+//         for (index, view) in nominee1Stack.arrangedSubviews.enumerated() {
+//             if index != 0 { // Skip the header button
+//                 view.isHidden = !isNominee1Expanded
+//             }
+//         }
+//    }
+//    
+//    @IBAction func Nominee2Btn(_ sender: UIButton) {
+//        isNominee2Expanded.toggle()
+//         
+//         // Hide/show all arranged subviews except the first one (the header button)
+//         for (index, view) in nominee2Stack.arrangedSubviews.enumerated() {
+//             if index != 0 { // Skip the header button
+//                 view.isHidden = !isNominee2Expanded
+//             }
+//         }
+//    }
+//    
+//    @IBAction func Nominee3Btn(_ sender: UIButton) {
+//        isNominee3Expanded.toggle()
+//         
+//         // Hide/show all arranged subviews except the first one (the header button)
+//         for (index, view) in nominee3Stack.arrangedSubviews.enumerated() {
+//             if index != 0 { // Skip the header button
+//                 view.isHidden = !isNominee3Expanded
+//             }
+//         }
+//    }
+//    
+//    private func fillNomineeFields(data: [String: Any], index: Int) {
+//        let name = data["NameAsPerAadhaar"] as? String ?? ""
+//        let dob = data["DOB"] as? String ?? ""
+//        let uid = data["Uid"] as? String ?? ""
+//        let gender = data["Gender"] as? String ?? ""
+//        let fatherName = data["FatherSpouseName"] as? String ?? ""
+//        
+//        let address1 = data["Address1"] as? String ?? ""
+//        let address2 = data["Address2"] as? String ?? ""
+//        let address3 = data["Address3"] as? String ?? ""
+//        let city = data["City"] as? String ?? ""
+//        let state = data["State"] as? String ?? ""
+//        let pincode = data["PinCode"] as? String ?? ""
+//        
+//        // Optional fields if available
+//        let mobile = data["Mobile"] as? String ?? ""
+//        let email = data["Email"] as? String ?? ""
+//        
+//        switch index {
+//           case 1:
+//               // Nominee fields
+//               nomineeNameTxt1.text = name
+//               nomineeDob1.text = dob
+//               documentId1.text = uid
+//               nomineeMobile1.text = mobile
+//               nomineeEmail1.text = email
+//               
+//               // Only auto-fill address fields if document type is Aadhaar
+//               if nomineedocumentType1 == "Aadhaar" {
+//                   addressTxtFirst1.text = address1
+//                   addressTxtSecond1.text = address2
+//                   addressTxtThird1.text = address3
+//                   cityTxt1.text = city
+//                   stateTxt1.text = state
+//                   pinCodeTxt1.text = pincode
+//               }
+//               
+//               // Set document type
+//               documentTypeBtn1.setTitle("Aadhaar", for: .normal)
+//               nomineedocumentType1 = "Aadhaar"
+//               
+//               // Only disable address fields if document type is Aadhaar
+//               nomineeNameTxt1.isEnabled = false
+//               nomineeDob1.isEnabled = false
+//               documentId1.isEnabled = false
+//               documentTypeBtn1.isEnabled = false
+//               
+//               if nomineedocumentType1 == "Aadhaar" {
+//                   addressTxtFirst1.isEnabled = false
+//                   addressTxtSecond1.isEnabled = false
+//                   addressTxtThird1.isEnabled = false
+//                   pinCodeTxt1.isEnabled = false
+//                   cityTxt1.isEnabled = false
+//                   stateTxt1.isEnabled = false
+//               }
+//            
+//        case 2:
+//            // Nominee fields
+//            nomineeNameTxt2.text = name
+//            nomineeDob2.text = dob
+//            documentId2.text = uid
+//            nomineeMobile2.text = mobile
+//            nomineeEmail2.text = email
+//            
+//            // Only auto-fill address fields if document type is Aadhaar
+//            if nomineedocumentType2 == "Aadhaar" {
+//                addressTxtFirst2.text = address1
+//                addressTxtSecond2.text = address2
+//                addressTxtThird2.text = address3
+//                cityTxt2.text = city
+//                stateTxt2.text = state
+//                pinCodeTxt2.text = pincode
+//            }
+//            
+//            // Set document type
+//            documentTypeBtn2.setTitle("Aadhaar", for: .normal)
+//            nomineedocumentType2 = "Aadhaar"
+//            
+//            // Only disable address fields if document type is Aadhaar
+//            nomineeNameTxt2.isEnabled = false
+//            nomineeDob2.isEnabled = false
+//            documentId2.isEnabled = false
+//            documentTypeBtn2.isEnabled = false
+//            
+//            if nomineedocumentType2 == "Aadhaar" {
+//                addressTxtFirst2.isEnabled = false
+//                addressTxtSecond2.isEnabled = false
+//                addressTxtThird2.isEnabled = false
+//                pinCodeTxt2.isEnabled = false
+//                cityTxt2.isEnabled = false
+//                stateTxt2.isEnabled = false
+//            }
+//        case 3:
+//            // Nominee fields
+//            nomineeNameTxt3.text = name
+//            nomineeDob3.text = dob
+//            documentId3.text = uid
+//            nomineeMobile3.text = mobile
+//            nomineeEmail3.text = email
+//            
+//            // Only auto-fill address fields if document type is Aadhaar
+//            if nomineedocumentType3 == "Aadhaar" {
+//                addressTxtFirst3.text = address1
+//                addressTxtSecond3.text = address2
+//                addressTxtThird3.text = address3
+//                cityTxt3.text = city
+//                stateTxt3.text = state
+//                pinCodeTxt3.text = pincode
+//            }
+//            
+//            // Set document type
+//            documentTypeBtn3.setTitle("Aadhaar", for: .normal)
+//            nomineedocumentType3 = "Aadhaar"
+//            
+//            // Only disable address fields if document type is Aadhaar
+//            nomineeNameTxt3.isEnabled = false
+//            nomineeDob3.isEnabled = false
+//            documentId3.isEnabled = false
+//            documentTypeBtn3.isEnabled = false
+//            
+//            if nomineedocumentType3 == "Aadhaar" {
+//                addressTxtFirst3.isEnabled = false
+//                addressTxtSecond3.isEnabled = false
+//                addressTxtThird3.isEnabled = false
+//                pinCodeTxt3.isEnabled = false
+//                cityTxt3.isEnabled = false
+//                stateTxt3.isEnabled = false
+//            }
+//        
+////        switch index {
+////        case 1:
+////            // Nominee fields
+////            nomineeNameTxt1.text = name
+////            nomineeDob1.text = dob
+////            documentId1.text = uid
+////            nomineeMobile1.text = mobile
+////            nomineeEmail1.text = email
+////
+////            // Address fields
+////            addressTxtFirst1.text = address1
+////            addressTxtSecond1.text = address2
+////            addressTxtThird1.text = address3
+////            cityTxt1.text = city
+////            stateTxt1.text = state
+////            pinCodeTxt1.text = pincode
+////
+////            // Set document type
+////            documentTypeBtn1.setTitle("Aadhaar", for: .normal)
+////            nomineedocumentType1 = "Aadhaar"
+////
+////            // Disable fields after verification
+////            nomineeNameTxt1.isEnabled = false
+////            nomineeDob1.isEnabled = false
+////            documentId1.isEnabled = false
+////            documentTypeBtn1.isEnabled = false
+////            addressTxtFirst1.isEnabled = false
+////            addressTxtSecond1.isEnabled = false
+////            addressTxtThird1.isEnabled = false
+////            pinCodeTxt1.isEnabled = false
+////            cityTxt1.isEnabled = false
+////            stateTxt1.isEnabled = false
+////
+////        case 2:
+////            // Nominee fields
+////            nomineeNameTxt2.text = name
+////            nomineeDob2.text = dob
+////            documentId2.text = uid
+////            nomineeMobile2.text = mobile
+////            nomineeEmail2.text = email
+////
+////            // Address fields
+////            addressTxtFirst2.text = address1
+////            addressTxtSecond2.text = address2
+////            addressTxtThird2.text = address3
+////            cityTxt2.text = city
+////            stateTxt2.text = state
+////            pinCodeTxt2.text = pincode
+////
+////            // Set document type
+////            documentTypeBtn2.setTitle("Aadhaar", for: .normal)
+////            nomineedocumentType2 = "Aadhaar"
+////
+////            // Disable fields
+////            nomineeNameTxt2.isEnabled = false
+////            nomineeDob2.isEnabled = false
+////            documentId2.isEnabled = false
+////            documentTypeBtn2.isEnabled = false
+////            addressTxtFirst2.isEnabled = false
+////            addressTxtSecond2.isEnabled = false
+////            addressTxtThird2.isEnabled = false
+////            pinCodeTxt1.isEnabled = false
+////            cityTxt2.isEnabled = false
+////            stateTxt2.isEnabled = false
+////
+////        case 3:
+////            // Nominee fields
+////            nomineeNameTxt3.text = name
+////            nomineeDob3.text = dob
+////            documentId3.text = uid
+////            nomineeMobile3.text = mobile
+////            nomineeEmail3.text = email
+////
+////            // Address fields
+////            addressTxtFirst3.text = address1
+////            addressTxtSecond3.text = address2
+////            addressTxtThird3.text = address3
+////            cityTxt3.text = city
+////            stateTxt3.text = state
+////            pinCodeTxt1.text = pincode
+////
+////            // Set document type
+////            documentTypeBtn3.setTitle("Aadhaar", for: .normal)
+////            nomineedocumentType3 = "Aadhaar"
+////
+////            // Disable fields
+////            nomineeNameTxt3.isEnabled = false
+////            nomineeDob3.isEnabled = false
+////            documentId3.isEnabled = false
+////            documentTypeBtn3.isEnabled = false
+////            addressTxtFirst3.isEnabled = false
+////            addressTxtSecond3.isEnabled = false
+////            addressTxtThird3.isEnabled = false
+////            pinCodeTxt1.isEnabled = false
+////            cityTxt3.isEnabled = false
+////            stateTxt3.isEnabled = false
+////
+//        default:
+//            return
+//        }
+//        
+//        // Age check and guardian visibility
+//        if let age = calculateAge(from: dob) {
+//            toggleGuardianFields(for: index, show: age < 18)
+//        }
+//        
+//        // Validate pincode to fetch city/state if needed
+//        validatePinCode(pinCode: pincode, for: "nominee", index: index)
+//        
+//        print("✅ Successfully auto-filled Nominee \(index)")
+//    }
+//    
+//    func calculateAge(from dob: String) -> Int? {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "dd-MM-yyyy"
+//        guard let dateOfBirth = dateFormatter.date(from: dob) else {
+//            return nil
+//        }
+//        let calendar = Calendar.current
+//        let ageComponents = calendar.dateComponents([.year], from: dateOfBirth, to: Date())
+//        return ageComponents.year
+//    }
+//  
+//    func toggleGuardianFields(for nomineeIndex: Int, show: Bool) {
+//        switch nomineeIndex {
+//        case 1:
+//            gurdianLbl1?.isHidden = !show
+//            guardianTypeLbl1?.isHidden = !show
+//            guardianDocumentTypeBtn1?.isHidden = !show
+//            minorNameLbl1?.isHidden = !show
+//            minorNameTxt1?.isHidden = !show
+//            guardianNameTxt1?.isHidden = !show
+//            guardianDobLbl1?.isHidden = !show
+//            guardianDobBtn1?.isHidden = !show
+//            guardianDobTxt1?.isHidden = !show
+//            guardianIDLbl1?.isHidden = !show
+//            guardianIdTxt1?.isHidden = !show
+//            guardianVerifyBtn1?.isHidden = !show
+//            guardianMobileLbl1?.isHidden = !show
+//            guardianMobileTxt1?.isHidden = !show
+//            guardianEmailLbl1?.isHidden = !show
+//            guardianEmailTxt1?.isHidden = !show
+//            nomineeSameAsBtn1?.isHidden = !show
+//            guardianAddressLblFirst1?.isHidden = !show
+//            guardianAddressTxtFirst1?.isHidden = !show
+//            guardianAddressLblSecond1?.isHidden = !show
+//            guardianAddressTxtSecond1?.isHidden = !show
+//            guardianAddressLblThird1?.isHidden = !show
+//            guardianAddressTxtThird1?.isHidden = !show
+//            guardianPinCodeLbl1?.isHidden = !show
+//            guardianPinCodeTxt1?.isHidden = !show
+//            guardianCityLbl1?.isHidden = !show
+//            guardianCityTxt1?.isHidden = !show
+//            guardianStateLbl1?.isHidden = !show
+//            guardianStateTxt1?.isHidden = !show
+//            guardianRelationLbl1?.isHidden = !show
+//            guardianRelationBtn1?.isHidden = !show
+//            
+//        case 2:
+//            gurdianLbl2?.isHidden = !show
+//            guardianTypeLbl2?.isHidden = !show
+//            guardianDocumentTypeBtn2?.isHidden = !show
+//            minorNameLbl2?.isHidden = !show
+//            minorNameTxt2?.isHidden = !show
+//            guardianNameTxt2?.isHidden = !show
+//            guardianDobLbl2?.isHidden = !show
+//            guardianDobBtn2?.isHidden = !show
+//            guardianDobTxt2?.isHidden = !show
+//            guardianIDLbl2?.isHidden = !show
+//            guardianIdTxt2?.isHidden = !show
+//            guardianVerifyBtn2?.isHidden = !show
+//            guardianMobileLbl2?.isHidden = !show
+//            guardianMobileTxt2?.isHidden = !show
+//            guardianEmailLbl2?.isHidden = !show
+//            guardianEmailTxt2?.isHidden = !show
+//            nomineeSameAsBtn2?.isHidden = !show
+//            guardianAddressLblFirst2?.isHidden = !show
+//            guardianAddressTxtFirst2?.isHidden = !show
+//            guardianAddressLblSecond2?.isHidden = !show
+//            guardianAddressTxtSecond2?.isHidden = !show
+//            guardianAddressLblThird2?.isHidden = !show
+//            guardianAddressTxtThird2?.isHidden = !show
+//            guardianPinCodeLbl2?.isHidden = !show
+//            guardianPinCodeTxt2?.isHidden = !show
+//            guardianCityLbl2?.isHidden = !show
+//            guardianCityTxt2?.isHidden = !show
+//            guardianStateLbl2?.isHidden = !show
+//            guardianStateTxt2?.isHidden = !show
+//            guardianRelationLbl2?.isHidden = !show
+//            guardianRelationBtn2?.isHidden = !show
+//            
+//        case 3:
+//            gurdianLbl3?.isHidden = !show
+//            guardianTypeLbl3?.isHidden = !show
+//            guardianDocumentTypeBtn3?.isHidden = !show
+//            minorNameLbl3?.isHidden = !show
+//            minorNameTxt3?.isHidden = !show
+//            guardianNameTxt3?.isHidden = !show
+//            guardianDobLbl3?.isHidden = !show
+//            guardianDobBtn3?.isHidden = !show
+//            guardianDobTxt3?.isHidden = !show
+//            guardianIDLbl3?.isHidden = !show
+//            guardianIdTxt3?.isHidden = !show
+//            guardianVerifyBtn3?.isHidden = !show
+//            guardianMobileLbl3?.isHidden = !show
+//            guardianMobileTxt3?.isHidden = !show
+//            guardianEmailLbl3?.isHidden = !show
+//            guardianEmailTxt3?.isHidden = !show
+//            nomineeSameAsBtn3?.isHidden = !show
+//            guardianAddressLblFirst3?.isHidden = !show
+//            guardianAddressTxtFirst3?.isHidden = !show
+//            guardianAddressLblSecond3?.isHidden = !show
+//            guardianAddressTxtSecond3?.isHidden = !show
+//            guardianAddressLblThird3?.isHidden = !show
+//            guardianAddressTxtThird3?.isHidden = !show
+//            guardianPinCodeLbl3?.isHidden = !show
+//            guardianPinCodeTxt3?.isHidden = !show
+//            guardianCityLbl3?.isHidden = !show
+//            guardianCityTxt3?.isHidden = !show
+//            guardianStateLbl3?.isHidden = !show
+//            guardianStateTxt3?.isHidden = !show
+//            guardianRelationLbl3?.isHidden = !show
+//            guardianRelationBtn3?.isHidden = !show
+//            
+//        default:
+//            break
+//        }
+//    }
+//    
+//    private func fillGuardianFields(data: [String: Any], index: Int) {
+//        DispatchQueue.main.async {
+//            print("🔧 Filling Guardian \(index) with DigiLocker data")
+//            
+//            let name = data["NameAsPerAadhaar"] as? String ?? ""
+//            let dob = data["DOB"] as? String ?? ""
+//            let uid = data["Uid"] as? String ?? ""
+//            
+//            let address1 = data["Address1"] as? String ?? ""
+//            let address2 = data["Address2"] as? String ?? ""
+//            let address3 = data["Address3"] as? String ?? ""
+//            let city = data["City"] as? String ?? ""
+//            let state = data["State"] as? String ?? ""
+//            let pincode = data["PinCode"] as? String ?? ""
+//            
+//            switch index {
+//            case 1:
+//                self.guardianNameTxt1.text = name
+//                self.guardianDobTxt1.text = dob
+//                self.guardianIdTxt1.text = uid
+//                
+//                self.guardianAddressTxtFirst1.text = address1
+//                self.guardianAddressTxtSecond1.text = address2
+//                self.guardianAddressTxtThird1.text = address3
+//                self.guardianCityTxt1.text = city
+//                self.guardianStateTxt1.text = state
+//                self.guardianPinCodeTxt1.text = pincode
+//                
+//                self.guardianDocumentTypeBtn1.setTitle("Aadhaar", for: .normal)
+//                self.guardiandocumentType1 = "Aadhaar"
+//                
+//            case 2:
+//                self.guardianNameTxt2.text = name
+//                self.guardianDobTxt2.text = dob
+//                self.guardianIdTxt2.text = uid
+//                
+//                self.guardianAddressTxtFirst2.text = address1
+//                self.guardianAddressTxtSecond2.text = address2
+//                self.guardianAddressTxtThird2.text = address3
+//                self.guardianCityTxt2.text = city
+//                self.guardianStateTxt2.text = state
+//                self.guardianPinCodeTxt2.text = pincode
+//                
+//                self.guardianDocumentTypeBtn2.setTitle("Aadhaar", for: .normal)
+//                self.guardiandocumentType2 = "Aadhaar"
+//                
+//            case 3:
+//                self.guardianNameTxt3.text = name
+//                self.guardianDobTxt3.text = dob
+//                self.guardianIdTxt3.text = uid
+//                
+//                self.guardianAddressTxtFirst3.text = address1
+//                self.guardianAddressTxtSecond3.text = address2
+//                self.guardianAddressTxtThird3.text = address3
+//                self.guardianCityTxt3.text = city
+//                self.guardianStateTxt3.text = state
+//                self.guardianPinCodeTxt3.text = pincode
+//                
+//                self.guardianDocumentTypeBtn3.setTitle("Aadhaar", for: .normal)
+//                self.guardiandocumentType3 = "Aadhaar"
+//                
+//            default:
+//                return
+//            }
+//            
+//            print("✅ Successfully auto-filled Guardian \(index)")
+//        }
+//    }
+//    
+//    func populateNomineeFieldsArrays() {
+//        // Nominee 1 Fields
+//        nominee1Fields = [
+//            documentTypeLbl1, documentTypeBtn1, documentId1, documentVerifyBtn1,
+//            nomineeNameTxt1, nomineeDob1, nomineeDobBtn1, nomineeMobile1, nomineeEmail1,
+//            addressSameAsApplicantBtn1, addressLblFirst1, addressTxtFirst1,
+//            addressLblSecond1, addressTxtSecond1, addressLblThird1, addressTxtThird1,
+//            pinCodeLbl1, pinCodeTxt1, cityLbl1, cityTxt1, stateLbl1, stateTxt1,
+//            relationApplicantLbl1, relationBtn1, shareLbl1, shareTxt1,
+//            gurdianLbl1, guardianTypeLbl1, guardianDocumentTypeBtn1,
+//            minorNameLbl1, minorNameTxt1, guardianNameTxt1,
+//            guardianDobLbl1, guardianDobBtn1, guardianDobTxt1,
+//            guardianIDLbl1, guardianIdTxt1, guardianVerifyBtn1,
+//            guardianMobileLbl1, guardianMobileTxt1,
+//            guardianEmailLbl1, guardianEmailTxt1,
+//            guardianRelationLbl1, guardianRelationBtn1,
+//            nomineeSameAsBtn1,
+//            guardianAddressLblFirst1, guardianAddressTxtFirst1,
+//            guardianAddressLblSecond1, guardianAddressTxtSecond1,
+//            guardianAddressLblThird1, guardianAddressTxtThird1,
+//            guardianPinCodeLbl1, guardianPinCodeTxt1,
+//            guardianCityLbl1, guardianCityTxt1,
+//            guardianStateLbl1, guardianStateTxt1
+//        ]
+//        
+//        nominee2Fields = [
+//            documentTypeLbl2, documentTypeBtn2, documentId2, documentVerifyBtn2,
+//            nomineeNameTxt2, nomineeDob2, nomineeDobBtn2, nomineeMobile2, nomineeEmail2,
+//            addressSameAsApplicantBtn2, addressLblFirst2, addressTxtFirst2,
+//            addressLblSecond2, addressTxtSecond2, addressLblThird2, addressTxtThird2,
+//            pinCodeLbl2, pinCodeTxt2, cityLbl2, cityTxt2, stateLbl2, stateTxt2,
+//            relationApplicantLbl2, relationBtn2, shareLbl2, shareTxt2,
+//            gurdianLbl2, guardianTypeLbl2, guardianDocumentTypeBtn2,
+//            minorNameLbl2, minorNameTxt2, guardianNameTxt2,
+//            guardianDobLbl2, guardianDobBtn2, guardianDobTxt2,
+//            guardianIDLbl2, guardianIdTxt2, guardianVerifyBtn2,
+//            guardianMobileLbl2, guardianMobileTxt2,
+//            guardianEmailLbl2, guardianEmailTxt2,
+//            guardianRelationLbl2, guardianRelationBtn2,
+//            nomineeSameAsBtn2,
+//            guardianAddressLblFirst2, guardianAddressTxtFirst2,
+//            guardianAddressLblSecond2, guardianAddressTxtSecond2,
+//            guardianAddressLblThird2, guardianAddressTxtThird2,
+//            guardianPinCodeLbl2, guardianPinCodeTxt2,
+//            guardianCityLbl2, guardianCityTxt2,
+//            guardianStateLbl2, guardianStateTxt2
+//        ]
+//        
+//        nominee2Fields = [
+//            documentTypeLbl3, documentTypeBtn3, documentId3, documentVerifyBtn3,
+//            nomineeNameTxt3, nomineeDob3, nomineeDobBtn3, nomineeMobile3, nomineeEmail3,
+//            addressSameAsApplicantBtn3, addressLblFirst3, addressTxtFirst3,
+//            addressLblSecond3, addressTxtSecond3, addressLblThird3, addressTxtThird3,
+//            pinCodeLbl3, pinCodeTxt3, cityLbl3, cityTxt3, stateLbl3, stateTxt3,
+//            relationApplicantLbl3, relationBtn3, shareLbl3, shareTxt3,
+//            gurdianLbl3, guardianTypeLbl3, guardianDocumentTypeBtn3,
+//            minorNameLbl3, minorNameTxt3, guardianNameTxt3,
+//            guardianDobLbl3, guardianDobBtn3, guardianDobTxt3,
+//            guardianIDLbl3, guardianIdTxt3, guardianVerifyBtn3,
+//            guardianMobileLbl3, guardianMobileTxt3,
+//            guardianEmailLbl3, guardianEmailTxt3,
+//            guardianRelationLbl3, guardianRelationBtn3,
+//            nomineeSameAsBtn3,
+//            guardianAddressLblFirst3, guardianAddressTxtFirst3,
+//            guardianAddressLblSecond3, guardianAddressTxtSecond3,
+//            guardianAddressLblThird3, guardianAddressTxtThird3,
+//            guardianPinCodeLbl2, guardianPinCodeTxt2,
+//            guardianCityLbl3, guardianCityTxt3,
+//            guardianStateLbl3, guardianStateTxt3
+//        ]
+//    }
+//    
+//    
+//    func saveDigiLocker(identifier1 : String) {
+//        digiIdentifier = identifier1
+//        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
+//            guard let tokenId = tokenId else {
+//                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+//                    if success {
+//                        // Call SIXTHAPI after tokenMobile API call is successful
+//                        self.saveDigiLocker(identifier1: identifier1)
+//                    } else {
+//                        print("Token generation failed.")
+//                    }
+//                }// Handle the case where no tokens are available
+//                print("No tokens available. Please reload the tokens.")
+//                return
+//            }
+//            let parameters: [String: Any?] = [
+//                "UserId": fetchedUserId,
+//                "TokenId": tokenId,
+//                "RegId": RegId,
+//                "PanNo": panNo,
+//                "PanName": "N",
+//                "Flag":"INSERT",
+//                "ThirdPartyRequest": ""
+//            ]
+//            print(parameters)
+//            let Url = "AadhaarData/SaveDigiLockerAuditLogDetails"
+//            
+//            apiCall(url: Url, method: "POST", parameters: parameters as [String : Any], view: self.view,loaderText: "please wait...") { result in
+//                switch result {
+//                case .success(let jsonResponse):
+//                    print("SAVE-DIGILOCKER Response: \(jsonResponse)")
+//                    //                    let DigiLockerURL = jsonResponse["DigiLockerURL"] as? String
+//                    let digilockerReturnURL = jsonResponse["DigiLockeReturnURL"] as? String
+//                    let Client_id = jsonResponse["Client_id"] as? String
+//                    let DigiLockerURL = jsonResponse["DigiLockerURL"] as? String
+//                    let TransactionID = jsonResponse["TransactionID"] as? String
+//                    if let errorCode = jsonResponse["ErrorCode"] as? String {
+//                        switch errorCode {
+//                        case "999992":
+//                            DispatchQueue.main.async {
+//                                CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+//                                print("All TokenMobile entries deleted due to error code 999992")
+//                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+//                                    if success {
+//                                        self.saveDigiLocker(identifier1: identifier1)
+//                                    } else {
+//                                        print("Token generation failed.")
+//                                    }
+//                                }
+//                            }
+//                        case "000000":
+//                            DispatchQueue.main.async {
+//                                if let digiType = jsonResponse["DigiType"] as? String {
+//                                    if digiType == "VERITICS" {
+//                                        self.navigationToVeriticsVC()
+//                                        //                                        self.navigateToVeriticsVC(DigiLockerURL: DigiLockerURL ?? "", TransactionID: TransactionID ?? "",identifier1 : identifier1)
+//                                    } else if digiType == "DIRECT"{
+//                                        let url = "\(DigiLockerURL ?? "")?redirect_uri=\(digilockerReturnURL ?? "")&response_type=code&response_type=code&client_id=\(Client_id ?? "")&state=\(TransactionID ?? "")"
+//                                        //                                        self.navigateToVeriticsVC(DigiLockerURL: url, TransactionID: TransactionID ?? "", identifier1: identifier1 )
+//                                        self.navigationToVeriticsVC()
+//                                    }else {
+//                                        print("Invalid type: \(digiType)")
+//                                    }
+//                                } else {
+//                                    print("DigiType is missing in the response")
+//                                }
+//                            }
+//                        default:
+//                            print("Unhandled error code: \(errorCode)")
+//                        }
+//                    }
+//                case .failure(let error):
+//                    print("Login API call failed: \(error.localizedDescription)")
+//                }
+//            }
+//            
+//        }
+//    }
+//    
+//    func validatePinCode(pinCode: String, for type: String, index: Int = 1) {
+//        let parameters: [String: Any] = ["PinCode": pinCode]
+//        
+//        let url = "CityState/GetCitySateOnPincode"
+//        
+//        apiCall(url: url, method: "POST", parameters: parameters, view: self.view) { result in
+//            switch result {
+//            case .success(let jsonResponse):
+//                if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000000" {
+//                    DispatchQueue.main.async {
+//                        if let countryList = jsonResponse["CountryList"] as? [[String: Any]],
+//                           let firstItem = countryList.first {
+//                            let city = firstItem["City"] as? String ?? ""
+//                            let state = firstItem["State"] as? String ?? ""
+//                            
+//                            if type == "nominee" {
+//                                switch index {
+//                                case 1:
+//                                    self.cityTxt1.text = city
+//                                    self.stateTxt1.text = state
+//                                    self.cityTxt1.isUserInteractionEnabled = false
+//                                    self.stateTxt1.isUserInteractionEnabled = false
+//                                case 2:
+//                                    self.cityTxt2.text = city
+//                                    self.stateTxt2.text = state
+//                                    self.cityTxt2.isUserInteractionEnabled = false
+//                                    self.stateTxt2.isUserInteractionEnabled = false
+//                                case 3:
+//                                    self.cityTxt3.text = city
+//                                    self.stateTxt3.text = state
+//                                    self.cityTxt3.isUserInteractionEnabled = false
+//                                    self.stateTxt3.isUserInteractionEnabled = false
+//                                default:
+//                                    break
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            case .failure(let error):
+//                print("API call failed: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+//    
+//    func ViewAllNomineeDetails() {
+//        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
+//            guard let tokenId = tokenId else {
+//                CoreDataHelper.generateToken(
+//                    decodeByteArrayToString: self.mobiledecodeArray ?? "",
+//                    USERID: self.fetchedUserId ?? "",
+//                    SessionId: self.fetchedSessionID ?? "",
+//                    entityName: "TokenMobile", deviceType: "W", in: self.view
+//                ) { success in
+//                    if success {
+//                        self.ViewAllNomineeDetails()
+//                    } else {
+//                        print("Token generation failed.")
+//                    }
+//                }
+//                print("No tokens available. Please reload the tokens.")
+//                return
+//            }
+//            
+//            let parameters: [String: Any?] = [
+//                "UserId": fetchedUserId,
+//                "PanNo": panNo,
+//                "RegId": RegId,
+//                "TokenId": tokenId
+//            ]
+//            
+//            print(parameters)
+//            
+//            let url = "NomineeDetails/ViewAllNomineeDetails"
+//            
+//            apiCall(url: url, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
+//                switch result {
+//                case .success(let jsonResponse):
+//                    print("ViewAllNomineeDetails Response: \(jsonResponse)")
+//                    
+//                    if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000000" {
+//                        DispatchQueue.main.async {
+//                            if let IsNominate = jsonResponse["IsNominate"] as? String {
+//                                if IsNominate == "N" {
+//                                    print("NO NOMINEES ARE PRESENT")
+//                                    // Reset UI for no nominees
+//                                    self.optOutBtn.isSelected = true
+//                                    self.optInBtn.isSelected = false
+//                                    self.addNomineeBtn.isHidden = true
+//                                    self.nominee1Stack.isHidden = true
+//                                    self.nominee2Stack.isHidden = true
+//                                    self.nominee3Stack.isHidden = true
+//                                    self.nomineeCount = 0
+//                                } else if IsNominate == "Y" {
+//                                    self.optInBtn.isSelected = true
+//                                    self.optOutBtn.isSelected = false
+//                                    
+//                                    if let nomineeData = jsonResponse["NomineeDetails"] as? [[String: Any]], !nomineeData.isEmpty {
+//                                        self.nomineeDetailsArray = nomineeData
+//                                        self.updateNomineeViewsall() // You need to implement this method
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        DispatchQueue.main.async {
+//                            if let errorMessage = jsonResponse["ErrorMessage"] as? String {
+//                                self.showAlert(message: errorMessage)
+//                            } else {
+//                                self.showAlert(message: "Unhandled error code")
+//                            }
+//                        }
+//                    }
+//                case .failure(let error):
+//                    DispatchQueue.main.async {
+//                        self.showAlert(message: "API call failed: \(error.localizedDescription)")
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    
+//    func updateNomineeViewsall() {
+//        // Show appropriate number of nominee stacks based on data count
+//        nomineeCount = nomineeDetailsArray.count
+//        
+//        for (index, nomineeData) in nomineeDetailsArray.enumerated() {
+//            let nomineeIndex = index + 1
+//            
+//            // Show the stack view
+//            switch nomineeIndex {
+//            case 1:
+//                nominee1Stack.isHidden = false
+//                populateNomineeData(nomineeData, for: 1)
+//            case 2:
+//                nominee2Stack.isHidden = false
+//                populateNomineeData(nomineeData, for: 2)
+//            case 3:
+//                nominee3Stack.isHidden = false
+//                populateNomineeData(nomineeData, for: 3)
+//            default:
+//                break
+//            }
+//        }
+//        
+//        // Hide add button if max reached
+//        addNomineeBtn.isHidden = (nomineeCount >= 3)
+//    }
+//
+//    func populateNomineeData(_ data: [String: Any], for index: Int) {
+//        switch index {
+//        case 1:
+//            nomineeNameTxt1.text = data["NomineeName"] as? String ?? ""
+//            nomineeDob1.text = data["NomineeDOB"] as? String ?? ""
+//            documentId1.text = data["NomineeDocumentId"] as? String ?? ""
+//            nomineeMobile1.text = data["NomineeMobile"] as? String ?? ""
+//            nomineeEmail1.text = data["NomineeEmail"] as? String ?? ""
+//            shareTxt1.text = data["SharePercentage"] as? String ?? ""
+//            relationBtn1.setTitle(data["NomineeRelation"] as? String ?? "", for: .normal)
+//            
+//            // Set document type button title
+//            let docType = data["NomineeDocumentType"] as? String ?? ""
+//            documentTypeBtn1.setTitle(docType, for: .normal)
+//            nomineedocumentType1 = docType
+//            
+//            // Address fields
+//            if data["IsAddressSameAsApplicant"] as? String == "Y" {
+//                addressSameAsApplicantBtn1.isSelected = true
+//                hideNomineeAddress1(true)
+//            } else {
+//                addressTxtFirst1.text = data["NomineeAddress1"] as? String ?? ""
+//                addressTxtSecond1.text = data["NomineeAddress2"] as? String ?? ""
+//                addressTxtThird1.text = data["NomineeAddress3"] as? String ?? ""
+//                cityTxt1.text = data["NomineeCity"] as? String ?? ""
+//                stateTxt1.text = data["NomineeState"] as? String ?? ""
+//                pinCodeTxt1.text = data["NomineePinCode"] as? String ?? ""
+//            }
+//            
+//            // Guardian fields if minor
+//            if let isMinor = data["IsMinor"] as? String, isMinor == "Y" {
+//                toggleGuardianFields(for: 1, show: true)
+//                guardianNameTxt1.text = data["GuardianName"] as? String ?? ""
+//                guardianDobTxt1.text = data["GuardianDOB"] as? String ?? ""
+//                guardianIdTxt1.text = data["GuardianDocumentId"] as? String ?? ""
+//                guardianMobileTxt1.text = data["GuardianMobile"] as? String ?? ""
+//                guardianEmailTxt1.text = data["GuardianEmail"] as? String ?? ""
+//                guardianRelationBtn1.setTitle(data["GuardianRelation"] as? String ?? "", for: .normal)
+//            }
+//            
+//        case 2:
+//            // Similar population for nominee 2
+//            nomineeNameTxt2.text = data["NomineeName"] as? String ?? ""
+//            nomineeDob2.text = data["NomineeDOB"] as? String ?? ""
+//            documentId2.text = data["NomineeDocumentId"] as? String ?? ""
+//            nomineeMobile2.text = data["NomineeMobile"] as? String ?? ""
+//            nomineeEmail2.text = data["NomineeEmail"] as? String ?? ""
+//            shareTxt2.text = data["SharePercentage"] as? String ?? ""
+//            relationBtn2.setTitle(data["NomineeRelation"] as? String ?? "", for: .normal)
+//            
+//            let docType = data["NomineeDocumentType"] as? String ?? ""
+//            documentTypeBtn2.setTitle(docType, for: .normal)
+//            nomineedocumentType2 = docType
+//            
+//            if data["IsAddressSameAsApplicant"] as? String == "Y" {
+//                addressSameAsApplicantBtn2.isSelected = true
+//                hideNomineeAddress2(true)
+//            } else {
+//                addressTxtFirst2.text = data["NomineeAddress1"] as? String ?? ""
+//                addressTxtSecond2.text = data["NomineeAddress2"] as? String ?? ""
+//                addressTxtThird2.text = data["NomineeAddress3"] as? String ?? ""
+//                cityTxt2.text = data["NomineeCity"] as? String ?? ""
+//                stateTxt2.text = data["NomineeState"] as? String ?? ""
+//                pinCodeTxt2.text = data["NomineePinCode"] as? String ?? ""
+//            }
+//            
+//        case 3:
+//            // Similar population for nominee 3
+//            nomineeNameTxt3.text = data["NomineeName"] as? String ?? ""
+//            nomineeDob3.text = data["NomineeDOB"] as? String ?? ""
+//            documentId3.text = data["NomineeDocumentId"] as? String ?? ""
+//            nomineeMobile3.text = data["NomineeMobile"] as? String ?? ""
+//            nomineeEmail3.text = data["NomineeEmail"] as? String ?? ""
+//            shareTxt3.text = data["SharePercentage"] as? String ?? ""
+//            relationBtn3.setTitle(data["NomineeRelation"] as? String ?? "", for: .normal)
+//            
+//            let docType = data["NomineeDocumentType"] as? String ?? ""
+//            documentTypeBtn3.setTitle(docType, for: .normal)
+//            nomineedocumentType3 = docType
+//            
+//            if data["IsAddressSameAsApplicant"] as? String == "Y" {
+//                addressSameAsApplicantBtn3.isSelected = true
+//                hideNomineeAddress3(true)
+//            } else {
+//                addressTxtFirst3.text = data["NomineeAddress1"] as? String ?? ""
+//                addressTxtSecond3.text = data["NomineeAddress2"] as? String ?? ""
+//                addressTxtThird3.text = data["NomineeAddress3"] as? String ?? ""
+//                cityTxt3.text = data["NomineeCity"] as? String ?? ""
+//                stateTxt3.text = data["NomineeState"] as? String ?? ""
+//                pinCodeTxt3.text = data["NomineePinCode"] as? String ?? ""
+//            }
+//            
+//        default:
+//            break
+//        }
+//    }
+//    
+//    func showAlert(message: String) {
+//        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+//        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+//        alertController.addAction(okAction)
+//        self.present(alertController, animated: true, completion: nil)
+//    }
+//    
+//    func navigationToVeriticsVC() {
+//        let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
+//        let vc = storyboard.instantiateViewController(identifier: "digiNomiVC") as! digiNomiVC
+//        vc.panNo = panNo
+//        vc.RegId = RegId
+//        vc.digilockerDone = "Done"
+//        vc.identifier3 = "NomineeVC"
+//        vc.identifier1 = digiIdentifier
+//        vc.delegate = self
+//        self.navigationController?.pushViewController(vc, animated: true)
+//    }
+//    
+//    @IBAction func documentType1(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "documentTypeVC") as! documentTypeVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "NomineeDocument1"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func dobBtnTapped(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "nomineeDOB1"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func documentType2(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "documentTypeVC") as! documentTypeVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "nomineeDocument2"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func dobBtnTapped2(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "nomineeDOB2"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func documentType3(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "documentTypeVC") as! documentTypeVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "nomineeDocument3"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func dobBtnTapped3(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "nomineeDOB3"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func nomineeVerifyBtn1(_ sender: UIButton) {
+//        verifyNominee(index: 1)
+//    }
+//    
+//    @IBAction func nomineeVerifyBtn2(_ sender: UIButton) {
+//        verifyNominee(index: 2)
+//    }
+//    
+//    @IBAction func nomineeVerifyBtn3(_ sender: UIButton) {
+//        verifyNominee(index: 3)
+//    }
+//
+//    @IBAction func guardianDocumentTypeBtn1(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "documentTypeVC") as! documentTypeVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "guardianDocument1"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func guardianDocumentTypeBtn2(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "documentTypeVC") as! documentTypeVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "guardianDocument2"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func guardianDocumentTypeBtn3(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "documentTypeVC") as! documentTypeVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "guardianDocument3"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func guardianVerifyBtn1(_ sender: UIButton) {
+//        verifyGuardian(index: 1)
+//    }
+//    
+//    @IBAction func guardianVerifyBtn2(_ sender: UIButton) {
+//        verifyGuardian(index: 2)
+//    }
+//    
+//    @IBAction func guardianVerifyBtn3(_ sender: UIButton) {
+//        verifyGuardian(index: 3)
+//    }
+//    
+//    @IBAction func guardianDobBtn1(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "guardianDOB1"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func guardianDobBtn2(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "guardianDOB2"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//    
+//    @IBAction func guardianDobBtn3(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.identifier = "guardianDOB3"
+//        vc.delegate = self
+//        vc.modalTransitionStyle = .crossDissolve
+//        present(vc, animated: true)
+//    }
+//   
+//    
+//    @IBAction func nomineeAdressSameBtn1(_ sender: UIButton) {
+//        sender.isSelected.toggle()
+//        hideNomineeAddress1(sender.isSelected)
+//    }
+//    
+//    @IBAction func nomineeAddressSameBtn2(_ sender: UIButton) {
+//        sender.isSelected.toggle()
+//        hideNomineeAddress2(sender.isSelected)
+//    }
+//    
+//    @IBAction func nomineeAddressSameBtn3(_ sender: UIButton) {
+//        sender.isSelected.toggle()
+//        hideNomineeAddress3(sender.isSelected)
+//    }
+// 
+//    @IBAction func guardianAddressSameBtn1(_ sender: UIButton) {
+//        sender.isSelected.toggle()
+//        hideGuardianAddress1(sender.isSelected)
+//    }
+//    
+//    @IBAction func guardianAddressSameBtn2(_ sender: UIButton) {
+//        sender.isSelected.toggle()
+//        hideGuardianAddress2(sender.isSelected)
+//    }
+//
+//    @IBAction func guardianAddressSameBtn3(_ sender: UIButton) {
+//        sender.isSelected.toggle()
+//        hideGuardianAddress3(sender.isSelected)
+//    }
+//    
+//    @IBAction func nomineeRelationBtn1(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "relationVC") as! relationVC
+//              vc.modalPresentationStyle = .overCurrentContext
+//              vc.identifier = "nomineeRelation1"
+//              vc.delegate = self
+//              vc.modalTransitionStyle = .crossDissolve
+//              present(vc, animated: true)
+//    }
+//    
+//    @IBAction func guradianRelationBtn1(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "relationVC") as! relationVC
+//              vc.modalPresentationStyle = .overCurrentContext
+//              vc.identifier = "guardianRelation1"
+//              vc.delegate = self
+//              vc.modalTransitionStyle = .crossDissolve
+//              present(vc, animated: true)
+//    }
+//    
+//    
+//    @IBAction func nomineeRelationBtn2(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "relationVC") as! relationVC
+//              vc.modalPresentationStyle = .overCurrentContext
+//              vc.identifier = "nomineeRelation2"
+//              vc.delegate = self
+//              vc.modalTransitionStyle = .crossDissolve
+//              present(vc, animated: true)
+//    }
+//    
+//    
+//    @IBAction func guardianRelationBtn2(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "relationVC") as! relationVC
+//              vc.modalPresentationStyle = .overCurrentContext
+//              vc.identifier = "guardianRelation2"
+//              vc.delegate = self
+//              vc.modalTransitionStyle = .crossDissolve
+//              present(vc, animated: true)
+//        
+//    }
+//    
+//    
+//    @IBAction func nomineeRelationBtn3(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "relationVC") as! relationVC
+//              vc.modalPresentationStyle = .overCurrentContext
+//              vc.identifier = "nomineeRelation3"
+//              vc.delegate = self
+//              vc.modalTransitionStyle = .crossDissolve
+//              present(vc, animated: true)
+//    }
+//    
+//    
+//    @IBAction func guardianRelationBtn3(_ sender: UIButton) {
+//        let vc = storyboard?.instantiateViewController(identifier: "relationVC") as! relationVC
+//              vc.modalPresentationStyle = .overCurrentContext
+//              vc.identifier = "guardianRelation3"
+//              vc.delegate = self
+//              vc.modalTransitionStyle = .crossDissolve
+//              present(vc, animated: true)
+//    }
+//    
+//    func verifyNominee(index: Int) {
+//        
+//        var panNo = ""
+//        var name = ""
+//        var dob = ""
+//        
+//        switch index {
+//        case 1:
+//            panNo = documentId1.text ?? ""
+//            name = nomineeNameTxt1.text ?? ""
+//            dob = nomineeDob1.text ?? ""
+//        case 2:
+//            panNo = documentId2.text ?? ""
+//            name = nomineeNameTxt2.text ?? ""
+//            dob = nomineeDob2.text ?? ""
+//        case 3:
+//            panNo = documentId3.text ?? ""
+//            name = nomineeNameTxt3.text ?? ""
+//            dob = nomineeDob3.text ?? ""
+//        default:
+//            return
+//        }
+////
+////        guard !panNo.isEmpty, !name.isEmpty, !dob.isEmpty else {
+////            showAlert(message: "Please enter Guardian details.")
+////            return
+////        }
+//        
+//        if let age = calculateAge(from: dob) {
+//            toggleGuardianFields(for: index, show: age < 18)
+//        }
+//        
+//        self.identifier = "Nominee\(index)"
+//        panValidation(panNo: panNo, name: name, userDOB: dob, isGuardian: false)
+//    }
+//    
+//    func verifyGuardian(index: Int) {
+//        
+//        var panNo = ""
+//        var name = ""
+//        var dob = ""
+//        
+//        switch index {
+//        case 1:
+//            panNo = guardianIdTxt1.text ?? ""
+//            name = guardianNameTxt1.text ?? ""
+//            dob = guardianDobTxt1.text ?? ""
+//        case 2:
+//            panNo = guardianIdTxt2.text ?? ""
+//            name = guardianNameTxt2.text ?? ""
+//            dob = guardianDobTxt2.text ?? ""
+//        case 3:
+//            panNo = guardianIdTxt3.text ?? ""
+//            name = guardianNameTxt3.text ?? ""
+//            dob = guardianDobTxt3.text ?? ""
+//        default:
+//            return
+//        }
+//        
+//        guard !panNo.isEmpty, !name.isEmpty, !dob.isEmpty else {
+//            showAlert(message: "Please enter all nominee details.")
+//            return
+//        }
+//        self.identifier = "Nominee\(index)"
+//        panValidation(panNo: panNo, name: name, userDOB: dob, isGuardian: true)
+//    }
+//    
+//    func isValidEmail(_ email: String) -> Bool {
+//        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+//        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+//        return emailTest.evaluate(with: email)
+//    }
+//    
+//    func isValidMobile(_ mobile: String) -> Bool {
+//        let mobileRegex = "^[0-9]{10}$"
+//        return NSPredicate(format: "SELF MATCHES %@", mobileRegex).evaluate(with: mobile)
+//    }
+//    
+//    func isValidPinCode(_ pincode: String) -> Bool {
+//        let pinRegex = "^[0-9]{6}$"
+//        return NSPredicate(format: "SELF MATCHES %@", pinRegex).evaluate(with: pincode)
+//    }
+//    
+////    @IBAction func proceedBtn(_ sender: UIButton) {
+////        if optOutBtn.isSelected {
+////              // Opt-Out selected - submit directly
+////              print("User opted out, submitting without nominee validation")
+////              NomineeType = "N"
+////              insertUpdateNomineeDetailsWebWithMinimalParams()
+////              return
+////          }
+////        guard nomineeCount > 0 else {
+////            showAlert(message: "Please add at least one nominee before proceeding.")
+////            return
+////        }
+////
+////        var panSet = Set<String>()
+////        var nameSet = Set<String>()
+////        for nominee in nomineeDetailsArray {
+////            if let pan = nominee["documentId"] as? String {
+////                if panSet.contains(pan) {
+////                    // Step 2: Show alert if a duplicate is found
+////                    showAlert(message: "Please enter different PAN or ID for each nominee.")
+////                    return
+////                }
+////                panSet.insert(pan)
+////            }
+////            if let name = nominee["nomineeName"] as? String {
+////                if nameSet.contains(name) {
+////                    showAlert(message: "Please enter a different nominee name for each nominee.")
+////                    return
+////                }
+////                nameSet.insert(name)
+////            }
+////        }
+////
+////        if NomineeType == "N" {
+////            print("nomineetype N called ")
+////            insertUpdateNomineeDetailsWebWithMinimalParams()
+////        } else if NomineeType == "Y" {
+////            // Call API with full parameters
+////            validateNomineeAllocation()
+////        } else {
+////            showAlert(message: "invalid number of nominee.")
+////        }
+////    }
+//    
+//    @IBAction func proceedBtn(_ sender: UIButton) {
+//        if optOutBtn.isSelected {
+//            // Opt-Out selected - submit directly
+//            print("User opted out, submitting without nominee validation")
+//            NomineeType = "N"
+//            insertUpdateNomineeDetailsWebWithMinimalParams()
+//            return
+//        }
+//        
+//        // Check if any nominee is added
+//        var hasNomineeData = false
+//        
+//        if !nominee1Stack.isHidden {
+//            if let name = nomineeNameTxt1.text, !name.isEmpty {
+//                hasNomineeData = true
+//            }
+//        }
+//        
+//        if !hasNomineeData && !nominee2Stack.isHidden {
+//            if let name = nomineeNameTxt2.text, !name.isEmpty {
+//                hasNomineeData = true
+//            }
+//        }
+//        
+//        if !hasNomineeData && !nominee3Stack.isHidden {
+//            if let name = nomineeNameTxt3.text, !name.isEmpty {
+//                hasNomineeData = true
+//            }
+//        }
+//        
+//        guard hasNomineeData else {
+//            showAlert(message: "Please add at least one nominee before proceeding.")
+//            return
+//        }
+//        
+//        // Validate PAN/ID duplicates
+//        var panSet = Set<String>()
+//        var nameSet = Set<String>()
+//        
+//        // Validate nominee 1 if present and has data
+//        if !nominee1Stack.isHidden, let name1 = nomineeNameTxt1.text, !name1.isEmpty {
+//            let pan1 = documentId1.text ?? ""
+//            
+//            if !pan1.isEmpty && panSet.contains(pan1) {
+//                showAlert(message: "Please enter different PAN or ID for each nominee.")
+//                return
+//            }
+//            if !pan1.isEmpty {
+//                panSet.insert(pan1)
+//            }
+//            
+//            if nameSet.contains(name1) {
+//                showAlert(message: "Please enter a different nominee name for each nominee.")
+//                return
+//            }
+//            nameSet.insert(name1)
+//        }
+//        
+//        // Validate nominee 2 if present and has data
+//        if !nominee2Stack.isHidden, let name2 = nomineeNameTxt2.text, !name2.isEmpty {
+//            let pan2 = documentId2.text ?? ""
+//            
+//            if !pan2.isEmpty && panSet.contains(pan2) {
+//                showAlert(message: "Please enter different PAN or ID for each nominee.")
+//                return
+//            }
+//            if !pan2.isEmpty {
+//                panSet.insert(pan2)
+//            }
+//            
+//            if nameSet.contains(name2) {
+//                showAlert(message: "Please enter a different nominee name for each nominee.")
+//                return
+//            }
+//            nameSet.insert(name2)
+//        }
+//        
+//        // Validate nominee 3 if present and has data
+//        if !nominee3Stack.isHidden, let name3 = nomineeNameTxt3.text, !name3.isEmpty {
+//            let pan3 = documentId3.text ?? ""
+//            
+//            if !pan3.isEmpty && panSet.contains(pan3) {
+//                showAlert(message: "Please enter different PAN or ID for each nominee.")
+//                return
+//            }
+//            if !pan3.isEmpty {
+//                panSet.insert(pan3)
+//            }
+//            
+//            if nameSet.contains(name3) {
+//                showAlert(message: "Please enter a different nominee name for each nominee.")
+//                return
+//            }
+//            nameSet.insert(name3)
+//        }
+//        
+//        // Validate total allocation
+//        validateNomineeAllocation()
+//    }
+//    
+//    func panValidation(panNo: String, name: String, userDOB: String,isGuardian: Bool){
+//        
+//        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
+//            guard let tokenId = tokenId else {
+//                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+//                    if success {
+//                        // Call SIXTHAPI after tokenMobile API call is successful
+//                        self.panValidation(panNo: panNo, name: name, userDOB: userDOB, isGuardian: isGuardian)
+//                    } else {
+//                        print("Token generation failed.")
+//                    }
+//                }
+//                print("No tokens available. Please reload the tokens.")
+//                return
+//            }
+//            
+//            let parameters: [String: Any?] = [
+//                "UserId": fetchedUserId,
+//                "TokenId": tokenId,
+//                "PanNo": panNo,
+//                "DeviceType": "1",
+//                "Name": name,
+//                "UserDOB": userDOB,
+//                "Flag":"N",
+//                "NOMType":identifier
+//            ]
+//            
+//            // URL for the login endpoint
+//            let Url = "Registration/ThirdPartyPANVerify"
+// 
+//            print(parameters)
+//            apiCall(url: Url, method: "POST", parameters: parameters as [String : Any], view: self.view,loaderText: "please wait processing data...") { result in
+//                switch result {
+//                case .success(let jsonResponse):
+//                    print("PAN api Response: \(jsonResponse)")
+//                    
+//                    let ErrorMessage = jsonResponse["ErrorMessage"] as? String
+//                    if let errorCode = jsonResponse["ErrorCode"] as? String {
+//                        
+//                        switch errorCode {
+//                            
+//                        case "000000":
+//                            DispatchQueue.main.async {
+//                                
+//                                if !isGuardian {
+//                                    
+//                                    // Detect nominee index
+//                                    if let index = Int(self.identifier.replacingOccurrences(of: "Nominee", with: "")) {
+//                                        
+//                                        // Disable fields after PAN verification
+//                                        self.disableNomineeFieldsAfterDigiLocker(index: index)
+//                                        
+//                                        // Age check for guardian
+//                                        if let age = self.calculateAge(from: userDOB) {
+//                                            self.toggleGuardianFields(for: index, show: age < 18)
+//                                        }
+//                                    }
+//                                }
+//                                
+//                                let storyboard = UIStoryboard(name: "DashboardVC", bundle: Bundle.module)
+//                                
+//                                guard let viewController = storyboard.instantiateViewController(withIdentifier: "PanVerifyPopupVC") as? PanVerifyPopupVC else {
+//                                    print("ViewController not found")
+//                                    return
+//                                }
+//                                
+//                                viewController.panName = jsonResponse["PANName"] as? String
+//                                viewController.dob = jsonResponse["DOB"] as? String
+//                                viewController.requestId = jsonResponse["RequestId"] as? String
+//                                viewController.panNo = jsonResponse["PanNo"] as? String
+//                                viewController.identifier = "nomineePanVerify"
+//                                viewController.modalPresentationStyle = .overCurrentContext
+//                                viewController.modalTransitionStyle = .crossDissolve
+//                                
+//                                self.present(viewController, animated: true)
+//                            }
+//                            
+//                        case "100001":
+//                            DispatchQueue.main.async {
+//                                self.showAlert( message: ErrorMessage ?? "")
+//                            }
+//                        case "300009":
+//                            DispatchQueue.main.async {
+//                                self.showAlert( message: ErrorMessage ?? "")
+//                            }
+//                        case "Pan-001":
+//                            DispatchQueue.main.async {
+//                                self.showAlert(message: ErrorMessage ?? "")
+//                            }
+//                        case "PANDOB-001":
+//                            DispatchQueue.main.async {
+//                                self.showAlert(message: ErrorMessage ?? "")
+//                            }
+//                        case "300001":
+//                            DispatchQueue.main.async {
+//                                self.showAlert(message: ErrorMessage ?? "")
+//                            }
+//                        case "300006":
+//                            DispatchQueue.main.async {
+//                                self.showAlert(message: ErrorMessage ?? "")
+//                            }
+//                        case "111111":
+//                            DispatchQueue.main.async {
+//                                self.showAlert(message: "Please check your pancard ID number")
+//                            }
+//                            
+//                        case "300003":
+//                            if let errorMessage = jsonResponse["ErrorMessage"] as? String {
+//                                DispatchQueue.main.async {
+//                                    self.showAlert(message: errorMessage)
+//                                }
+//                            }
+//                        default:
+//                            print("Unhandled error code: \(errorCode)")
+//                        }
+//                    }
+//                    
+//                case .failure(let error):
+//                    print("Login API call failed: \(error.localizedDescription)")
+//                }
+//            }
+//        }
+//    }
+//    
+////    func insertUpdateNomineeDetailsWebWithMinimalParams() {
+////        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
+////            guard let tokenId = tokenId else {
+////                // Handle the case where no tokens are available
+////                CoreDataHelper.generateToken(
+////                    decodeByteArrayToString: self.mobiledecodeArray ?? "",
+////                    USERID: self.fetchedUserId ?? "",
+////                    SessionId: self.fetchedSessionID ?? "",
+////                    entityName: "TokenMobile", deviceType: "W", in: self.view
+////                ) { success in
+////                    if success {
+////                        // Retry SIXTHAPI after token regeneration
+////                        self.insertUpdateNomineeDetailsWebWithMinimalParams()
+////                    } else {
+////                        print("Token generation failed.")
+////                    }
+////                }
+////                print("No tokens available. Please reload the tokens.")
+////                return
+////            }
+////
+////            var parameters: [String: Any?] = [
+////                "SessionId": fetchedSessionID,
+////                "TokenId": tokenId,
+////                "UserId": fetchedUserId,
+////                "PanNo": panNo,
+////                "RegId": RegId,
+////                "NomineeType": NomineeType
+////            ]
+////
+////            let url = "NomineeDetails/InsertUpdateNomineeDetailsWeb"
+////
+////            apiCall(url: url, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
+////                switch result {
+////                case .success(let jsonResponse):
+////                    print("InsertUpdateNomineeDetailsWeb Response: \(jsonResponse)")
+////                    if let errorCode = jsonResponse["ErrorCode"] as? String {
+////                        if errorCode == "000000" {
+////                            DispatchQueue.main.async {
+////                                let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module )
+////                                if let nextVC = storyboard.instantiateViewController(withIdentifier: "DocumentVC") as? DocumentVC {
+////                                                                        nextVC.PanNo = self.panNo
+////                                                                        nextVC.RegId = self.RegId
+////                                                                        nextVC.delegate = self
+////                                    self.navigationController?.pushViewController(nextVC, animated: true)
+////                                }
+////                            }
+////                        } else if errorCode == "999992" {
+////                            // Handle invalid token case
+////                            print("Invalid token detected. Attempting to refresh token.")
+////                            CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+////                                if success {
+////                                    self.insertUpdateNomineeDetailsWebWithMinimalParams()
+////                                } else {
+////                                    DispatchQueue.main.async {
+////                                        self.showAlert(message: "Token refresh failed. Please try again.")
+////                                    }
+////                                }
+////                            }
+////                        } else {
+////                            DispatchQueue.main.async {
+////                                if let errorMessage = jsonResponse["ErrorMessage"] as? String {
+////                                    self.showAlert(message: errorMessage)
+////                                } else {
+////                                    self.showAlert(message: "Unhandled error code")
+////                                }
+////                            }
+////                        }
+////                    }
+////                case .failure(let error):
+////                    DispatchQueue.main.async {
+////                        self.showAlert(message: "API call failed: \(error.localizedDescription)")
+////                    }
+////                }
+////            }
+////        }
+////    }
+//    func insertUpdateNomineeDetailsWebWithMinimalParams() {
+//        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
+//            guard let tokenId = tokenId else {
+//                CoreDataHelper.generateToken(
+//                    decodeByteArrayToString: self.mobiledecodeArray ?? "",
+//                    USERID: self.fetchedUserId ?? "",
+//                    SessionId: self.fetchedSessionID ?? "",
+//                    entityName: "TokenMobile", deviceType: "W", in: self.view
+//                ) { success in
+//                    if success {
+//                        self.insertUpdateNomineeDetailsWebWithMinimalParams()
+//                    } else {
+//                        print("Token generation failed.")
+//                    }
+//                }
+//                return
+//            }
+//            
+//            // Build nominee details array from UI
+//            var nomineeDetailsArray: [[String: Any]] = []
+//            
+//            // Check and add Nominee 1
+//            if !nominee1Stack.isHidden {
+//                var nominee1Data: [String: Any] = [:]
+//                nominee1Data["NomineeName"] = nomineeNameTxt1.text ?? ""
+//                nominee1Data["NomineeDOB"] = nomineeDob1.text ?? ""
+//                nominee1Data["NomineeDocumentType"] = nomineedocumentType1 ?? ""
+//                nominee1Data["NomineeDocumentId"] = documentId1.text ?? ""
+//                nominee1Data["NomineeMobile"] = nomineeMobile1.text ?? ""
+//                nominee1Data["NomineeEmail"] = nomineeEmail1.text ?? ""
+//                nominee1Data["NomineeRelation"] = relationBtn1.title(for: .normal) ?? ""
+//                nominee1Data["SharePercentage"] = shareTxt1.text ?? ""
+//                nominee1Data["IsAddressSameAsApplicant"] = addressSameAsApplicantBtn1.isSelected ? "Y" : "N"
+//                
+//                if !addressSameAsApplicantBtn1.isSelected {
+//                    nominee1Data["NomineeAddress1"] = addressTxtFirst1.text ?? ""
+//                    nominee1Data["NomineeAddress2"] = addressTxtSecond1.text ?? ""
+//                    nominee1Data["NomineeAddress3"] = addressTxtThird1.text ?? ""
+//                    nominee1Data["NomineeCity"] = cityTxt1.text ?? ""
+//                    nominee1Data["NomineeState"] = stateTxt1.text ?? ""
+//                    nominee1Data["NomineePinCode"] = pinCodeTxt1.text ?? ""
+//                }
+//                
+//                // Check if minor (guardian exists)
+//                let isMinor = !gurdianLbl1.isHidden
+//                nominee1Data["IsMinor"] = isMinor ? "Y" : "N"
+//                
+//                if isMinor {
+//                    nominee1Data["GuardianName"] = guardianNameTxt1.text ?? ""
+//                    nominee1Data["GuardianDOB"] = guardianDobTxt1.text ?? ""
+//                    nominee1Data["GuardianDocumentType"] = guardiandocumentType1 ?? ""
+//                    nominee1Data["GuardianDocumentId"] = guardianIdTxt1.text ?? ""
+//                    nominee1Data["GuardianMobile"] = guardianMobileTxt1.text ?? ""
+//                    nominee1Data["GuardianEmail"] = guardianEmailTxt1.text ?? ""
+//                    nominee1Data["GuardianRelation"] = guardianRelationBtn1.title(for: .normal) ?? ""
+//                    nominee1Data["IsGuardianAddressSameAsNominee"] = nomineeSameAsBtn1.isSelected ? "Y" : "N"
+//                    
+//                    if !nomineeSameAsBtn1.isSelected {
+//                        nominee1Data["GuardianAddress1"] = guardianAddressTxtFirst1.text ?? ""
+//                        nominee1Data["GuardianAddress2"] = guardianAddressTxtSecond1.text ?? ""
+//                        nominee1Data["GuardianAddress3"] = guardianAddressTxtThird1.text ?? ""
+//                        nominee1Data["GuardianCity"] = guardianCityTxt1.text ?? ""
+//                        nominee1Data["GuardianState"] = guardianStateTxt1.text ?? ""
+//                        nominee1Data["GuardianPinCode"] = guardianPinCodeTxt1.text ?? ""
+//                    }
+//                }
+//                
+//                nomineeDetailsArray.append(nominee1Data)
+//            }
+//            
+//            // Check and add Nominee 2
+//            if !nominee2Stack.isHidden {
+//                var nominee2Data: [String: Any] = [:]
+//                nominee2Data["NomineeName"] = nomineeNameTxt2.text ?? ""
+//                nominee2Data["NomineeDOB"] = nomineeDob2.text ?? ""
+//                nominee2Data["NomineeDocumentType"] = nomineedocumentType2 ?? ""
+//                nominee2Data["NomineeDocumentId"] = documentId2.text ?? ""
+//                nominee2Data["NomineeMobile"] = nomineeMobile2.text ?? ""
+//                nominee2Data["NomineeEmail"] = nomineeEmail2.text ?? ""
+//                nominee2Data["NomineeRelation"] = relationBtn2.title(for: .normal) ?? ""
+//                nominee2Data["SharePercentage"] = shareTxt2.text ?? ""
+//                nominee2Data["IsAddressSameAsApplicant"] = addressSameAsApplicantBtn2.isSelected ? "Y" : "N"
+//                
+//                if !addressSameAsApplicantBtn2.isSelected {
+//                    nominee2Data["NomineeAddress1"] = addressTxtFirst2.text ?? ""
+//                    nominee2Data["NomineeAddress2"] = addressTxtSecond2.text ?? ""
+//                    nominee2Data["NomineeAddress3"] = addressTxtThird2.text ?? ""
+//                    nominee2Data["NomineeCity"] = cityTxt2.text ?? ""
+//                    nominee2Data["NomineeState"] = stateTxt2.text ?? ""
+//                    nominee2Data["NomineePinCode"] = pinCodeTxt2.text ?? ""
+//                }
+//                
+//                let isMinor = !gurdianLbl2.isHidden
+//                nominee2Data["IsMinor"] = isMinor ? "Y" : "N"
+//                
+//                if isMinor {
+//                    nominee2Data["GuardianName"] = guardianNameTxt2.text ?? ""
+//                    nominee2Data["GuardianDOB"] = guardianDobTxt2.text ?? ""
+//                    nominee2Data["GuardianDocumentType"] = guardiandocumentType2 ?? ""
+//                    nominee2Data["GuardianDocumentId"] = guardianIdTxt2.text ?? ""
+//                    nominee2Data["GuardianMobile"] = guardianMobileTxt2.text ?? ""
+//                    nominee2Data["GuardianEmail"] = guardianEmailTxt2.text ?? ""
+//                    nominee2Data["GuardianRelation"] = guardianRelationBtn2.title(for: .normal) ?? ""
+//                    nominee2Data["IsGuardianAddressSameAsNominee"] = nomineeSameAsBtn2.isSelected ? "Y" : "N"
+//                    
+//                    if !nomineeSameAsBtn2.isSelected {
+//                        nominee2Data["GuardianAddress1"] = guardianAddressTxtFirst2.text ?? ""
+//                        nominee2Data["GuardianAddress2"] = guardianAddressTxtSecond2.text ?? ""
+//                        nominee2Data["GuardianAddress3"] = guardianAddressTxtThird2.text ?? ""
+//                        nominee2Data["GuardianCity"] = guardianCityTxt2.text ?? ""
+//                        nominee2Data["GuardianState"] = guardianStateTxt2.text ?? ""
+//                        nominee2Data["GuardianPinCode"] = guardianPinCodeTxt2.text ?? ""
+//                    }
+//                }
+//                
+//                nomineeDetailsArray.append(nominee2Data)
+//            }
+//            
+//            // Check and add Nominee 3
+//            if !nominee3Stack.isHidden {
+//                var nominee3Data: [String: Any] = [:]
+//                nominee3Data["NomineeName"] = nomineeNameTxt3.text ?? ""
+//                nominee3Data["NomineeDOB"] = nomineeDob3.text ?? ""
+//                nominee3Data["NomineeDocumentType"] = nomineedocumentType3 ?? ""
+//                nominee3Data["NomineeDocumentId"] = documentId3.text ?? ""
+//                nominee3Data["NomineeMobile"] = nomineeMobile3.text ?? ""
+//                nominee3Data["NomineeEmail"] = nomineeEmail3.text ?? ""
+//                nominee3Data["NomineeRelation"] = relationBtn3.title(for: .normal) ?? ""
+//                nominee3Data["SharePercentage"] = shareTxt3.text ?? ""
+//                nominee3Data["IsAddressSameAsApplicant"] = addressSameAsApplicantBtn3.isSelected ? "Y" : "N"
+//                
+//                if !addressSameAsApplicantBtn3.isSelected {
+//                    nominee3Data["NomineeAddress1"] = addressTxtFirst3.text ?? ""
+//                    nominee3Data["NomineeAddress2"] = addressTxtSecond3.text ?? ""
+//                    nominee3Data["NomineeAddress3"] = addressTxtThird3.text ?? ""
+//                    nominee3Data["NomineeCity"] = cityTxt3.text ?? ""
+//                    nominee3Data["NomineeState"] = stateTxt3.text ?? ""
+//                    nominee3Data["NomineePinCode"] = pinCodeTxt3.text ?? ""
+//                }
+//                
+//                let isMinor = !gurdianLbl3.isHidden
+//                nominee3Data["IsMinor"] = isMinor ? "Y" : "N"
+//                
+//                if isMinor {
+//                    nominee3Data["GuardianName"] = guardianNameTxt3.text ?? ""
+//                    nominee3Data["GuardianDOB"] = guardianDobTxt3.text ?? ""
+//                    nominee3Data["GuardianDocumentType"] = guardiandocumentType3 ?? ""
+//                    nominee3Data["GuardianDocumentId"] = guardianIdTxt3.text ?? ""
+//                    nominee3Data["GuardianMobile"] = guardianMobileTxt3.text ?? ""
+//                    nominee3Data["GuardianEmail"] = guardianEmailTxt3.text ?? ""
+//                    nominee3Data["GuardianRelation"] = guardianRelationBtn3.title(for: .normal) ?? ""
+//                    nominee3Data["IsGuardianAddressSameAsNominee"] = nomineeSameAsBtn3.isSelected ? "Y" : "N"
+//                    
+//                    if !nomineeSameAsBtn3.isSelected {
+//                        nominee3Data["GuardianAddress1"] = guardianAddressTxtFirst3.text ?? ""
+//                        nominee3Data["GuardianAddress2"] = guardianAddressTxtSecond3.text ?? ""
+//                        nominee3Data["GuardianAddress3"] = guardianAddressTxtThird3.text ?? ""
+//                        nominee3Data["GuardianCity"] = guardianCityTxt3.text ?? ""
+//                        nominee3Data["GuardianState"] = guardianStateTxt3.text ?? ""
+//                        nominee3Data["GuardianPinCode"] = guardianPinCodeTxt3.text ?? ""
+//                    }
+//                }
+//                
+//                nomineeDetailsArray.append(nominee3Data)
+//            }
+//            
+//            var parameters: [String: Any] = [
+//                "SessionId": fetchedSessionID ?? "",
+//                "TokenId": tokenId,
+//                "UserId": fetchedUserId ?? "",
+//                "PanNo": panNo ?? "",
+//                "RegId": RegId ?? "",
+//                "NomineeType": NomineeType
+//            ]
+//            
+//            // Only add NomineeDetails if we have data
+//            if !nomineeDetailsArray.isEmpty {
+//                parameters["NomineeDetails"] = nomineeDetailsArray
+//            }
+//            
+//            print("📤 Request Body: \(parameters)")
+//            let url = "NomineeDetails/InsertUpdateNomineeDetailsWeb"
+//            
+//            apiCall(url: url, method: "POST", parameters: parameters, view: self.view) { result in
+//                switch result {
+//                case .success(let jsonResponse):
+//                    print("InsertUpdateNomineeDetailsWeb Response: \(jsonResponse)")
+//                    if let errorCode = jsonResponse["ErrorCode"] as? String {
+//                        if errorCode == "000000" {
+//                            DispatchQueue.main.async {
+//                                let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
+//                                if let nextVC = storyboard.instantiateViewController(withIdentifier: "DocumentVC") as? DocumentVC {
+//                                    nextVC.PanNo = self.panNo
+//                                    nextVC.RegId = self.RegId
+//                                    nextVC.delegate = self
+//                                    self.navigationController?.pushViewController(nextVC, animated: true)
+//                                }
+//                            }
+//                        } else if errorCode == "999992" {
+//                            print("Invalid token detected. Attempting to refresh token.")
+//                            CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W", in: self.view) { success in
+//                                if success {
+//                                    self.insertUpdateNomineeDetailsWebWithMinimalParams()
+//                                } else {
+//                                    DispatchQueue.main.async {
+//                                        self.showAlert(message: "Token refresh failed. Please try again.")
+//                                    }
+//                                }
+//                            }
+//                        } else {
+//                            DispatchQueue.main.async {
+//                                if let errorMessage = jsonResponse["ErrorMessage"] as? String {
+//                                    self.showAlert(message: errorMessage)
+//                                } else {
+//                                    self.showAlert(message: "Unhandled error code")
+//                                }
+//                            }
+//                        }
+//                    }
+//                case .failure(let error):
+//                    DispatchQueue.main.async {
+//                        self.showAlert(message: "API call failed: \(error.localizedDescription)")
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    
+//    private func disableNomineeFieldsAfterDigiLocker(index: Int) {
+//        var documentType: String?
+//           
+//           switch index {
+//           case 1:
+//               documentType = nomineedocumentType1
+//           case 2:
+//               documentType = nomineedocumentType2
+//           case 3:
+//               documentType = nomineedocumentType3
+//           default:
+//               break
+//           }
+//           
+//           // Only disable address fields if document type is Aadhaar
+//           let shouldDisableAddressFields = (documentType == "Aadhaar")
+//           
+//           switch index {
+//           case 1:
+//               nomineeNameTxt1.isEnabled = false
+//               nomineeDob1.isEnabled = false
+//               documentId1.isEnabled = false
+//               documentTypeBtn1.isEnabled = false
+//               
+//               // Conditionally disable address fields only for Aadhaar
+//               if shouldDisableAddressFields {
+//                   addressTxtFirst1.isEnabled = false
+//                   addressTxtSecond1.isEnabled = false
+//                   addressTxtThird1.isEnabled = false
+//                   pinCodeTxt1.isEnabled = false
+//                   cityTxt1.isEnabled = false
+//                   stateTxt1.isEnabled = false
+//               }
+//               // For PAN, address fields remain enabled
+//               
+//           case 2:
+//               nomineeNameTxt2.isEnabled = false
+//               nomineeDob2.isEnabled = false
+//               documentId2.isEnabled = false
+//               documentTypeBtn2.isEnabled = false
+//               
+//               if shouldDisableAddressFields {
+//                   addressTxtFirst2.isEnabled = false
+//                   addressTxtSecond2.isEnabled = false
+//                   addressTxtThird2.isEnabled = false
+//                   pinCodeTxt2.isEnabled = false
+//                   cityTxt2.isEnabled = false
+//                   stateTxt2.isEnabled = false
+//               }
+//               
+//           case 3:
+//               nomineeNameTxt3.isEnabled = false
+//               nomineeDob3.isEnabled = false
+//               documentId3.isEnabled = false
+//               documentTypeBtn3.isEnabled = false
+//               
+//               if shouldDisableAddressFields {
+//                   addressTxtFirst3.isEnabled = false
+//                   addressTxtSecond3.isEnabled = false
+//                   addressTxtThird3.isEnabled = false
+//                   pinCodeTxt3.isEnabled = false
+//                   cityTxt3.isEnabled = false
+//                   stateTxt3.isEnabled = false
+//               }
+//               
+//           default:
+//               break
+//           }
+////        switch index {
+////        case 1:
+////            nomineeNameTxt1.isEnabled   = false
+////            nomineeDob1.isEnabled    = false
+////            documentId1.isEnabled     = false
+////            documentTypeBtn1.isEnabled  = false
+////            addressTxtFirst1.isEnabled      = false
+////            addressTxtSecond1.isEnabled      = false
+////            addressTxtThird1.isEnabled      = false
+////            pinCodeTxt1.isEnabled           = false
+////            // Optionally disable mobile/email too if you consider them final
+////            // nomineeMobileTxt1.isEnabled = false
+////            // nomineeEmailTxt1.isEnabled  = false
+////
+////        case 2:
+////            nomineeNameTxt2.isEnabled   = false
+////            nomineeDob2.isEnabled    = false
+////            documentId2.isEnabled     = false
+////            documentTypeBtn2.isEnabled  = false
+////            addressTxtFirst2.isEnabled      = false
+////            addressTxtSecond2.isEnabled      = false
+////            addressTxtThird2.isEnabled      = false
+////            pinCodeTxt2.isEnabled           = false
+////
+////        case 3:
+////            nomineeNameTxt3.isEnabled   = false
+////            nomineeDob3.isEnabled    = false
+////            documentId3.isEnabled     = false
+////            documentTypeBtn3.isEnabled  = false
+////            addressTxtFirst3.isEnabled      = false
+////            addressTxtSecond3.isEnabled      = false
+////            addressTxtThird3.isEnabled      = false
+////            pinCodeTxt3.isEnabled           = false
+////
+////        default: break
+////        }
+////
+//    }
+//    
+//    func validateNomineeAllocation() {
+//        func validateNomineeAllocation() {
+//            // Calculate how many nominees are actually filled/visible
+//            var activeNomineeCount = 0
+//            
+//            // Check each nominee stack to see if it has data
+//            if !nominee1Stack.isHidden {
+//                // Check if at least name is entered or it's a valid nominee
+//                if let name = nomineeNameTxt1.text, !name.isEmpty {
+//                    activeNomineeCount += 1
+//                }
+//            }
+//            
+//            if !nominee2Stack.isHidden {
+//                if let name = nomineeNameTxt2.text, !name.isEmpty {
+//                    activeNomineeCount += 1
+//                }
+//            }
+//            
+//            if !nominee3Stack.isHidden {
+//                if let name = nomineeNameTxt3.text, !name.isEmpty {
+//                    activeNomineeCount += 1
+//                }
+//            }
+//            
+//            // Get allocation percentages
+//            let nominee1Percentage = Int(shareTxt1.text?.trimmingCharacters(in: .whitespaces) ?? "") ?? 0
+//            let nominee2Percentage = Int(shareTxt2.text?.trimmingCharacters(in: .whitespaces) ?? "") ?? 0
+//            let nominee3Percentage = Int(shareTxt3.text?.trimmingCharacters(in: .whitespaces) ?? "") ?? 0
+//            
+//            var totalAllocation = 0
+//            var allocations: [Int] = []
+//            
+//            // Add percentages based on active nominees
+//            if activeNomineeCount >= 1 && !nominee1Stack.isHidden {
+//                allocations.append(nominee1Percentage)
+//                totalAllocation += nominee1Percentage
+//            }
+//            if activeNomineeCount >= 2 && !nominee2Stack.isHidden {
+//                allocations.append(nominee2Percentage)
+//                totalAllocation += nominee2Percentage
+//            }
+//            if activeNomineeCount >= 3 && !nominee3Stack.isHidden {
+//                allocations.append(nominee3Percentage)
+//                totalAllocation += nominee3Percentage
+//            }
+//            
+//            // Validate based on number of active nominees
+//            switch activeNomineeCount {
+//            case 1:
+//                if totalAllocation != 100 {
+//                    showAlert(message: "Allocation percentage for single nominee must be 100%.")
+//                    return
+//                }
+//                // Store the allocation values
+//                nominee1Allocation = "\(nominee1Percentage)"
+//                
+//            case 2:
+//                if totalAllocation != 100 {
+//                    showAlert(message: "Total allocation percentage for 2 nominees must be 100%. Current total: \(totalAllocation)%")
+//                    return
+//                }
+//                if allocations[0] <= 0 || allocations[1] <= 0 {
+//                    showAlert(message: "Each nominee must have a positive allocation percentage.")
+//                    return
+//                }
+//                nominee1Allocation = "\(allocations[0])"
+//                nominee2Allocation = "\(allocations[1])"
+//                
+//            case 3:
+//                if totalAllocation != 100 {
+//                    showAlert(message: "Total allocation percentage for 3 nominees must be 100%. Current total: \(totalAllocation)%")
+//                    return
+//                }
+//                if allocations[0] <= 0 || allocations[1] <= 0 || allocations[2] <= 0 {
+//                    showAlert(message: "Each nominee must have a positive allocation percentage.")
+//                    return
+//                }
+//                nominee1Allocation = "\(allocations[0])"
+//                nominee2Allocation = "\(allocations[1])"
+//                nominee3Allocation = "\(allocations[2])"
+//                
+//            default:
+//                showAlert(message: "Please add at least one nominee before proceeding.")
+//                return
+//            }
+//            
+//            // If all validations pass, proceed with API call
+//            print("✅ Allocations validated: Total = \(totalAllocation)%")
+//            NomineeType = "Y"
+//            insertUpdateNomineeDetailsWebWithMinimalParams()
+//        }
+//    }
+//}
 
 
 

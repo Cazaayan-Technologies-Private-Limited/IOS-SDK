@@ -1193,7 +1193,11 @@ protocol BrokerageSelectionDelegate: AnyObject {
     func didSelectBrokerage(_ plan: BrokeragePlan, filter: BrokerageFilter)
 }
 
-class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegate, @MainActor CommodityCategoryVCDelegate {
+class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegate, @MainActor CommodityCategoryVCDelegate, @MainActor ReloadPageDelegate, UITextFieldDelegate {
+    func reloadPageData() {
+        self.viewTradingDetails()
+    }
+    
     func didSelectCommodityValues(selectedValues: [String : String]) {
         // Save full dictionary
         self.selectedCommodityDict = selectedValues
@@ -1293,7 +1297,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+
         CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self]
             userId, sessionID, decodeByteArrayString in
             
@@ -1313,18 +1317,20 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             
             // ✅ NOW SAFE TO CALL APIs
             self.DPSchemeName()
-           // self.insertWeb()
             ViewDPScheme()
             brokeragePlan()
             viewTradingDetails()
             ValidateToken()
         }
-        equity.isSelected = true
         
-        dematYesBtn.setImage(UIImage(systemName: "circle"), for: .normal)
+        // Initialize button images
+        dematYesBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
         dematNoBtn.setImage(UIImage(systemName: "circle"), for: .normal)
-        navigationItem.hidesBackButton = true
         
+        dematIdTxt.delegate = self
+        boIdTxt.delegate = self
+        
+        // Rest of your UI setup...
         equityBtn.layer.cornerRadius = 10
         fandoBtn.layer.cornerRadius = 10
         commodityBtn.layer.cornerRadius = 10
@@ -1347,9 +1353,9 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
         dematIdLabel.isHidden = true
         boIdLabel.isHidden = true
         boIdTxt.isHidden = true
-        //dematYesBtn.isSelected = true
         depositoriesLabel.isHidden = true
-        //dematYesBtn(dematYesBtn)
+        
+        // Call this to set initial state
         updateDematSelection(isNew: true)
         
         proceedBtn.backgroundColor = .appPrimary
@@ -1359,6 +1365,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
         let tap = UITapGestureRecognizer(target: self, action: #selector(openDepository))
         depositoryButton.addGestureRecognizer(tap)
     }
+
     
     @IBAction func backBtn(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
@@ -1389,23 +1396,29 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
     
     func updateDematSelection(isNew: Bool) {
         IsDpAccountNew = isNew ? "Y" : "N"
-        
-        dematYesBtn.setImage(UIImage(systemName: isNew ? "circle.circle.fill" : "circle"), for: .normal)
-        dematNoBtn.setImage(UIImage(systemName: isNew ? "circle" : "circle.circle.fill"), for: .normal)
+         
+         // Set the button images based on selection
+         if isNew {
+             dematYesBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
+             dematNoBtn.setImage(UIImage(systemName: "circle"), for: .normal)
+         } else {
+             dematYesBtn.setImage(UIImage(systemName: "circle"), for: .normal)
+             dematNoBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
+         }
+         
+         dematChargesView.isHidden = !isNew
+         dematChargesLabel.isHidden = !isNew
+         line1View.isHidden = !isNew
 
-        dematChargesView.isHidden = !isNew
-        dematChargesLabel.isHidden = !isNew
-        line1View.isHidden = !isNew
-
-        let hideFields = isNew
-        depositoryLabel.isHidden = hideFields
-        depositoryView.isHidden = hideFields
-        dematNameLabel.isHidden = hideFields
-        dematTxt.isHidden = hideFields
-        dematIdTxt.isHidden = hideFields
-        dematIdLabel.isHidden = hideFields
-        boIdLabel.isHidden = hideFields
-        boIdTxt.isHidden = hideFields
+         let hideFields = isNew
+         depositoryLabel.isHidden = hideFields
+         depositoryView.isHidden = hideFields
+         dematNameLabel.isHidden = hideFields
+         dematTxt.isHidden = hideFields
+         dematIdTxt.isHidden = hideFields
+         dematIdLabel.isHidden = hideFields
+         boIdLabel.isHidden = hideFields
+         boIdTxt.isHidden = hideFields
     }
     
     @IBAction func equityBtnTapped(_ sender: UIButton) {
@@ -1446,6 +1459,69 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                showAlert(message: "Please select at least one trading segment")
                return
            }
+        
+        if IsDpAccountNew == "Y" {
+                
+                DPName = nil
+                DPID = nil
+                BOID = nil
+                
+            } else if IsDpAccountNew == "N" {
+            
+                // ✅ Depository Name
+                guard let depositoryName = Depositoryname, !depositoryName.isEmpty else {
+                    showAlert(message: "Please select depository name")
+                    return
+                }
+                
+                // ✅ Demat Name
+                guard let dematName = dematTxt.text, !dematName.isEmpty else {
+                    showAlert(message: "Please enter demat name")
+                    return
+                }
+                
+                if !isValidName(dematName) {
+                    showAlert(message: "Please enter characters only in demat name")
+                    return
+                }
+                
+                // ✅ Demat ID
+                guard let dematID = dematIdTxt.text, !dematID.isEmpty else {
+                    showAlert(message: "Please enter demat ID")
+                    return
+                }
+                
+                if depositoryName == "NSDL" {
+                    let regex = "^IN[0-9]{6}$"
+                    if !NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: dematID) {
+                        showAlert(message: "NSDL Demat ID must be 'IN' followed by 6 digits")
+                        return
+                    }
+                } else if depositoryName == "CDSL" {
+                    let regex = "^[0-9]{8}$"
+                    if !NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: dematID) {
+                        showAlert(message: "CDSL Demat ID must be exactly 8 digits")
+                        return
+                    }
+                }
+                
+                // ✅ BOID
+                guard let boID = boIdTxt.text, !boID.isEmpty else {
+                    showAlert(message: "Please enter BOID")
+                    return
+                }
+                
+                let boidRegex = "^[0-9]{8}$"
+                if !NSPredicate(format: "SELF MATCHES %@", boidRegex).evaluate(with: boID) {
+                    showAlert(message: "BOID must be exactly 8 digits")
+                    return
+                }
+                
+                // ✅ Assign values
+                DPName = dematName
+                DPID = dematID
+                BOID = boID
+            }
         paymentRequest()
         insertWeb()
          
@@ -1457,11 +1533,88 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             let vc = storyboard.instantiateViewController(identifier: "BankVC") as! BankVC
             vc.panNo = self.panNo
             vc.regId = self.regId
+            vc.delegate = self
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
     
+    func isValidName(_ name: String) -> Bool {
+           let regex = "^[A-Za-z]+( [A-Za-z]+)*$"
+           let namePredicate = NSPredicate(format: "SELF MATCHES %@", regex)
+           return namePredicate.evaluate(with: name)
+       }
     
+    func textField(
+            _ textField: UITextField, shouldChangeCharactersIn range: NSRange,
+            replacementString string: String
+        ) -> Bool {
+            if textField == boIdTxt {
+                // Allow only 8 digits for BOID
+                let maxLength = 8
+                let currentString: NSString = textField.text as NSString? ?? ""
+                let newString: NSString =
+                currentString.replacingCharacters(in: range, with: string)
+                as NSString
+                
+                // Allow only digits
+                let allowedCharacterSet = CharacterSet.decimalDigits
+                let replacementCharacterSet = CharacterSet(charactersIn: string)
+                let isReplacementStringNumeric = allowedCharacterSet.isSuperset(
+                    of: replacementCharacterSet)
+                
+                return newString.length <= maxLength && isReplacementStringNumeric
+            }
+            
+            if textField == dematIdTxt {
+                // Allow "IN" prefix for NSDL and only numbers after that
+                if let depository = Depositoryname, depository == "CDSL" {
+                    // Prevent deletion of the first two characters ("IN")
+                    let prefix = "12"
+                    
+                    // Ensure the first two characters remain "IN"
+                    if range.location < prefix.count {
+                        return false  // Block changes to the prefix part
+                    }
+                    
+                    // After "IN", only numbers are allowed and max length is 8 (excluding prefix)
+                    let maxLength = 8  // 2-character "IN" + 8 digits
+                    let currentString: NSString = textField.text as NSString? ?? ""
+                    let newString: NSString =
+                    currentString.replacingCharacters(in: range, with: string)
+                    as NSString
+                    
+                    // Allow only digits after the prefix
+                    let allowedCharacterSet = CharacterSet.decimalDigits
+                    let replacementCharacterSet = CharacterSet(charactersIn: string)
+                    let isReplacementStringNumeric = allowedCharacterSet.isSuperset(
+                        of: replacementCharacterSet)
+                    
+                    return newString.length <= maxLength
+                    && isReplacementStringNumeric
+                } else {
+                    // For non-NSDL cases, just allow digits up to 8 characters
+                    let maxLength = 8
+                    let currentString: NSString = textField.text as NSString? ?? ""
+                    let newString: NSString =
+                    currentString.replacingCharacters(in: range, with: string)
+                    as NSString
+                    
+                    // Allow only digits
+                    let allowedCharacterSet = CharacterSet.decimalDigits
+                    let replacementCharacterSet = CharacterSet(charactersIn: string)
+                    let isReplacementStringNumeric = allowedCharacterSet.isSuperset(
+                        of: replacementCharacterSet)
+                    
+                    return newString.length <= maxLength
+                    && isReplacementStringNumeric
+                }
+            }
+            
+            // Default behavior for other text fields
+            return true
+        }
+    
+
     
     
 //    @IBAction func depositoryNameBtn(_ sender: UIButton) {
@@ -1660,7 +1813,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             ) { result in
                 switch result {
                 case .success(let jsonResponse):
-                    print("ValidateToken Response: \(jsonResponse)")
+                    print("viewTradingDetails Response: \(jsonResponse)")
                     if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
                         case "000000":
@@ -2027,41 +2180,171 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
         }
     
 
-    func updateUIFromTradingDetails(_ jsonResponse: [String: Any]) {
-        
-        // MARK: - DP Account Handling
-//        if let isDpNew = jsonResponse["DP_IsDpAccountNew"] as? String {
-//            self.IsDpAccountNew = isDpNew
+//    func updateUIFromTradingDetails(_ jsonResponse: [String: Any]) {
+//        
+//        // MARK: - DP Account Handling
+////        if let isDpNew = jsonResponse["DP_IsDpAccountNew"] as? String {
+////            self.IsDpAccountNew = isDpNew
+////            
+////            if isDpNew == "Y" {
+////                self.dematYesBtn(self.dematYesBtn)
+////            } else {
+////                self.dematNoBtn(self.dematNoBtn)
+////                
+////                self.depositoryLabel.text = jsonResponse["DP_Depositoryname"] as? String
+////                self.dematTxt.text = jsonResponse["DP_DPName"] as? String
+////                self.dematIdTxt.text = jsonResponse["DP_DPID"] as? String
+////                self.boIdTxt.text = jsonResponse["DP_BOID"] as? String
+////            }
+////        }
+//        
+//        self.IsDpAccountNew = "Y"
+//        updateDematSelection(isNew: true)
+//        
+//        // MARK: - Segment Selection Handling
+//        if let segments = jsonResponse["TRD_SegmentsPreferred"] as? String {
 //            
-//            if isDpNew == "Y" {
-//                self.dematYesBtn(self.dematYesBtn)
-//            } else {
-//                self.dematNoBtn(self.dematNoBtn)
-//                
-//                self.depositoryLabel.text = jsonResponse["DP_Depositoryname"] as? String
-//                self.dematTxt.text = jsonResponse["DP_DPName"] as? String
-//                self.dematIdTxt.text = jsonResponse["DP_DPID"] as? String
-//                self.boIdTxt.text = jsonResponse["DP_BOID"] as? String
+//            // Reset all first
+//            equity.isSelected = false
+//            fando.isSelected = false
+//            currency.isSelected = false
+//            mutual.isSelected = false
+//            commodity.isSelected = false
+//            mtf.isSelected = false
+//            slbm.isSelected = false
+//
+//            let upperSegments = segments.uppercased()
+//            
+//            if upperSegments.contains("EQUITY") {
+//                equity.isSelected = true
 //            }
+//            if upperSegments.contains("FNO") || upperSegments.contains("F&O") {
+//                fando.isSelected = true
+//            }
+//            if upperSegments.contains("CURRENCY") {
+//                currency.isSelected = true
+//            }
+//            if upperSegments.contains("MUTUAL") {
+//                mutual.isSelected = true
+//            }
+//            if upperSegments.contains("COMMODITY") {
+//                commodity.isSelected = true
+//            }
+//            if upperSegments.contains("MTF") {
+//                mtf.isSelected = true
+//            }
+//            if upperSegments.contains("SLBM") {
+//                slbm.isSelected = true
+//            }
+//        } else {
+//            // ✅ DEFAULT fallback
+//            equity.isSelected = true
 //        }
+//    }
+//
+    func updateUIFromTradingDetails(_ jsonResponse: [String: Any]) {
+//
+//        // Reset all
+//        equity.isSelected = false
+//        fando.isSelected = false
+//        currency.isSelected = false
+//        mutual.isSelected = false
+//        commodity.isSelected = false
+//        mtf.isSelected = false
+//        slbm.isSelected = false
+//
+//        if let segments = jsonResponse["TRD_SegmentsPreferred"] as? String,
+//           !segments.isEmpty {
+//
+//            let upperSegments = segments.uppercased()
+//
+//            if upperSegments.contains("EQUITY") {
+//                equity.isSelected = true
+//            }
+//            if upperSegments.contains("FNO") || upperSegments.contains("F&O") {
+//                fando.isSelected = true
+//            }
+//            if upperSegments.contains("CURRENCY") {
+//                currency.isSelected = true
+//            }
+//            if upperSegments.contains("MUTUAL") {
+//                mutual.isSelected = true
+//            }
+//            if upperSegments.contains("COMMODITY") {
+//                commodity.isSelected = true
+//            }
+//            if upperSegments.contains("MTF") {
+//                mtf.isSelected = true
+//            }
+//            if upperSegments.contains("SLBM") {
+//                slbm.isSelected = true
+//            }
+//
+//        } else {
+//            // ✅ fallback ONLY if API gives empty
+//            equity.isSelected = true
+//        }
+//        
+//        if let isDpNew = jsonResponse["DP_IsDpAccountNew"] as? String {
+//                self.IsDpAccountNew = isDpNew
+//
+//                if isDpNew == "Y" {
+//                    // 👉 New account
+//                    updateDematSelection(isNew: true)
+//
+//                    // Clear values
+//                    dematTxt.text = ""
+//                    dematIdTxt.text = ""
+//                    boIdTxt.text = ""
+//                    depositoryLabel.text = ""
+//
+//                } else {
+//                    // 👉 Existing account
+//                    updateDematSelection(isNew: false)
+//
+//                    // Show fields
+//                    depositoryLabel.isHidden = false
+//                    depositoryView.isHidden = false
+//                    dematNameLabel.isHidden = false
+//                    dematTxt.isHidden = false
+//                    dematIdTxt.isHidden = false
+//                    dematIdLabel.isHidden = false
+//                    boIdLabel.isHidden = false
+//                    boIdTxt.isHidden = false
+//
+//                    // Assign values from API
+//                    let depository = jsonResponse["DP_Depositoryname"] as? String ?? ""
+//                    let dpName = jsonResponse["DP_DPName"] as? String ?? ""
+//                    let dpId = jsonResponse["DP_DPID"] as? String ?? ""
+//                    let boId = jsonResponse["DP_BOID"] as? String ?? ""
+//
+//                    self.Depositoryname = depository
+//                    self.DPName = dpName
+//                    self.DPID = dpId
+//                    self.BOID = boId
+//
+//                    // Set UI
+//                    depositoryLabel.text = depository
+//                    dematTxt.text = dpName
+//                    dematIdTxt.text = dpId
+//                    boIdTxt.text = boId
+//                }
+//            }
         
-        self.IsDpAccountNew = "Y"
-        updateDematSelection(isNew: true)
-        
-        // MARK: - Segment Selection Handling
-        if let segments = jsonResponse["TRD_SegmentsPreferred"] as? String {
-            
-            // Reset all first
-            equity.isSelected = false
-            fando.isSelected = false
-            currency.isSelected = false
-            mutual.isSelected = false
-            commodity.isSelected = false
-            mtf.isSelected = false
-            slbm.isSelected = false
+        // Reset all
+        equity.isSelected = false
+        fando.isSelected = false
+        currency.isSelected = false
+        mutual.isSelected = false
+        commodity.isSelected = false
+        mtf.isSelected = false
+        slbm.isSelected = false
+
+        if let segments = jsonResponse["TRD_SegmentsPreferred"] as? String,
+           !segments.isEmpty {
 
             let upperSegments = segments.uppercased()
-            
+
             if upperSegments.contains("EQUITY") {
                 equity.isSelected = true
             }
@@ -2083,9 +2366,63 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             if upperSegments.contains("SLBM") {
                 slbm.isSelected = true
             }
+
+        } else {
+            // ✅ fallback ONLY if API gives empty
+            equity.isSelected = true
+        }
+        
+        // Check if DP_IsDpAccountNew exists in the response
+        if let isDpNew = jsonResponse["DP_IsDpAccountNew"] as? String {
+            self.IsDpAccountNew = isDpNew
+
+            if isDpNew == "Y" {
+                // 👉 New account
+                updateDematSelection(isNew: true)
+
+                // Clear values
+                dematTxt.text = ""
+                dematIdTxt.text = ""
+                boIdTxt.text = ""
+                depositoryLabel.text = ""
+
+            } else if isDpNew == "N" {
+                // 👉 Existing account
+                updateDematSelection(isNew: false)
+
+                // Show fields
+                depositoryLabel.isHidden = false
+                depositoryView.isHidden = false
+                dematNameLabel.isHidden = false
+                dematTxt.isHidden = false
+                dematIdTxt.isHidden = false
+                dematIdLabel.isHidden = false
+                boIdLabel.isHidden = false
+                boIdTxt.isHidden = false
+
+                // Assign values from API
+                let depository = jsonResponse["DP_Depositoryname"] as? String ?? ""
+                let dpName = jsonResponse["DP_DPName"] as? String ?? ""
+                let dpId = jsonResponse["DP_DPID"] as? String ?? ""
+                let boId = jsonResponse["DP_BOID"] as? String ?? ""
+
+                self.Depositoryname = depository
+                self.DPName = dpName
+                self.DPID = dpId
+                self.BOID = boId
+
+                // Set UI
+                depositoryLabel.text = depository
+                dematTxt.text = dpName
+                dematIdTxt.text = dpId
+                boIdTxt.text = boId
+            }
+        } else {
+            // 👈 IMPORTANT: If the API doesn't return DP_IsDpAccountNew, default to "Y" (New Account)
+            self.IsDpAccountNew = "Y"
+            updateDematSelection(isNew: true)
         }
     }
-    
     
     func isValidID(_ id: String) -> Bool {
         let regex = "^[0-9]+$"

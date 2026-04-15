@@ -717,7 +717,7 @@ extension EsignVC {
                                 self.panNo = jsonResponse["PanNo"] as? String
                                 self.regId = jsonResponse["RegId"] as? String
                                 self.PANName = jsonResponse["PANName"] as? String
-                               // self.updateUIFromSixthAPI(jsonResponse)
+                                // self.updateUIFromSixthAPI(jsonResponse)
                                 if self.finalStatus == "4"{
                                     DispatchQueue.main.async {
                                         self.pdfLbl.isHidden = false
@@ -735,6 +735,7 @@ extension EsignVC {
             }
         }
     }
+}
     
 //    func updateUIFromSixthAPI(_ json: [String: Any]) {
 //        
@@ -779,4 +780,4 @@ extension EsignVC {
 //        waitingView.backgroundColor = defaultColor
 //        approveView.backgroundColor = defaultColor
 //    }
-}
+//}

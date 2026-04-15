@@ -66,6 +66,13 @@ class ApplicationFormVC: UIViewController {
         SIXTHAPI(userID: fetchedUserId ?? "")
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .appBackground
+        
+        if let savedPan = UserDefaults.standard.string(forKey: "SavedPAN") {
+            self.panNo = savedPan
+            print("✅ Retrieved PAN: \(savedPan)")
+        } else {
+            print("❌ No PAN found in UserDefaults")
+        }
     }
     
     
@@ -84,38 +91,38 @@ class ApplicationFormVC: UIViewController {
     }
     
     private func handleStepTap(_ step: StepItem) {
-
-//        let previousSteps = steps.filter { $0.index < step.index }
-//
-//        // ❗ Block ONLY if any previous step is PENDING
-//        let hasPendingPreviousStep = previousSteps.contains {
-//            $0.status == .pending
-//        }
-//
-//        if hasPendingPreviousStep {
-//            showAlert("Please complete previous step first")
-//            return
-//        }
-
-       //  ✅ Approved OR Rejected → allow navigation
+        
+        //        let previousSteps = steps.filter { $0.index < step.index }
+        //
+        //        // ❗ Block ONLY if any previous step is PENDING
+        //        let hasPendingPreviousStep = previousSteps.contains {
+        //            $0.status == .pending
+        //        }
+        //
+        //        if hasPendingPreviousStep {
+        //            showAlert("Please complete previous step first")
+        //            return
+        //        }
+        
+        //  ✅ Approved OR Rejected → allow navigation
         
         guard isDataLoaded else {
-             showAlert("Please wait, loading data...")
-             return
-         }
+            showAlert("Please wait, loading data...")
+            return
+        }
         
-       navigateToStep(step)
+        navigateToStep(step)
     }
     
     private func navigateToStep(_ step: StepItem) {
         
         guard let pan = panNo, !pan.isEmpty,
-               let reg = regId, !reg.isEmpty else {
-             showAlert("PAN or RegId missing. Please wait.")
-             return
-         }
-
-         let vc: UIViewController
+              let reg = regId, !reg.isEmpty else {
+            showAlert("PAN or RegId missing. Please wait.")
+            return
+        }
+        
+        let vc: UIViewController
         
         switch step.title {
         case "Basic":
@@ -130,13 +137,17 @@ class ApplicationFormVC: UIViewController {
         case "Trading":
             let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
             let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-            vc.panNo = panNo
+            let savedPAN = UserDefaults.standard.string(forKey: "SavedPAN")
+            let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+            vc.panNo = finalPAN
             vc.regId = regId
             self.navigationController?.pushViewController(vc, animated: true)
         case "Bank":
             let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
             let vc = storyboard.instantiateViewController(identifier: "BankVC") as! BankVC
-            vc.panNo = panNo
+            let savedPAN = UserDefaults.standard.string(forKey: "SavedPAN")
+            let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+            vc.panNo = finalPAN
             vc.regId = regId
             self.navigationController?.pushViewController(vc, animated: true)
         case "Others":
@@ -273,7 +284,7 @@ class ApplicationFormVC: UIViewController {
     }
     
     private func setupBottomTermsView() {
-
+        
         // ✅ Terms Button
         termsButton.setTitle("  I agree to Terms & Conditions", for: .normal)
         termsButton.setImage(UIImage(systemName: "square"), for: .normal)
@@ -283,38 +294,38 @@ class ApplicationFormVC: UIViewController {
         termsButton.contentHorizontalAlignment = .leading
         termsButton.addTarget(self, action: #selector(TermsAndConditionsBtn(_:)), for: .touchUpInside)
         termsButton.translatesAutoresizingMaskIntoConstraints = false
-
+        
         view.addSubview(termsButton)
-
+        
         NSLayoutConstraint.activate([
-//            termsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-//            termsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            //            termsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            //            termsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             termsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             termsButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
             termsButton.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
-
+    
     @objc private func TermsAndConditionsBtn(_ sender: UIButton) {
-
+        
         // Open terms every time user taps
         let storyboard = UIStoryboard(name: "terms", bundle: Bundle.module)
         if let vc = storyboard.instantiateViewController(
             withIdentifier: "termsVC") as? termsVC {
-
+            
             vc.modalPresentationStyle = .overCurrentContext
             vc.modalTransitionStyle = .crossDissolve
-
+            
             vc.dismissHandler = { [weak self] in
                 guard let self = self else { return }
-
+                
                 sender.isSelected = true
                 sender.setImage(
                     UIImage(systemName: "checkmark.square.fill"),
                     for: .normal
                 )
             }
-
+            
             present(vc, animated: true)
         }
     }
@@ -387,21 +398,21 @@ class StepView: UIView {
 extension ApplicationFormVC {
     
     func mapStepStatus(_ value: Any?) -> StepStatus {
-
+        
         // NSNumber (most common from JSON)
         if let number = value as? NSNumber {
             return number.intValue == 1 ? .approved : .pending
         }
-
+        
         // Int
         if let intValue = value as? Int {
             return intValue == 1 ? .approved : .pending
         }
-
+        
         // String
         if let stringValue = value as? String {
             let status = stringValue.uppercased()
-
+            
             if status == "1" {
                 return .approved
             } else if status.contains("APPROVED") {
@@ -425,7 +436,7 @@ extension ApplicationFormVC {
                 self.fetchedSessionID = sessionID
                 self.decodeArray = decodeByteArrayString
                 print("UserID: \(userId), SessionID: \(sessionID)")
-               
+                
             } else {
                 print("No UserID or SessionID found.")
             }
@@ -498,28 +509,28 @@ extension ApplicationFormVC {
                                 self.regId = jsonResponse["RegId"] as? String
                                 self.PANName = jsonResponse["PANName"] as? String
                                 self.nameLabel.text = jsonResponse["PANName"] as? String ?? "-"
-                                self.isDataLoaded = true 
+                                self.isDataLoaded = true
                                 
                                 let steps: [StepItem] = [
                                     StepItem(title: "Basic", index: 1,
                                              status: self.mapStepStatus(jsonResponse["AadhaarStatus"])),
-
+                                    
                                     StepItem(title: "Trading", index: 2,
                                              status: self.mapStepStatus(jsonResponse["Trading_Status"])),
-
+                                    
                                     StepItem(title: "Bank", index: 4,
                                              status: self.mapStepStatus(jsonResponse["BankDpTradStatus"])),
-
+                                    
                                     StepItem(title: "Others", index: 5,
                                              status: self.mapStepStatus(jsonResponse["OtherStatus"])),
-
+                                    
                                     StepItem(title: "Nominee", index: 6,
                                              status: self.mapStepStatus(jsonResponse["NomineeStatus"])),
-
+                                    
                                     StepItem(title: "Documents", index: 7,
                                              status: self.mapStepStatus(jsonResponse["DocumentStatus"]))
                                 ]
-
+                                
                                 self.reloadSteps(steps)
                                 
                             }

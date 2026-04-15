@@ -447,74 +447,175 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,  
     }
     
     @IBAction func saveNnext(_ sender: UIButton) {
+//        fatherName = fatherNameTF.text
+//        motherName = motherNameTF.text
+//        tradingExperience = tradingExperienceTF.text
+//        networth = networthTxt.text
+//        networthDate = networthDateTxt.text
+//        
+//        // Validate the input values one by one with individual alerts
+//        if fatherName == nil || fatherName!.isEmpty {
+//            showAlert(message: "Please fill in Father's Name.")
+//            return
+//        }
+//        
+//        if let networth = networthTxt.text, !networth.isEmpty {
+//            // Networth is filled, so check for date
+//            guard let networthDate = networthDateTxt.text, !networthDate.isEmpty else {
+//                // Date is missing, show alert
+//                showAlert(message: "Please select Networth Date.")
+//                return
+//            }
+//        }
+//        
+//        if let networthText = networthTxt.text,
+//           let networthValue = Int(networthText),
+//           networthValue < 100000 {
+//            
+//            showAlert(message: "Networth should not be less than 1,00,000")
+//            return
+//        }
+//        
+//        if fatherName == nil || fatherName!.isEmpty {
+//            showAlert(message: "Please fill in Father's Name.")
+//            return
+//        }
+//        
+//        if maritalStatus == nil || maritalStatus!.isEmpty {
+//            showAlert(message: "Please select Marital Status.")
+//            return
+//        }
+//        
+//        // Check for education - skip alert if it's "0"
+//        if education == nil || (education! == "0") {
+//            showAlert(message: "Please select Education.")
+//        } else if education!.isEmpty {
+//            showAlert(message: "Please select Education.")
+//            return
+//        }
+//        
+//        // Check for occupation - skip alert if it's "0"
+//        if occupation == nil || (occupation! == "0") {
+//            showAlert(message: "Please select Occupation.")
+//        } else if occupation!.isEmpty {
+//            showAlert(message: "Please select Occupation.")
+//            return
+//        }
+//        
+//        if annual == nil || (annual! == "0") {
+//            showAlert(message: "Please select Annual Income.")
+//        } else if occupation!.isEmpty {
+//            showAlert(message: "Please select Annual Income.")
+//            return
+//        }
+//        
+//        if tradingExperience == nil || tradingExperience!.isEmpty || tradingExperience! == "0" {
+//             showAlert(message: "Please select Trading Experience.")
+//             return
+//         }
+//        SaveOtherData()
+        
         fatherName = fatherNameTF.text
-        motherName = motherNameTF.text
-        tradingExperience = tradingExperienceTF.text
-        networth = networthTxt.text
+            motherName = motherNameTF.text
+            tradingExperience = tradingExperienceTF.text
+            networth = networthTxt.text
         networthDate = networthDateTxt.text
+
+        guard let fatherName = fatherName, !fatherName.isEmpty else {
+               showAlert(message: "Please fill in Father's Name.")
+               return
+           }
+
+           // ✅ Marital Status
+           guard let maritalStatus = maritalStatus, !maritalStatus.isEmpty else {
+               showAlert(message: "Please select Marital Status.")
+               return
+           }
+
+           // ✅ Education
+           guard let education = education, !education.isEmpty, education != "0" else {
+               showAlert(message: "Please select Education.")
+               return
+           }
+
+           // ✅ Occupation
+           guard let occupation = occupation, !occupation.isEmpty, occupation != "0" else {
+               showAlert(message: "Please select Occupation.")
+               return
+           }
+
+           // ✅ Annual Income
+           guard let annual = annual, !annual.isEmpty, annual != "0" else {
+               showAlert(message: "Please select Annual Income.")
+               return
+           }
+
+           // ✅ Trading Experience (ALLOW 0 ✅)
+           guard let tradingExperience = tradingExperience, !tradingExperience.isEmpty else {
+               showAlert(message: "Please enter Trading Experience.")
+               return
+           }
+
+           // ✅ Networth (MANDATORY)
+//           guard let networth = networth, !networth.isEmpty else {
+//               showAlert(message: "Please enter Networth.")
+//               return
+//           }
+
+           // ✅ Networth Date (MANDATORY)
+//           guard let networthDate = networthDate, !networthDate.isEmpty else {
+//               showAlert(message: "Please select Networth Date.")
+//               return
+//           }
+
+           // ✅ Networth Minimum Check
+//           if let networthValue = Int(networth), networthValue < 100000 {
+//               showAlert(message: "Networth should not be less than 1,00,000")
+//               return
+//           }
+
+           // ✅ Running Account Authorization
+           guard let runningAccountAuthorization = runningAccountAuthorization, !runningAccountAuthorization.isEmpty else {
+               showAlert(message: "Please select Running Account Authorization.")
+               return
+           }
+
+           // ✅ Dividend Interest
+           guard let dividend = Dividend_Interest, !dividend.isEmpty else {
+               showAlert(message: "Please select Dividend/Interest option.")
+               return
+           }
+
+           // ✅ DIS
+           guard let dis = DIS, !dis.isEmpty else {
+               showAlert(message: "Please select DIS option.")
+               return
+           }
         
-        // Validate the input values one by one with individual alerts
-        if fatherName == nil || fatherName!.isEmpty {
-            showAlert(message: "Please fill in Father's Name.")
-            return
-        }
-        
-        if let networth = networthTxt.text, !networth.isEmpty {
-            // Networth is filled, so check for date
-            guard let networthDate = networthDateTxt.text, !networthDate.isEmpty else {
-                // Date is missing, show alert
-                showAlert(message: "Please select Networth Date.")
+        if self.IsDerivative.uppercased() == "Y" {
+            if let networthText = networthTxt.text, !networthText.isEmpty,
+               let networthValue = Double(networthText.replacingOccurrences(of: ",", with: "")) {
+                
+                if networthValue < 100000 {
+                    showAlert(message: "Networth must be at least 1 Lakh.")
+                    return
+                }
+                
+                // Networth date is mandatory
+                if networthDate == nil || networthDate!.isEmpty {
+                    showAlert(message: "Please select Networth Date.")
+                    return
+                }
+                
+            } else {
+                showAlert(message: "Please fill in Networth.")
                 return
             }
         }
-        
-        if let networthText = networthTxt.text,
-           let networthValue = Int(networthText),
-           networthValue < 100000 {
-            
-            showAlert(message: "Networth should not be less than 1,00,000")
-            return
-        }
-        
-        if fatherName == nil || fatherName!.isEmpty {
-            showAlert(message: "Please fill in Father's Name.")
-            return
-        }
-        
-        if maritalStatus == nil || maritalStatus!.isEmpty {
-            showAlert(message: "Please select Marital Status.")
-            return
-        }
-        
-        // Check for education - skip alert if it's "0"
-        if education == nil || (education! == "0") {
-            showAlert(message: "Please select Education.")
-        } else if education!.isEmpty {
-            showAlert(message: "Please select Education.")
-            return
-        }
-        
-        // Check for occupation - skip alert if it's "0"
-        if occupation == nil || (occupation! == "0") {
-            showAlert(message: "Please select Occupation.")
-        } else if occupation!.isEmpty {
-            showAlert(message: "Please select Occupation.")
-            return
-        }
-        
-        if annual == nil || (annual! == "0") {
-            showAlert(message: "Please select Annual Income.")
-        } else if occupation!.isEmpty {
-            showAlert(message: "Please select Annual Income.")
-            return
-        }
-        
-        if tradingExperience == nil || tradingExperience!.isEmpty || tradingExperience! == "0" {
-             showAlert(message: "Please select Trading Experience.")
-             return
-         }
-        SaveOtherData()
-    }
+
+           // ✅ All validations passed
+           SaveOtherData()
+       }
     
     func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)

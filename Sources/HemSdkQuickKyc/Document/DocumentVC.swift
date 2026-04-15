@@ -17,12 +17,12 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                   UINavigationControllerDelegate, UIDocumentPickerDelegate,
                   @MainActor AVCapturePhotoCaptureDelegate, @MainActor CLLocationManagerDelegate,
                   @MainActor ImageProcessingDelegate, @MainActor didselectdocumentType, CropViewControllerDelegate,
-                  @MainActor IncomeCVCDelegate, @MainActor doneapplicationprotocol, @MainActor WebViewDelegate, @MainActor didTypeUccCode
+                  @MainActor IncomeCVCDelegate, @MainActor doneapplicationprotocol, @MainActor WebViewDelegate
 {
-    func Ucccode(ucccode: String) {
-        print("Received UCC Code: \(ucccode)")
-        self.UpdateFinalStatus(ucccode: ucccode)
-    }
+//    func Ucccode(ucccode: String) {
+//        print("Received UCC Code: \(ucccode)")
+//        self.UpdateFinalStatus(ucccode: ucccode)
+//    }
     
     func webViewDidFinishLoad(ocrcount: Int, response: [String: Any]?) {
         print("numberCount:-\(ocrcount)")
@@ -51,7 +51,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         self.navigationController?.popToRootViewController(animated: true)
         if ispdfgenerated == "1" {
             // Navigate to esignVC
-            let storyboard = UIStoryboard(name: "ApplicationStatusVC", bundle: Bundle.module)
+            let storyboard = UIStoryboard(name: "Esign", bundle: .main)
             let vc =
             storyboard.instantiateViewController(identifier: "ApplicationStatusVC")
             as! ApplicationStatusVC
@@ -552,6 +552,13 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         
+//        if CLLocationManager.authorizationStatus() == .notDetermined {
+//                 locationManager.requestWhenInUseAuthorization()
+//             } else if CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
+//                       CLLocationManager.authorizationStatus() == .authorizedAlways {
+//                 locationManager.startUpdatingLocation()
+//             }
+        
         //hide done button
         
         if isFromRejectionFlow {
@@ -763,16 +770,16 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                            unverifiedSections.append("Bank Proof")
                        }
                        
-                   case "DematImage":
-                       if dematimageUrls.isEmpty {
-                           unverifiedSections.append("Demat (No images uploaded)")
-                       } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? String,
-                                 status != "1" && status != "2" {
-                           unverifiedSections.append("Demat")
-                       } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? Int,
-                                 status != 1 && status != 2 {
-                           unverifiedSections.append("Demat")
-                       }
+//                   case "DematImage":
+//                       if dematimageUrls.isEmpty {
+//                           unverifiedSections.append("Demat (No images uploaded)")
+//                       } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? String,
+//                                 status != "1" && status != "2" {
+//                           unverifiedSections.append("Demat")
+//                       } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? Int,
+//                                 status != 1 && status != 2 {
+//                           unverifiedSections.append("Demat")
+//                       }
                        
                    default:
                        break
@@ -791,15 +798,15 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                }
                
                // Check PAN Copy (check local image)
-               if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
-                   unverifiedSections.append("PAN Copy (No image uploaded)")
-               } else if let status = jsonResponse["PANImage_Verify"] as? String,
-                         status != "1" && status != "2" {
-                   unverifiedSections.append("PAN Copy")
-               } else if let status = jsonResponse["PANImage_Verify"] as? Int,
-                         status != 1 && status != 2 {
-                   unverifiedSections.append("PAN Copy")
-               }
+//               if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+//                   unverifiedSections.append("PAN Copy (No image uploaded)")
+//               } else if let status = jsonResponse["PANImage_Verify"] as? String,
+//                         status != "1" && status != "2" {
+//                   unverifiedSections.append("PAN Copy")
+//               } else if let status = jsonResponse["PANImage_Verify"] as? Int,
+//                         status != 1 && status != 2 {
+//                   unverifiedSections.append("PAN Copy")
+//               }
                
                // Check Client Photo (check local image)
                if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
@@ -813,32 +820,32 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                }
                
                // Check Nominees if they exist and have images
-               if !NomineeDetails1.isHidden {
-                   if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
-                       unverifiedSections.append("Nominee 1 (No image uploaded)")
-                   } else if let status = jsonResponse["NOMINEE_1Images_Verify"] as? String,
-                             status != "1" && status != "2" {
-                       unverifiedSections.append("Nominee 1")
-                   }
-               }
+//               if !NomineeDetails1.isHidden {
+//                   if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
+//                       unverifiedSections.append("Nominee 1 (No image uploaded)")
+//                   } else if let status = jsonResponse["NOMINEE_1Images_Verify"] as? String,
+//                             status != "1" && status != "2" {
+//                       unverifiedSections.append("Nominee 1")
+//                   }
+//               }
                
-               if !NomineeDetails2.isHidden {
-                   if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
-                       unverifiedSections.append("Nominee 2 (No image uploaded)")
-                   } else if let status = jsonResponse["NOMINEE_2Images_Verify"] as? String,
-                             status != "1" && status != "2" {
-                       unverifiedSections.append("Nominee 2")
-                   }
-               }
+//               if !NomineeDetails2.isHidden {
+//                   if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
+//                       unverifiedSections.append("Nominee 2 (No image uploaded)")
+//                   } else if let status = jsonResponse["NOMINEE_2Images_Verify"] as? String,
+//                             status != "1" && status != "2" {
+//                       unverifiedSections.append("Nominee 2")
+//                   }
+//               }
                
-               if !NomineeDetails3.isHidden {
-                   if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
-                       unverifiedSections.append("Nominee 3 (No image uploaded)")
-                   } else if let status = jsonResponse["NOMINEE_3Images_Verify"] as? String,
-                             status != "1" && status != "2" {
-                       unverifiedSections.append("Nominee 3")
-                   }
-               }
+//               if !NomineeDetails3.isHidden {
+//                   if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
+//                       unverifiedSections.append("Nominee 3 (No image uploaded)")
+//                   } else if let status = jsonResponse["NOMINEE_3Images_Verify"] as? String,
+//                             status != "1" && status != "2" {
+//                       unverifiedSections.append("Nominee 3")
+//                   }
+//               }
                
                // Show alert if there are unverified sections
                DispatchQueue.main.async {
@@ -873,11 +880,11 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
            }
            
            // Check Demat
-           if DematImage.isHidden == false {
-               if dematimageUrls.isEmpty {
-                   missingDocuments.append("Demat")
-               }
-           }
+//           if DematImage.isHidden == false {
+//               if dematimageUrls.isEmpty {
+//                   missingDocuments.append("Demat")
+//               }
+//           }
            
            // Check Signature
            if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
@@ -885,9 +892,9 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
            }
            
            // Check PAN Copy
-           if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
-               missingDocuments.append("PAN Copy")
-           }
+//           if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+//               missingDocuments.append("PAN Copy")
+//           }
            
            // Check Client Photo
            if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
@@ -895,23 +902,23 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
            }
            
            // Check Nominees
-           if !NomineeDetails1.isHidden {
-               if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
-                   missingDocuments.append("Nominee 1")
-               }
-           }
+//           if !NomineeDetails1.isHidden {
+//               if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
+//                   missingDocuments.append("Nominee 1")
+//               }
+//           }
            
-           if !NomineeDetails2.isHidden {
-               if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
-                   missingDocuments.append("Nominee 2")
-               }
-           }
+//           if !NomineeDetails2.isHidden {
+//               if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
+//                   missingDocuments.append("Nominee 2")
+//               }
+//           }
            
-           if !NomineeDetails3.isHidden {
-               if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
-                   missingDocuments.append("Nominee 3")
-               }
-           }
+//           if !NomineeDetails3.isHidden {
+//               if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
+//                   missingDocuments.append("Nominee 3")
+//               }
+//           }
            
            if !missingDocuments.isEmpty {
                let message = "Please upload the following documents:\n" + missingDocuments.joined(separator: "\n")
@@ -1044,9 +1051,17 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                             print("errorcode 000000 called")
                             DispatchQueue.main.async{
                                 print("done")
-                                let storyboard = UIStoryboard(name: "Rejection", bundle: .main)
-                                let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
-                                self.navigationController?.pushViewController(vc, animated: true)
+//                                let storyboard = UIStoryboard(name: "Rejection", bundle: Bundle.module)
+//                                let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
+//                                self.navigationController?.pushViewController(vc, animated: true)
+                                let vc =
+                                self.storyboard?.instantiateViewController(
+                                    withIdentifier: "applicationDoneVC")
+                                as! applicationDoneVC
+                                vc.modalPresentationStyle = .overCurrentContext
+                                vc.modalTransitionStyle = .crossDissolve
+                                vc.delegate = self
+                                self.present(vc, animated: true)
                             }
                             
                         default:
@@ -1145,28 +1160,28 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                         title: "Verification Required", message: message)
                 } else {
                     // Proceed to next step if all verifications are complete
-                    self.navigateToNextStep()
+                    self.UpdateFinalStatus()
                 }
             }
         }
     }
     
-        func navigateToNextStep() {
-            if let rejectionValue = rejection, !rejectionValue.isEmpty {
-                UpdateDocumentModificationStatus()
-            } else {
-                let vc =
-                self.storyboard?.instantiateViewController(
-                    withIdentifier: "uccVC")
-                as! uccVC
-                vc.modalPresentationStyle = .overCurrentContext
-                vc.modalTransitionStyle = .crossDissolve
-    
-                vc.delegate = self
-    
-                self.present(vc, animated: true)
-            }
-        }
+//        func navigateToNextStep() {
+//            if let rejectionValue = rejection, !rejectionValue.isEmpty {
+//                UpdateDocumentModificationStatus()
+//            } else {
+//                let vc =
+//                self.storyboard?.instantiateViewController(
+//                    withIdentifier: "uccVC")
+//                as! uccVC
+//                vc.modalPresentationStyle = .overCurrentContext
+//                vc.modalTransitionStyle = .crossDissolve
+//    
+//                vc.delegate = self
+//    
+//                self.present(vc, animated: true)
+//            }
+//        }
     
     @IBAction func incomeProofDocumentTypeBtn(_ sender: UIButton) {
         if let vc = storyboard?.instantiateViewController(
@@ -1625,7 +1640,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         if sender.isSelected {
             // If the button is selected and user clicks, deselect it and show terms and conditions page
             sender.isSelected = false
-            let storyboard = UIStoryboard(name: "terms", bundle: .main)
+            let storyboard = UIStoryboard(name: "terms", bundle: Bundle.module)
             if let vc = storyboard.instantiateViewController(
                 withIdentifier: "termsVC") as? termsVC
             {
@@ -1983,16 +1998,19 @@ extension DocumentVC {
             visibleSections["IncomeProof"] = false
         }
         
+        DematImage.isHidden = true
+        visibleSections["DematImage"] = false
+        
         // Check for "DP_IMAGEID_Verify" field
-        if let isDpAccountNew = jsonResponse["IsDpAccountNew"] as? String,
-           isDpAccountNew == "Y"
-        {
-            DematImage.isHidden = true
-            visibleSections["DematImage"] = false
-        } else {
-            DematImage.isHidden = false
-            visibleSections["DematImage"] = true
-        }
+//        if let isDpAccountNew = jsonResponse["IsDpAccountNew"] as? String,
+//           isDpAccountNew == "Y"
+//        {
+//            DematImage.isHidden = true
+//            visibleSections["DematImage"] = false
+//        } else {
+//            DematImage.isHidden = false
+//            visibleSections["DematImage"] = true
+//        }
         
         // Check for "NOMINEE_1Images_Verify" field
 //        if let nominee1ImagesVerify = jsonResponse["Nom1NomineeOrGuardianName"]
@@ -3551,6 +3569,233 @@ extension DocumentVC {
         }
     }
     
+//    func CLIENTPHOTOUpload(imageData: Data) {
+//        
+//        var fileName: String = ""
+//        var mimeType: String = ""
+//        fileName = "image.jpg"
+//        mimeType = "image/jpeg"
+//        
+//        let parameters: [String: Any?] = [
+//            "PanNo": PanNo,
+//            "RegId": RegId,
+//            "UserId": fetchedUserId,
+//            "MOBRequestID": "",
+//            "Type": "IMAGE",
+//            "Latitude": Latitude,
+//            "Longitude": Longitude,
+//            "Location": "",
+//            "OCRCount": ocrCount,
+//            "NewValue": "",
+//            "BrowserName": "",
+//            "BrowserVersion": "",
+//            "OS": "",
+//            "OSVersion": "",
+//            "IPAddress": "",
+//            "DeviceType": "",
+//        ]
+//        print("client photo uploads", parameters)
+//        let url = "\(self.prefixUrl)MultiPartImageUpload/CLIENTPHOTOUpload"
+//        //uploadDocument(apiEndpoint: "http://yourapi.com/upload", parameters: yourParameters, fileData: pdfData, fileName: pdfFileName, mimeType: pdfMimeType)
+//        uploadDocument(
+//            apiEndpoint: url, parameters: parameters, fileData: imageData,
+//            fileName: fileName, mimeType: mimeType, loaderView: self.view,
+//            loaderText: "Kindly wait we are verifying your client image..."
+//        ) { result in
+//            switch result {
+//            case .success(let jsonResponse):
+//                print("CLIENTPHOTOUpload Response: \(jsonResponse)")
+//                let ClientPhotoImageID_Verify =
+//                jsonResponse["DocumentImages_Verify"] as? String
+//                if let errorCode = jsonResponse["ErrorCode"] as? String {
+//                    switch errorCode {
+//                    case "000000":
+//                        DispatchQueue.main.async {
+//                            print("Image upload successful")
+//                            // Call GetUserLocation API
+//                            self.ocrpancount = 0
+//                            if let latitude = self.Latitude,
+//                               let longitude = self.Longitude
+//                            {
+//                                self.GetUserLocation(
+//                                    Longitude: longitude, Latitude: latitude)
+//                                self.clientImageUpdateUI(with: jsonResponse)
+//                                //                                    self.ClientPhotoImageID_Verify = ClientPhotoImageID_Verify
+//                            }
+//                            self.CP_CaptureImgBtn.isHidden = true
+//                            self.CP_IPVLinkBtn.isHidden = true
+//                        }
+//
+//                    case "801005":
+//                        print("OCR Error hit, current count = \(self.ocrCount)")
+//                        if self.ocrCount == 1 {
+//                            // 1st failure → show alert
+//                            let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+//                            ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+//                            ?? "OCR failed."
+//                            
+//                            DispatchQueue.main.async {
+//                                self.showAlert(title: "Error", message: errorMessage)
+//                            }
+//                            self.ocrCount += 1
+//                        } else if self.ocrCount == 1 {
+//                            // 2nd failure → allow user to retry
+//                            self.ocrCount += 1
+//                            let errorMessage = (jsonResponse["RejectRemark"] as? String)
+//                            ?? (jsonResponse["ErrorMessage"] as? String)
+//                            ?? "Second attempt failed. Please try again."
+//                            
+//                            DispatchQueue.main.async {
+//                                self.signatureAttemptLabel.text = errorMessage
+//                                print("Retry allowed for OCRCount: \(self.ocrCount)")
+//                            }
+//                        } else {
+//                            // After 2 failures → upload anyway
+//                            print("Invalid OCR but forcing upload.")
+//                            DispatchQueue.main.async {
+//                                if let validImage = self.selectedClientImage {
+//                                    self.CPImageView.image = validImage
+//                                }
+//                                self.showAlert(title: "Notice", message: "OCR failed multiple times, proceeding with upload.")
+//                                self.CLIENTPHOTOUpload(imageData: imageData)
+//                            }
+//                        }
+//                    case "111111":
+//                        // Increment OCR count and retry if less than 3
+//                        let errorMessage = (jsonResponse["ErrorMessage"] as? String) ?? "Something went wrong."
+//                        DispatchQueue.main.async {
+//                            print("Image upload successful")
+//                            self.showAlert(title: "Alert", message: errorMessage)
+//                            // Call GetUserLocation API
+//                            self.ocrpancount = 0
+//                            if let latitude = self.Latitude,
+//                               let longitude = self.Longitude
+//                            {
+//                                self.GetUserLocation(
+//                                    Longitude: longitude, Latitude: latitude)
+//                                self.clientImageUpdateUI(with: jsonResponse)
+//                                //                                    self.ClientPhotoImageID_Verify = ClientPhotoImageID_Verify
+//                            }
+//                        }
+//                    case "999992":
+//                        DispatchQueue.main.async {
+//                            self.regenerate(imageData: imageData)
+//                        }
+//                    default:
+//                        print("Unhandled error code: \(errorCode)")
+//                        // Handle error
+//                    }
+//                }
+//            case .failure(let error):
+//                print("API call failed: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+//    
+//    func clientImageUpdateUI(with response: [String: Any]) {
+//        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
+//            [self] tokenId in
+//            guard let tokenId = tokenId else {
+//                // Handle the case where no tokens are available
+//                CoreDataHelper.generateToken(
+//                    decodeByteArrayToString: self.mobiledecodeArray ?? "",
+//                    USERID: self.fetchedUserId ?? "",
+//                    SessionId: self.fetchedSessionID ?? "",
+//                    entityName: "TokenMobile", deviceType: "M", in: self.view
+//                ) { success in
+//                    if success {
+//                        // Retry SIXTHAPI after token regeneration
+//                        self.clientImageUpdateUI(with: response)
+//                    } else {
+//                        print("Token generation failed.")
+//                    }
+//                }
+//                print("No tokens available. Please reload the tokens.")
+//                return
+//            }
+//            if let clientImageID = response["RequestID"] as? Int {
+//                //                        print("if is called")// Construct the URL safely
+//                let userId =
+//                fetchedUserId?.addingPercentEncoding(
+//                    withAllowedCharacters: .urlQueryAllowed) ?? ""
+//                
+//                let imageUrlString =
+//                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(clientImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId=\(tokenId)"
+//                self.clientPhotoUrl = imageUrlString
+//                self.CPHolderView1.isHidden = false
+//                
+//                CPImageView.isHidden = false
+//                CP_Long_Lat_Lbl.isHidden = false
+//                CP_Location_label.isHidden = false
+//                CpHolderView2.isHidden = false
+//                // Print to debug the formed URL
+//                self.ClientPhotoImageID_Verify =
+//                response["DocumentImages_Verify"] as? String
+//                
+//                
+//                print("Formed panView URL: \(imageUrlString)")
+//                self.CPImageView.restorationIdentifier = "clientPhoto"
+//                loadImage(
+//                    from: imageUrlString, into: self.CPImageView,
+//                    with: "clientPhoto")
+//                DispatchQueue.main.async {
+//                    self.updateButtonImage(
+//                        button: self.clientPhotoStatusBtn,
+//                        statusKey: "DocumentImages_Verify",
+//                        jsonResponse: response)
+//                    
+//                    
+//                }
+//            } else {
+//                CPImageView.image = UIImage(
+//                    systemName: "person.crop.circle.badge.xmark")
+//            }
+//            
+//        }
+//    }
+//    
+//    func InsertUpdateIPVAuditLog() {
+//        
+//        let parameters: [String: Any?] = [
+//            "RegId": RegId,
+//            "PanNo": PanNo,
+//            "CreatedBy": fetchedUserId,
+//            "Flag": "INSERT",
+//        ]
+//        print(parameters)
+//        let Url = "MultiPartImageUpload/InsertUpdateIPVAuditLog"
+//        
+//        apiCall(
+//            url: Url, method: "POST", parameters: parameters as [String: Any],
+//            view: self.view
+//        ) { result in
+//            switch result {
+//            case .success(let jsonResponse):
+//                print("InsertUpdateIPVAuditLog Response: \(jsonResponse)")
+//                if let errorCode = jsonResponse["ErrorCode"] as? String {
+//                    switch errorCode {
+//                    case "000000":
+//                        DispatchQueue.main.async { [self] in
+//                            self.IPVStatus = "IPV"  // Store IPV status
+//                            self.startPeriodicViewDocumentDetails()
+//                            showAlert(
+//                                title: "Alert",
+//                                message:
+//                                    "You get email in your verified email id..."
+//                            )
+//                            print("api is running")
+//                        }
+//                    default:
+//                        print("Unhandled error code: \(errorCode)")
+//                    }
+//                }
+//            case .failure(let error):
+//                print("Login API call failed: \(error.localizedDescription)")
+//            }
+//            
+//        }
+//    }
+    
     func CLIENTPHOTOUpload(imageData: Data) {
         
         var fileName: String = ""
@@ -4368,7 +4613,7 @@ extension DocumentVC {
 //        }
 //    }
     
-    func UpdateFinalStatus(ucccode: String) {
+    func UpdateFinalStatus() {
         
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
             [self] tokenId in
@@ -4382,7 +4627,7 @@ extension DocumentVC {
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
-                        self.UpdateFinalStatus(ucccode: ucccode)
+                        self.UpdateFinalStatus()
                     } else {
                         print("Token generation failed.")
                     }
@@ -4396,7 +4641,7 @@ extension DocumentVC {
                 "RegId": RegId,
                 "PanNo": PanNo,
                 "isTermsAndCondition": "true",
-                "UCCCode": ucccode,
+               // "UCCCode": ucccode,
                 "isCommodityCategoriDone": "0",
                 "CommodityCategoriValue": "",
                 "CommodityCategoriKey": "",

@@ -172,6 +172,9 @@ class PanVerifyPopupVC: UIViewController {
                             
                         case "000000":
                             DispatchQueue.main.async {
+                                let panNo = jsonResponse["PanNo"] as? String
+                                       // Save PAN locally
+                                UserDefaults.standard.set(panNo, forKey: "SavedPAN")
                                 self.delegate?.didReceiveApiResponse(
                                     panName: jsonResponse["PANName"] as? String,
                                     panNo: jsonResponse["PanNo"] as? String,

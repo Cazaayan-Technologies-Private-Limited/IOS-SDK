@@ -119,9 +119,10 @@ class DigiLocker_b_VC: UIViewController {
             // ✅ Existing flow for DigiLockerA
             let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
             let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-            vc.panNo = self.panNo
-            vc.regId = self.RegId
-            
+            let savedPAN = UserDefaults.standard.string(forKey: "SavedPAN")
+            let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+            vc.panNo = finalPAN
+            vc.regId = RegId
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }

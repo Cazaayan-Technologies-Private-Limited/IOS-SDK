@@ -700,12 +700,10 @@ extension MobileOTPVC{
                             }
                         case "000000":
                             print("errorcode 000000 called")
-                            if let finalStatus = FinalStatusValue,
-                               (finalStatus == "7"){
-                                
+                            if let finalStatus = FinalStatusValue, finalStatus == "KYC REJECTED" {
                                 DispatchQueue.main.async {
                                     let storyboard = UIStoryboard(name: "Rejection", bundle: Bundle.module)
-                                    let vc = storyboard.instantiateViewController(withIdentifier: "RejectionVC") as! RejectionVC
+                                    let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
                                     self.navigationController?.pushViewController(vc, animated: true)
                                 }
                                 return
@@ -762,7 +760,7 @@ extension MobileOTPVC{
                                 return
                             }
                             
-                            self.sectionPage()
+                        self.sectionPage()
                         case "000001":
                             self.showAlert(message: ErrorMessage ?? "")
                         default:
