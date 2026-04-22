@@ -331,42 +331,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             }
         }
     }
-//    
-//    func initiateLoginAPI(phoneNumber: String) {
-//        
-//        let url = URL(string: "https://signup.hemnxt.com:84/V4.0.0/api/OTPManagement/InitiateLogin")!
-//        
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.setValue("cz_live_rdf5QYYl8z1lPEXLuw3y0e22gq05uUuU", forHTTPHeaderField: "api-key")
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        
-//        let body: [String: Any] = [
-//            "MobileNo": phoneNumber
-//        ]
-//        
-//        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-//        
-//        URLSession.shared.dataTask(with: request) { data, response, error in
-//            
-//            guard let data = data else { return }
-//            
-//            do {
-//                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-//                   let txnId = json["TxnId"] as? String {
-//                    
-//                    print("TxnId:", txnId)
-//                    
-//                    // 👉 STEP 2: Validate TxnId
-//                    self.validateTxnIdAPI(txnId: txnId, phoneNumber: phoneNumber)
-//                }
-//            } catch {
-//                print("Error:", error)
-//            }
-//            
-//        }.resume()
-//    }
-    
+
     func initiateLoginAPI(phoneNumber: String) {
         
         let url = URL(string: "https://signup.hemnxt.com:84/V4.0.0/api/OTPManagement/InitiateLogin")!

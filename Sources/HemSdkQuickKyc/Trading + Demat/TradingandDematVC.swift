@@ -1275,7 +1275,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
     var Depositoryname: String?
     var IsSchemeExternal: String?
     var selectBSDA: String?
-    var IsDpAccountNew: String?
+    var IsDpAccountNew: String = "Y"
     var DPSchemeCode: String?
     var DPSchemename: String?
     var DPName: String?
@@ -1294,6 +1294,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
     var isCurrencySelected = false
     var isMutualSelected = false
     var isCommoditySelectedState = false
+    var decodeArray: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -1321,6 +1322,8 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             brokeragePlan()
             viewTradingDetails()
             ValidateToken()
+            
+            
         }
         
         // Initialize button images
@@ -1364,6 +1367,14 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(openDepository))
         depositoryButton.addGestureRecognizer(tap)
+        
+        if let savedPAN = UserDefaults.standard.string(forKey: "PanNo"), !savedPAN.isEmpty {
+            self.panNo = savedPAN
+            self.PANName = UserDefaults.standard.string(forKey: "SavedPANName") ?? ""
+            print("✅ Retrieved PAN from UserDefaults: \(savedPAN)")
+        } else {
+            print("⚠️ No PAN found in UserDefaults")
+        }
     }
 
     
@@ -1430,6 +1441,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
     }
     
     @IBAction func commodityBtnTapped(_ sender: UIButton) {
+        guard sender.isEnabled else { return }
         sender.isSelected.toggle()
     }
     
@@ -1461,10 +1473,10 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
            }
         
         if IsDpAccountNew == "Y" {
-                
-                DPName = nil
-                DPID = nil
-                BOID = nil
+                // For new account, send empty strings
+                DPName = ""
+                DPID = ""
+                BOID = ""
                 
             } else if IsDpAccountNew == "N" {
             
@@ -1524,15 +1536,18 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             }
         paymentRequest()
         insertWeb()
-         
-//        updateUI(with: [:])
-//        insertWeb()
-//        paymentRequest()
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
             let vc = storyboard.instantiateViewController(identifier: "BankVC") as! BankVC
-            vc.panNo = self.panNo
-            vc.regId = self.regId
+            
+            let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+            let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+            
+            let regId = UserDefaults.standard.string(forKey: "RegId")
+            let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+            
+            vc.panNo = finalPAN
+            vc.regId = regIdFinal
             vc.delegate = self
             self.navigationController?.pushViewController(vc, animated: true)
         }
@@ -1647,12 +1662,18 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                 return
             }
             
+            guard let panNumber = self.panNo, !panNumber.isEmpty else {
+                     print("❌ PAN Number is missing from UserDefaults")
+                     self.showAlert(message: "PAN number not found. Please login again.")
+                     return
+                 }
+            
             let parameters: [String: Any?] = [
                 "IsPaymentGetwayAllow": 0,
                 "TxnId": nil,
                 "RegId": regId,
                 "UserId": fetchedUserId,
-                "PanNo": panNo,
+                "PanNo": panNumber,
                 "TokenId": tokenId,
                 "Type": nil,
                 "IsEquitySelect": "1",
@@ -1798,10 +1819,16 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                 print("No tokens available. Please reload the tokens.")
                 return
             }
+            
+            guard let panNumber = self.panNo, !panNumber.isEmpty else {
+                     print("❌ PAN Number is missing from UserDefaults")
+                     return
+                 }
+            
             let parameters: [String: Any?] = [
                   "RegId": regId,
                   "UserId": fetchedUserId,
-                  "PanNo": panNo,
+                  "PanNo": panNumber,
                   "TokenId": tokenId
             ]
             print(parameters)
@@ -2028,11 +2055,33 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                 print("No tokens available. Please reload the tokens.")
                 return
             }
+            
+            guard let panNumber = self.panNo, !panNumber.isEmpty else {
+                    print("❌ PAN Number is missing from UserDefaults")
+                    self.showAlert(message: "PAN number not found. Please login again.")
+                    return
+                }
+            let dpName: String
+            let dpId: String
+            let boid: String
+            
+            if self.IsDpAccountNew == "Y" {
+                     // For new account, send empty strings
+                     dpName = ""
+                     dpId = ""
+                     boid = ""
+                 } else {
+                     // For existing account, use the entered values
+                     dpName = self.DPName ?? self.dematTxt.text ?? ""
+                     dpId = self.DPID ?? self.dematIdTxt.text ?? ""
+                     boid = self.BOID ?? self.boIdTxt.text ?? ""
+                 }
+            
             let parameters: [String: Any?] = [
                 "RegId": regId,
                 "UserId": fetchedUserId,
-                "PanNo": panNo,
-                "IsDpAccountNew": self.IsDpAccountNew ?? "Y",
+                "PanNo": panNumber,
+                "IsDpAccountNew": self.IsDpAccountNew,
                 "Depositoryname": self.IsDpAccountNew == "Y" ? "" : (self.Depositoryname ?? ""),
                 "DPName": self.DPName ?? self.dematTxt.text ?? "",
                 "DPID": self.DPID ?? self.dematIdTxt.text ?? "",
@@ -2135,12 +2184,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                     switch result {
                     case .success(let jsonResponse):
                         print("BrokeragePlan Response: \(jsonResponse)")
-                        //                    let DigiLockerURL = jsonResponse["DigiLockerURL"] as? String
-                        //                    let digilockerReturnURL =
-                        //                    jsonResponse["DigiLockeReturnURL"] as? String
-                        //                    let Client_id = jsonResponse["Client_id"] as? String
-                        //                    let TransactionID = jsonResponse["TransactionID"] as? String
-    
+                 
                         if let errorCode = jsonResponse["ErrorCode"] as? String {
                             switch errorCode {
                             case "999992":
@@ -2150,21 +2194,27 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                             case "000000":
                                 DispatchQueue.main.async {
                                     if let list = jsonResponse["List"] as? [[String: Any]] {
- 
-                                          if let firstPlan = list.first {
-                                              self.equityPlanName = firstPlan["BrokeragePlanName"] as? String ?? ""
-                                          }
-
-                                          // find commodity plan
-                                          if let commodityPlan = list.first(where: { ($0["Segment"] as? String) == "COMMODITY" }) {
-                                              self.commodityPlanName = commodityPlan["BrokeragePlanName"] as? String ?? ""
-                                          }
-                                      }
+                                        
+                                        if let firstPlan = list.first {
+                                            self.equityPlanName = firstPlan["BrokeragePlanName"] as? String ?? ""
+                                            
+                                            // 🔥 ADD THIS
+                                            let segment = firstPlan["Segment"] as? String ?? ""
+                                            print("Segment:", segment)
+                                            
+                                            DispatchQueue.main.async {
+                                                self.handleSegment(segment)
+                                            }
+                                        }
+                                        
+                                        if let commodityPlan = list.first(where: { ($0["Segment"] as? String) == "COMMODITY" }) {
+                                            self.commodityPlanName = commodityPlan["BrokeragePlanName"] as? String ?? ""
+                                        }
+                                    }
 
                                       print("Equity Plan:", self.equityPlanName)
                                       print("Commodity Plan:", self.commodityPlanName)
-                                    self.paymentRequest()
-                                    self.insertWeb()
+                                  
                                    
                                 }
                             default:
@@ -2179,159 +2229,34 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             }
         }
     
-
-//    func updateUIFromTradingDetails(_ jsonResponse: [String: Any]) {
-//        
-//        // MARK: - DP Account Handling
-////        if let isDpNew = jsonResponse["DP_IsDpAccountNew"] as? String {
-////            self.IsDpAccountNew = isDpNew
-////            
-////            if isDpNew == "Y" {
-////                self.dematYesBtn(self.dematYesBtn)
-////            } else {
-////                self.dematNoBtn(self.dematNoBtn)
-////                
-////                self.depositoryLabel.text = jsonResponse["DP_Depositoryname"] as? String
-////                self.dematTxt.text = jsonResponse["DP_DPName"] as? String
-////                self.dematIdTxt.text = jsonResponse["DP_DPID"] as? String
-////                self.boIdTxt.text = jsonResponse["DP_BOID"] as? String
-////            }
-////        }
-//        
-//        self.IsDpAccountNew = "Y"
-//        updateDematSelection(isNew: true)
-//        
-//        // MARK: - Segment Selection Handling
-//        if let segments = jsonResponse["TRD_SegmentsPreferred"] as? String {
-//            
-//            // Reset all first
-//            equity.isSelected = false
-//            fando.isSelected = false
-//            currency.isSelected = false
-//            mutual.isSelected = false
-//            commodity.isSelected = false
-//            mtf.isSelected = false
-//            slbm.isSelected = false
-//
-//            let upperSegments = segments.uppercased()
-//            
-//            if upperSegments.contains("EQUITY") {
-//                equity.isSelected = true
-//            }
-//            if upperSegments.contains("FNO") || upperSegments.contains("F&O") {
-//                fando.isSelected = true
-//            }
-//            if upperSegments.contains("CURRENCY") {
-//                currency.isSelected = true
-//            }
-//            if upperSegments.contains("MUTUAL") {
-//                mutual.isSelected = true
-//            }
-//            if upperSegments.contains("COMMODITY") {
-//                commodity.isSelected = true
-//            }
-//            if upperSegments.contains("MTF") {
-//                mtf.isSelected = true
-//            }
-//            if upperSegments.contains("SLBM") {
-//                slbm.isSelected = true
-//            }
-//        } else {
-//            // ✅ DEFAULT fallback
-//            equity.isSelected = true
-//        }
-//    }
-//
-    func updateUIFromTradingDetails(_ jsonResponse: [String: Any]) {
-//
-//        // Reset all
-//        equity.isSelected = false
-//        fando.isSelected = false
-//        currency.isSelected = false
-//        mutual.isSelected = false
-//        commodity.isSelected = false
-//        mtf.isSelected = false
-//        slbm.isSelected = false
-//
-//        if let segments = jsonResponse["TRD_SegmentsPreferred"] as? String,
-//           !segments.isEmpty {
-//
-//            let upperSegments = segments.uppercased()
-//
-//            if upperSegments.contains("EQUITY") {
-//                equity.isSelected = true
-//            }
-//            if upperSegments.contains("FNO") || upperSegments.contains("F&O") {
-//                fando.isSelected = true
-//            }
-//            if upperSegments.contains("CURRENCY") {
-//                currency.isSelected = true
-//            }
-//            if upperSegments.contains("MUTUAL") {
-//                mutual.isSelected = true
-//            }
-//            if upperSegments.contains("COMMODITY") {
-//                commodity.isSelected = true
-//            }
-//            if upperSegments.contains("MTF") {
-//                mtf.isSelected = true
-//            }
-//            if upperSegments.contains("SLBM") {
-//                slbm.isSelected = true
-//            }
-//
-//        } else {
-//            // ✅ fallback ONLY if API gives empty
-//            equity.isSelected = true
-//        }
-//        
-//        if let isDpNew = jsonResponse["DP_IsDpAccountNew"] as? String {
-//                self.IsDpAccountNew = isDpNew
-//
-//                if isDpNew == "Y" {
-//                    // 👉 New account
-//                    updateDematSelection(isNew: true)
-//
-//                    // Clear values
-//                    dematTxt.text = ""
-//                    dematIdTxt.text = ""
-//                    boIdTxt.text = ""
-//                    depositoryLabel.text = ""
-//
-//                } else {
-//                    // 👉 Existing account
-//                    updateDematSelection(isNew: false)
-//
-//                    // Show fields
-//                    depositoryLabel.isHidden = false
-//                    depositoryView.isHidden = false
-//                    dematNameLabel.isHidden = false
-//                    dematTxt.isHidden = false
-//                    dematIdTxt.isHidden = false
-//                    dematIdLabel.isHidden = false
-//                    boIdLabel.isHidden = false
-//                    boIdTxt.isHidden = false
-//
-//                    // Assign values from API
-//                    let depository = jsonResponse["DP_Depositoryname"] as? String ?? ""
-//                    let dpName = jsonResponse["DP_DPName"] as? String ?? ""
-//                    let dpId = jsonResponse["DP_DPID"] as? String ?? ""
-//                    let boId = jsonResponse["DP_BOID"] as? String ?? ""
-//
-//                    self.Depositoryname = depository
-//                    self.DPName = dpName
-//                    self.DPID = dpId
-//                    self.BOID = boId
-//
-//                    // Set UI
-//                    depositoryLabel.text = depository
-//                    dematTxt.text = dpName
-//                    dematIdTxt.text = dpId
-//                    boIdTxt.text = boId
-//                }
-//            }
+    func handleSegment(_ segment: String) {
         
-        // Reset all
+        let upperSegment = segment.uppercased()
+        
+        if upperSegment == "EQUITY" {
+            // ❌ Disable commodity
+            commodity.isEnabled = false
+            commodity.alpha = 0.5
+            commodity.isSelected = false
+            
+            print("🚫 Commodity Disabled (EQUITY only)")
+            
+        } else if upperSegment == "BOTH" {
+            // ✅ Enable commodity
+            commodity.isEnabled = true
+            commodity.alpha = 1.0
+            
+            print("✅ Commodity Enabled (BOTH)")
+            
+        } else {
+            // fallback (optional)
+            commodity.isEnabled = false
+            commodity.alpha = 0.5
+        }
+    }
+
+    func updateUIFromTradingDetails(_ jsonResponse: [String: Any]) {
+
         equity.isSelected = false
         fando.isSelected = false
         currency.isSelected = false
@@ -2345,7 +2270,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
 
             let upperSegments = segments.uppercased()
 
-            if upperSegments.contains("EQUITY") {
+            if upperSegments.contains("EQUITY CASH") {
                 equity.isSelected = true
             }
             if upperSegments.contains("FNO") || upperSegments.contains("F&O") {
@@ -2371,56 +2296,54 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             // ✅ fallback ONLY if API gives empty
             equity.isSelected = true
         }
-        
+  
         // Check if DP_IsDpAccountNew exists in the response
-        if let isDpNew = jsonResponse["DP_IsDpAccountNew"] as? String {
-            self.IsDpAccountNew = isDpNew
+        let isDpNew = (jsonResponse["DP_IsDpAccountNew"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
 
-            if isDpNew == "Y" {
-                // 👉 New account
-                updateDematSelection(isNew: true)
+        if isDpNew == "N" {
+            self.IsDpAccountNew = "N"
+            
+            // 👉 Existing account
+            updateDematSelection(isNew: false)
 
-                // Clear values
-                dematTxt.text = ""
-                dematIdTxt.text = ""
-                boIdTxt.text = ""
-                depositoryLabel.text = ""
+            // Show fields
+            depositoryLabel.isHidden = false
+            depositoryView.isHidden = false
+            dematNameLabel.isHidden = false
+            dematTxt.isHidden = false
+            dematIdTxt.isHidden = false
+            dematIdLabel.isHidden = false
+            boIdLabel.isHidden = false
+            boIdTxt.isHidden = false
 
-            } else if isDpNew == "N" {
-                // 👉 Existing account
-                updateDematSelection(isNew: false)
+            // Assign values from API
+            let depository = jsonResponse["DP_Depositoryname"] as? String ?? ""
+            let dpName = jsonResponse["DP_DPName"] as? String ?? ""
+            let dpId = jsonResponse["DP_DPID"] as? String ?? ""
+            let boId = jsonResponse["DP_BOID"] as? String ?? ""
 
-                // Show fields
-                depositoryLabel.isHidden = false
-                depositoryView.isHidden = false
-                dematNameLabel.isHidden = false
-                dematTxt.isHidden = false
-                dematIdTxt.isHidden = false
-                dematIdLabel.isHidden = false
-                boIdLabel.isHidden = false
-                boIdTxt.isHidden = false
+            self.Depositoryname = depository
+            self.DPName = dpName
+            self.DPID = dpId
+            self.BOID = boId
 
-                // Assign values from API
-                let depository = jsonResponse["DP_Depositoryname"] as? String ?? ""
-                let dpName = jsonResponse["DP_DPName"] as? String ?? ""
-                let dpId = jsonResponse["DP_DPID"] as? String ?? ""
-                let boId = jsonResponse["DP_BOID"] as? String ?? ""
+            // Set UI
+            depositoryLabel.text = depository
+            dematTxt.text = dpName
+            dematIdTxt.text = dpId
+            boIdTxt.text = boId
 
-                self.Depositoryname = depository
-                self.DPName = dpName
-                self.DPID = dpId
-                self.BOID = boId
-
-                // Set UI
-                depositoryLabel.text = depository
-                dematTxt.text = dpName
-                dematIdTxt.text = dpId
-                boIdTxt.text = boId
-            }
         } else {
-            // 👈 IMPORTANT: If the API doesn't return DP_IsDpAccountNew, default to "Y" (New Account)
+            // 👉 Default ALWAYS "Y"
             self.IsDpAccountNew = "Y"
+            
             updateDematSelection(isNew: true)
+
+            // Clear values
+            dematTxt.text = ""
+            dematIdTxt.text = ""
+            boIdTxt.text = ""
+            depositoryLabel.text = ""
         }
     }
     
@@ -2437,59 +2360,94 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-}
-
-
-
-//    func updateUI(with response: [String: Any]) {
-//
-//        if IsDpAccountNew == "Y" {
-//            // 1. Check if Depositoryname is nil or empty
-//
-//            DPName = nil
-//            DPID = nil
-//            BOID = nil
-//            insertWeb()
-//
-//        } else if IsDpAccountNew == "N" {
-//            selectBSDA = nil
-//            selectBSDA = nil
-//            DPSchemeCode = nil
-//            IsSchemeExternal = nil
-//
-//            guard let depositoryName = Depositoryname, !depositoryName.isEmpty
-//            else {
-//                showAlert(message: "Please select depository name")
-//                return
-//            }
-//
-//            guard let dematID = dematIdTxt.text, !dematID.isEmpty else {
-//                showAlert(message: "Please enter demat ID")
-//                return
-//            }
-//
-//            guard let boID = boIdTxt.text, !boID.isEmpty else {
-//                showAlert(message: "Please enter BOID")
-//                return
-//            }
-//
-//            guard let dematName = dematTxt.text, !dematName.isEmpty else {
-//                showAlert(message: "Please enter demat name")
-//                return
-//            }
-//
-//            if !isValidID(boID) || boID.count != 8 {
-//                showAlert(message: "BOID must be exactly 8 digits")
-//                return
-//            }
-//
-//            // Store the text field data in the variables
-//            DPName = dematName
-//            DPID = dematID
-//            BOID = boID
-//
-//            // All validations passed for "N" case, proceed to call the API
-//            insertWeb()
-//        }
-//    }
     
+    func SIXTHAPI(userID:String){
+        
+        CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
+            guard let self = self else { return }
+            
+            if let userId = userId, let sessionID = sessionID {
+                self.fetchedUserId = userId
+                self.fetchedSessionID = sessionID
+                self.decodeArray = decodeByteArrayString
+                print("UserID: \(userId), SessionID: \(sessionID)")
+                
+            } else {
+                print("No UserID or SessionID found.")
+            }
+        }
+        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { tokenId in
+            guard let tokenId = tokenId else {
+                // Handle the case where no tokens are available
+                CoreDataHelper.generateToken(
+                    decodeByteArrayToString: self
+                        .mobiledecodeArray ?? "",
+                    USERID: self.fetchedUserId ?? "",
+                    SessionId: self.fetchedSessionID ?? "",
+                    entityName: "TokenMobile", deviceType: "W",
+                    in: self.view
+                ) { success in
+                    if success {
+                        // Retry SIXTHAPI after token regeneration
+                        self.SIXTHAPI(userID: userID)
+                    } else {
+                        print("Token generation failed.")
+                    }
+                }
+                print("No tokens available. Please reload the tokens.")
+                return
+            }
+            let parameters: [String: Any] = [
+                "UserId": self.fetchedUserId as Any,
+                "TokenId": tokenId
+            ]
+            print("6th api params\(parameters)")
+            let sixthUrl = "ActiveApplication/GetActiveApplicationCL"
+            // API call
+            apiCall(url: sixthUrl, method: "POST", parameters: parameters, view: self.view) { result in
+                switch result {
+                case .success(let jsonResponse):
+                    print("SIXTHAPI Response: \(jsonResponse)")
+                    self.panNo = jsonResponse["PanNo"] as? String
+                    self.regId = jsonResponse["RegId"] as? String
+                    self.PANName = jsonResponse["PANName"] as? String
+                    self.EmailId = jsonResponse["EmailId"] as? String
+               
+                    if let errorCode = jsonResponse["ErrorCode"] as? String {
+                        switch errorCode {
+                        case "999992":
+                            DispatchQueue.main.async {
+                                CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+                                print("All TokenMobile entries deleted due to error code 999992")
+                                
+                                // Regenerate tokens
+                                CoreDataHelper.generateToken(decodeByteArrayToString: self.decodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+                                    if success {
+                                        // Retry SIXTHAPI after token regeneration
+                                        self.SIXTHAPI(userID: userID)
+                                    } else {
+                                        print("Token generation failed.")
+                                    }
+                                }
+                            }
+                        case "000000":
+                            print("errorcode 000000 called")
+                            DispatchQueue.main.async{
+                               
+                                self.panNo = jsonResponse["PanNo"] as? String
+                                self.regId = jsonResponse["RegId"] as? String
+                                self.PANName = jsonResponse["PANName"] as? String
+                             
+                                
+                            }
+                        default:
+                            print("Unhandled error code: \(errorCode)")
+                        }
+                    }
+                case .failure(let error):
+                    print("SIXTHAPI API call failed: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+}

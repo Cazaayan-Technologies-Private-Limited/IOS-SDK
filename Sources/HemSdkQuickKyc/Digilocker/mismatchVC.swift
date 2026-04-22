@@ -351,7 +351,7 @@ class mismatchVC: UIViewController {
     var panName: String?
     weak var delegate: DigiLocker_b_VCDelegate?
     var panNo : String?
-    var regid : String?
+    var regId : String?
     var trasactionid : String?
     var userid : String?
     var mobiledecodeArray: String?
@@ -470,7 +470,7 @@ class mismatchVC: UIViewController {
                 "UserId": userid,
                 "TokenId": tokenId,
                 "PanNo": panNo,
-                "RegId": regid,
+                "RegId": regId,
                 "TransactionID": trasactionid,
                 "Flag": 0,
                 "ThirdPartyRequest": ""
@@ -506,8 +506,14 @@ class mismatchVC: UIViewController {
                                     
                                     let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
                                     let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-                                    vc.panNo = self.panNo
-                                    vc.regId = self.regid
+                                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                    
+                                    let regId = UserDefaults.standard.string(forKey: "RegId")
+                                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                    
+                                    vc.panNo = finalPAN
+                                    vc.regId = regIdFinal
                                     
                                     self.navigationController?.pushViewController(vc, animated: true)
                                 }

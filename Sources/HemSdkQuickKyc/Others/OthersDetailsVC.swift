@@ -153,7 +153,6 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,  
         DIS = "N"
         DISNoBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
         
-        //DISNoBtn.isSelected = true
         ddpi = "Y"
 //        yesDdpiBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
         
@@ -587,10 +586,11 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,  
            }
 
            // ✅ DIS
-           guard let dis = DIS, !dis.isEmpty else {
-               showAlert(message: "Please select DIS option.")
-               return
-           }
+        if DISNoBtn.currentImage == UIImage(systemName: "circle.circle.fill") {
+            DIS = "N"
+        } else {
+            DIS = "Y"
+        }
         
         if self.IsDerivative.uppercased() == "Y" {
             if let networthText = networthTxt.text, !networthText.isEmpty,
@@ -891,6 +891,13 @@ extension OtherDetailsVC{
             self.ECSNoBtn.isEnabled = true
             updateECSSelection()
         }
+        
+        if let disValue = response["DIS"] as? String, !disValue.isEmpty {
+            self.DIS = disValue
+        } else {
+            self.DIS = "N" // fallback
+        }
+        
     }
     
     func SaveOtherData(){

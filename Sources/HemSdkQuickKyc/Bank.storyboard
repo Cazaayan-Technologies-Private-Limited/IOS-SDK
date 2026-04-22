@@ -471,6 +471,24 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="97U-UT-GWR">
+                                <rect key="frame" x="20" y="748" width="374" height="50"/>
+                                <color key="backgroundColor" red="0.96470588239999999" green="0.45882352939999999" blue="0.2274509804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="IC0-3Z-C8e"/>
+                                    <constraint firstAttribute="height" constant="50" id="qOP-DX-pLQ"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Proceed"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="IC0-3Z-C8e"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="connectToCams:" destination="zGZ-VV-np2" eventType="touchUpInside" id="VJ3-mL-1r8"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Qzi-yF-tUu"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -488,7 +506,9 @@
                             <constraint firstItem="Qzi-yF-tUu" firstAttribute="trailing" secondItem="FxC-H9-nsH" secondAttribute="trailing" constant="20" id="EJr-zq-HtS"/>
                             <constraint firstItem="DqP-zv-bDm" firstAttribute="leading" secondItem="Qzi-yF-tUu" secondAttribute="leading" constant="20" id="EfB-vl-6kY"/>
                             <constraint firstItem="Qzi-yF-tUu" firstAttribute="trailing" secondItem="wX5-5X-e04" secondAttribute="trailing" constant="20" id="Ghh-Iz-GZL"/>
+                            <constraint firstItem="Qzi-yF-tUu" firstAttribute="bottom" secondItem="97U-UT-GWR" secondAttribute="bottom" constant="30" id="Gm8-WQ-maa"/>
                             <constraint firstItem="QB7-8p-fk4" firstAttribute="top" secondItem="wX5-5X-e04" secondAttribute="bottom" constant="8" symbolic="YES" id="HOW-Ow-GxQ"/>
+                            <constraint firstItem="Qzi-yF-tUu" firstAttribute="trailing" secondItem="97U-UT-GWR" secondAttribute="trailing" constant="20" id="JlR-Rk-2wR"/>
                             <constraint firstItem="NYi-jN-5do" firstAttribute="top" secondItem="Qzi-yF-tUu" secondAttribute="top" id="LSs-q7-cLG"/>
                             <constraint firstItem="Qzi-yF-tUu" firstAttribute="trailing" secondItem="DqP-zv-bDm" secondAttribute="trailing" constant="20" id="LcB-W3-lDP"/>
                             <constraint firstItem="Qzi-yF-tUu" firstAttribute="trailing" secondItem="NYi-jN-5do" secondAttribute="trailing" id="MQE-u3-8jb"/>
@@ -498,6 +518,7 @@
                             <constraint firstItem="Sor-gK-GTk" firstAttribute="leading" secondItem="Qzi-yF-tUu" secondAttribute="leading" constant="20" id="Xwd-a1-WEg"/>
                             <constraint firstItem="FxC-H9-nsH" firstAttribute="leading" secondItem="Qzi-yF-tUu" secondAttribute="leading" constant="20" id="Y5n-Ep-qzq"/>
                             <constraint firstItem="wX5-5X-e04" firstAttribute="leading" secondItem="Qzi-yF-tUu" secondAttribute="leading" constant="20" id="YXf-fb-WvY"/>
+                            <constraint firstItem="97U-UT-GWR" firstAttribute="leading" secondItem="Qzi-yF-tUu" secondAttribute="leading" constant="20" id="abl-3J-COD"/>
                             <constraint firstItem="fvI-MY-Bsm" firstAttribute="centerX" secondItem="jlV-Pk-vP4" secondAttribute="centerX" id="be7-2t-BfA"/>
                             <constraint firstItem="3AU-N2-Iy8" firstAttribute="leading" secondItem="Qzi-yF-tUu" secondAttribute="leading" constant="20" id="coa-cg-gfb"/>
                             <constraint firstItem="QB7-8p-fk4" firstAttribute="leading" secondItem="Qzi-yF-tUu" secondAttribute="leading" constant="20" id="d3v-cT-kiN"/>
@@ -530,6 +551,7 @@
                         <outlet property="IFSCTF" destination="qlO-IR-K8V" id="dVu-bt-g8Y"/>
                         <outlet property="MICRTF" destination="Sor-gK-GTk" id="YDI-6I-kDs"/>
                         <outlet property="SubmitBtn" destination="DqP-zv-bDm" id="PJz-yM-jbP"/>
+                        <outlet property="connectToCams" destination="97U-UT-GWR" id="7zU-yr-fME"/>
                         <outlet property="homeBtn" destination="fOw-T1-scj" id="C8e-iR-lMW"/>
                         <outlet property="upiIDBtn" destination="i0y-hN-sNh" id="nb0-Fu-niR"/>
                     </connections>
@@ -537,6 +559,76 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kzf-DH-SjB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1995.6521739130437" y="176.78571428571428"/>
+        </scene>
+        <!--CamsVC-->
+        <scene sceneID="YXR-O9-Dxa">
+            <objects>
+                <viewController storyboardIdentifier="CamsVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="1hm-Fj-vii" customClass="CamsVC" customModule="HemSdkQuickKyc" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xqC-Le-Jyb">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TmF-cT-yhn">
+                                <rect key="frame" x="0.0" y="182" width="414" height="646"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3cL-32-W26">
+                                <rect key="frame" x="0.0" y="132" width="414" height="50"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EUH-Cr-PVY">
+                                        <rect key="frame" x="354" y="5" width="40" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="fsN-1Y-ao7"/>
+                                            <constraint firstAttribute="width" constant="40" id="tvt-hn-VlB"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="multiply" catalog="system"/>
+                                        <connections>
+                                            <action selector="closeBtn:" destination="1hm-Fj-vii" eventType="touchUpInside" id="oEx-aY-d4v"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemIndigoColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="EUH-Cr-PVY" secondAttribute="trailing" constant="20" id="LfL-8V-lsH"/>
+                                    <constraint firstAttribute="height" constant="50" id="Q1K-8j-yCa"/>
+                                    <constraint firstItem="EUH-Cr-PVY" firstAttribute="centerY" secondItem="3cL-32-W26" secondAttribute="centerY" id="dRW-2d-gYp"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="o8c-fD-51r"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="TmF-cT-yhn" firstAttribute="top" secondItem="3cL-32-W26" secondAttribute="bottom" id="4ax-EU-xg1"/>
+                            <constraint firstItem="3cL-32-W26" firstAttribute="top" secondItem="xqC-Le-Jyb" secondAttribute="top" id="FG7-3F-c4n"/>
+                            <constraint firstItem="3cL-32-W26" firstAttribute="trailing" secondItem="o8c-fD-51r" secondAttribute="trailing" id="K3k-r3-cg9"/>
+                            <constraint firstItem="3cL-32-W26" firstAttribute="leading" secondItem="o8c-fD-51r" secondAttribute="leading" id="Oye-wt-GfA"/>
+                            <constraint firstItem="o8c-fD-51r" firstAttribute="trailing" secondItem="TmF-cT-yhn" secondAttribute="trailing" id="T5B-z8-q4g"/>
+                            <constraint firstItem="o8c-fD-51r" firstAttribute="bottom" secondItem="TmF-cT-yhn" secondAttribute="bottom" id="TSf-R1-2AB"/>
+                            <constraint firstItem="3cL-32-W26" firstAttribute="top" secondItem="o8c-fD-51r" secondAttribute="top" constant="36" id="ZhS-KU-lb3"/>
+                            <constraint firstItem="TmF-cT-yhn" firstAttribute="leading" secondItem="o8c-fD-51r" secondAttribute="leading" id="bFg-r4-ui5"/>
+                            <constraint firstItem="TmF-cT-yhn" firstAttribute="top" secondItem="o8c-fD-51r" secondAttribute="top" constant="100" id="f3N-lj-hF5"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="FG7-3F-c4n"/>
+                                <exclude reference="f3N-lj-hF5"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="camsWebView" destination="TmF-cT-yhn" id="SmK-Y0-mTW"/>
+                        <outlet property="closeBtn" destination="EUH-Cr-PVY" id="C6d-nG-R9P"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qPj-5e-yXq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2724.6376811594205" y="167.41071428571428"/>
         </scene>
     </scenes>
     <resources>
@@ -547,18 +639,22 @@
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="info-circle" width="24" height="24"/>
         <image name="leftArrow" width="24" height="24"/>
+        <image name="multiply" catalog="system" width="128" height="111"/>
         <image name="rightArrow" width="24" height="24"/>
         <systemColor name="opaqueSeparatorColor">
-            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemIndigoColor">
+            <color red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

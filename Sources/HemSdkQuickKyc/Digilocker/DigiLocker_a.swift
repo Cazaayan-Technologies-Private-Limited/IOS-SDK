@@ -663,6 +663,7 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
     weak var delegate: VerticsVCDelegate?
     var responseData: [String: Any]?
     var digiIdentifier1: String?
+    var regId: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -755,7 +756,7 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
                     vc.panName = panName
                     vc.userid = self.fetchedUserId
                     vc.panNo = self.panNo
-                    vc.regid = self.RegId
+                    vc.regId = self.RegId
                     vc.trasactionid = self.transactionID
                     vc.identifier3 = self.identifier3
                     vc.delegate = self
@@ -778,8 +779,14 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
                 if self.identifier3 == "DigiLockerA" {
                     let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
                     let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-                    vc.panNo = pan
-                    vc.regId = self.RegId
+                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                    
+                    let regId = UserDefaults.standard.string(forKey: "RegId")
+                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                    
+                    vc.panNo = finalPAN
+                    vc.regId = regIdFinal
                     
                     self.navigationController?.pushViewController(vc, animated: true)
                     
@@ -810,7 +817,7 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
     }
     
     @IBAction func ConnectToDigiLockerBtn(_ sender: UIButton) {
-        saveDigiLocker(identifier1: identifier1 ?? "")
+        saveDigiLocker()
     }
 
     func tokenAuthentication() {
@@ -859,15 +866,14 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
         }
     }
     
-    func saveDigiLocker(identifier1: String) {
-        digiIdentifier1 = identifier1
+    func saveDigiLocker() {
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
             [self] tokenId in
             guard let tokenId = tokenId else {
                 // Handle the case where no tokens are available
                 CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                     if success {
-                        self.saveDigiLocker(identifier1: identifier1)
+                        self.saveDigiLocker()
                     } else {
                         print("Token generation failed.")
                     }
@@ -919,7 +925,7 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
                                     in: self.view
                                 ) { success in
                                     if success {
-                                        self.saveDigiLocker(identifier1: identifier1 ?? "")
+                                        self.saveDigiLocker()
                                     } else {
                                         print("Token generation failed.")
                                     }
@@ -934,14 +940,14 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
                                         // Perform the action for VERITICSVC
                                         navigateToVeriticsVC(
                                             DigiLockerURL: DigiLockerURL ?? "",
-                                            TransactionID: TransactionID ?? ""
+                                            TransactionID: TransactionID ?? "", identifier3: identifier3 ?? ""
                                         )
                                     } else if digiType == "DIRECT" {
                                         let url =
                                         "\(DigiLockerURL ?? "")?redirect_uri=\(digilockerReturnURL ?? "")&response_type=code&response_type=code&client_id=\(Client_id ?? "")&state=\(TransactionID ?? "")"
                                         self.navigateToVeriticsVC(
                                             DigiLockerURL: url,
-                                            TransactionID: TransactionID ?? ""
+                                            TransactionID: TransactionID ?? "", identifier3: identifier3 ?? ""
                                         )
                                     } else {
                                         print("Invalid type: \(digiType)")
@@ -962,7 +968,7 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
         }
     }
     
-    func navigateToVeriticsVC(DigiLockerURL: String, TransactionID: String) {
+    func navigateToVeriticsVC(DigiLockerURL: String, TransactionID: String, identifier3: String) {
         
         let vc = VerticsVC()
         vc.DigiLockerURL = DigiLockerURL
@@ -972,9 +978,7 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
 //        vc.identifier3 = "DigiLockerA"
 //        vc.identifier3 = "NomineeVC"
         //vc.identifier1 = identifier1
-     
         vc.identifier3 = "DigiLockerA"
-        vc.identifier1 = digiIdentifier1
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }

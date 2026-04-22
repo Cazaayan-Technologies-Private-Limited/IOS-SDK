@@ -8923,31 +8923,39 @@
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="fill" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eT3-H6-5Xp">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lh8-vh-1VJ">
                                                                         <rect key="frame" x="0.0" y="1066.5" width="382" height="40"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Relation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xIE-Xp-ShG">
+                                                                                <rect key="frame" x="5" y="0.0" width="377" height="40"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zg7-JX-ERG">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="377" height="40"/>
+                                                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <state key="normal">
+                                                                                    <imageReference key="image" image="chevron.down" catalog="system" symbolScale="small"/>
+                                                                                </state>
+                                                                                <connections>
+                                                                                    <action selector="nomineeRelationBtn1:" destination="kwh-dq-sdj" eventType="touchUpInside" id="3GC-Qx-pUz"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="40" id="r0F-nX-uhA"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="xIE-Xp-ShG" secondAttribute="trailing" id="01U-rC-3dY"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="zg7-JX-ERG" secondAttribute="trailing" constant="5" id="DfA-zN-bOq"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="xIE-Xp-ShG" secondAttribute="bottom" id="FQt-0k-B9M"/>
+                                                                            <constraint firstItem="xIE-Xp-ShG" firstAttribute="top" secondItem="lh8-vh-1VJ" secondAttribute="top" id="NXE-HP-e1K"/>
+                                                                            <constraint firstAttribute="height" constant="40" id="RKf-yd-rKC"/>
+                                                                            <constraint firstItem="zg7-JX-ERG" firstAttribute="leading" secondItem="lh8-vh-1VJ" secondAttribute="leading" id="Rh8-26-d9T"/>
+                                                                            <constraint firstItem="xIE-Xp-ShG" firstAttribute="leading" secondItem="lh8-vh-1VJ" secondAttribute="leading" constant="5" id="Rqi-X1-llq"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="zg7-JX-ERG" secondAttribute="bottom" id="cM2-vL-dzt"/>
+                                                                            <constraint firstItem="zg7-JX-ERG" firstAttribute="top" secondItem="lh8-vh-1VJ" secondAttribute="top" id="khn-We-TXh"/>
                                                                         </constraints>
-                                                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal" title="Button" image="chevron.down" catalog="system">
-                                                                            <attributedString key="attributedTitle">
-                                                                                <fragment content="Select Document">
-                                                                                    <attributes>
-                                                                                        <font key="NSFont" size="11" name="Helvetica"/>
-                                                                                        <font key="NSOriginalFont" size="12" name="Helvetica"/>
-                                                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                                    </attributes>
-                                                                                </fragment>
-                                                                            </attributedString>
-                                                                        </state>
-                                                                        <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" title="Select Document">
-                                                                            <fontDescription key="titleFontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                                                                        </buttonConfiguration>
-                                                                        <connections>
-                                                                            <action selector="nomineeRelationBtn1:" destination="kwh-dq-sdj" eventType="touchUpInside" id="hZl-Mj-Eo5"/>
-                                                                        </connections>
-                                                                    </button>
+                                                                    </view>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="%of Share" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bA2-xw-LxZ">
                                                                         <rect key="frame" x="0.0" y="1116.5" width="382" height="20"/>
                                                                         <constraints>
@@ -9149,31 +9157,39 @@
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="fill" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k8I-3A-eGD">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6gM-Vv-Xft">
                                                                         <rect key="frame" x="0.0" y="1740.5" width="382" height="40"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Relation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NkZ-M1-9eM">
+                                                                                <rect key="frame" x="5" y="0.0" width="377" height="40"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MZP-2I-Dtd">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="377" height="40"/>
+                                                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <state key="normal">
+                                                                                    <imageReference key="image" image="chevron.down" catalog="system" symbolScale="small"/>
+                                                                                </state>
+                                                                                <connections>
+                                                                                    <action selector="guradianRelationBtn1:" destination="kwh-dq-sdj" eventType="touchUpInside" id="DzH-Wi-U1m"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="40" id="86U-gg-1O1"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="MZP-2I-Dtd" secondAttribute="bottom" id="6Cy-fp-PK3"/>
+                                                                            <constraint firstItem="NkZ-M1-9eM" firstAttribute="leading" secondItem="6gM-Vv-Xft" secondAttribute="leading" constant="5" id="HLr-dD-eJO"/>
+                                                                            <constraint firstItem="NkZ-M1-9eM" firstAttribute="top" secondItem="6gM-Vv-Xft" secondAttribute="top" id="Mm8-Hu-wc7"/>
+                                                                            <constraint firstItem="MZP-2I-Dtd" firstAttribute="leading" secondItem="6gM-Vv-Xft" secondAttribute="leading" id="Uhi-Xe-wLm"/>
+                                                                            <constraint firstItem="MZP-2I-Dtd" firstAttribute="top" secondItem="6gM-Vv-Xft" secondAttribute="top" id="VU9-QI-5DU"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="NkZ-M1-9eM" secondAttribute="trailing" id="Vpk-Yz-kpl"/>
+                                                                            <constraint firstAttribute="height" constant="40" id="XTT-kW-y2m"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="MZP-2I-Dtd" secondAttribute="trailing" constant="5" id="exU-8f-EyN"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="NkZ-M1-9eM" secondAttribute="bottom" id="ugd-Uo-WJh"/>
                                                                         </constraints>
-                                                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal" title="Button" image="chevron.down" catalog="system">
-                                                                            <attributedString key="attributedTitle">
-                                                                                <fragment content="Select Document">
-                                                                                    <attributes>
-                                                                                        <font key="NSFont" size="11" name="Helvetica"/>
-                                                                                        <font key="NSOriginalFont" size="12" name="Helvetica"/>
-                                                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                                    </attributes>
-                                                                                </fragment>
-                                                                            </attributedString>
-                                                                        </state>
-                                                                        <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" title="Select Document">
-                                                                            <fontDescription key="titleFontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                                                                        </buttonConfiguration>
-                                                                        <connections>
-                                                                            <action selector="guradianRelationBtn1:" destination="kwh-dq-sdj" eventType="touchUpInside" id="d5G-0L-gYX"/>
-                                                                        </connections>
-                                                                    </button>
+                                                                    </view>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="maU-Vj-38V">
                                                                         <rect key="frame" x="0.0" y="1790.5" width="382" height="22"/>
                                                                         <color key="tintColor" systemColor="systemGrayColor"/>
@@ -9349,7 +9365,6 @@
                                                                                     <imageReference key="image" image="chevron.down" catalog="system" symbolScale="small"/>
                                                                                 </buttonConfiguration>
                                                                                 <connections>
-                                                                                    <action selector="documentType1:" destination="kwh-dq-sdj" eventType="touchUpInside" id="xej-kP-l1A"/>
                                                                                     <action selector="documentType2:" destination="kwh-dq-sdj" eventType="touchUpInside" id="cRB-7N-XcU"/>
                                                                                 </connections>
                                                                             </button>
@@ -9611,31 +9626,39 @@
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="fill" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZCT-Tq-wft">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k9j-GR-P4b">
                                                                         <rect key="frame" x="0.0" y="1066.5" width="382" height="40"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Relation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jxq-HG-Nca">
+                                                                                <rect key="frame" x="5" y="0.0" width="377" height="40"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hOj-Ab-KoV">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="377" height="40"/>
+                                                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <state key="normal">
+                                                                                    <imageReference key="image" image="chevron.down" catalog="system" symbolScale="small"/>
+                                                                                </state>
+                                                                                <connections>
+                                                                                    <action selector="nomineeRelationBtn2:" destination="kwh-dq-sdj" eventType="touchUpInside" id="awl-oZ-WMk"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="40" id="xAs-c4-mOw"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="Jxq-HG-Nca" secondAttribute="bottom" id="5O6-oV-qLP"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="hOj-Ab-KoV" secondAttribute="trailing" constant="5" id="Eg4-cq-Hky"/>
+                                                                            <constraint firstItem="Jxq-HG-Nca" firstAttribute="leading" secondItem="k9j-GR-P4b" secondAttribute="leading" constant="5" id="G8t-7k-XIr"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="Jxq-HG-Nca" secondAttribute="trailing" id="HsT-5t-TrM"/>
+                                                                            <constraint firstItem="hOj-Ab-KoV" firstAttribute="top" secondItem="k9j-GR-P4b" secondAttribute="top" id="MQO-95-Aya"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="hOj-Ab-KoV" secondAttribute="bottom" id="Qzj-jt-KKU"/>
+                                                                            <constraint firstItem="Jxq-HG-Nca" firstAttribute="top" secondItem="k9j-GR-P4b" secondAttribute="top" id="ZON-jh-Cec"/>
+                                                                            <constraint firstItem="hOj-Ab-KoV" firstAttribute="leading" secondItem="k9j-GR-P4b" secondAttribute="leading" id="gh8-Fa-2iW"/>
+                                                                            <constraint firstAttribute="height" constant="40" id="yRt-Ng-xdX"/>
                                                                         </constraints>
-                                                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal" title="Button" image="chevron.down" catalog="system">
-                                                                            <attributedString key="attributedTitle">
-                                                                                <fragment content="Select Document">
-                                                                                    <attributes>
-                                                                                        <font key="NSFont" size="11" name="Helvetica"/>
-                                                                                        <font key="NSOriginalFont" size="12" name="Helvetica"/>
-                                                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                                    </attributes>
-                                                                                </fragment>
-                                                                            </attributedString>
-                                                                        </state>
-                                                                        <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" title="Select Document">
-                                                                            <fontDescription key="titleFontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                                                                        </buttonConfiguration>
-                                                                        <connections>
-                                                                            <action selector="nomineeRelationBtn2:" destination="kwh-dq-sdj" eventType="touchUpInside" id="ArV-qP-bL1"/>
-                                                                        </connections>
-                                                                    </button>
+                                                                    </view>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="%of Share" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VZs-zy-AcK">
                                                                         <rect key="frame" x="0.0" y="1116.5" width="382" height="20"/>
                                                                         <constraints>
@@ -9849,31 +9872,39 @@
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="fill" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f7Y-sL-hQy">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uTe-8d-DJE">
                                                                         <rect key="frame" x="0.0" y="1772.5" width="382" height="40"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Relation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fDE-jf-r8i">
+                                                                                <rect key="frame" x="5" y="0.0" width="377" height="40"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L6C-5o-ied">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="377" height="40"/>
+                                                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <state key="normal">
+                                                                                    <imageReference key="image" image="chevron.down" catalog="system" symbolScale="small"/>
+                                                                                </state>
+                                                                                <connections>
+                                                                                    <action selector="guardianRelationBtn2:" destination="kwh-dq-sdj" eventType="touchUpInside" id="ea6-Bj-cck"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="40" id="29i-7d-kSm"/>
+                                                                            <constraint firstItem="L6C-5o-ied" firstAttribute="top" secondItem="uTe-8d-DJE" secondAttribute="top" id="6Gm-Ci-jrt"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="fDE-jf-r8i" secondAttribute="trailing" id="9Gv-sp-z6w"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="L6C-5o-ied" secondAttribute="bottom" id="HtV-gv-DPJ"/>
+                                                                            <constraint firstAttribute="height" constant="40" id="HwD-1P-4Bq"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="L6C-5o-ied" secondAttribute="trailing" constant="5" id="MUt-DM-mqO"/>
+                                                                            <constraint firstItem="fDE-jf-r8i" firstAttribute="top" secondItem="uTe-8d-DJE" secondAttribute="top" id="Uqy-jb-0Ys"/>
+                                                                            <constraint firstItem="fDE-jf-r8i" firstAttribute="leading" secondItem="uTe-8d-DJE" secondAttribute="leading" constant="5" id="aco-0Z-H9D"/>
+                                                                            <constraint firstItem="L6C-5o-ied" firstAttribute="leading" secondItem="uTe-8d-DJE" secondAttribute="leading" id="b6y-fZ-xQv"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="fDE-jf-r8i" secondAttribute="bottom" id="dDd-oU-m2O"/>
                                                                         </constraints>
-                                                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal" title="Button" image="chevron.down" catalog="system">
-                                                                            <attributedString key="attributedTitle">
-                                                                                <fragment content="Select Document">
-                                                                                    <attributes>
-                                                                                        <font key="NSFont" size="11" name="Helvetica"/>
-                                                                                        <font key="NSOriginalFont" size="12" name="Helvetica"/>
-                                                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                                    </attributes>
-                                                                                </fragment>
-                                                                            </attributedString>
-                                                                        </state>
-                                                                        <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" title="Select Document">
-                                                                            <fontDescription key="titleFontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                                                                        </buttonConfiguration>
-                                                                        <connections>
-                                                                            <action selector="guardianRelationBtn2:" destination="kwh-dq-sdj" eventType="touchUpInside" id="HzB-FJ-YLY"/>
-                                                                        </connections>
-                                                                    </button>
+                                                                    </view>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBm-zR-8NL">
                                                                         <rect key="frame" x="0.0" y="1822.5" width="382" height="20"/>
                                                                         <constraints>
@@ -10037,7 +10068,6 @@
                                                                                     <imageReference key="image" image="chevron.down" catalog="system" symbolScale="small"/>
                                                                                 </buttonConfiguration>
                                                                                 <connections>
-                                                                                    <action selector="documentType1:" destination="kwh-dq-sdj" eventType="touchUpInside" id="6Vx-IA-y5g"/>
                                                                                     <action selector="documentType3:" destination="kwh-dq-sdj" eventType="touchUpInside" id="y3B-XO-b6Q"/>
                                                                                 </connections>
                                                                             </button>
@@ -10299,31 +10329,39 @@
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="fill" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y4f-Rm-0TV">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qHu-Ta-cSI">
                                                                         <rect key="frame" x="0.0" y="1066.5" width="382" height="40"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Relation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Afb-It-RRH">
+                                                                                <rect key="frame" x="5" y="0.0" width="377" height="40"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ndj-uf-QsK">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="377" height="40"/>
+                                                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <state key="normal">
+                                                                                    <imageReference key="image" image="chevron.down" catalog="system" symbolScale="small"/>
+                                                                                </state>
+                                                                                <connections>
+                                                                                    <action selector="nomineeRelationBtn3:" destination="kwh-dq-sdj" eventType="touchUpInside" id="ccf-NH-7qd"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="40" id="w41-G2-ovS"/>
+                                                                            <constraint firstItem="Afb-It-RRH" firstAttribute="top" secondItem="qHu-Ta-cSI" secondAttribute="top" id="1bC-Kb-U1C"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="ndj-uf-QsK" secondAttribute="trailing" constant="5" id="CHv-3u-xV2"/>
+                                                                            <constraint firstItem="ndj-uf-QsK" firstAttribute="top" secondItem="qHu-Ta-cSI" secondAttribute="top" id="LD4-rz-O0h"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="ndj-uf-QsK" secondAttribute="bottom" id="P6f-Ho-hd5"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="Afb-It-RRH" secondAttribute="bottom" id="TTn-RP-SjR"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="Afb-It-RRH" secondAttribute="trailing" id="cG0-od-paP"/>
+                                                                            <constraint firstItem="ndj-uf-QsK" firstAttribute="leading" secondItem="qHu-Ta-cSI" secondAttribute="leading" id="dL3-4d-WcM"/>
+                                                                            <constraint firstAttribute="height" constant="40" id="eXk-MP-DB0"/>
+                                                                            <constraint firstItem="Afb-It-RRH" firstAttribute="leading" secondItem="qHu-Ta-cSI" secondAttribute="leading" constant="5" id="nSl-Gt-Hat"/>
                                                                         </constraints>
-                                                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal" title="Button" image="chevron.down" catalog="system">
-                                                                            <attributedString key="attributedTitle">
-                                                                                <fragment content="Select Document">
-                                                                                    <attributes>
-                                                                                        <font key="NSFont" size="11" name="Helvetica"/>
-                                                                                        <font key="NSOriginalFont" size="12" name="Helvetica"/>
-                                                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                                    </attributes>
-                                                                                </fragment>
-                                                                            </attributedString>
-                                                                        </state>
-                                                                        <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" title="Select Document">
-                                                                            <fontDescription key="titleFontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                                                                        </buttonConfiguration>
-                                                                        <connections>
-                                                                            <action selector="nomineeRelationBtn3:" destination="kwh-dq-sdj" eventType="touchUpInside" id="BPO-i4-f1t"/>
-                                                                        </connections>
-                                                                    </button>
+                                                                    </view>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="%of Share" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fb1-fc-xYb">
                                                                         <rect key="frame" x="0.0" y="1116.5" width="382" height="20"/>
                                                                         <constraints>
@@ -10537,31 +10575,39 @@
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
-                                                                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="fill" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OTP-iF-1h7">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hjf-NA-wPT">
                                                                         <rect key="frame" x="0.0" y="1772.5" width="382" height="40"/>
+                                                                        <subviews>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Relation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Omv-A9-Esb">
+                                                                                <rect key="frame" x="5" y="0.0" width="377" height="40"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vut-dI-Opj">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="377" height="40"/>
+                                                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                <state key="normal">
+                                                                                    <imageReference key="image" image="chevron.down" catalog="system" symbolScale="small"/>
+                                                                                </state>
+                                                                                <connections>
+                                                                                    <action selector="guardianRelationBtn3:" destination="kwh-dq-sdj" eventType="touchUpInside" id="zj8-zL-bv7"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                        </subviews>
+                                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="40" id="8q1-Px-uu1"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="Vut-dI-Opj" secondAttribute="trailing" constant="5" id="Kd2-a4-0B8"/>
+                                                                            <constraint firstItem="Omv-A9-Esb" firstAttribute="leading" secondItem="Hjf-NA-wPT" secondAttribute="leading" constant="5" id="LLW-eR-rux"/>
+                                                                            <constraint firstItem="Omv-A9-Esb" firstAttribute="top" secondItem="Hjf-NA-wPT" secondAttribute="top" id="PCF-NE-OjO"/>
+                                                                            <constraint firstItem="Vut-dI-Opj" firstAttribute="top" secondItem="Hjf-NA-wPT" secondAttribute="top" id="PLY-fK-TR2"/>
+                                                                            <constraint firstItem="Vut-dI-Opj" firstAttribute="leading" secondItem="Hjf-NA-wPT" secondAttribute="leading" id="R90-MO-MY3"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="Omv-A9-Esb" secondAttribute="bottom" id="Uez-d8-4QP"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="Vut-dI-Opj" secondAttribute="bottom" id="WZJ-fF-Nrn"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="Omv-A9-Esb" secondAttribute="trailing" id="jWl-NX-cbu"/>
+                                                                            <constraint firstAttribute="height" constant="40" id="zCv-3O-D9A"/>
                                                                         </constraints>
-                                                                        <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                        <state key="normal" title="Button" image="chevron.down" catalog="system">
-                                                                            <attributedString key="attributedTitle">
-                                                                                <fragment content="Select Document">
-                                                                                    <attributes>
-                                                                                        <font key="NSFont" size="11" name="Helvetica"/>
-                                                                                        <font key="NSOriginalFont" size="12" name="Helvetica"/>
-                                                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                                    </attributes>
-                                                                                </fragment>
-                                                                            </attributedString>
-                                                                        </state>
-                                                                        <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" title="Select Document">
-                                                                            <fontDescription key="titleFontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
-                                                                        </buttonConfiguration>
-                                                                        <connections>
-                                                                            <action selector="guardianRelationBtn3:" destination="kwh-dq-sdj" eventType="touchUpInside" id="wu2-jL-Rz4"/>
-                                                                        </connections>
-                                                                    </button>
+                                                                    </view>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sfy-s5-eOq">
                                                                         <rect key="frame" x="0.0" y="1822.5" width="382" height="20"/>
                                                                         <constraints>
@@ -10875,6 +10921,9 @@
                         <outlet property="guardianIdTxt1" destination="tDx-Y6-Vby" id="1Dd-bW-7Cw"/>
                         <outlet property="guardianIdTxt2" destination="ojS-Uo-edc" id="nGH-3h-67i"/>
                         <outlet property="guardianIdTxt3" destination="edU-hq-ECl" id="zOk-P0-m07"/>
+                        <outlet property="guardianLbl1" destination="NkZ-M1-9eM" id="3nK-JZ-2Er"/>
+                        <outlet property="guardianLbl2" destination="fDE-jf-r8i" id="p6b-Xh-xWh"/>
+                        <outlet property="guardianLbl3" destination="Omv-A9-Esb" id="9Tc-oB-0gL"/>
                         <outlet property="guardianMobileLbl1" destination="mqk-ew-48j" id="E4t-sC-s4n"/>
                         <outlet property="guardianMobileLbl2" destination="NaV-qH-yBw" id="fLT-ld-sI2"/>
                         <outlet property="guardianMobileLbl3" destination="Rza-sg-djh" id="5ph-KF-Twm"/>
@@ -10887,9 +10936,9 @@
                         <outlet property="guardianPinCodeTxt1" destination="J3e-6H-DC5" id="0Yt-EI-ZNB"/>
                         <outlet property="guardianPinCodeTxt2" destination="ydi-Dw-mc6" id="5Cu-e2-m6m"/>
                         <outlet property="guardianPinCodeTxt3" destination="zVw-hk-usi" id="7Mw-92-xg8"/>
-                        <outlet property="guardianRelationBtn1" destination="k8I-3A-eGD" id="APS-eb-YPt"/>
-                        <outlet property="guardianRelationBtn2" destination="f7Y-sL-hQy" id="SMz-AU-AA0"/>
-                        <outlet property="guardianRelationBtn3" destination="OTP-iF-1h7" id="CAB-z7-7sp"/>
+                        <outlet property="guardianRelationBtn1" destination="MZP-2I-Dtd" id="yKp-dV-Hbh"/>
+                        <outlet property="guardianRelationBtn2" destination="MZP-2I-Dtd" id="Vx3-BK-fTb"/>
+                        <outlet property="guardianRelationBtn3" destination="Vut-dI-Opj" id="njN-OK-uJP"/>
                         <outlet property="guardianRelationLbl1" destination="Vje-PZ-Fxg" id="zVV-QJ-a5j"/>
                         <outlet property="guardianRelationLbl2" destination="sFE-If-4Pj" id="SeN-Wq-Jvc"/>
                         <outlet property="guardianRelationLbl3" destination="zlE-HB-ngD" id="GyS-vC-qg8"/>
@@ -10961,13 +11010,16 @@
                         <outlet property="relationApplicantLbl1" destination="uPY-0F-DWo" id="pma-sQ-jhE"/>
                         <outlet property="relationApplicantLbl2" destination="aok-Ce-hWy" id="nvX-lL-QsX"/>
                         <outlet property="relationApplicantLbl3" destination="2Mo-b0-ZSN" id="7G3-dn-Fvk"/>
-                        <outlet property="relationBtn1" destination="eT3-H6-5Xp" id="uTD-21-0Ch"/>
-                        <outlet property="relationBtn2" destination="ZCT-Tq-wft" id="qXW-go-rRl"/>
-                        <outlet property="relationBtn3" destination="y4f-Rm-0TV" id="V11-Te-I3K"/>
+                        <outlet property="relationBtn1" destination="zg7-JX-ERG" id="REg-9N-uop"/>
+                        <outlet property="relationBtn2" destination="hOj-Ab-KoV" id="nOt-4p-6Md"/>
+                        <outlet property="relationBtn3" destination="ndj-uf-QsK" id="ukZ-RF-5hu"/>
+                        <outlet property="relationLbl1" destination="xIE-Xp-ShG" id="jyn-lk-k06"/>
+                        <outlet property="relationLbl2" destination="Jxq-HG-Nca" id="qYD-H8-Jws"/>
+                        <outlet property="relationLbl3" destination="Afb-It-RRH" id="2fP-eH-s6W"/>
                         <outlet property="shareLbl1" destination="bA2-xw-LxZ" id="dxQ-DM-zI8"/>
                         <outlet property="shareLbl2" destination="VZs-zy-AcK" id="H6L-Gp-5XP"/>
                         <outlet property="shareLbl3" destination="Fb1-fc-xYb" id="uMB-QH-dk3"/>
-                        <outlet property="shareTxt1" destination="JH7-EY-GJN" id="zxP-FJ-Sl8"/>
+                        <outlet property="shareTxt1" destination="JH7-EY-GJN" id="70f-pU-vs3"/>
                         <outlet property="shareTxt2" destination="xti-6z-NaO" id="oIO-xP-9Fj"/>
                         <outlet property="shareTxt3" destination="jyu-rQ-6M3" id="7dc-j7-j6g"/>
                         <outlet property="stateLbl1" destination="GAr-sB-1U4" id="oay-Yd-34H"/>
@@ -10992,8 +11044,8 @@
         <image name="Nomineeimg" width="269.5" height="173"/>
         <image name="addCircle" width="24" height="24"/>
         <image name="arrowtriangle.down.fill" catalog="system" width="128" height="120"/>
-        <image name="calendar" catalog="system" width="128" height="107"/>
         <image name="calendar" width="24" height="24"/>
+        <image name="calendar" catalog="system" width="128" height="107"/>
         <image name="checkmark" width="24" height="24"/>
         <image name="checkmark.square.fill" catalog="system" width="128" height="114"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
@@ -11012,28 +11064,28 @@
         <image name="unCheck_1" width="20" height="21"/>
         <image name="upArrow" width="26" height="26"/>
         <systemColor name="secondaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.53333333333333333" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray4Color">
-            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

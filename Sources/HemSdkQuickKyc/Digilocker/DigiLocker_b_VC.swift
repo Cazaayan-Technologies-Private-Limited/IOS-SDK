@@ -71,7 +71,7 @@ class DigiLocker_b_VC: UIViewController {
     weak var delegate: DigiLocker_b_VCDelegate?
     var identifier3: String?
     var panNo: String?
-    var RegId: String?
+    var regId: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,10 +119,14 @@ class DigiLocker_b_VC: UIViewController {
             // ✅ Existing flow for DigiLockerA
             let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
             let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-            let savedPAN = UserDefaults.standard.string(forKey: "SavedPAN")
+            let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
             let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+            
+            let regId = UserDefaults.standard.string(forKey: "RegId")
+            let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+            
             vc.panNo = finalPAN
-            vc.regId = RegId
+            vc.regId = regIdFinal
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }

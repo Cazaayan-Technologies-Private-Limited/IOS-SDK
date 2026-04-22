@@ -446,10 +446,6 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
     }
     
     func ValidatesaveDigiLocker(completion: @escaping (Bool) -> Void) {
-        // Prevent duplicate API hits
-        guard !isApiInProgress else { return }
-        isApiInProgress = true
-        
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [weak self] tokenId in
             guard let self = self else { return }
             // 🔁 Token missing → generate & retry

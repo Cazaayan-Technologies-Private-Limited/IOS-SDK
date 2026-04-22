@@ -19,10 +19,10 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                   @MainActor ImageProcessingDelegate, @MainActor didselectdocumentType, CropViewControllerDelegate,
                   @MainActor IncomeCVCDelegate, @MainActor doneapplicationprotocol, @MainActor WebViewDelegate
 {
-//    func Ucccode(ucccode: String) {
-//        print("Received UCC Code: \(ucccode)")
-//        self.UpdateFinalStatus(ucccode: ucccode)
-//    }
+    //    func Ucccode(ucccode: String) {
+    //        print("Received UCC Code: \(ucccode)")
+    //        self.UpdateFinalStatus(ucccode: ucccode)
+    //    }
     
     func webViewDidFinishLoad(ocrcount: Int, response: [String: Any]?) {
         print("numberCount:-\(ocrcount)")
@@ -377,7 +377,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         drawBtn.layer.cornerRadius = 10
         termsnconditionBtn.isSelected = true
         SubmitBtn.layer.cornerRadius = 10
-
+        
         incomeProofCollectionView.register(
             UINib(nibName: "incomeCVC", bundle: Bundle.module),
             forCellWithReuseIdentifier: "incomeCVC")
@@ -393,6 +393,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         self.ButtonHolderView4.layer.cornerRadius = 10
         self.ButtonHolderView5.layer.cornerRadius = 10
         self.ButtonHolderView6.layer.cornerRadius = 10
+        self.ButtonHolderView7.layer.cornerRadius = 10
         self.ButtonHolderView7.layer.cornerRadius = 10
         self.ButtonHolderView8.layer.cornerRadius = 10
         self.ButtonHolderView9.layer.cornerRadius = 10
@@ -439,7 +440,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         //incomeProofVerifyBtn.isHidden = true
         //IPUploadBtn.isHidden = true
         //BankProof
-       // BPLabel1.isHidden = true
+        // BPLabel1.isHidden = true
         //BPView1.isHidden = true
         //BPlabel2.isHidden = true
         //BPStackview1.isHidden = true
@@ -454,9 +455,9 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         CSDocumentView.isHidden = true
         
         //PAN Copy
-//        PCLabel1.isHidden = true
-//        PCLabel2.isHidden = true
-//        PCLabel3.isHidden = true
+        //        PCLabel1.isHidden = true
+        //        PCLabel2.isHidden = true
+        //        PCLabel3.isHidden = true
         // PCLabel4.isHidden = true
         // PCStackView1.isHidden = true
         PCStackView.isHidden = true
@@ -464,10 +465,10 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         PCHolderView.isHidden = true
         //PANCopyBtn.isHidden = true
         //Client Photo
-       // CPLabel1.isHidden = true
+        // CPLabel1.isHidden = true
         //CPLabel2.isHidden = true
         //CPLabel3.isHidden = true
-       // CPStackView.isHidden = true
+        // CPStackView.isHidden = true
         CPHolderView1.isHidden = true
         CPImageView.isHidden = true
         CP_Long_Lat_Lbl.isHidden = true
@@ -475,9 +476,9 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         CP_Location_label.isHidden = true
         
         //DematImage
-        DILabel1.isHidden = true
-        DILabel2.isHidden = true
-        DIStackView1.isHidden = true
+        //DILabel1.isHidden = true
+        //DILabel2.isHidden = true
+        //DIStackView1.isHidden = true
         DIStackView2.isHidden = true
         DICollectionView.isHidden = true
         DIDocumentView.isHidden = true
@@ -552,12 +553,12 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         
-//        if CLLocationManager.authorizationStatus() == .notDetermined {
-//                 locationManager.requestWhenInUseAuthorization()
-//             } else if CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
-//                       CLLocationManager.authorizationStatus() == .authorizedAlways {
-//                 locationManager.startUpdatingLocation()
-//             }
+        //        if CLLocationManager.authorizationStatus() == .notDetermined {
+        //                 locationManager.requestWhenInUseAuthorization()
+        //             } else if CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
+        //                       CLLocationManager.authorizationStatus() == .authorizedAlways {
+        //                 locationManager.startUpdatingLocation()
+        //             }
         
         //hide done button
         
@@ -588,6 +589,10 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         ClientPhoto.layer.borderWidth = 0.5
         ClientPhoto.layer.borderColor = UIColor.appBorder.cgColor
         
+        DematImage.layer.cornerRadius = 20
+        DematImage.layer.borderWidth = 0.5
+        DematImage.layer.borderColor = UIColor.appBorder.cgColor
+        
         //BANKPROOFBTN.isHidden = true
         PANCopy.isHidden = true
         DematImage.isHidden = true
@@ -607,6 +612,9 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         IncomeProof.isLayoutMarginsRelativeArrangement = true
         IncomeProof.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16)
         
+        DematImage.isLayoutMarginsRelativeArrangement = true
+        DematImage.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16)
+        
         IpView1.layer.cornerRadius = 10
         IpView1.layer.borderWidth = 0.5
         IpView1.layer.borderColor = UIColor.appBorder.cgColor
@@ -624,7 +632,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         incomeProofYesBtn.tintColor = .appPrimary
         incomeProofNoBtn.tintColor = .appPrimary
         incomeProofVerifyBtn.backgroundColor = .documentBackground
-   
+        
         panCopyBtn.tintColor = .appPrimary
         panCopyBtn.backgroundColor = .documentBackground
         
@@ -639,13 +647,24 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         doneBtn.backgroundColor = .appPrimary
         SubmitBtn.backgroundColor = .appPrimary
         view.backgroundColor = .appBackground
-        DematImage.isHidden = true
         
-//        IncomeProofBtn.isSelected = true
-//        IncomeProof(shouldShow: true)
+        BankProofYesBtn.tintColor = .appPrimary
+        BankProofNoBtn.tintColor = .appPrimary
+        BANKPROOFBTN.backgroundColor = .documentBackground
         
-       // IncomeProof(shouldShow: true)
-    
+        dematNoBtn.tintColor = .appPrimary
+        dematYesBtn.tintColor = .appPrimary
+        
+        DematImgBtn.backgroundColor = .documentBackground
+        DematImageVerifyBtn.backgroundColor = .documentBackground
+        //DematImage.backgroundColor = .documentBackground
+        //DematImage.isHidden = true
+        
+        //        IncomeProofBtn.isSelected = true
+        //        IncomeProof(shouldShow: true)
+        
+        // IncomeProof(shouldShow: true)
+        
     }
     
     
@@ -724,291 +743,291 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBAction func doneBtn(_ sender: UIButton) {
-       // UpdateFinalDoneStatus()
+        // UpdateFinalDoneStatus()
         if !validateLocalDocuments() {
-               return // Alert will be shown by validateLocalDocuments
-           }
-           
-           if panDelete == "PAN deleted" {
-               showAlert(title: "Alert", message: "upload your PAN Image")
-               return
-           }
-           
-           // Then check server verification status
-           self.ViewDocumentDetails()
-           
-           DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
-               guard let self = self else { return }
-               
-               var unverifiedSections: [String] = []
-               
-               // Check visible sections dynamically
-               for (section, isVisible) in visibleSections {
-                   guard isVisible else { continue }
-                   
-                   switch section {
-                   case "IncomeProof":
-                       // First check local collection view
-                       if imageUrls.isEmpty {
-                           unverifiedSections.append("Income Proof (No images uploaded)")
-                       } else if let status = jsonResponse["DerivativeImages_Verify"] as? String,
-                                 status != "1" && status != "2" {
-                           unverifiedSections.append("Income Proof")
-                       } else if let status = jsonResponse["DerivativeImages_Verify"] as? Int,
-                                 status != 1 && status != 2 {
-                           unverifiedSections.append("Income Proof")
-                       }
-                       
-                   case "BankProof":
-                       if bpImageUrls.isEmpty {
-                           unverifiedSections.append("Bank Proof (No images uploaded)")
-                       } else if let status = jsonResponse["BankImages_Verify"] as? String,
-                                 status != "1" && status != "2" {
-                           unverifiedSections.append("Bank Proof")
-                       } else if let status = jsonResponse["BankImages_Verify"] as? Int,
-                                 status != 1 && status != 2 {
-                           unverifiedSections.append("Bank Proof")
-                       }
-                       
-//                   case "DematImage":
-//                       if dematimageUrls.isEmpty {
-//                           unverifiedSections.append("Demat (No images uploaded)")
-//                       } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? String,
-//                                 status != "1" && status != "2" {
-//                           unverifiedSections.append("Demat")
-//                       } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? Int,
-//                                 status != 1 && status != 2 {
-//                           unverifiedSections.append("Demat")
-//                       }
-                       
-                   default:
-                       break
-                   }
-               }
-               
-               // Check Signature (check local image)
-               if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
-                   unverifiedSections.append("Signature (No image uploaded)")
-               } else if let status = jsonResponse["SignatureImage_Verify"] as? String,
-                         status != "1" && status != "2" {
-                   unverifiedSections.append("Signature")
-               } else if let status = jsonResponse["SignatureImage_Verify"] as? Int,
-                         status != 1 && status != 2 {
-                   unverifiedSections.append("Signature")
-               }
-               
-               // Check PAN Copy (check local image)
-//               if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
-//                   unverifiedSections.append("PAN Copy (No image uploaded)")
-//               } else if let status = jsonResponse["PANImage_Verify"] as? String,
-//                         status != "1" && status != "2" {
-//                   unverifiedSections.append("PAN Copy")
-//               } else if let status = jsonResponse["PANImage_Verify"] as? Int,
-//                         status != 1 && status != 2 {
-//                   unverifiedSections.append("PAN Copy")
-//               }
-               
-               // Check Client Photo (check local image)
-               if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
-                   unverifiedSections.append("Client Photo (No image uploaded)")
-               } else if let status = jsonResponse["ClientPhotoImageID_Verify"] as? String,
-                         status != "1" && status != "2" {
-                   unverifiedSections.append("Client Photo")
-               } else if let status = jsonResponse["ClientPhotoImageID_Verify"] as? Int,
-                         status != 1 && status != 2 {
-                   unverifiedSections.append("Client Photo")
-               }
-               
-               // Check Nominees if they exist and have images
-//               if !NomineeDetails1.isHidden {
-//                   if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
-//                       unverifiedSections.append("Nominee 1 (No image uploaded)")
-//                   } else if let status = jsonResponse["NOMINEE_1Images_Verify"] as? String,
-//                             status != "1" && status != "2" {
-//                       unverifiedSections.append("Nominee 1")
-//                   }
-//               }
-               
-//               if !NomineeDetails2.isHidden {
-//                   if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
-//                       unverifiedSections.append("Nominee 2 (No image uploaded)")
-//                   } else if let status = jsonResponse["NOMINEE_2Images_Verify"] as? String,
-//                             status != "1" && status != "2" {
-//                       unverifiedSections.append("Nominee 2")
-//                   }
-//               }
-               
-//               if !NomineeDetails3.isHidden {
-//                   if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
-//                       unverifiedSections.append("Nominee 3 (No image uploaded)")
-//                   } else if let status = jsonResponse["NOMINEE_3Images_Verify"] as? String,
-//                             status != "1" && status != "2" {
-//                       unverifiedSections.append("Nominee 3")
-//                   }
-//               }
-               
-               // Show alert if there are unverified sections
-               DispatchQueue.main.async {
-                   if !unverifiedSections.isEmpty {
-                       let message = "Please upload/verify the following sections before proceeding:\n"
-                                   + unverifiedSections.joined(separator: "\n")
-                       self.showAlert(title: "Verification Required", message: message)
-                   } else {
-                       // Proceed with final status update if all verifications are complete
-                       self.UpdateFinalDoneStatus()
-                   }
-               }
-           }
-       }
-
-       // Add this helper method to validate local documents
-       func validateLocalDocuments() -> Bool {
-           var missingDocuments: [String] = []
-           
-           // Check Income Proof
-           if IncomeProof.isHidden == false {
-               if imageUrls.isEmpty {
-                   missingDocuments.append("Income Proof")
-               }
-           }
-           
-           // Check Bank Proof
-           if BankProof.isHidden == false {
-               if bpImageUrls.isEmpty {
-                   missingDocuments.append("Bank Proof")
-               }
-           }
-           
-           // Check Demat
-//           if DematImage.isHidden == false {
-//               if dematimageUrls.isEmpty {
-//                   missingDocuments.append("Demat")
-//               }
-//           }
-           
-           // Check Signature
-           if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
-               missingDocuments.append("Signature")
-           }
-           
-           // Check PAN Copy
-//           if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
-//               missingDocuments.append("PAN Copy")
-//           }
-           
-           // Check Client Photo
-           if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
-               missingDocuments.append("Client Photo")
-           }
-           
-           // Check Nominees
-//           if !NomineeDetails1.isHidden {
-//               if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
-//                   missingDocuments.append("Nominee 1")
-//               }
-//           }
-           
-//           if !NomineeDetails2.isHidden {
-//               if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
-//                   missingDocuments.append("Nominee 2")
-//               }
-//           }
-           
-//           if !NomineeDetails3.isHidden {
-//               if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
-//                   missingDocuments.append("Nominee 3")
-//               }
-//           }
-           
-           if !missingDocuments.isEmpty {
-               let message = "Please upload the following documents:\n" + missingDocuments.joined(separator: "\n")
-               showAlert(title: "Missing Documents", message: message)
-               return false
-           }
-           
-           return true
-       }
-//        if panDelete == "PAN deleted" {
-//               showAlert(title: "Alert", message: "upload your PAN Image")
-//               return
-//           }
-//
-//           self.ViewDocumentDetails()
-//
-//           DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
-//               guard let self = self else { return }
-//
-//               var unverifiedSections: [String] = []
-//
-//               // Check visible sections dynamically
-//               for (section, isVisible) in visibleSections {
-//                   guard isVisible else { continue }
-//
-//                   switch section {
-//                   case "IncomeProof":
-//                       if let status = jsonResponse["DerivativeImages_Verify"] as? String,
-//                          status != "1" && status != "2" {
-//                           unverifiedSections.append("Income Proof")
-//                       } else if let status = jsonResponse["DerivativeImages_Verify"] as? Int,
-//                                 status != 1 && status != 2 {
-//                           unverifiedSections.append("Income Proof")
-//                       }
-//
-//                   case "BankProof":
-//                       if let status = jsonResponse["BankImages_Verify"] as? String,
-//                          status != "1" && status != "2" {
-//                           unverifiedSections.append("Bank Proof")
-//                       } else if let status = jsonResponse["BankImages_Verify"] as? Int,
-//                                 status != 1 && status != 2 {
-//                           unverifiedSections.append("Bank Proof")
-//                       }
-//
-//                   case "DematImage":
-//                       if let status = jsonResponse["DP_IMAGEID_Verify"] as? String,
-//                          status != "1" && status != "2" {
-//                           unverifiedSections.append("Demat")
-//                       } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? Int,
-//                                 status != 1 && status != 2 {
-//                           unverifiedSections.append("Demat")
-//                       }
-//
-//                   default:
-//                       break
-//                   }
-//               }
-//
-//               // Explicitly check Signature, PAN Copy, and Client Photo
-//               let additionalChecks: [String: String] = [
-//                   "DerivativeImages_Verify": "IncomeProof",
-//                   "SignatureImage_Verify": "Signature",
-//                   "ClientPhotoImageID_Verify": "Client Photo",
-//                   "PANImage_Verify": "PAN Copy"
-//               ]
-//
-//               for (key, sectionName) in additionalChecks {
-//                   if let status = jsonResponse[key] as? String,
-//                      status != "1" && status != "2" {
-//                       unverifiedSections.append(sectionName)
-//                   } else if let status = jsonResponse[key] as? Int,
-//                             status != 1 && status != 2 {
-//                       unverifiedSections.append(sectionName)
-//                   }
-//               }
-//
-//               // Show alert if there are unverified sections
-//               DispatchQueue.main.async {
-//                   if !unverifiedSections.isEmpty {
-//                       let message = "Please upload/verify the following sections before proceeding:\n"
-//                                   + unverifiedSections.joined(separator: "\n")
-//                       self.showAlert(title: "Verification Required", message: message)
-//                   } else {
-//                       // Proceed with final status update if all verifications are complete
-//                       self.UpdateFinalDoneStatus()
-//                   }
-//               }
-//           }
-//    }
-//
+            return // Alert will be shown by validateLocalDocuments
+        }
+        
+        if panDelete == "PAN deleted" {
+            showAlert(title: "Alert", message: "upload your PAN Image")
+            return
+        }
+        
+        // Then check server verification status
+        self.ViewDocumentDetails()
+        
+        DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let self = self else { return }
+            
+            var unverifiedSections: [String] = []
+            
+            // Check visible sections dynamically
+            for (section, isVisible) in visibleSections {
+                guard isVisible else { continue }
+                
+                switch section {
+                case "IncomeProof":
+                    // First check local collection view
+                    if imageUrls.isEmpty {
+                        unverifiedSections.append("Income Proof (No images uploaded)")
+                    } else if let status = jsonResponse["DerivativeImages_Verify"] as? String,
+                              status != "1" && status != "2" {
+                        unverifiedSections.append("Income Proof")
+                    } else if let status = jsonResponse["DerivativeImages_Verify"] as? Int,
+                              status != 1 && status != 2 {
+                        unverifiedSections.append("Income Proof")
+                    }
+                    
+                case "BankProof":
+                    if bpImageUrls.isEmpty {
+                        unverifiedSections.append("Bank Proof (No images uploaded)")
+                    } else if let status = jsonResponse["BankImages_Verify"] as? String,
+                              status != "1" && status != "2" {
+                        unverifiedSections.append("Bank Proof")
+                    } else if let status = jsonResponse["BankImages_Verify"] as? Int,
+                              status != 1 && status != 2 {
+                        unverifiedSections.append("Bank Proof")
+                    }
+                    
+                case "DematImage":
+                    if dematimageUrls.isEmpty {
+                        unverifiedSections.append("Demat (No images uploaded)")
+                    } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? String,
+                              status != "1" && status != "2" {
+                        unverifiedSections.append("Demat")
+                    } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? Int,
+                              status != 1 && status != 2 {
+                        unverifiedSections.append("Demat")
+                    }
+                    
+                default:
+                    break
+                }
+            }
+            
+            // Check Signature (check local image)
+            if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+                unverifiedSections.append("Signature (No image uploaded)")
+            } else if let status = jsonResponse["SignatureImage_Verify"] as? String,
+                      status != "1" && status != "2" {
+                unverifiedSections.append("Signature")
+            } else if let status = jsonResponse["SignatureImage_Verify"] as? Int,
+                      status != 1 && status != 2 {
+                unverifiedSections.append("Signature")
+            }
+            
+            // Check PAN Copy (check local image)
+            //               if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+            //                   unverifiedSections.append("PAN Copy (No image uploaded)")
+            //               } else if let status = jsonResponse["PANImage_Verify"] as? String,
+            //                         status != "1" && status != "2" {
+            //                   unverifiedSections.append("PAN Copy")
+            //               } else if let status = jsonResponse["PANImage_Verify"] as? Int,
+            //                         status != 1 && status != 2 {
+            //                   unverifiedSections.append("PAN Copy")
+            //               }
+            
+            // Check Client Photo (check local image)
+            if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+                unverifiedSections.append("Client Photo (No image uploaded)")
+            } else if let status = jsonResponse["ClientPhotoImageID_Verify"] as? String,
+                      status != "1" && status != "2" {
+                unverifiedSections.append("Client Photo")
+            } else if let status = jsonResponse["ClientPhotoImageID_Verify"] as? Int,
+                      status != 1 && status != 2 {
+                unverifiedSections.append("Client Photo")
+            }
+            
+            // Check Nominees if they exist and have images
+            //               if !NomineeDetails1.isHidden {
+            //                   if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
+            //                       unverifiedSections.append("Nominee 1 (No image uploaded)")
+            //                   } else if let status = jsonResponse["NOMINEE_1Images_Verify"] as? String,
+            //                             status != "1" && status != "2" {
+            //                       unverifiedSections.append("Nominee 1")
+            //                   }
+            //               }
+            
+            //               if !NomineeDetails2.isHidden {
+            //                   if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
+            //                       unverifiedSections.append("Nominee 2 (No image uploaded)")
+            //                   } else if let status = jsonResponse["NOMINEE_2Images_Verify"] as? String,
+            //                             status != "1" && status != "2" {
+            //                       unverifiedSections.append("Nominee 2")
+            //                   }
+            //               }
+            
+            //               if !NomineeDetails3.isHidden {
+            //                   if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
+            //                       unverifiedSections.append("Nominee 3 (No image uploaded)")
+            //                   } else if let status = jsonResponse["NOMINEE_3Images_Verify"] as? String,
+            //                             status != "1" && status != "2" {
+            //                       unverifiedSections.append("Nominee 3")
+            //                   }
+            //               }
+            
+            // Show alert if there are unverified sections
+            DispatchQueue.main.async {
+                if !unverifiedSections.isEmpty {
+                    let message = "Please upload/verify the following sections before proceeding:\n"
+                    + unverifiedSections.joined(separator: "\n")
+                    self.showAlert(title: "Verification Required", message: message)
+                } else {
+                    // Proceed with final status update if all verifications are complete
+                    self.UpdateFinalDoneStatus()
+                }
+            }
+        }
+    }
+    
+    // Add this helper method to validate local documents
+    func validateLocalDocuments() -> Bool {
+        var missingDocuments: [String] = []
+        
+        // Check Income Proof
+        if IncomeProof.isHidden == false {
+            if imageUrls.isEmpty {
+                missingDocuments.append("Income Proof")
+            }
+        }
+        
+        // Check Bank Proof
+        if BankProof.isHidden == false {
+            if bpImageUrls.isEmpty {
+                missingDocuments.append("Bank Proof")
+            }
+        }
+        
+        // Check Demat
+        if DematImage.isHidden == false {
+            if dematimageUrls.isEmpty {
+                missingDocuments.append("Demat")
+            }
+        }
+        
+        // Check Signature
+        if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+            missingDocuments.append("Signature")
+        }
+        
+        // Check PAN Copy
+        //           if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+        //               missingDocuments.append("PAN Copy")
+        //           }
+        
+        // Check Client Photo
+        if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+            missingDocuments.append("Client Photo")
+        }
+        
+        // Check Nominees
+        //           if !NomineeDetails1.isHidden {
+        //               if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
+        //                   missingDocuments.append("Nominee 1")
+        //               }
+        //           }
+        
+        //           if !NomineeDetails2.isHidden {
+        //               if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
+        //                   missingDocuments.append("Nominee 2")
+        //               }
+        //           }
+        
+        //           if !NomineeDetails3.isHidden {
+        //               if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
+        //                   missingDocuments.append("Nominee 3")
+        //               }
+        //           }
+        
+        if !missingDocuments.isEmpty {
+            let message = "Please upload the following documents:\n" + missingDocuments.joined(separator: "\n")
+            showAlert(title: "Missing Documents", message: message)
+            return false
+        }
+        
+        return true
+    }
+    //        if panDelete == "PAN deleted" {
+    //               showAlert(title: "Alert", message: "upload your PAN Image")
+    //               return
+    //           }
+    //
+    //           self.ViewDocumentDetails()
+    //
+    //           DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
+    //               guard let self = self else { return }
+    //
+    //               var unverifiedSections: [String] = []
+    //
+    //               // Check visible sections dynamically
+    //               for (section, isVisible) in visibleSections {
+    //                   guard isVisible else { continue }
+    //
+    //                   switch section {
+    //                   case "IncomeProof":
+    //                       if let status = jsonResponse["DerivativeImages_Verify"] as? String,
+    //                          status != "1" && status != "2" {
+    //                           unverifiedSections.append("Income Proof")
+    //                       } else if let status = jsonResponse["DerivativeImages_Verify"] as? Int,
+    //                                 status != 1 && status != 2 {
+    //                           unverifiedSections.append("Income Proof")
+    //                       }
+    //
+    //                   case "BankProof":
+    //                       if let status = jsonResponse["BankImages_Verify"] as? String,
+    //                          status != "1" && status != "2" {
+    //                           unverifiedSections.append("Bank Proof")
+    //                       } else if let status = jsonResponse["BankImages_Verify"] as? Int,
+    //                                 status != 1 && status != 2 {
+    //                           unverifiedSections.append("Bank Proof")
+    //                       }
+    //
+    //                   case "DematImage":
+    //                       if let status = jsonResponse["DP_IMAGEID_Verify"] as? String,
+    //                          status != "1" && status != "2" {
+    //                           unverifiedSections.append("Demat")
+    //                       } else if let status = jsonResponse["DP_IMAGEID_Verify"] as? Int,
+    //                                 status != 1 && status != 2 {
+    //                           unverifiedSections.append("Demat")
+    //                       }
+    //
+    //                   default:
+    //                       break
+    //                   }
+    //               }
+    //
+    //               // Explicitly check Signature, PAN Copy, and Client Photo
+    //               let additionalChecks: [String: String] = [
+    //                   "DerivativeImages_Verify": "IncomeProof",
+    //                   "SignatureImage_Verify": "Signature",
+    //                   "ClientPhotoImageID_Verify": "Client Photo",
+    //                   "PANImage_Verify": "PAN Copy"
+    //               ]
+    //
+    //               for (key, sectionName) in additionalChecks {
+    //                   if let status = jsonResponse[key] as? String,
+    //                      status != "1" && status != "2" {
+    //                       unverifiedSections.append(sectionName)
+    //                   } else if let status = jsonResponse[key] as? Int,
+    //                             status != 1 && status != 2 {
+    //                       unverifiedSections.append(sectionName)
+    //                   }
+    //               }
+    //
+    //               // Show alert if there are unverified sections
+    //               DispatchQueue.main.async {
+    //                   if !unverifiedSections.isEmpty {
+    //                       let message = "Please upload/verify the following sections before proceeding:\n"
+    //                                   + unverifiedSections.joined(separator: "\n")
+    //                       self.showAlert(title: "Verification Required", message: message)
+    //                   } else {
+    //                       // Proceed with final status update if all verifications are complete
+    //                       self.UpdateFinalDoneStatus()
+    //                   }
+    //               }
+    //           }
+    //    }
+    //
     func UpdateFinalDoneStatus() {
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { tokenId in
             guard let tokenId = tokenId else {
@@ -1051,9 +1070,9 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                             print("errorcode 000000 called")
                             DispatchQueue.main.async{
                                 print("done")
-//                                let storyboard = UIStoryboard(name: "Rejection", bundle: Bundle.module)
-//                                let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
-//                                self.navigationController?.pushViewController(vc, animated: true)
+                                //                                let storyboard = UIStoryboard(name: "Rejection", bundle: Bundle.module)
+                                //                                let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
+                                //                                self.navigationController?.pushViewController(vc, animated: true)
                                 let vc =
                                 self.storyboard?.instantiateViewController(
                                     withIdentifier: "applicationDoneVC")
@@ -1126,7 +1145,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                     {
                         unverifiedSections.append("Demat")
                     }
- 
+                    
                 default:
                     break
                 }
@@ -1166,22 +1185,22 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         }
     }
     
-//        func navigateToNextStep() {
-//            if let rejectionValue = rejection, !rejectionValue.isEmpty {
-//                UpdateDocumentModificationStatus()
-//            } else {
-//                let vc =
-//                self.storyboard?.instantiateViewController(
-//                    withIdentifier: "uccVC")
-//                as! uccVC
-//                vc.modalPresentationStyle = .overCurrentContext
-//                vc.modalTransitionStyle = .crossDissolve
-//    
-//                vc.delegate = self
-//    
-//                self.present(vc, animated: true)
-//            }
-//        }
+    //        func navigateToNextStep() {
+    //            if let rejectionValue = rejection, !rejectionValue.isEmpty {
+    //                UpdateDocumentModificationStatus()
+    //            } else {
+    //                let vc =
+    //                self.storyboard?.instantiateViewController(
+    //                    withIdentifier: "uccVC")
+    //                as! uccVC
+    //                vc.modalPresentationStyle = .overCurrentContext
+    //                vc.modalTransitionStyle = .crossDissolve
+    //
+    //                vc.delegate = self
+    //
+    //                self.present(vc, animated: true)
+    //            }
+    //        }
     
     @IBAction func incomeProofDocumentTypeBtn(_ sender: UIButton) {
         if let vc = storyboard?.instantiateViewController(
@@ -1601,6 +1620,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
             dematNoBtn.isSelected = false
             dematDocumentType = "PDF"
             DIStackView2.isHidden = false
+            DematImageVerifyBtn.isHidden = true
             
         } else if sender == dematNoBtn {
             dematYesBtn.isSelected = false
@@ -1662,13 +1682,13 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
 extension DocumentVC {
     
     @IBAction func IncomeProofBtn(_ sender: UIButton) {
-//        if sender.isSelected {
-//            sender.isSelected = false
-//            IncomeProof(shouldShow: false)
-//        } else {
-//            sender.isSelected = true
-//            IncomeProof(shouldShow: true)
-//        }
+        //        if sender.isSelected {
+        //            sender.isSelected = false
+        //            IncomeProof(shouldShow: false)
+        //        } else {
+        //            sender.isSelected = true
+        //            IncomeProof(shouldShow: true)
+        //        }
         IncomeProof(shouldShow: true)
     }
     
@@ -1901,23 +1921,23 @@ extension DocumentVC {
                                 
                                 if let panDocumentSource = jsonResponse["PanDocumentSource"] as? String, panDocumentSource.uppercased() == "DIGILOCKER" {
                                     self.panMsg.text = "PAN card has been fetched successfully."
-                                 } else {
-                                     self.panMsg.text = ""
-                                 }
-
-                                 // Bank statement fetched
-                                 if let bankProofSource = jsonResponse["BankProofSource"] as? String, bankProofSource.uppercased() == "CAMS" {
-                                     self.bankMsg.text = "Bank statement fetched successfully."
-                                 } else {
-                                     self.bankMsg.text = ""
-                                 }
-
-                                 // Income proof fetched (if available)
-                                 if let incomeProofSource = jsonResponse["IncomeproofSource"] as? String, !incomeProofSource.isEmpty {
-                                     self.incomeProofmsg.text = "Income proof fetched successfully."
-                                 } else {
-                                     self.incomeProofmsg.text = ""
-                                 }
+                                } else {
+                                    self.panMsg.text = ""
+                                }
+                                
+                                // Bank statement fetched
+                                if let bankProofSource = jsonResponse["BankProofSource"] as? String, bankProofSource.uppercased() == "CAMS" {
+                                    self.bankMsg.text = "Bank statement fetched successfully."
+                                } else {
+                                    self.bankMsg.text = ""
+                                }
+                                
+                                // Income proof fetched (if available)
+                                if let incomeProofSource = jsonResponse["IncomeproofSource"] as? String, !incomeProofSource.isEmpty {
+                                    self.incomeProofmsg.text = "Income proof fetched successfully."
+                                } else {
+                                    self.incomeProofmsg.text = ""
+                                }
                                 
                                 if self.IPVStatus == "IPV" {
                                     if let clientPhotoID = jsonResponse["ClientPhotoImageID"] as? String, !clientPhotoID.isEmpty {
@@ -1998,52 +2018,52 @@ extension DocumentVC {
             visibleSections["IncomeProof"] = false
         }
         
-        DematImage.isHidden = true
+        // DematImage.isHidden = true
         visibleSections["DematImage"] = false
         
         // Check for "DP_IMAGEID_Verify" field
-//        if let isDpAccountNew = jsonResponse["IsDpAccountNew"] as? String,
-//           isDpAccountNew == "Y"
-//        {
-//            DematImage.isHidden = true
-//            visibleSections["DematImage"] = false
-//        } else {
-//            DematImage.isHidden = false
-//            visibleSections["DematImage"] = true
-//        }
+        if let isDpAccountNew = jsonResponse["IsDpAccountNew"] as? String,
+           isDpAccountNew == "Y"
+        {
+            DematImage.isHidden = true
+            visibleSections["DematImage"] = false
+        } else {
+            DematImage.isHidden = false
+            visibleSections["DematImage"] = true
+        }
         
         // Check for "NOMINEE_1Images_Verify" field
-//        if let nominee1ImagesVerify = jsonResponse["Nom1NomineeOrGuardianName"]
-//            as? String, nominee1ImagesVerify.isEmpty
-//        {
-//            NomineeDetails1.isHidden = true
-//            visibleSections["NomineeDetails1"] = false
-//        } else {
-//            NomineeDetails1.isHidden = false
-//            visibleSections["NomineeDetails1"] = true
-//        }
-//
-//        // Check for "NOMINEE_2Images_Verify" field
-//        if let nominee2ImagesVerify = jsonResponse["Nom2NomineeOrGuardianName"]
-//            as? String, nominee2ImagesVerify.isEmpty
-//        {
-//            NomineeDetails2.isHidden = true
-//            visibleSections["NomineeDetails2"] = false
-//        } else {
-//            NomineeDetails2.isHidden = false
-//            visibleSections["NomineeDetails2"] = true
-//        }
-//
-//        // Check for "NOMINEE_3Images_Verify" field
-//        if let nominee3ImagesVerify = jsonResponse["Nom3NomineeOrGuardianName"]
-//            as? String, nominee3ImagesVerify.isEmpty
-//        {
-//            NomineeDetails3.isHidden = true
-//            visibleSections["NomineeDetails3"] = false
-//        } else {
-//            NomineeDetails3.isHidden = false
-//            visibleSections["NomineeDetails3"] = true
-//        }
+        //        if let nominee1ImagesVerify = jsonResponse["Nom1NomineeOrGuardianName"]
+        //            as? String, nominee1ImagesVerify.isEmpty
+        //        {
+        //            NomineeDetails1.isHidden = true
+        //            visibleSections["NomineeDetails1"] = false
+        //        } else {
+        //            NomineeDetails1.isHidden = false
+        //            visibleSections["NomineeDetails1"] = true
+        //        }
+        //
+        //        // Check for "NOMINEE_2Images_Verify" field
+        //        if let nominee2ImagesVerify = jsonResponse["Nom2NomineeOrGuardianName"]
+        //            as? String, nominee2ImagesVerify.isEmpty
+        //        {
+        //            NomineeDetails2.isHidden = true
+        //            visibleSections["NomineeDetails2"] = false
+        //        } else {
+        //            NomineeDetails2.isHidden = false
+        //            visibleSections["NomineeDetails2"] = true
+        //        }
+        //
+        //        // Check for "NOMINEE_3Images_Verify" field
+        //        if let nominee3ImagesVerify = jsonResponse["Nom3NomineeOrGuardianName"]
+        //            as? String, nominee3ImagesVerify.isEmpty
+        //        {
+        //            NomineeDetails3.isHidden = true
+        //            visibleSections["NomineeDetails3"] = false
+        //        } else {
+        //            NomineeDetails3.isHidden = false
+        //            visibleSections["NomineeDetails3"] = true
+        //        }
     }
     
     func updateButtonImages(with jsonResponse: [String: Any]) {
@@ -2220,7 +2240,7 @@ extension DocumentVC {
         }
     }
     
-
+    
     func updateClientPhotoUI(with response: [String: Any]) {
         let latitude = response["Latitude"] as? String ?? "Latitude"
         let longitude = response["Longitude"] as? String ?? "Longitude"
@@ -2231,7 +2251,7 @@ extension DocumentVC {
             }
             return
         }
-
+        
         // Fetch token from CoreData before building the image URL
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { tokenId in
             guard let tokenId = tokenId else {
@@ -2241,12 +2261,12 @@ extension DocumentVC {
                 }
                 return
             }
-
+            
             let userIdEncoded = self.fetchedUserId?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
             let imageUrlString = "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(ClientPhotoImageID)&ImageType=ThumbNail&UserId=\(userIdEncoded)&TokenId=\(tokenId)"
             
             print("Full Client Photo URL: \(imageUrlString)")
-
+            
             DispatchQueue.main.async {
                 self.clientPhotoUrl = imageUrlString
                 self.CP_Long_Lat_Lbl.text = "Your Lat/Long \n \(latitude), \(longitude)"
@@ -2261,19 +2281,19 @@ extension DocumentVC {
                 self.CPImageView.setNeedsLayout()
                 self.view.setNeedsLayout()
                 self.view.layoutIfNeeded()
-
+                
                 if let clientImageVerify = response["ClientPhotoImageID_Verify"] as? String {
                     self.ClientPhotoImageID_Verify = clientImageVerify
                     self.ClientPhoto(shouldShow: false)
                     print("Client Photo UI updated successfully.")
                 }
-
+                
                 // Stop any periodic timer after updating
                 self.stopPeriodicViewDocumentDetails()
             }
         }
     }
-
+    
     func updateUI(with response: [String: Any]) {
         // Update Signature Image
         if let signatureImageID = response["SignatureImageID"] as? String,
@@ -2297,32 +2317,32 @@ extension DocumentVC {
                 // If the value is 0, show the buttons, otherwise hide t
                 self.SignatureImage_Verify = SignatureImage_Verify
                 DispatchQueue.main.async {
-                               if SignatureImage_Verify == "0" {
-                                   // Pending - show upload buttons
-                                   self.CSStackView1.isHidden = false
-                                   self.CSDocumentView.isHidden = true
-                                   self.CurrentSignBtn.isHidden = false
-                                   self.drawBtn.isHidden = false
-                               } else {
-                                   // Verified or Rejected - show the image
-                                   self.CSStackView1.isHidden = true
-                                   self.CSDocumentView.isHidden = false
-                                   self.CurrentSignBtn.isHidden = true
-                                   self.drawBtn.isHidden = true
-                               }
-                           }
-                       }
-                   } else {
-                       // No signature exists - show upload buttons
-                       DispatchQueue.main.async {
-                           self.CSStackView1.isHidden = false
-                           self.CSDocumentView.isHidden = true
-                           self.CurrentSignBtn.isHidden = false
-                           self.drawBtn.isHidden = false
-                           self.signatureImageview.image = nil
-                       }
-                   
-        } 
+                    if SignatureImage_Verify == "0" {
+                        // Pending - show upload buttons
+                        self.CSStackView1.isHidden = false
+                        self.CSDocumentView.isHidden = true
+                        self.CurrentSignBtn.isHidden = false
+                        self.drawBtn.isHidden = false
+                    } else {
+                        // Verified or Rejected - show the image
+                        self.CSStackView1.isHidden = true
+                        self.CSDocumentView.isHidden = false
+                        self.CurrentSignBtn.isHidden = true
+                        self.drawBtn.isHidden = true
+                    }
+                }
+            }
+        } else {
+            // No signature exists - show upload buttons
+            DispatchQueue.main.async {
+                self.CSStackView1.isHidden = false
+                self.CSDocumentView.isHidden = true
+                self.CurrentSignBtn.isHidden = false
+                self.drawBtn.isHidden = false
+                self.signatureImageview.image = nil
+            }
+            
+        }
         
         // Update NOMINEE_1ImageID Image
         if let NOMINEE_1ImageID = response["NOMINEE_1ImageID"] as? String,
@@ -2616,8 +2636,8 @@ extension DocumentVC {
                     incomeProofVerifyBtn.isHidden = true
                     self.incomeProofDocumentTypeBtn.isEnabled = false
                     self.incomeProofYearBtn.isEnabled = false
+                    incomeProofVerifyBtn.isHidden = true
                     
-                   
                     if incomeproofDocumenttype == "PDF" {
                         incomeProofNoBtn.isEnabled = false
                     } else if incomeproofDocumenttype == "IMAGE" {
@@ -2702,9 +2722,7 @@ extension DocumentVC {
         if let dematImageIDsString = response["DP_IMAGEID"] as? String,
            !dematImageIDsString.isEmpty
         {
-            let userId =
-            fetchedUserId?.addingPercentEncoding(
-                withAllowedCharacters: .urlQueryAllowed) ?? ""
+            let userId = fetchedUserId?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
             
             // Split the IDs and form URLs for each
             let dematImageIDs = dematImageIDsString.split(separator: ",").map {
@@ -2716,10 +2734,10 @@ extension DocumentVC {
             
             // Generate URLs and update the bpImageUrls array
             for imageID in dematImageIDs {
-                let imageUrlString =
-                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(imageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId={tokenId}"
+                let imageUrlString = "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(imageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId={tokenId}"
                 dematimageUrls.append(imageUrlString)
             }
+            
             if let DP_IMAGEType = response["DP_IMAGEType"] as? String {
                 dematDocumentType = DP_IMAGEType
                 if DP_IMAGEType == "PDF" {
@@ -2732,26 +2750,41 @@ extension DocumentVC {
             }
             
             if let DPVerify = response["DP_IMAGEID_Verify"] as? Int {
-                // If the value is 0, show the buttons, otherwise hide them
                 self.DP_IMAGEID_Verify = DPVerify
                 print("DP_IMAGEID_Verify: \(DP_IMAGEID_Verify)")
+                
                 if DP_IMAGEID_Verify == 0 {
+                    // Pending verification - show verify button
+                    DispatchQueue.main.async {
+                        self.DematImageVerifyBtn.isHidden = false
+                        self.DIStackView2.isHidden = false
+                        self.dematDescriptionLabel.isHidden = false
+                        self.DematImgBtn.isHidden = false
+                        // Keep collection view visible
+                        self.DICollectionView.isHidden = false
+                        self.DIDocumentView.isHidden = false
+                    }
                 } else {
-                    DIStackView2.isHidden = true
-                    dematDescriptionLabel.isHidden = true
-                    DematImgBtn.isHidden = true
-                    DematImageVerifyBtn.isHidden = true
-                    if self.dematDocumentType == "PDF" {
-                        dematNoBtn.isEnabled = false
-                    } else if dematDocumentType == "IMAGE" {
+                    // Already verified (1 or 2) - hide verify button but keep collection view visible
+                    DispatchQueue.main.async {
+                        self.DematImageVerifyBtn.isHidden = true
+                        self.DIStackView2.isHidden = true
+                        self.dematDescriptionLabel.isHidden = true
+                        self.DematImgBtn.isHidden = true
                         
-                        dematYesBtn.isEnabled = false
+                        // ✅ IMPORTANT: Keep collection view visible to show uploaded images
+                        self.DICollectionView.isHidden = false
+                        self.DIDocumentView.isHidden = false
+                        
+                        if self.dematDocumentType == "PDF" {
+                            self.dematNoBtn.isEnabled = false
+                        } else if self.dematDocumentType == "IMAGE" {
+                            self.dematYesBtn.isEnabled = false
+                        }
                     }
                 }
-            } else {
-                // Handle the case where the key is not present or is not an integer
-                print("dp image key not found or invalid type")
             }
+            
             // Reload the collection view to show updated images
             DispatchQueue.main.async {
                 self.DICollectionView.reloadData()
@@ -2971,7 +3004,7 @@ extension DocumentVC {
             }
         }
     }
-
+    
     func DerivativeUpload(imageData: Data, password: String?) {
         
         var fileName: String = ""
@@ -3066,7 +3099,7 @@ extension DocumentVC {
                             self.incomeProofYearBtn.isHidden = true
                             self.yearBtn.isHidden = true
                             self.iplabel3.isHidden = true
-            
+                            
                             //self.IPStackView2.isHidden = true
                             
                             self.IPDocumentView.isHidden = false
@@ -3136,7 +3169,7 @@ extension DocumentVC {
         //
         
         print("identifier document demat:\(identifier)")
-
+        
         DispatchQueue.main.async {
             switch identifier {
             case "IncomeProof":
@@ -3147,6 +3180,7 @@ extension DocumentVC {
                     jsonResponse: jsonResponse)
                 self.imageUrls.append(ImageUrlString)
                 self.incomeProofCollectionView.reloadData()
+                self.incomeProofVerifyBtn.isHidden = false
             case "Bank":
                 self.bpcounts(shouldShow: true)
                 self.updateButtonImage(
@@ -3155,6 +3189,7 @@ extension DocumentVC {
                     jsonResponse: jsonResponse)
                 self.bpImageUrls.append(ImageUrlString)
                 self.BpCollectionView.reloadData()
+                self.bankProofVerifyBtn.isHidden = false
             case "Demat":
                 self.diCounts(shouldShow: true)
                 
@@ -3169,6 +3204,21 @@ extension DocumentVC {
                 self.dematimageUrls.append(ImageUrlString)
                 //self.updateButtondpimage(button: self.dematStatusBtn, statusKey: "DocumentImages_Verify", jsonResponse: jsonResponse)
                 self.DICollectionView.reloadData()
+                if let verifyStatus = jsonResponse["DocumentImages_Verify"] as? String {
+                        if verifyStatus == "0" {
+                            self.DematImageVerifyBtn.isHidden = false
+                        } else {
+                            self.DematImageVerifyBtn.isHidden = true  // ✅ Hide when verified (1 or 2)
+                        }
+                    } else if let verifyStatus = jsonResponse["DocumentImages_Verify"] as? Int {
+                        if verifyStatus == 0 {
+                            self.DematImageVerifyBtn.isHidden = false
+                        } else {
+                            self.DematImageVerifyBtn.isHidden = true  // ✅ Hide when verified (1 or 2)
+                        }
+                    } else {
+                        self.DematImageVerifyBtn.isHidden = false
+                    }
             default:
                 break
             }
@@ -3569,232 +3619,232 @@ extension DocumentVC {
         }
     }
     
-//    func CLIENTPHOTOUpload(imageData: Data) {
-//        
-//        var fileName: String = ""
-//        var mimeType: String = ""
-//        fileName = "image.jpg"
-//        mimeType = "image/jpeg"
-//        
-//        let parameters: [String: Any?] = [
-//            "PanNo": PanNo,
-//            "RegId": RegId,
-//            "UserId": fetchedUserId,
-//            "MOBRequestID": "",
-//            "Type": "IMAGE",
-//            "Latitude": Latitude,
-//            "Longitude": Longitude,
-//            "Location": "",
-//            "OCRCount": ocrCount,
-//            "NewValue": "",
-//            "BrowserName": "",
-//            "BrowserVersion": "",
-//            "OS": "",
-//            "OSVersion": "",
-//            "IPAddress": "",
-//            "DeviceType": "",
-//        ]
-//        print("client photo uploads", parameters)
-//        let url = "\(self.prefixUrl)MultiPartImageUpload/CLIENTPHOTOUpload"
-//        //uploadDocument(apiEndpoint: "http://yourapi.com/upload", parameters: yourParameters, fileData: pdfData, fileName: pdfFileName, mimeType: pdfMimeType)
-//        uploadDocument(
-//            apiEndpoint: url, parameters: parameters, fileData: imageData,
-//            fileName: fileName, mimeType: mimeType, loaderView: self.view,
-//            loaderText: "Kindly wait we are verifying your client image..."
-//        ) { result in
-//            switch result {
-//            case .success(let jsonResponse):
-//                print("CLIENTPHOTOUpload Response: \(jsonResponse)")
-//                let ClientPhotoImageID_Verify =
-//                jsonResponse["DocumentImages_Verify"] as? String
-//                if let errorCode = jsonResponse["ErrorCode"] as? String {
-//                    switch errorCode {
-//                    case "000000":
-//                        DispatchQueue.main.async {
-//                            print("Image upload successful")
-//                            // Call GetUserLocation API
-//                            self.ocrpancount = 0
-//                            if let latitude = self.Latitude,
-//                               let longitude = self.Longitude
-//                            {
-//                                self.GetUserLocation(
-//                                    Longitude: longitude, Latitude: latitude)
-//                                self.clientImageUpdateUI(with: jsonResponse)
-//                                //                                    self.ClientPhotoImageID_Verify = ClientPhotoImageID_Verify
-//                            }
-//                            self.CP_CaptureImgBtn.isHidden = true
-//                            self.CP_IPVLinkBtn.isHidden = true
-//                        }
-//
-//                    case "801005":
-//                        print("OCR Error hit, current count = \(self.ocrCount)")
-//                        if self.ocrCount == 1 {
-//                            // 1st failure → show alert
-//                            let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-//                            ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-//                            ?? "OCR failed."
-//                            
-//                            DispatchQueue.main.async {
-//                                self.showAlert(title: "Error", message: errorMessage)
-//                            }
-//                            self.ocrCount += 1
-//                        } else if self.ocrCount == 1 {
-//                            // 2nd failure → allow user to retry
-//                            self.ocrCount += 1
-//                            let errorMessage = (jsonResponse["RejectRemark"] as? String)
-//                            ?? (jsonResponse["ErrorMessage"] as? String)
-//                            ?? "Second attempt failed. Please try again."
-//                            
-//                            DispatchQueue.main.async {
-//                                self.signatureAttemptLabel.text = errorMessage
-//                                print("Retry allowed for OCRCount: \(self.ocrCount)")
-//                            }
-//                        } else {
-//                            // After 2 failures → upload anyway
-//                            print("Invalid OCR but forcing upload.")
-//                            DispatchQueue.main.async {
-//                                if let validImage = self.selectedClientImage {
-//                                    self.CPImageView.image = validImage
-//                                }
-//                                self.showAlert(title: "Notice", message: "OCR failed multiple times, proceeding with upload.")
-//                                self.CLIENTPHOTOUpload(imageData: imageData)
-//                            }
-//                        }
-//                    case "111111":
-//                        // Increment OCR count and retry if less than 3
-//                        let errorMessage = (jsonResponse["ErrorMessage"] as? String) ?? "Something went wrong."
-//                        DispatchQueue.main.async {
-//                            print("Image upload successful")
-//                            self.showAlert(title: "Alert", message: errorMessage)
-//                            // Call GetUserLocation API
-//                            self.ocrpancount = 0
-//                            if let latitude = self.Latitude,
-//                               let longitude = self.Longitude
-//                            {
-//                                self.GetUserLocation(
-//                                    Longitude: longitude, Latitude: latitude)
-//                                self.clientImageUpdateUI(with: jsonResponse)
-//                                //                                    self.ClientPhotoImageID_Verify = ClientPhotoImageID_Verify
-//                            }
-//                        }
-//                    case "999992":
-//                        DispatchQueue.main.async {
-//                            self.regenerate(imageData: imageData)
-//                        }
-//                    default:
-//                        print("Unhandled error code: \(errorCode)")
-//                        // Handle error
-//                    }
-//                }
-//            case .failure(let error):
-//                print("API call failed: \(error.localizedDescription)")
-//            }
-//        }
-//    }
-//    
-//    func clientImageUpdateUI(with response: [String: Any]) {
-//        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
-//            [self] tokenId in
-//            guard let tokenId = tokenId else {
-//                // Handle the case where no tokens are available
-//                CoreDataHelper.generateToken(
-//                    decodeByteArrayToString: self.mobiledecodeArray ?? "",
-//                    USERID: self.fetchedUserId ?? "",
-//                    SessionId: self.fetchedSessionID ?? "",
-//                    entityName: "TokenMobile", deviceType: "M", in: self.view
-//                ) { success in
-//                    if success {
-//                        // Retry SIXTHAPI after token regeneration
-//                        self.clientImageUpdateUI(with: response)
-//                    } else {
-//                        print("Token generation failed.")
-//                    }
-//                }
-//                print("No tokens available. Please reload the tokens.")
-//                return
-//            }
-//            if let clientImageID = response["RequestID"] as? Int {
-//                //                        print("if is called")// Construct the URL safely
-//                let userId =
-//                fetchedUserId?.addingPercentEncoding(
-//                    withAllowedCharacters: .urlQueryAllowed) ?? ""
-//                
-//                let imageUrlString =
-//                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(clientImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId=\(tokenId)"
-//                self.clientPhotoUrl = imageUrlString
-//                self.CPHolderView1.isHidden = false
-//                
-//                CPImageView.isHidden = false
-//                CP_Long_Lat_Lbl.isHidden = false
-//                CP_Location_label.isHidden = false
-//                CpHolderView2.isHidden = false
-//                // Print to debug the formed URL
-//                self.ClientPhotoImageID_Verify =
-//                response["DocumentImages_Verify"] as? String
-//                
-//                
-//                print("Formed panView URL: \(imageUrlString)")
-//                self.CPImageView.restorationIdentifier = "clientPhoto"
-//                loadImage(
-//                    from: imageUrlString, into: self.CPImageView,
-//                    with: "clientPhoto")
-//                DispatchQueue.main.async {
-//                    self.updateButtonImage(
-//                        button: self.clientPhotoStatusBtn,
-//                        statusKey: "DocumentImages_Verify",
-//                        jsonResponse: response)
-//                    
-//                    
-//                }
-//            } else {
-//                CPImageView.image = UIImage(
-//                    systemName: "person.crop.circle.badge.xmark")
-//            }
-//            
-//        }
-//    }
-//    
-//    func InsertUpdateIPVAuditLog() {
-//        
-//        let parameters: [String: Any?] = [
-//            "RegId": RegId,
-//            "PanNo": PanNo,
-//            "CreatedBy": fetchedUserId,
-//            "Flag": "INSERT",
-//        ]
-//        print(parameters)
-//        let Url = "MultiPartImageUpload/InsertUpdateIPVAuditLog"
-//        
-//        apiCall(
-//            url: Url, method: "POST", parameters: parameters as [String: Any],
-//            view: self.view
-//        ) { result in
-//            switch result {
-//            case .success(let jsonResponse):
-//                print("InsertUpdateIPVAuditLog Response: \(jsonResponse)")
-//                if let errorCode = jsonResponse["ErrorCode"] as? String {
-//                    switch errorCode {
-//                    case "000000":
-//                        DispatchQueue.main.async { [self] in
-//                            self.IPVStatus = "IPV"  // Store IPV status
-//                            self.startPeriodicViewDocumentDetails()
-//                            showAlert(
-//                                title: "Alert",
-//                                message:
-//                                    "You get email in your verified email id..."
-//                            )
-//                            print("api is running")
-//                        }
-//                    default:
-//                        print("Unhandled error code: \(errorCode)")
-//                    }
-//                }
-//            case .failure(let error):
-//                print("Login API call failed: \(error.localizedDescription)")
-//            }
-//            
-//        }
-//    }
+    //    func CLIENTPHOTOUpload(imageData: Data) {
+    //
+    //        var fileName: String = ""
+    //        var mimeType: String = ""
+    //        fileName = "image.jpg"
+    //        mimeType = "image/jpeg"
+    //
+    //        let parameters: [String: Any?] = [
+    //            "PanNo": PanNo,
+    //            "RegId": RegId,
+    //            "UserId": fetchedUserId,
+    //            "MOBRequestID": "",
+    //            "Type": "IMAGE",
+    //            "Latitude": Latitude,
+    //            "Longitude": Longitude,
+    //            "Location": "",
+    //            "OCRCount": ocrCount,
+    //            "NewValue": "",
+    //            "BrowserName": "",
+    //            "BrowserVersion": "",
+    //            "OS": "",
+    //            "OSVersion": "",
+    //            "IPAddress": "",
+    //            "DeviceType": "",
+    //        ]
+    //        print("client photo uploads", parameters)
+    //        let url = "\(self.prefixUrl)MultiPartImageUpload/CLIENTPHOTOUpload"
+    //        //uploadDocument(apiEndpoint: "http://yourapi.com/upload", parameters: yourParameters, fileData: pdfData, fileName: pdfFileName, mimeType: pdfMimeType)
+    //        uploadDocument(
+    //            apiEndpoint: url, parameters: parameters, fileData: imageData,
+    //            fileName: fileName, mimeType: mimeType, loaderView: self.view,
+    //            loaderText: "Kindly wait we are verifying your client image..."
+    //        ) { result in
+    //            switch result {
+    //            case .success(let jsonResponse):
+    //                print("CLIENTPHOTOUpload Response: \(jsonResponse)")
+    //                let ClientPhotoImageID_Verify =
+    //                jsonResponse["DocumentImages_Verify"] as? String
+    //                if let errorCode = jsonResponse["ErrorCode"] as? String {
+    //                    switch errorCode {
+    //                    case "000000":
+    //                        DispatchQueue.main.async {
+    //                            print("Image upload successful")
+    //                            // Call GetUserLocation API
+    //                            self.ocrpancount = 0
+    //                            if let latitude = self.Latitude,
+    //                               let longitude = self.Longitude
+    //                            {
+    //                                self.GetUserLocation(
+    //                                    Longitude: longitude, Latitude: latitude)
+    //                                self.clientImageUpdateUI(with: jsonResponse)
+    //                                //                                    self.ClientPhotoImageID_Verify = ClientPhotoImageID_Verify
+    //                            }
+    //                            self.CP_CaptureImgBtn.isHidden = true
+    //                            self.CP_IPVLinkBtn.isHidden = true
+    //                        }
+    //
+    //                    case "801005":
+    //                        print("OCR Error hit, current count = \(self.ocrCount)")
+    //                        if self.ocrCount == 1 {
+    //                            // 1st failure → show alert
+    //                            let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+    //                            ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+    //                            ?? "OCR failed."
+    //
+    //                            DispatchQueue.main.async {
+    //                                self.showAlert(title: "Error", message: errorMessage)
+    //                            }
+    //                            self.ocrCount += 1
+    //                        } else if self.ocrCount == 1 {
+    //                            // 2nd failure → allow user to retry
+    //                            self.ocrCount += 1
+    //                            let errorMessage = (jsonResponse["RejectRemark"] as? String)
+    //                            ?? (jsonResponse["ErrorMessage"] as? String)
+    //                            ?? "Second attempt failed. Please try again."
+    //
+    //                            DispatchQueue.main.async {
+    //                                self.signatureAttemptLabel.text = errorMessage
+    //                                print("Retry allowed for OCRCount: \(self.ocrCount)")
+    //                            }
+    //                        } else {
+    //                            // After 2 failures → upload anyway
+    //                            print("Invalid OCR but forcing upload.")
+    //                            DispatchQueue.main.async {
+    //                                if let validImage = self.selectedClientImage {
+    //                                    self.CPImageView.image = validImage
+    //                                }
+    //                                self.showAlert(title: "Notice", message: "OCR failed multiple times, proceeding with upload.")
+    //                                self.CLIENTPHOTOUpload(imageData: imageData)
+    //                            }
+    //                        }
+    //                    case "111111":
+    //                        // Increment OCR count and retry if less than 3
+    //                        let errorMessage = (jsonResponse["ErrorMessage"] as? String) ?? "Something went wrong."
+    //                        DispatchQueue.main.async {
+    //                            print("Image upload successful")
+    //                            self.showAlert(title: "Alert", message: errorMessage)
+    //                            // Call GetUserLocation API
+    //                            self.ocrpancount = 0
+    //                            if let latitude = self.Latitude,
+    //                               let longitude = self.Longitude
+    //                            {
+    //                                self.GetUserLocation(
+    //                                    Longitude: longitude, Latitude: latitude)
+    //                                self.clientImageUpdateUI(with: jsonResponse)
+    //                                //                                    self.ClientPhotoImageID_Verify = ClientPhotoImageID_Verify
+    //                            }
+    //                        }
+    //                    case "999992":
+    //                        DispatchQueue.main.async {
+    //                            self.regenerate(imageData: imageData)
+    //                        }
+    //                    default:
+    //                        print("Unhandled error code: \(errorCode)")
+    //                        // Handle error
+    //                    }
+    //                }
+    //            case .failure(let error):
+    //                print("API call failed: \(error.localizedDescription)")
+    //            }
+    //        }
+    //    }
+    //
+    //    func clientImageUpdateUI(with response: [String: Any]) {
+    //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
+    //            [self] tokenId in
+    //            guard let tokenId = tokenId else {
+    //                // Handle the case where no tokens are available
+    //                CoreDataHelper.generateToken(
+    //                    decodeByteArrayToString: self.mobiledecodeArray ?? "",
+    //                    USERID: self.fetchedUserId ?? "",
+    //                    SessionId: self.fetchedSessionID ?? "",
+    //                    entityName: "TokenMobile", deviceType: "M", in: self.view
+    //                ) { success in
+    //                    if success {
+    //                        // Retry SIXTHAPI after token regeneration
+    //                        self.clientImageUpdateUI(with: response)
+    //                    } else {
+    //                        print("Token generation failed.")
+    //                    }
+    //                }
+    //                print("No tokens available. Please reload the tokens.")
+    //                return
+    //            }
+    //            if let clientImageID = response["RequestID"] as? Int {
+    //                //                        print("if is called")// Construct the URL safely
+    //                let userId =
+    //                fetchedUserId?.addingPercentEncoding(
+    //                    withAllowedCharacters: .urlQueryAllowed) ?? ""
+    //
+    //                let imageUrlString =
+    //                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(clientImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId=\(tokenId)"
+    //                self.clientPhotoUrl = imageUrlString
+    //                self.CPHolderView1.isHidden = false
+    //
+    //                CPImageView.isHidden = false
+    //                CP_Long_Lat_Lbl.isHidden = false
+    //                CP_Location_label.isHidden = false
+    //                CpHolderView2.isHidden = false
+    //                // Print to debug the formed URL
+    //                self.ClientPhotoImageID_Verify =
+    //                response["DocumentImages_Verify"] as? String
+    //
+    //
+    //                print("Formed panView URL: \(imageUrlString)")
+    //                self.CPImageView.restorationIdentifier = "clientPhoto"
+    //                loadImage(
+    //                    from: imageUrlString, into: self.CPImageView,
+    //                    with: "clientPhoto")
+    //                DispatchQueue.main.async {
+    //                    self.updateButtonImage(
+    //                        button: self.clientPhotoStatusBtn,
+    //                        statusKey: "DocumentImages_Verify",
+    //                        jsonResponse: response)
+    //
+    //
+    //                }
+    //            } else {
+    //                CPImageView.image = UIImage(
+    //                    systemName: "person.crop.circle.badge.xmark")
+    //            }
+    //
+    //        }
+    //    }
+    //
+    //    func InsertUpdateIPVAuditLog() {
+    //
+    //        let parameters: [String: Any?] = [
+    //            "RegId": RegId,
+    //            "PanNo": PanNo,
+    //            "CreatedBy": fetchedUserId,
+    //            "Flag": "INSERT",
+    //        ]
+    //        print(parameters)
+    //        let Url = "MultiPartImageUpload/InsertUpdateIPVAuditLog"
+    //
+    //        apiCall(
+    //            url: Url, method: "POST", parameters: parameters as [String: Any],
+    //            view: self.view
+    //        ) { result in
+    //            switch result {
+    //            case .success(let jsonResponse):
+    //                print("InsertUpdateIPVAuditLog Response: \(jsonResponse)")
+    //                if let errorCode = jsonResponse["ErrorCode"] as? String {
+    //                    switch errorCode {
+    //                    case "000000":
+    //                        DispatchQueue.main.async { [self] in
+    //                            self.IPVStatus = "IPV"  // Store IPV status
+    //                            self.startPeriodicViewDocumentDetails()
+    //                            showAlert(
+    //                                title: "Alert",
+    //                                message:
+    //                                    "You get email in your verified email id..."
+    //                            )
+    //                            print("api is running")
+    //                        }
+    //                    default:
+    //                        print("Unhandled error code: \(errorCode)")
+    //                    }
+    //                }
+    //            case .failure(let error):
+    //                print("Login API call failed: \(error.localizedDescription)")
+    //            }
+    //
+    //        }
+    //    }
     
     func CLIENTPHOTOUpload(imageData: Data) {
         
@@ -3852,7 +3902,7 @@ extension DocumentVC {
                             self.CP_CaptureImgBtn.isHidden = true
                             self.CP_IPVLinkBtn.isHidden = true
                         }
-
+                        
                     case "801005":
                         print("OCR Error hit, current count = \(self.ocrCount)")
                         if self.ocrCount == 1 {
@@ -4552,66 +4602,66 @@ extension DocumentVC {
         }
     }
     
-//    func deleteImageFromServer(
-//        requestId: String, documentType: String,
-//        completion: @escaping (Bool) -> Void
-//    ) {
-//        let parameters: [String: Any?] = [
-//            "RegId": RegId,
-//            "PanNo": PanNo,
-//            "RequestId": requestId,
-//            "Documents": documentType,
-//        ]
-//
-//        let url = "ImageManagement/DeleteDocumentsImageOnRequestID"
-//        apiCall(
-//            url: url, method: "POST", parameters: parameters as [String: Any],
-//            view: self.view, loaderText: "Deleting Image..."
-//        ) { result in
-//            switch result {
-//            case .success(let jsonResponse):
-//                print(
-//                    "DeleteDocumentsImageOnRequestID Response: \(jsonResponse)")
-//                if let errorCode = jsonResponse["ErrorCode"] as? String,
-//                   errorCode == "000000"
-//                {
-//                    DispatchQueue.main.async { [self] in
-//                        switch documentType {
-//                        case "DERIVATIVE":
-//                            DispatchQueue.main.async {
-//                                self.counts(shouldShow: true)
-//                                self.showAlert(
-//                                    title: "Success",
-//                                    message: "Image deleted successfully.")
-//                            }
-//                        case "BANK":
-//                            DispatchQueue.main.async {
-//                                self.bpcounts(shouldShow: true)
-//                                BPStackview2.isHidden = false
-//                                self.showAlert(
-//                                    title: "Success",
-//                                    message: "Image bank deleted successfully.")
-//                            }
-//                        case "DP_IMAGE":
-//                            self.diCounts(shouldShow: true)
-//                            self.showAlert(
-//                                title: "Success",
-//                                message: "Image DP_IMAGE deleted successfully.")
-//                        default:
-//                            break
-//                        }
-//                        completion(true)  // Indicate success
-//                    }
-//                } else {
-//                    print("Unhandled error code: \(jsonResponse)")
-//                    completion(false)  // Indicate failure
-//                }
-//            case .failure(let error):
-//                print("Failed to delete image: \(error.localizedDescription)")
-//                completion(false)  // Indicate failure
-//            }
-//        }
-//    }
+    //    func deleteImageFromServer(
+    //        requestId: String, documentType: String,
+    //        completion: @escaping (Bool) -> Void
+    //    ) {
+    //        let parameters: [String: Any?] = [
+    //            "RegId": RegId,
+    //            "PanNo": PanNo,
+    //            "RequestId": requestId,
+    //            "Documents": documentType,
+    //        ]
+    //
+    //        let url = "ImageManagement/DeleteDocumentsImageOnRequestID"
+    //        apiCall(
+    //            url: url, method: "POST", parameters: parameters as [String: Any],
+    //            view: self.view, loaderText: "Deleting Image..."
+    //        ) { result in
+    //            switch result {
+    //            case .success(let jsonResponse):
+    //                print(
+    //                    "DeleteDocumentsImageOnRequestID Response: \(jsonResponse)")
+    //                if let errorCode = jsonResponse["ErrorCode"] as? String,
+    //                   errorCode == "000000"
+    //                {
+    //                    DispatchQueue.main.async { [self] in
+    //                        switch documentType {
+    //                        case "DERIVATIVE":
+    //                            DispatchQueue.main.async {
+    //                                self.counts(shouldShow: true)
+    //                                self.showAlert(
+    //                                    title: "Success",
+    //                                    message: "Image deleted successfully.")
+    //                            }
+    //                        case "BANK":
+    //                            DispatchQueue.main.async {
+    //                                self.bpcounts(shouldShow: true)
+    //                                BPStackview2.isHidden = false
+    //                                self.showAlert(
+    //                                    title: "Success",
+    //                                    message: "Image bank deleted successfully.")
+    //                            }
+    //                        case "DP_IMAGE":
+    //                            self.diCounts(shouldShow: true)
+    //                            self.showAlert(
+    //                                title: "Success",
+    //                                message: "Image DP_IMAGE deleted successfully.")
+    //                        default:
+    //                            break
+    //                        }
+    //                        completion(true)  // Indicate success
+    //                    }
+    //                } else {
+    //                    print("Unhandled error code: \(jsonResponse)")
+    //                    completion(false)  // Indicate failure
+    //                }
+    //            case .failure(let error):
+    //                print("Failed to delete image: \(error.localizedDescription)")
+    //                completion(false)  // Indicate failure
+    //            }
+    //        }
+    //    }
     
     func UpdateFinalStatus() {
         
@@ -4641,7 +4691,7 @@ extension DocumentVC {
                 "RegId": RegId,
                 "PanNo": PanNo,
                 "isTermsAndCondition": "true",
-               // "UCCCode": ucccode,
+                // "UCCCode": ucccode,
                 "isCommodityCategoriDone": "0",
                 "CommodityCategoriValue": "",
                 "CommodityCategoriKey": "",
@@ -4700,57 +4750,57 @@ extension DocumentVC {
 }
 
 extension DocumentVC {
-//    func IncomeProof(shouldShow: Bool) {
-//        IPLabel1.isHidden = !shouldShow
-//        IpView1.isHidden = !shouldShow
-//        IPLabel2.isHidden = !shouldShow
-//        IPStackView1.isHidden = !shouldShow
-//        incomeProofmsg.isHidden = !shouldShow
-//        //IPStackView2.isHidden = !shouldShow
-//        IPCollectionView.isHidden = false
-//        //IPDocumentView.isHidden = !shouldShow
-//        if let documentType = incomeproofDocumenttype, !documentType.isEmpty {
-//            IPStackView2.isHidden = !shouldShow
-//        } else {
-//            IPStackView2.isHidden = true
-//        }
-//        
-//        // Conditionally hide or show additional elements based on incomeproofDocumenttypetext
-//        if let documentTypeText = incomeproofDocumenttypetext,
-//           !documentTypeText.isEmpty,
-//           documentTypeText == "Latest ITR" || documentTypeText == "Form 16"
-//        {
-//            
-//            // Show the relevant elements if conditions are met
-//            iplabel3.isHidden = !shouldShow
-//           // yearBtn.isHidden = !shouldShow
-//            // incomeProofVerifyBtn.isHidden = !shouldShow // Uncomment if needed
-//        } else {
-//            // Hide the elements if conditions are not met
-//            iplabel3.isHidden = true
-//            yearBtn.isHidden = true
-//            // incomeProofVerifyBtn.isHidden = true // Uncomment if needed
-//        }
-//        
-//        // New condition to check imageUrls count and set visibility for IPCollectionView and IPDocumentView
-//        self.counts(shouldShow: shouldShow)
-//        if imageUrls.isEmpty {
-//            IPCollectionView.isHidden = true
-//            IPDocumentView.isHidden = true
-//        } else {
-//            IPCollectionView.isHidden = !shouldShow
-//            IPDocumentView.isHidden = !shouldShow
-//        }
-//        if ipverify == "Y" {
-//            self.verifyIP()
-//        }
-//        
-//        if DerivativeImages_Verify == "0" {
-//            print("varify is pending")
-//        } else {
-//            IPDocumentView.isHidden = true
-//        }
-//    }
+    //    func IncomeProof(shouldShow: Bool) {
+    //        IPLabel1.isHidden = !shouldShow
+    //        IpView1.isHidden = !shouldShow
+    //        IPLabel2.isHidden = !shouldShow
+    //        IPStackView1.isHidden = !shouldShow
+    //        incomeProofmsg.isHidden = !shouldShow
+    //        //IPStackView2.isHidden = !shouldShow
+    //        IPCollectionView.isHidden = false
+    //        //IPDocumentView.isHidden = !shouldShow
+    //        if let documentType = incomeproofDocumenttype, !documentType.isEmpty {
+    //            IPStackView2.isHidden = !shouldShow
+    //        } else {
+    //            IPStackView2.isHidden = true
+    //        }
+    //
+    //        // Conditionally hide or show additional elements based on incomeproofDocumenttypetext
+    //        if let documentTypeText = incomeproofDocumenttypetext,
+    //           !documentTypeText.isEmpty,
+    //           documentTypeText == "Latest ITR" || documentTypeText == "Form 16"
+    //        {
+    //
+    //            // Show the relevant elements if conditions are met
+    //            iplabel3.isHidden = !shouldShow
+    //           // yearBtn.isHidden = !shouldShow
+    //            // incomeProofVerifyBtn.isHidden = !shouldShow // Uncomment if needed
+    //        } else {
+    //            // Hide the elements if conditions are not met
+    //            iplabel3.isHidden = true
+    //            yearBtn.isHidden = true
+    //            // incomeProofVerifyBtn.isHidden = true // Uncomment if needed
+    //        }
+    //
+    //        // New condition to check imageUrls count and set visibility for IPCollectionView and IPDocumentView
+    //        self.counts(shouldShow: shouldShow)
+    //        if imageUrls.isEmpty {
+    //            IPCollectionView.isHidden = true
+    //            IPDocumentView.isHidden = true
+    //        } else {
+    //            IPCollectionView.isHidden = !shouldShow
+    //            IPDocumentView.isHidden = !shouldShow
+    //        }
+    //        if ipverify == "Y" {
+    //            self.verifyIP()
+    //        }
+    //
+    //        if DerivativeImages_Verify == "0" {
+    //            print("varify is pending")
+    //        } else {
+    //            IPDocumentView.isHidden = true
+    //        }
+    //    }
     
     func IncomeProof(shouldShow: Bool) {
         
@@ -4791,13 +4841,13 @@ extension DocumentVC {
         if ipverify == "Y" {
             self.verifyIP()
         }
-//        if DerivativeImages_Verify != "0" {
-//            IPDocumentView.isHidden = false
-//        }
-//        if !imageUrls.isEmpty {
-//               IPCollectionView.isHidden = false
-//               IPDocumentView.isHidden = false
-//           }
+        //        if DerivativeImages_Verify != "0" {
+        //            IPDocumentView.isHidden = false
+        //        }
+        //        if !imageUrls.isEmpty {
+        //               IPCollectionView.isHidden = false
+        //               IPDocumentView.isHidden = false
+        //           }
     }
     
     func counts(shouldShow: Bool) {
@@ -4818,6 +4868,12 @@ extension DocumentVC {
                     incomeProofNoBtn.isEnabled = false
                     incomeProofYesBtn.isEnabled = true
                     IPCollectionView.isHidden = !shouldShow
+                    
+                    if DerivativeImages_Verify != "0" {
+                                      incomeProofVerifyBtn.isHidden = true
+                                  } else {
+                                      incomeProofVerifyBtn.isHidden = false
+                                  }
                 } else if imageUrls.isEmpty {
                     incomeProofuploadBtn.isHidden = false
                     IPCollectionView.isHidden = true
@@ -4831,6 +4887,11 @@ extension DocumentVC {
                     IPStackView2.isHidden = !shouldShow
                     incomeProofuploadBtn.isHidden = false
                     incomeProofVerifyBtn.isHidden = true  // Hide Verify button when count is less than required
+                    if DerivativeImages_Verify != "0" {
+                                        incomeProofVerifyBtn.isHidden = true
+                                    } else {
+                                        incomeProofVerifyBtn.isHidden = false
+                                    }
                     self.incomeProofDocumentTypeBtn.isEnabled = false
                     incomeProofNoBtn.isEnabled = false
                 }
@@ -4980,25 +5041,25 @@ extension DocumentVC {
         }
     }
     
-//    func CurrentSignature(shouldShow: Bool) {
-//        CSLabel1.isHidden = !shouldShow
-//        //        CSStackView1.isHidden = !shouldShow
-//        // CsCollectionView.isHidden = !shouldShow
-//        //CSDocumentView.isHidden = !shouldShow
-//        if SignatureImage_Verify == nil {
-//            print("varify is pending")
-//            CSDocumentView.isHidden = true
-//            CSStackView1.isHidden = !shouldShow
-//        } else {
-//            CSDocumentView.isHidden = !shouldShow
-//            CSStackView1.isHidden = true
-//        }
-//        //        if panCopyDocumentType == ""{
-//        //            CSStackView1.isHidden = true
-//        //        }else{
-//        //            CSStackView1.isHidden = !shouldShow
-//        //        }
-//    }
+    //    func CurrentSignature(shouldShow: Bool) {
+    //        CSLabel1.isHidden = !shouldShow
+    //        //        CSStackView1.isHidden = !shouldShow
+    //        // CsCollectionView.isHidden = !shouldShow
+    //        //CSDocumentView.isHidden = !shouldShow
+    //        if SignatureImage_Verify == nil {
+    //            print("varify is pending")
+    //            CSDocumentView.isHidden = true
+    //            CSStackView1.isHidden = !shouldShow
+    //        } else {
+    //            CSDocumentView.isHidden = !shouldShow
+    //            CSStackView1.isHidden = true
+    //        }
+    //        //        if panCopyDocumentType == ""{
+    //        //            CSStackView1.isHidden = true
+    //        //        }else{
+    //        //            CSStackView1.isHidden = !shouldShow
+    //        //        }
+    //    }
     func PANCopy(shouldShow: Bool) {
         PCLabel1.isHidden = !shouldShow
         PCLabel2.isHidden = !shouldShow
@@ -5086,11 +5147,21 @@ extension DocumentVC {
         if diVerify == "Y" {
             self.verifyDI()
         }
-        if DP_IMAGEID_Verify == 0 {
-            
-            print("varify is pending")
-        } else {
+        if dematimageUrls.isEmpty {
+            DICollectionView.isHidden = true
             DIDocumentView.isHidden = true
+        } else {
+            DICollectionView.isHidden = false
+            DIDocumentView.isHidden = false
+        }
+        
+        if diVerify == "Y" {
+            self.verifyDI()
+        }
+        if DP_IMAGEID_Verify != 0 {
+            DispatchQueue.main.async {
+                self.DematImageVerifyBtn.isHidden = true
+            }
         }
         
     }
@@ -5101,7 +5172,12 @@ extension DocumentVC {
                 if dematimageUrls.count >= 1 {
                     DematImgBtn.isHidden = true
                     DIStackView2.isHidden = true
-                    DematImageVerifyBtn.isHidden = true
+                    if DP_IMAGEID_Verify == 0 {
+                                  DematImageVerifyBtn.isHidden = false
+                              } else {
+                                  DematImageVerifyBtn.isHidden = true  // ✅ Hide when verified
+                              }
+                    
                     dematNoBtn.isEnabled = false
                     dematYesBtn.isEnabled = true
                 } else if dematimageUrls.isEmpty {
@@ -5110,9 +5186,16 @@ extension DocumentVC {
                     dematNoBtn.isEnabled = true
                     dematYesBtn.isEnabled = true
                     DematImgBtn.isHidden = false
+                    DematImageVerifyBtn.isHidden = true
                 } else {
                     DIStackView2.isHidden = !shouldShow
-                    DematImageVerifyBtn.isHidden = true
+                    
+                    // Only show verify button if not already verified
+                    if DP_IMAGEID_Verify == 0 {
+                        DematImageVerifyBtn.isHidden = false
+                    } else {
+                        DematImageVerifyBtn.isHidden = true
+                    }
                 }
             }
         case "IMAGE":
@@ -5120,15 +5203,29 @@ extension DocumentVC {
                 if dematimageUrls.count >= 5 {
                     DIStackView2.isHidden = true
                     DematImageVerifyBtn.isHidden = false
+                    
+                    if DP_IMAGEID_Verify == 0 {
+                        DematImageVerifyBtn.isHidden = false
+                    } else {
+                        DematImageVerifyBtn.isHidden = true
+                    }
                 } else if dematimageUrls.isEmpty {
                     DICollectionView.isHidden = true
                     DIDocumentView.isHidden = true
                     dematNoBtn.isEnabled = true
                     dematYesBtn.isEnabled = true
                     DematImgBtn.isHidden = false
+                    DematImageVerifyBtn.isHidden = true
                 } else {
                     DIStackView2.isHidden = !shouldShow
-                    DematImageVerifyBtn.isHidden = false
+                    
+                    // Only show verify button if not already verified
+                    if DP_IMAGEID_Verify == 0 {
+                        DematImageVerifyBtn.isHidden = false
+                    } else {
+                        DematImageVerifyBtn.isHidden = true
+                    }
+                    
                     dematNoBtn.isEnabled = true
                     dematYesBtn.isEnabled = false
                 }
@@ -5438,7 +5535,7 @@ extension DocumentVC: UICollectionViewDelegate, UICollectionViewDataSource {
             } else {
                 cell.deleteButton.isHidden = false  // Default case
             }
-       
+            
         } else if collectionView == BpCollectionView {
             imageUrlString = bpImageUrls[indexPath.row]
             if rejection1 == "Rejection", BankImages_Verify == "2" {
@@ -5481,44 +5578,44 @@ extension DocumentVC: UICollectionViewDelegate, UICollectionViewDataSource {
         return cell
     }
     
-//    func didTapDeleteButton(
-//        at indexPath: IndexPath, in collectionView: UICollectionView
-//    ) {
-//        if collectionView == incomeProofCollectionView {
-//            // Handle deletion for incomeProofCollectionView
-//            if indexPath.row < imageUrls.count {
-//                imageUrls.remove(at: indexPath.row)
-//                //DerivativeImages_Verify = "0"
-//                DispatchQueue.main.async {
-//                    self.incomeProofCollectionView.reloadData()
-//                    self.showAlert(title: "Deleted", message: "Income proof image removed successfully.")
-//                }
-//                print("Locally deleted image at index: \(indexPath.row) from incomeProofCollectionView")
-//            }
-//        } else if collectionView == BpCollectionView {
-//        // Handle deletion for BpCollectionView
-//        if indexPath.row < bpImageUrls.count {
-//            bpImageUrls.remove(at: indexPath.row)
-//           // BankImages_Verify = "0"
-//            DispatchQueue.main.async {
-//                self.BpCollectionView.reloadData()
-//                self.showAlert(title: "Deleted", message: "Bank proof image removed successfully.")
-//            }
-//            print("Locally deleted image at index: \(indexPath.row) from BpCollectionView")
-//        }
-//    } else if collectionView == DICollectionView {
-//        // Handle deletion for DICollectionView
-//        if indexPath.row < dematimageUrls.count {
-//            dematimageUrls.remove(at: indexPath.row)
-//           // DP_IMAGEID_Verify = 0
-//            DispatchQueue.main.async {
-//                self.DICollectionView.reloadData()
-//                self.showAlert(title: "Deleted", message: "Demat image removed successfully.")
-//            }
-//            print("Locally deleted image at index: \(indexPath.row) from DICollectionView")
-//        }
-//    }
-//}
+    //    func didTapDeleteButton(
+    //        at indexPath: IndexPath, in collectionView: UICollectionView
+    //    ) {
+    //        if collectionView == incomeProofCollectionView {
+    //            // Handle deletion for incomeProofCollectionView
+    //            if indexPath.row < imageUrls.count {
+    //                imageUrls.remove(at: indexPath.row)
+    //                //DerivativeImages_Verify = "0"
+    //                DispatchQueue.main.async {
+    //                    self.incomeProofCollectionView.reloadData()
+    //                    self.showAlert(title: "Deleted", message: "Income proof image removed successfully.")
+    //                }
+    //                print("Locally deleted image at index: \(indexPath.row) from incomeProofCollectionView")
+    //            }
+    //        } else if collectionView == BpCollectionView {
+    //        // Handle deletion for BpCollectionView
+    //        if indexPath.row < bpImageUrls.count {
+    //            bpImageUrls.remove(at: indexPath.row)
+    //           // BankImages_Verify = "0"
+    //            DispatchQueue.main.async {
+    //                self.BpCollectionView.reloadData()
+    //                self.showAlert(title: "Deleted", message: "Bank proof image removed successfully.")
+    //            }
+    //            print("Locally deleted image at index: \(indexPath.row) from BpCollectionView")
+    //        }
+    //    } else if collectionView == DICollectionView {
+    //        // Handle deletion for DICollectionView
+    //        if indexPath.row < dematimageUrls.count {
+    //            dematimageUrls.remove(at: indexPath.row)
+    //           // DP_IMAGEID_Verify = 0
+    //            DispatchQueue.main.async {
+    //                self.DICollectionView.reloadData()
+    //                self.showAlert(title: "Deleted", message: "Demat image removed successfully.")
+    //            }
+    //            print("Locally deleted image at index: \(indexPath.row) from DICollectionView")
+    //        }
+    //    }
+    //}
     func didTapDeleteButton(at indexPath: IndexPath, in collectionView: UICollectionView) {
         var imageUrlString: String?
         var documentType: String?
@@ -5579,6 +5676,7 @@ extension DocumentVC: UICollectionViewDelegate, UICollectionViewDataSource {
                     if success {
                         DispatchQueue.main.async {
                             self?.removeImageLocally(at: indexPath, in: collectionView)
+                            self?.resetDocumentUIAfterDelete(documentType: docType)
                             self?.showAlert(title: "Success", message: "Document deleted successfully.")
                         }
                     } else {
@@ -5593,16 +5691,145 @@ extension DocumentVC: UICollectionViewDelegate, UICollectionViewDataSource {
         } else {
             // For non-rejection flow or non-rejected documents, just remove locally
             removeImageLocally(at: indexPath, in: collectionView)
+            resetDocumentUIAfterDelete(documentType: docType)
             showAlert(title: "Deleted", message: "Image removed locally.")
         }
     }
-
+    
+    func resetDocumentUIAfterDelete(documentType: String) {
+        switch documentType {
+        case "DERIVATIVE":
+            // Reset Income Proof UI
+            DispatchQueue.main.async { [self] in
+                // Reset verification status
+                DerivativeImages_Verify = nil
+                ipverify = nil
+                
+                // Show upload button
+                incomeProofuploadBtn.isHidden = false
+                
+                // Hide verify button until new upload
+                incomeProofVerifyBtn.isHidden = true
+                
+                // Reset document type button state
+                incomeProofDocumentTypeBtn.isEnabled = true
+                incomeProofYearBtn.isEnabled = true
+                
+                // Reset PDF/Image buttons
+                incomeProofNoBtn.isEnabled = true
+                incomeProofYesBtn.isEnabled = true
+                
+                // Show stack views again
+                IPStackView2.isHidden = false
+                
+                // Hide collection view if no images left
+                if imageUrls.isEmpty {
+                    IPCollectionView.isHidden = true
+                    IPDocumentView.isHidden = true
+                }
+                
+                // Reset status label
+                incomeproofStatusLabel.isHidden = true
+                incomeproofStatusLabel.text = ""
+                
+                // Reload collection view
+                incomeProofCollectionView.reloadData()
+                
+                // Refresh from server to get updated status
+                ViewDocumentDetails()
+            }
+            
+        case "BANK":
+            // Reset Bank Proof UI
+            DispatchQueue.main.async { [self] in
+                // Reset verification status
+                BankImages_Verify = nil
+                bpverify = nil
+                
+                // Show upload button
+                BANKPROOFBTN.isHidden = false
+                
+                // Hide verify button until new upload
+                bankProofVerifyBtn.isHidden = true
+                
+                // Reset document type button state
+                BankProofDocumentTypeBtn.isEnabled = true
+                
+                // Reset PDF/Image buttons
+                BankProofNoBtn.isEnabled = true
+                BankProofYesBtn.isEnabled = true
+                
+                // Show stack views again
+                BPStackview2.isHidden = false
+                
+                // Hide collection view if no images left
+                if bpImageUrls.isEmpty {
+                    BpCollectionView.isHidden = true
+                    BPDocumentView.isHidden = true
+                }
+                
+                // Reset description label
+                BPdescriptionLabel.isHidden = true
+                BPdescriptionLabel.text = ""
+                
+                // Reload collection view
+                BpCollectionView.reloadData()
+                
+                // Refresh from server to get updated status
+                ViewDocumentDetails()
+            }
+            
+        case "DP_IMAGE":
+            // Reset Demat UI
+            DispatchQueue.main.async { [self] in
+                // Reset verification status
+                DP_IMAGEID_Verify = nil
+                diVerify = nil
+                
+                // Show upload button
+                DematImgBtn.isHidden = false
+                
+                // Hide verify button until new upload
+                DematImageVerifyBtn.isHidden = true
+                
+                // Reset PDF/Image buttons
+                dematNoBtn.isEnabled = true
+                dematYesBtn.isEnabled = true
+                
+                // Show stack views again
+                DIStackView2.isHidden = false
+                
+                // Hide collection view if no images left
+                if dematimageUrls.isEmpty {
+                    DICollectionView.isHidden = true
+                    DIDocumentView.isHidden = true
+                }
+                
+                // Reset description label
+                dematDescriptionLabel.isHidden = true
+                dematDescriptionLabel.text = ""
+                
+                // Reload collection view
+                DICollectionView.reloadData()
+                
+                // Refresh from server to get updated status
+                ViewDocumentDetails()
+            }
+            
+        default:
+            break
+        }
+    }
+    
     // Helper function to remove image locally
     func removeImageLocally(at indexPath: IndexPath, in collectionView: UICollectionView) {
         if collectionView == incomeProofCollectionView {
             imageUrls.remove(at: indexPath.row)
             if imageUrls.isEmpty {
                 DerivativeImages_Verify = nil
+                incomeProofuploadBtn.isHidden = false
+                IPCollectionView.isHidden = true
+                IPDocumentView.isHidden = true
             }
             DispatchQueue.main.async {
                 self.incomeProofCollectionView.reloadData()
@@ -5611,6 +5838,9 @@ extension DocumentVC: UICollectionViewDelegate, UICollectionViewDataSource {
             bpImageUrls.remove(at: indexPath.row)
             if bpImageUrls.isEmpty {
                 BankImages_Verify = nil
+                BANKPROOFBTN.isHidden = false
+                BpCollectionView.isHidden = true
+                BPDocumentView.isHidden = true
             }
             DispatchQueue.main.async {
                 self.BpCollectionView.reloadData()
@@ -5619,13 +5849,16 @@ extension DocumentVC: UICollectionViewDelegate, UICollectionViewDataSource {
             dematimageUrls.remove(at: indexPath.row)
             if dematimageUrls.isEmpty {
                 DP_IMAGEID_Verify = nil
+                DematImgBtn.isHidden = false
+                DICollectionView.isHidden = true
+                DIDocumentView.isHidden = true
             }
             DispatchQueue.main.async {
                 self.DICollectionView.reloadData()
             }
         }
     }
-
+    
     func extractRequestId(from imageUrlString: String) -> String? {
         // Encode the URL string to handle any special characters
         let encodedUrlString = imageUrlString.addingPercentEncoding(
@@ -5725,6 +5958,7 @@ extension DocumentVC {
                     //self.PCYesBtn.isEnabled = true
                     //self.PCNoBtn.isSelected = false
                     //self.PCYesBtn.isSelected = false
+                    self.ViewDocumentDetails()
                 }
             } else {
                 DispatchQueue.main.async {
@@ -6093,7 +6327,7 @@ extension DocumentVC {
 //        let image = UIImage(data: imageData)
 //        // Use captured image here
 //    }
-//    
+//
 //    @IBAction func incomeProofYearBtn(_ sender: UIButton) {
 //        if let vc = storyboard?.instantiateViewController(
 //            withIdentifier: "yearVC") as? yearVC
@@ -6105,33 +6339,33 @@ extension DocumentVC {
 //            self.present(vc, animated: true, completion: nil)
 //        }
 //    }
-//    
+//
 //    @IBAction func homeBtn(_ sender: UIButton) {
 //        self.navigationController?.popToRootViewController(animated: true)
 //    }
-//    
+//
 //    @IBAction func currentSignatureBtnTapped(_ sender: UIButton) {
 //        identifier = "Signature"
 //        showImageSourceSelection()
 //    }
-//    
+//
 //    @IBAction func drawSignatureBtn(_ sender: UIButton) {
 //        let signatureVC = signatureVC()
-//        
+//
 //        // Pass required parameters if needed
 //        signatureVC.PanNo = PanNo
 //        signatureVC.RegId = RegId
 //        signatureVC.fetchedUserId = fetchedUserId
 //        signatureVC.mobiledecodeArray = mobiledecodeArray
 //        signatureVC.fetchedSessionID = fetchedSessionID
-//        
+//
 //        // Handle the saved signature + API response
 //        signatureVC.onSignatureSaved = { [weak self] image, response in
 //            guard let self = self else { return }
 //            DispatchQueue.main.async {
 //                // ✅ Show the drawn signature in your UIImageView
 //                self.signatureImageview.image = image
-//                
+//
 //                // ✅ Also call your existing UI update method with response
 //                if let response = response {
 //                    self.signatureupdateUI(with: response)
@@ -6144,11 +6378,11 @@ extension DocumentVC {
 //        nav.modalPresentationStyle = .fullScreen
 //        present(nav, animated: true)
 //    }
-//    
-//    
+//
+//
 //    @IBAction func incomeProofUploadBtn(_ sender: UIButton) {
 //        identifier = "IncomeProof"
-//        
+//
 //        switch incomeproofDocumenttype {
 //        case "PDF":
 //            openPDFPicker()
@@ -6158,30 +6392,30 @@ extension DocumentVC {
 //            break
 //        }
 //    }
-//    
+//
 //    @IBAction func doneBtn(_ sender: UIButton) {
 //       // UpdateFinalDoneStatus()
 //        if !validateLocalDocuments() {
 //               return // Alert will be shown by validateLocalDocuments
 //           }
-//           
+//
 //           if panDelete == "PAN deleted" {
 //               showAlert(title: "Alert", message: "upload your PAN Image")
 //               return
 //           }
-//           
+//
 //           // Then check server verification status
 //           self.ViewDocumentDetails()
-//           
+//
 //           DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
 //               guard let self = self else { return }
-//               
+//
 //               var unverifiedSections: [String] = []
-//               
+//
 //               // Check visible sections dynamically
 //               for (section, isVisible) in visibleSections {
 //                   guard isVisible else { continue }
-//                   
+//
 //                   switch section {
 //                   case "IncomeProof":
 //                       // First check local collection view
@@ -6194,7 +6428,7 @@ extension DocumentVC {
 //                                 status != 1 && status != 2 {
 //                           unverifiedSections.append("Income Proof")
 //                       }
-//                       
+//
 //                   case "BankProof":
 //                       if bpImageUrls.isEmpty {
 //                           unverifiedSections.append("Bank Proof (No images uploaded)")
@@ -6205,7 +6439,7 @@ extension DocumentVC {
 //                                 status != 1 && status != 2 {
 //                           unverifiedSections.append("Bank Proof")
 //                       }
-//                       
+//
 //                   case "DematImage":
 //                       if dematimageUrls.isEmpty {
 //                           unverifiedSections.append("Demat (No images uploaded)")
@@ -6216,12 +6450,12 @@ extension DocumentVC {
 //                                 status != 1 && status != 2 {
 //                           unverifiedSections.append("Demat")
 //                       }
-//                       
+//
 //                   default:
 //                       break
 //                   }
 //               }
-//               
+//
 //               // Check Signature (check local image)
 //               if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //                   unverifiedSections.append("Signature (No image uploaded)")
@@ -6232,7 +6466,7 @@ extension DocumentVC {
 //                         status != 1 && status != 2 {
 //                   unverifiedSections.append("Signature")
 //               }
-//               
+//
 //               // Check PAN Copy (check local image)
 //               if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //                   unverifiedSections.append("PAN Copy (No image uploaded)")
@@ -6243,7 +6477,7 @@ extension DocumentVC {
 //                         status != 1 && status != 2 {
 //                   unverifiedSections.append("PAN Copy")
 //               }
-//               
+//
 //               // Check Client Photo (check local image)
 //               if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //                   unverifiedSections.append("Client Photo (No image uploaded)")
@@ -6254,7 +6488,7 @@ extension DocumentVC {
 //                         status != 1 && status != 2 {
 //                   unverifiedSections.append("Client Photo")
 //               }
-//               
+//
 //               // Check Nominees if they exist and have images
 //               if !NomineeDetails1.isHidden {
 //                   if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
@@ -6264,7 +6498,7 @@ extension DocumentVC {
 //                       unverifiedSections.append("Nominee 1")
 //                   }
 //               }
-//               
+//
 //               if !NomineeDetails2.isHidden {
 //                   if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                       unverifiedSections.append("Nominee 2 (No image uploaded)")
@@ -6273,7 +6507,7 @@ extension DocumentVC {
 //                       unverifiedSections.append("Nominee 2")
 //                   }
 //               }
-//               
+//
 //               if !NomineeDetails3.isHidden {
 //                   if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                       unverifiedSections.append("Nominee 3 (No image uploaded)")
@@ -6282,7 +6516,7 @@ extension DocumentVC {
 //                       unverifiedSections.append("Nominee 3")
 //                   }
 //               }
-//               
+//
 //               // Show alert if there are unverified sections
 //               DispatchQueue.main.async {
 //                   if !unverifiedSections.isEmpty {
@@ -6300,68 +6534,68 @@ extension DocumentVC {
 //       // Add this helper method to validate local documents
 //       func validateLocalDocuments() -> Bool {
 //           var missingDocuments: [String] = []
-//           
+//
 //           // Check Income Proof
 //           if IncomeProof.isHidden == false {
 //               if imageUrls.isEmpty {
 //                   missingDocuments.append("Income Proof")
 //               }
 //           }
-//           
+//
 //           // Check Bank Proof
 //           if BankProof.isHidden == false {
 //               if bpImageUrls.isEmpty {
 //                   missingDocuments.append("Bank Proof")
 //               }
 //           }
-//           
+//
 //           // Check Demat
 //           if DematImage.isHidden == false {
 //               if dematimageUrls.isEmpty {
 //                   missingDocuments.append("Demat")
 //               }
 //           }
-//           
+//
 //           // Check Signature
 //           if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //               missingDocuments.append("Signature")
 //           }
-//           
+//
 //           // Check PAN Copy
 //           if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //               missingDocuments.append("PAN Copy")
 //           }
-//           
+//
 //           // Check Client Photo
 //           if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //               missingDocuments.append("Client Photo")
 //           }
-//           
+//
 //           // Check Nominees
 //           if !NomineeDetails1.isHidden {
 //               if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                   missingDocuments.append("Nominee 1")
 //               }
 //           }
-//           
+//
 //           if !NomineeDetails2.isHidden {
 //               if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                   missingDocuments.append("Nominee 2")
 //               }
 //           }
-//           
+//
 //           if !NomineeDetails3.isHidden {
 //               if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                   missingDocuments.append("Nominee 3")
 //               }
 //           }
-//           
+//
 //           if !missingDocuments.isEmpty {
 //               let message = "Please upload the following documents:\n" + missingDocuments.joined(separator: "\n")
 //               showAlert(title: "Missing Documents", message: message)
 //               return false
 //           }
-//           
+//
 //           return true
 //       }
 ////        if panDelete == "PAN deleted" {
@@ -6465,22 +6699,22 @@ extension DocumentVC {
 //                print("No tokens available. Please reload the tokens.")
 //                return
 //            }
-//            
+//
 //            let parameters: [String: Any] = [
 //                "PanNo": self.PanNo,
 //                "RegId": self.RegId,
 //                "DocumentName": "Documents"
 //            ]
-//            
+//
 //            print("6th api params\(parameters)")
 //            let sixthUrl = "MultipartImageUpload/UpdateDocumentModificationStatus"
-//            
+//
 //            // API call
 //            apiCall(url: sixthUrl, method: "POST", parameters: parameters, view: self.view,loaderText: "Kindly wait we are fetching your details...") { result in
 //                switch result {
 //                case .success(let jsonResponse):
 //                    print("UpdateDocumentModificationStatus: \(jsonResponse)")
-//                    
+//
 //                    if let errorCode = jsonResponse["ErrorCode"] as? String {
 //                        switch errorCode {
 //                        case "000000":
@@ -6491,7 +6725,7 @@ extension DocumentVC {
 //                                let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
 //                                self.navigationController?.pushViewController(vc, animated: true)
 //                            }
-//                            
+//
 //                        default:
 //                            print("Unhandled error code: \(errorCode)")
 //                        }
@@ -6502,24 +6736,24 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    @IBAction func submitBtn(_ sender: UIButton) {
 //        if panDelete == "PAN deleted" {
 //            showAlert(title: "Alert", message: "upload your PAN Image")
 //            return
 //        }
 //        self.ViewDocumentDetails()
-//        
+//
 //        DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
 //            [weak self] in
 //            guard let self = self else { return }
-//            
+//
 //            var unverifiedSections: [String] = []
-//            
+//
 //            // Check visible sections dynamically
 //            for (section, isVisible) in visibleSections {
 //                guard isVisible else { continue }
-//                
+//
 //                switch section {
 //                case "IncomeProof":
 //                    if let status = jsonResponse["DerivativeImages_Verify"]
@@ -6532,7 +6766,7 @@ extension DocumentVC {
 //                    {
 //                        unverifiedSections.append("Income Proof")
 //                    }
-//                    
+//
 //                case "BankProof":
 //                    if let status = jsonResponse["BankImages_Verify"]
 //                        as? String, status != "1" && status != "2"
@@ -6543,7 +6777,7 @@ extension DocumentVC {
 //                    {
 //                        unverifiedSections.append("Bank Proof")
 //                    }
-//                    
+//
 //                case "DematImage":
 //                    if let status = jsonResponse["DP_IMAGEID_Verify"]
 //                        as? String, status != "1" && status != "2"
@@ -6554,7 +6788,7 @@ extension DocumentVC {
 //                    {
 //                        unverifiedSections.append("Demat")
 //                    }
-//                    
+//
 ////                case "NomineeDetails1":
 ////                    if let nominee = jsonResponse["NOMINEE_1Images_Verify"]
 ////                        as? String, nominee != "1" && nominee != "2"
@@ -6590,19 +6824,19 @@ extension DocumentVC {
 ////                    {
 ////                        unverifiedSections.append("Nominee 3 Details")
 ////                    }
-//                    
+//
 //                default:
 //                    break
 //                }
 //            }
-//            
+//
 //            // Explicitly check Signature, PAN Copy, and Client Photo
 //            let additionalChecks: [String: String] = [
 //                "SignatureImage_Verify": "Signature",
 //                "ClientPhotoImageID_Verify": "Client Photo"
 ////                "PANImage_Verify": "PAN Copy"
 //            ]
-//            
+//
 //            for (key, sectionName) in additionalChecks {
 //                if let status = jsonResponse[key] as? String,
 //                   status != "1" && status != "2"
@@ -6614,7 +6848,7 @@ extension DocumentVC {
 //                    unverifiedSections.append(sectionName)
 //                }
 //            }
-//            
+//
 //            // Show alert if there are unverified sections
 //            DispatchQueue.main.async {
 //                if !unverifiedSections.isEmpty {
@@ -6630,7 +6864,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //        func navigateToNextStep() {
 //            if let rejectionValue = rejection, !rejectionValue.isEmpty {
 //                UpdateDocumentModificationStatus()
@@ -6641,13 +6875,13 @@ extension DocumentVC {
 //                as! uccVC
 //                vc.modalPresentationStyle = .overCurrentContext
 //                vc.modalTransitionStyle = .crossDissolve
-//    
+//
 //                vc.delegate = self
-//    
+//
 //                self.present(vc, animated: true)
 //            }
 //        }
-//    
+//
 //    @IBAction func incomeProofDocumentTypeBtn(_ sender: UIButton) {
 //        if let vc = storyboard?.instantiateViewController(
 //            withIdentifier: "incomeproofDocumentVC") as? incomeproofDocumentVC
@@ -6659,14 +6893,14 @@ extension DocumentVC {
 //            self.present(vc, animated: true, completion: nil)
 //        }
 //    }
-//    
+//
 //    @IBAction func incomeproofYesNoBtnPressed(_ sender: UIButton) {
 //        if sender == incomeProofYesBtn {
 //            incomeProofYesBtn.isSelected = true
 //            incomeProofNoBtn.isSelected = false
 //            incomeproofDocumenttype = "PDF"
 //            IPStackView2.isHidden = false
-//            
+//
 //        } else if sender == incomeProofNoBtn {
 //            incomeProofYesBtn.isSelected = false
 //            incomeProofNoBtn.isSelected = true
@@ -6674,7 +6908,7 @@ extension DocumentVC {
 //            IPStackView2.isHidden = false
 //        }
 //    }
-//    
+//
 //    @IBAction func incomeProofVerifyBtn(_ sender: UIButton) {
 //        incomeProofOcrCount += 1
 //        DocumentVerify(
@@ -6682,13 +6916,13 @@ extension DocumentVC {
 //            DocumentType: incomeproofDocumenttypetext ?? "",
 //            ocrCount: incomeProofOcrCount)
 //    }
-//    
+//
 //    func didselectdocument(documenttype: String, identifier: String) {
 //        switch identifier {
 //        case "incomeProof":
 //            self.incomeproofDocumentTypeLabel.text = documenttype
 //            incomeproofDocumenttypetext = documenttype
-//            
+//
 //            print("income", incomeproofDocumenttypetext!)
 //            switch documenttype {
 //            case "Six Month Bank Statement":
@@ -6726,7 +6960,7 @@ extension DocumentVC {
 //                iplabel3.isHidden = true
 //                yearBtn.isHidden = true
 //                IPStackView1.isHidden = false
-//                
+//
 //            case "Demat Account Holding with Value":
 //                incomeProofVerifyBtn.isHidden = true
 //                iplabel3.isHidden = true
@@ -6760,16 +6994,16 @@ extension DocumentVC {
 //        case "IncomeYear":
 //            self.incomeProofYearBtn.setTitle(documenttype, for: .normal)
 //            year = documenttype
-//            
+//
 //            //bankproofDocumentTypetext = documenttype
 //        default:
 //            break
 //        }
 //    }
-//    
+//
 //    @IBAction func bankProofMediaUploadButton(_ sender: UIButton) {
 //        identifier = "BankProof"
-//        
+//
 //        //bankproofDocumentType
 //        switch bankproofDocumentType {
 //        case "PDF":
@@ -6797,13 +7031,13 @@ extension DocumentVC {
 //            BankProofNoBtn.isSelected = false
 //            bankproofDocumentType = "PDF"
 //            BPStackview2.isHidden = false
-//            
+//
 //        } else if sender == BankProofNoBtn {
 //            BankProofYesBtn.isSelected = false
 //            BankProofNoBtn.isSelected = true
 //            bankproofDocumentType = "IMAGE"
 //            BPStackview2.isHidden = false
-//            
+//
 //        }
 //    }
 //    @IBAction func bankProofVerifyBtn(_ sender: UIButton) {
@@ -6812,7 +7046,7 @@ extension DocumentVC {
 //            DocumentName: "BANK", DocumentType: bankproofDocumentTypetext ?? "",
 //            ocrCount: bankOcrCount)
 //    }
-//    
+//
 //    @IBAction func panCopyUploadBtn(_ sender: UIButton) {
 //        //           identifier = "PanCopy"
 //        //           showImageSourceSelection()
@@ -6839,39 +7073,39 @@ extension DocumentVC {
 //                PCStackView.isHidden = true
 //            }
 //            //            PCStackView.isHidden = false
-//            
+//
 //        } else if sender == PCNoBtn {
 //            PCYesBtn.isSelected = false
 //            PCNoBtn.isSelected = true
 //            panCopyDocumentType = "IMAGE"
 //            //PCStackView.isHidden = false
-//            
+//
 //        }
-//        
+//
 //    }
-//    
+//
 //    // Function to show the alert for camera and gallery selection
 //    func showImageSourceSelection() {
 //        let alertController = UIAlertController(
 //            title: "Choose Image", message: nil, preferredStyle: .actionSheet)
-//        
+//
 //        let cameraAction = UIAlertAction(title: "Camera", style: .default) {
 //            _ in
 //            self.openCamera()
 //        }
-//        
+//
 //        let galleryAction = UIAlertAction(title: "Gallery", style: .default) {
 //            _ in
 //            self.openGallery()
 //        }
-//        
+//
 //        let cancelAction = UIAlertAction(
 //            title: "Cancel", style: .cancel, handler: nil)
-//        
+//
 //        alertController.addAction(cameraAction)
 //        alertController.addAction(galleryAction)
 //        alertController.addAction(cancelAction)
-//        
+//
 //        // For iPad compatibility
 //        if let popoverController = alertController.popoverPresentationController
 //        {
@@ -6881,10 +7115,10 @@ extension DocumentVC {
 //                height: 0)
 //            popoverController.permittedArrowDirections = []
 //        }
-//        
+//
 //        present(alertController, animated: true, completion: nil)
 //    }
-//    
+//
 //    // Open Camera
 //    func openCamera() {
 //        if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -6896,7 +7130,7 @@ extension DocumentVC {
 //            showAlert(title: "Error", message: "Camera not available.")
 //        }
 //    }
-//    
+//
 //    // Open Gallery
 //    func openGallery() {
 //        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
@@ -6908,7 +7142,7 @@ extension DocumentVC {
 //            showAlert(title: "Error", message: "Gallery not available.")
 //        }
 //    }
-//    
+//
 //    // UIImagePickerController delegate function to handle selected image
 //    func imagePickerController(
 //        _ picker: UIImagePickerController,
@@ -6927,20 +7161,20 @@ extension DocumentVC {
 //        //                }
 //        //            }
 //        //        }
-//        
+//
 //        if let capturedImage = info[.originalImage] as? UIImage {
 //            // ✅ Now send this capturedImage to your API
 //            ValidateIsPhotoDone(image: capturedImage)
 //        }
-//        
+//
 //        guard let image = info[.originalImage] as? UIImage else {
 //            return
 //        }
 //        picker.dismiss(animated: true)
-//        
+//
 //        showCrop(image: image)
 //    }
-//    
+//
 //    func showCrop(image: UIImage) {
 //        let vc = CropViewController(croppingStyle: .default, image: image)
 //        vc.aspectRatioPreset = .presetSquare
@@ -6951,21 +7185,21 @@ extension DocumentVC {
 //        vc.delegate = self
 //        present(vc, animated: true)
 //    }
-//    
+//
 //    func cropViewController(
 //        _ cropViewController: CropViewController,
 //        didFinishCancelled cancelled: Bool
 //    ) {
 //        cropViewController.dismiss(animated: true)
 //    }
-//    
+//
 //    func cropViewController(
 //        _ cropViewController: CropViewController, didCropToImage image: UIImage,
 //        withRect cropRect: CGRect, angle: Int
 //    ) {
 //        cropViewController.dismiss(animated: true)
 //        print("did Crop")
-//        
+//
 //        // let imageView = UIImageView(frame: view.frame)
 //        guard let compressedData = image.jpegData(compressionQuality: 0.1)
 //        else { return }
@@ -6979,7 +7213,7 @@ extension DocumentVC {
 //    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
 //        picker.dismiss(animated: true, completion: nil)
 //    }
-//    
+//
 //    // Helper function to show alert messages
 //    func showAlert(title: String, message: String) {
 //        let alert = UIAlertController(
@@ -6988,7 +7222,7 @@ extension DocumentVC {
 //        alert.addAction(okAction)
 //        present(alert, animated: true, completion: nil)
 //    }
-//    
+//
 //    // MARK: - CLLocationManagerDelegate
 //    func locationManager(
 //        _ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]
@@ -7001,25 +7235,25 @@ extension DocumentVC {
 //        //        CP_Long_Lat_Lbl.text = "Latitude: \(latitude), Longitude: \(longitude)"
 //        //        CP_Location_label.text = "Latitude: \(latitude), Longitude: \(longitude)"
 //        // Use location.coordinate.latitude and location.coordinate.longitude
-//        
+//
 //        guard let location = locations.last else { return }
 //        let latitude = location.coordinate.latitude
 //        let longitude = location.coordinate.longitude
 //        print("Latitude: \(latitude), Longitude: \(longitude)")
-//        
+//
 //        // Update labels
 //        CP_Long_Lat_Lbl.text = "Latitude: \(latitude), Longitude: \(longitude)"
 //        CP_Location_label.text =
 //        "Latitude: \(latitude), Longitude: \(longitude)"
-//        
+//
 //        // Store location for later use
 //        self.Latitude = "\(latitude)"
 //        self.Longitude = "\(longitude)"
-//        
+//
 //        // Stop location updates to conserve battery
 //        locationManager.stopUpdatingLocation()
 //    }
-//    
+//
 //    @IBAction func capturePhotoButtonPressed(_ sender: UIButton) {
 //        locationManager = CLLocationManager()
 //        locationManager.delegate = self
@@ -7027,8 +7261,8 @@ extension DocumentVC {
 //        locationManager.startUpdatingLocation()
 //        identifier = "ClientPhoto"
 //        DispatchQueue.main.async { [self] in
-//            
-//            
+//
+//
 //            self.GetUserLocation(Longitude: Longitude ?? "", Latitude: Latitude ?? "")
 //            self.SavePhotoAuditLogDetails()
 //        }
@@ -7040,15 +7274,15 @@ extension DocumentVC {
 //    //
 //    //        let settings = AVCapturePhotoSettings()
 //    //        photoOutput.capturePhoto(with: settings, delegate: self)
-//    
-//    
+//
+//
 //    @IBAction func IPVlinkBtn(_ sender: UIButton) {
 //        InsertUpdateIPVAuditLog()
 //    }
-//    
+//
 //    @IBAction func dematUploadBtn(_ sender: UIButton) {
 //        identifier = "Demat"
-//        
+//
 //        //dematDocumentType
 //        switch dematDocumentType {
 //        case "PDF":
@@ -7058,7 +7292,7 @@ extension DocumentVC {
 //        default:
 //            break
 //        }
-//        
+//
 //    }
 //    @IBAction func DematYesNoBtnPressed(_ sender: UIButton) {
 //        if sender == dematYesBtn {
@@ -7066,13 +7300,13 @@ extension DocumentVC {
 //            dematNoBtn.isSelected = false
 //            dematDocumentType = "PDF"
 //            DIStackView2.isHidden = false
-//            
+//
 //        } else if sender == dematNoBtn {
 //            dematYesBtn.isSelected = false
 //            dematNoBtn.isSelected = true
 //            dematDocumentType = "IMAGE"
 //            DIStackView2.isHidden = false
-//            
+//
 //        }
 //    }
 //    @IBAction func DematVerifyBtn(_ sender: UIButton) {
@@ -7081,7 +7315,7 @@ extension DocumentVC {
 //            DocumentName: "DP_IMAGE", DocumentType: "DP_IMAGE",
 //            ocrCount: dematOcrCount)
 //    }
-//    
+//
 //    @IBAction func nominee1UploadBtn(_ sender: UIButton) {
 //        identifier = "NOMINEE_1"
 //        showImageSourceSelection()
@@ -7095,12 +7329,12 @@ extension DocumentVC {
 //        identifier = "NOMINEE_3"
 //        showImageSourceSelection()
 //    }
-//    
+//
 //    @IBAction func BackBtn(_ sender: UIButton) {
 //        delegate?.reloadPageData()
 //        self.navigationController?.popViewController(animated: true)
 //    }
-//    
+//
 //    @IBAction func TermsAndConditionsBtn(_ sender: UIButton) {
 //        if sender.isSelected {
 //            // If the button is selected and user clicks, deselect it and show terms and conditions page
@@ -7111,21 +7345,21 @@ extension DocumentVC {
 //            {
 //                vc.modalPresentationStyle = .overCurrentContext
 //                vc.modalTransitionStyle = .crossDissolve
-//                
+//
 //                // Closure or delegate to set the button to selected when termsVC is dismissed
 //                vc.dismissHandler = { [weak self] in
 //                    self?.termsnconditionBtn.isSelected = true
 //                }
-//                
+//
 //                present(vc, animated: true, completion: nil)
 //            }
 //        }
 //    }
-//    
+//
 //}
 //
 //extension DocumentVC {
-//    
+//
 //    @IBAction func IncomeProofBtn(_ sender: UIButton) {
 //        if sender.isSelected {
 //            sender.isSelected = false
@@ -7207,12 +7441,12 @@ extension DocumentVC {
 //            NomineeDetail3(shouldShow: true)
 //        }
 //    }
-//    
+//
 //}
 //
 //extension DocumentVC {
 //    func ValidateToken() {
-//        
+//
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
 //            guard let tokenId = tokenId else {
@@ -7238,7 +7472,7 @@ extension DocumentVC {
 //            ]
 //            print(parameters)
 //            let Url = "TokenAuthentication/ValidateToken"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view
@@ -7259,7 +7493,7 @@ extension DocumentVC {
 //                                print(
 //                                    "All TokenMobile entries deleted due to error code 999992"
 //                                )
-//                                
+//
 //                                // Regenerate tokens
 //                                CoreDataHelper.generateToken(
 //                                    decodeByteArrayToString: self
@@ -7288,11 +7522,11 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func GetNomineeDocTypeMaster() {
-//        
+//
 //        let Url = "DropDownManagement/GetNomineeDocTypeMaster"
-//        
+//
 //        apiCall(url: Url, method: "POST", parameters: [:], view: self.view) {
 //            result in
 //            switch result {
@@ -7313,9 +7547,9 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func ViewDocumentDetails() {
-//        
+//
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
 //            guard let tokenId = tokenId else {
@@ -7343,7 +7577,7 @@ extension DocumentVC {
 //            ]
 //            print(parameters)
 //            let Url = "Client/ViewDocumentDetails"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view,
@@ -7357,11 +7591,11 @@ extension DocumentVC {
 //                        switch errorCode {
 //                        case "000000":
 //                            DispatchQueue.main.async {
-//                                
+//
 //                                print("api is running")
 //                                self.updateButtonImages(with: jsonResponse)
 //                                self.updateViewVisibility(with: jsonResponse)
-//                                
+//
 //                                if let panDocumentSource = jsonResponse["PanDocumentSource"] as? String, panDocumentSource.uppercased() == "DIGILOCKER" {
 //                                    self.panMsg.text = "PAN card has been fetched successfully."
 //                                 } else {
@@ -7381,7 +7615,7 @@ extension DocumentVC {
 //                                 } else {
 //                                     self.incomeProofmsg.text = ""
 //                                 }
-//                                
+//
 //                                if self.IPVStatus == "IPV" {
 //                                    if let clientPhotoID = jsonResponse["ClientPhotoImageID"] as? String, !clientPhotoID.isEmpty {
 //                                        self.updateClientPhotoUI(with: jsonResponse) // Update only Client Photo UI
@@ -7399,7 +7633,7 @@ extension DocumentVC {
 //                                print(
 //                                    "All TokenMobile entries deleted due to error code 999992"
 //                                )
-//                                
+//
 //                                // Regenerate tokens
 //                                CoreDataHelper.generateToken(
 //                                    decodeByteArrayToString: self
@@ -7439,14 +7673,14 @@ extension DocumentVC {
 //            BankProof.isHidden = false
 //            visibleSections["BankProof"] = true
 //        }
-//        
+//
 //        // Check for "DerivativeImages_Verify" field
 //        if let segments = jsonResponse["Segments"] as? String {
 //            let segmentsArray = segments.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
-//            
+//
 //            let derivativeSegments = ["EQUITY DERIVATIVE", "COMMODITY", "CURRENCY"]
 //            let hasDerivativeSegment = segmentsArray.contains { derivativeSegments.contains($0) }
-//            
+//
 //            // Show DerivativeButton if any derivative-related segment is found
 //            if hasDerivativeSegment {
 //                IncomeProof.isHidden = false
@@ -7460,7 +7694,7 @@ extension DocumentVC {
 //            IncomeProof.isHidden = true
 //            visibleSections["IncomeProof"] = false
 //        }
-//        
+//
 //        // Check for "DP_IMAGEID_Verify" field
 //        if let isDpAccountNew = jsonResponse["IsDpAccountNew"] as? String,
 //           isDpAccountNew == "Y"
@@ -7471,7 +7705,7 @@ extension DocumentVC {
 //            DematImage.isHidden = false
 //            visibleSections["DematImage"] = true
 //        }
-//        
+//
 //        // Check for "NOMINEE_1Images_Verify" field
 ////        if let nominee1ImagesVerify = jsonResponse["Nom1NomineeOrGuardianName"]
 ////            as? String, nominee1ImagesVerify.isEmpty
@@ -7505,7 +7739,7 @@ extension DocumentVC {
 ////            visibleSections["NomineeDetails3"] = true
 ////        }
 //    }
-//    
+//
 //    func updateButtonImages(with jsonResponse: [String: Any]) {
 //        updateButtonImage(
 //            button: bankProofStatusBtn, statusKey: "BankImages_Verify",
@@ -7525,7 +7759,7 @@ extension DocumentVC {
 //        updateButtonImage(
 //            button: dematStatusBtn, statusKey: "DP_IMAGEID_Verify",
 //            jsonResponse: jsonResponse)
-//        
+//
 //        updateButtonImage(
 //            button: nominee1StatusBtn, statusKey: "NOMINEE_1Images_Verify",
 //            jsonResponse: jsonResponse)
@@ -7535,7 +7769,7 @@ extension DocumentVC {
 //        updateButtonImage(
 //            button: nominee3StatusBtn, statusKey: "NOMINEE_3Images_Verify",
 //            jsonResponse: jsonResponse)
-//        
+//
 //        handleDeleteButtonVisibility(with: jsonResponse)
 //    }
 //    func handleDeleteButtonVisibility(with jsonResponse: [String: Any]) {
@@ -7550,7 +7784,7 @@ extension DocumentVC {
 //            nominee3deleteBtn.isHidden = true
 //            return
 //        }
-//        
+//
 //        // If rejection is not "Rejection", hide all delete buttons
 //        if rejection != "Rejection" {
 //            pandeleteBtn.isHidden = true
@@ -7561,43 +7795,43 @@ extension DocumentVC {
 //            nominee3deleteBtn.isHidden = true
 //            return
 //        }
-//        
+//
 //        // Check respective verify values from the JSON response
 //        if let panVerify = jsonResponse["PANImage_Verify"] as? String {
 //            pandeleteBtn.isHidden = panVerify != "2"
 //        }
-//        
+//
 //        if let signatureVerify = jsonResponse["SignatureImage_Verify"]
 //            as? String
 //        {
 //            signaturedeleteBtn.isHidden = signatureVerify != "2"
 //        }
-//        
+//
 //        if let clientPhotoVerify = jsonResponse["ClientPhotoImageID_Verify"]
 //            as? String
 //        {
 //            clientphotodeleteBtn.isHidden = clientPhotoVerify != "2"
 //        }
-//        
+//
 //        if let nominee1Verify = jsonResponse["NOMINEE_1Images_Verify"]
 //            as? String
 //        {
 //            nominee1deleteBtn.isHidden = nominee1Verify != "2"
 //        }
-//        
+//
 //        if let nominee2Verify = jsonResponse["NOMINEE_2Images_Verify"]
 //            as? String
 //        {
 //            nominee2deleteBtn.isHidden = nominee2Verify != "2"
 //        }
-//        
+//
 //        if let nominee3Verify = jsonResponse["NOMINEE_3Images_Verify"]
 //            as? String
 //        {
 //            nominee3deleteBtn.isHidden = nominee3Verify != "2"
 //        }
 //    }
-//    
+//
 //    private func updateButtonImage(
 //        button: UIButton, statusKey: String, jsonResponse: [String: Any]
 //    ) {
@@ -7611,7 +7845,7 @@ extension DocumentVC {
 //            button.setImage(nil, for: .normal)  // No image if status is unavailable
 //            return
 //        }
-//        
+//
 //        // Now, use the `statusValue` as a string for comparison
 //        switch statusValue {
 //        case "0":
@@ -7629,7 +7863,7 @@ extension DocumentVC {
 //            button.setImage(nil, for: .normal)  // Default to no image for unexpected values
 //        }
 //    }
-//    
+//
 //    func ValidateIsPhotoDone(image: UIImage) {
 //        let parameters: [String: Any?] = [
 //            "TransactionID": transactionId,
@@ -7645,9 +7879,9 @@ extension DocumentVC {
 //            "Location": location,
 //            "OCR_Count": "\(ocrCount ?? 1)",
 //        ]
-//        
+//
 //        let apiUrl = "MultiPartImageUpload/ValidateIsPhotoDone"
-//        
+//
 //        DispatchQueue.main.async {
 //            apiCall(url: apiUrl, method: "POST", parameters: parameters as [String: Any], view: self.view) { result in
 //                switch result {
@@ -7658,16 +7892,16 @@ extension DocumentVC {
 //                            switch errorCode {
 //                            case "000000":
 //                                self.ocrCount = 0
-//                                
+//
 //                                self.navigationController?.popViewController(animated: true)
-//                                
+//
 //                            case "801005":
 //                                if self.ocrCount ?? 0 < 2 {
 //                                    self.ocrCount += 1 // Increase count correctly
 //                                }
-//                                
+//
 //                                self.navigationController?.popViewController(animated: true)
-//                                
+//
 //                            default:
 //                                print("Unhandled error code: \(errorCode)")
 //                            }
@@ -7679,12 +7913,12 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //
 //    func updateClientPhotoUI(with response: [String: Any]) {
 //        let latitude = response["Latitude"] as? String ?? "Latitude"
 //        let longitude = response["Longitude"] as? String ?? "Longitude"
-//        
+//
 //        guard let ClientPhotoImageID = response["ClientPhotoImageID"] as? String, !ClientPhotoImageID.isEmpty else {
 //            DispatchQueue.main.async {
 //                self.CPImageView.image = UIImage(systemName: "person.crop.circle.badge.xmark")
@@ -7704,7 +7938,7 @@ extension DocumentVC {
 //
 //            let userIdEncoded = self.fetchedUserId?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
 //            let imageUrlString = "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(ClientPhotoImageID)&ImageType=ThumbNail&UserId=\(userIdEncoded)&TokenId=\(tokenId)"
-//            
+//
 //            print("Full Client Photo URL: \(imageUrlString)")
 //
 //            DispatchQueue.main.async {
@@ -7712,10 +7946,10 @@ extension DocumentVC {
 //                self.CP_Long_Lat_Lbl.text = "Your Lat/Long \n \(latitude), \(longitude)"
 //                self.GetUserLocation(Longitude: longitude, Latitude: latitude)
 //                self.CPImageView.restorationIdentifier = "CLIENTPHOTO"
-//                
+//
 //                // Load image into CPImageView
 //                self.loadImage(from: imageUrlString, into: self.CPImageView, with: "CLIENTPHOTO")
-//                
+//
 //                // Force UI refresh
 //                self.CPImageView.setNeedsDisplay()
 //                self.CPImageView.setNeedsLayout()
@@ -7776,7 +8010,7 @@ extension DocumentVC {
 //                //                self.signatureImageview.image = UIImage(systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        // Update NOMINEE_1ImageID Image
 //        if let NOMINEE_1ImageID = response["NOMINEE_1ImageID"] as? String,
 //           !NOMINEE_1ImageID.isEmpty
@@ -7803,8 +8037,8 @@ extension DocumentVC {
 //                }
 //            }
 //            //NM1Label1
-//            
-//            
+//
+//
 //            self.nominee_1DocumentTypelbl.text =
 //            response["NOMINEE_1DocumentType"] as? String
 //            if let nominee1ImagesVerify = response["NOMINEE_1Images_Verify"]
@@ -7828,7 +8062,7 @@ extension DocumentVC {
 //                // Handle the case where the key is not present or is not an integer
 //                print("NOMINEE_1Images_Verify key not found or invalid type")
 //            }
-//            
+//
 //        } else {
 //            DispatchQueue.main.async {
 //                self.nominee_1nameLabel.text =
@@ -7845,7 +8079,7 @@ extension DocumentVC {
 //                //                self.nominee1ImageView.image = UIImage(systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        //nominee2
 //        if let NOMINEE_2ImageID = response["NOMINEE_2ImageID"] as? String,
 //           !NOMINEE_2ImageID.isEmpty
@@ -7877,24 +8111,24 @@ extension DocumentVC {
 //            if let nominee2ImagesVerify = response["NOMINEE_2Images_Verify"]
 //                as? String
 //            {
-//                
+//
 //                self.nominee2ImagesVerify = nominee2ImagesVerify
-//                
+//
 //            } else {
 //                // Handle the case where the key is not present or is not an integer
 //                print("NOMINEE_2Image key not found or invalid type")
 //            }
-//            
+//
 //        } else {
 //            DispatchQueue.main.async {
 //                self.NM2Label3.text = response["Nom2NomineeOrGuardianName"] as? String
 //                self.nominee_2DocumentTypelbl.text =
 //                response["NOMINEE_2DocumentType"] as? String
-//                
+//
 //                //                self.nominee2ImageView.image = UIImage(systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        //nominee3
 //        if let NOMINEE_3ImageID = response["NOMINEE_3ImageID"] as? String,
 //           !NOMINEE_3ImageID.isEmpty
@@ -7905,7 +8139,7 @@ extension DocumentVC {
 //            let ImageUrlString =
 //            "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(NOMINEE_3ImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId={tokenId}"
 //            self.nominee3Url = ImageUrlString
-//            
+//
 //            self.nominee3ImageView.restorationIdentifier = "nominee3"
 //            loadImage(
 //                from: ImageUrlString, into: self.nominee3ImageView,
@@ -7926,12 +8160,12 @@ extension DocumentVC {
 //            {
 //                // If the value is 0, show the buttons, otherwise hide them
 //                self.nominee3ImagesVerify = nominee3ImagesVerify
-//                
+//
 //            } else {
 //                // Handle the case where the key is not present or is not an integer
 //                print("NOMINEE_3Images_Verify key not found or invalid type")
 //            }
-//            
+//
 //        } else {
 //            DispatchQueue.main.async {
 //                //                self.nominee3ImageView.image = UIImage(systemName: "person.crop.circle.badge.xmark")
@@ -7948,7 +8182,7 @@ extension DocumentVC {
 //                }
 //            }
 //        }
-//        
+//
 //        // Update ClientPhotoImageID Image
 //        let Latitude = response["Latitude"] as? String
 //        let Longitude = response["Longitude"] as? String
@@ -7961,7 +8195,7 @@ extension DocumentVC {
 //            let ImageUrlString =
 //            "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(ClientPhotoImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId={tokenId}"
 //            self.clientPhotoUrl = ImageUrlString
-//            
+//
 //            self.CPImageView.restorationIdentifier = "CLIENTPHOTO"
 //            loadImage(
 //                from: ImageUrlString, into: self.CPImageView,
@@ -7985,7 +8219,7 @@ extension DocumentVC {
 //                    systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        // Update Pan Image
 //        if let PANImageID = response["PANImageID"] as? String,
 //           !PANImageID.isEmpty
@@ -8010,7 +8244,7 @@ extension DocumentVC {
 //                    systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        // Update Collection View Images
 //        if let derivativeImageIDsString = response["DerivativeImageID"]
 //            as? String, !derivativeImageIDsString.isEmpty
@@ -8018,15 +8252,15 @@ extension DocumentVC {
 //            let userId =
 //            fetchedUserId?.addingPercentEncoding(
 //                withAllowedCharacters: .urlQueryAllowed) ?? ""
-//            
+//
 //            // Split the IDs and form URLs for each
 //            let derivativeImageIDs = derivativeImageIDsString.split(
 //                separator: ","
 //            ).map { $0.trimmingCharacters(in: .whitespaces) }
-//            
+//
 //            // Clear previous images
 //            imageUrls.removeAll()
-//            
+//
 //            // Generate URLs and update the imageUrls array
 //            for imageID in derivativeImageIDs {
 //                let imageUrlString =
@@ -8048,13 +8282,13 @@ extension DocumentVC {
 //                    incomeProofNoBtn.isSelected = true
 //                }
 //            }
-//            
+//
 //            if let assesmentYear = response["AssesmentYear"] as? String,
 //               !assesmentYear.isEmpty {
 //                self.incomeProofYearBtn.setTitle(assesmentYear, for: .normal)
 //                self.year = assesmentYear
 //            }
-//            
+//
 //            if let DerivativeImages_Verify = response["DerivativeImages_Verify"]
 //                as? String
 //            {
@@ -8069,8 +8303,8 @@ extension DocumentVC {
 //                    incomeProofVerifyBtn.isHidden = true
 //                    self.incomeProofDocumentTypeBtn.isEnabled = false
 //                    self.incomeProofYearBtn.isEnabled = false
-//                    
-//                   
+//
+//
 //                    if incomeproofDocumenttype == "PDF" {
 //                        incomeProofNoBtn.isEnabled = false
 //                    } else if incomeproofDocumenttype == "IMAGE" {
@@ -8081,7 +8315,7 @@ extension DocumentVC {
 //                // Handle the case where the key is not present or is not an integer
 //                print("NOMINEE_1Images_Verify key not found or invalid type")
 //            }
-//            
+//
 //            DispatchQueue.main.async {
 //                self.incomeProofCollectionView.reloadData()
 //            }
@@ -8093,15 +8327,15 @@ extension DocumentVC {
 //            let userId =
 //            fetchedUserId?.addingPercentEncoding(
 //                withAllowedCharacters: .urlQueryAllowed) ?? ""
-//            
+//
 //            // Split the IDs and form URLs for each
 //            let bankImageIDs = bankImageIDsString.split(separator: ",").map {
 //                $0.trimmingCharacters(in: .whitespaces)
 //            }
-//            
+//
 //            // Clear previous images
 //            bpImageUrls.removeAll()
-//            
+//
 //            // Generate URLs and update the bpImageUrls array
 //            for imageID in bankImageIDs {
 //                let imageUrlString =
@@ -8111,7 +8345,7 @@ extension DocumentVC {
 //            let documentType = response["BankDocumentType"] as? String
 //            self.BankProofDocumentTypelbl.text = documentType
 //            self.bankproofDocumentTypetext = documentType
-//            
+//
 //            if let derivativeType = response["BankType"] as? String {
 //                bankproofDocumentType = derivativeType
 //                if derivativeType == "PDF" {
@@ -8150,7 +8384,7 @@ extension DocumentVC {
 //                self.BpCollectionView.reloadData()
 //            }
 //        }
-//        
+//
 //        // Update demat Proof Collection View Images
 //        if let dematImageIDsString = response["DP_IMAGEID"] as? String,
 //           !dematImageIDsString.isEmpty
@@ -8158,15 +8392,15 @@ extension DocumentVC {
 //            let userId =
 //            fetchedUserId?.addingPercentEncoding(
 //                withAllowedCharacters: .urlQueryAllowed) ?? ""
-//            
+//
 //            // Split the IDs and form URLs for each
 //            let dematImageIDs = dematImageIDsString.split(separator: ",").map {
 //                $0.trimmingCharacters(in: .whitespaces)
 //            }
-//            
+//
 //            // Clear previous images
 //            dematimageUrls.removeAll()
-//            
+//
 //            // Generate URLs and update the bpImageUrls array
 //            for imageID in dematImageIDs {
 //                let imageUrlString =
@@ -8183,7 +8417,7 @@ extension DocumentVC {
 //                    dematNoBtn.isSelected = true
 //                }
 //            }
-//            
+//
 //            if let DPVerify = response["DP_IMAGEID_Verify"] as? Int {
 //                // If the value is 0, show the buttons, otherwise hide them
 //                self.DP_IMAGEID_Verify = DPVerify
@@ -8197,7 +8431,7 @@ extension DocumentVC {
 //                    if self.dematDocumentType == "PDF" {
 //                        dematNoBtn.isEnabled = false
 //                    } else if dematDocumentType == "IMAGE" {
-//                        
+//
 //                        dematYesBtn.isEnabled = false
 //                    }
 //                }
@@ -8210,13 +8444,13 @@ extension DocumentVC {
 //                self.DICollectionView.reloadData()
 //            }
 //        }
-//        
+//
 //    }
-//    
+//
 //    func MediaDownload() {
-//        
+//
 //        let Url = "MultiPartImageUpload/MediaDownload"
-//        
+//
 //        apiCall(url: Url, method: "POST", parameters: [:], view: self.view) {
 //            result in
 //            switch result {
@@ -8237,7 +8471,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func SignatureUpload(imageData: Data) {
 //        guard ocrCount <= 3 else {
 //            print("OCR attempts exceeded. No further attempts allowed.")
@@ -8245,7 +8479,7 @@ extension DocumentVC {
 //        }
 //        let imageFileName = "image.jpg"
 //        let imageMimeType = "image/jpeg"
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -8262,7 +8496,7 @@ extension DocumentVC {
 //            "IPAddress": "",
 //            "DeviceType": "",
 //        ]
-//        
+//
 //        let url = "\(self.prefixUrl)MultiPartImageUpload/SignatureUpload"
 //        print("signature url:", url)
 //        uploadDocument(
@@ -8290,7 +8524,7 @@ extension DocumentVC {
 //                            self.signatureupdateUI(with: jsonResponse)
 //                          //  self.updateSignatureVisibility(isVerified: true)
 //                            self.ocrCount = 1
-//                            
+//
 //                        }
 //                    case "801005":
 //                        // Increment OCR count and retry if less than 3
@@ -8320,7 +8554,7 @@ extension DocumentVC {
 //                                ?? "1 attempt failed."
 //                                print(
 //                                    "Retrying with OCRCount: \(self.ocrCount)")
-//                                
+//
 //                                self.showAlert(title: "Invalid Signature", message: errorMessage)
 //                                //self.SignatureUpload(imageData: imageData) // Retry API call
 //                            } else {
@@ -8347,7 +8581,7 @@ extension DocumentVC {
 //    func regenerate(imageData: Data) {
 //        CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
 //        print("All TokenMobile entries deleted due to error code 999992")
-//        
+//
 //        // Regenerate tokens
 //        CoreDataHelper.generateToken(
 //            decodeByteArrayToString: self.mobiledecodeArray ?? "",
@@ -8363,7 +8597,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func signatureupdateUI(with response: [String: Any]) {
 //        DispatchQueue.main.async {
 //            CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
@@ -8385,27 +8619,27 @@ extension DocumentVC {
 //                    }
 //                    return
 //                }
-//                
+//
 //                if let signatureImageID = response["RequestID"] as? Int {
 //                    let userId = fetchedUserId?.addingPercentEncoding(
 //                        withAllowedCharacters: .urlQueryAllowed
 //                    ) ?? ""
-//                    
+//
 //                    // ✅ Use IMAGE instead of ThumbNail for actual signature
 //                    let imageUrlString =
 //                    "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(signatureImageID)&ImageType=IMAGE&UserId=\(userId)&TokenId=\(tokenId)"
-//                    
+//
 //                    self.signatureUrl = imageUrlString
 //                    print("Formed signature URL: \(imageUrlString)")
-//                    
+//
 //                    self.signatureImageview.restorationIdentifier = "signatureview"
-//                    
+//
 //                    loadImage(
 //                        from: imageUrlString,
 //                        into: self.signatureImageview,
 //                        with: "signatureview"
 //                    )
-//                    
+//
 //                    DispatchQueue.main.async {
 //                        self.updateButtonImage(
 //                            button: self.currentSignatureStatusBtn,
@@ -8413,12 +8647,12 @@ extension DocumentVC {
 //                            jsonResponse: response
 //                        )
 //                    }
-//                    
+//
 //                    // Hide/Show UI
 //                    self.drawBtn.isHidden = true
 //                    self.CurrentSignBtn.isHidden = true
 //                    self.CSDocumentView.isHidden = false
-//                    
+//
 //                } else {
 //                    self.signatureImageview.image = UIImage(
 //                        systemName: "person.crop.circle.badge.xmark"
@@ -8427,7 +8661,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func updateSignatureVisibility(isVerified: Bool) {
 //        drawBtn.isHidden = isVerified
 //        CurrentSignBtn.isHidden = isVerified
@@ -8436,10 +8670,10 @@ extension DocumentVC {
 //    }
 //
 //    func DerivativeUpload(imageData: Data, password: String?) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
-//        
+//
 //        switch incomeproofDocumenttype {
 //        case "PDF":
 //            if incomeproofDocumenttype != lastderivativeDocumentType {
@@ -8448,7 +8682,7 @@ extension DocumentVC {
 //            lastderivativeDocumentType = incomeproofDocumenttype
 //            fileName = "document.pdf"
 //            mimeType = "application/pdf"
-//            
+//
 //            if incomeproofDocumenttypetext == "Latest ITR"
 //                || incomeproofDocumenttypetext == "Form 16"
 //            {
@@ -8466,7 +8700,7 @@ extension DocumentVC {
 //            //            if incomeproofDocumenttypetext == "Six Month Bank Statement" {
 //            //                           incomeProofOcrCount = 1 // Start with 1, allowing only 1 attempt
 //            //                       }
-//            
+//
 //        case "IMAGE":
 //            if incomeproofDocumenttype != lastderivativeDocumentType {
 //                incomeProofOcrCount = 0  // Reset to 1 for PDFs
@@ -8474,16 +8708,16 @@ extension DocumentVC {
 //            lastderivativeDocumentType = incomeproofDocumenttype
 //            fileName = "image.jpg"
 //            mimeType = "image/jpeg"
-//            
+//
 //            if incomeproofDocumenttypetext == "Salary Slip" || incomeproofDocumenttypetext == "Demat Account Holding with Value" {
 //                incomeProofOcrCount = 1 // Start with 1, allowing only 1 attempt
 //            }
-//            
-//            
+//
+//
 //        default:
 //            break
 //        }
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -8529,13 +8763,13 @@ extension DocumentVC {
 //                            self.incomeProofYearBtn.isHidden = true
 //                            self.yearBtn.isHidden = true
 //                            self.iplabel3.isHidden = true
-//            
+//
 //                            //self.IPStackView2.isHidden = true
-//                            
+//
 //                            self.IPDocumentView.isHidden = false
 //                            self.updateCollectionViewWithUploadedImage(
 //                                from: jsonResponse, identifier: "IncomeProof")
-//                            
+//
 //                        }
 //                    case "801005":
 //                        // Increment OCR count and retry if less than 3
@@ -8586,7 +8820,7 @@ extension DocumentVC {
 //            return
 //        }
 //        print("update ui calll...")
-//        
+//
 //        let userId =
 //        fetchedUserId?.addingPercentEncoding(
 //            withAllowedCharacters: .urlQueryAllowed) ?? ""
@@ -8597,7 +8831,7 @@ extension DocumentVC {
 //        //
 //        //
 //        //
-//        
+//
 //        print("identifier document demat:\(identifier)")
 //
 //        DispatchQueue.main.async {
@@ -8620,7 +8854,7 @@ extension DocumentVC {
 //                self.BpCollectionView.reloadData()
 //            case "Demat":
 //                self.diCounts(shouldShow: true)
-//                
+//
 //                let DP_IMAGEID_Verify =
 //                jsonResponse["DocumentImages_Verify"] as? String
 //                self.DP_IMAGEID_Verify = Int(DP_IMAGEID_Verify ?? "0")
@@ -8637,20 +8871,20 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func BankUpload(imageData: Data, password: String?) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
-//        
-//        
-//        
+//
+//
+//
 //        switch bankproofDocumentType {
 //        case "PDF":
 //            if bankproofDocumentType != lastbankDocumentType {
 //                bankOcrCount = 1  // Reset count if document type changes
 //            }
-//            
+//
 //            lastbankDocumentType = bankproofDocumentType
 //            fileName = "document.pdf"
 //            mimeType = "application/pdf"
@@ -8658,14 +8892,14 @@ extension DocumentVC {
 //            if bankproofDocumentType != lastbankDocumentType {
 //                bankOcrCount = 0  // Reset count if document type changes
 //            }
-//            
+//
 //            lastbankDocumentType = bankproofDocumentType
 //            fileName = "image.jpg"
 //            mimeType = "image/jpeg"
 //        default:
 //            break
 //        }
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -8752,19 +8986,19 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func dematUpload(imageData: Data, password: String?) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
-//        
+//
 //        if dematDocumentType != lastDematDocumentType {
 //            dematOcrCount = 1  // Reset count if document type changes
 //        }
-//        
+//
 //        // Update the last document type to the current one
 //        lastDematDocumentType = dematDocumentType
-//        
+//
 //        switch dematDocumentType {
 //        case "PDF":
 //            fileName = "document.pdf"
@@ -8788,7 +9022,7 @@ extension DocumentVC {
 //         RejectRemark=""
 //         Status=""
 //         */
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -8796,7 +9030,7 @@ extension DocumentVC {
 //            "MOBRequestID": "",
 //            "Type": dematDocumentType,
 //            "Password": password,
-//            
+//
 //            "DocumentName": "DP_IMAGE",
 //            "Status": "",
 //            "OCRCount": "\(dematOcrCount)",
@@ -8877,13 +9111,13 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func PANUpload(imageData: Data, password: String?) {
-//        
+//
 //        var fileName: String = "image.jpg"
 //        var mimeType: String = "image/jpeg"
 //        //var ocrpancount = 1
-//        
+//
 //        //            switch panCopyDocumentType {
 //        //            case "PDF":
 //        //                fileName = "document.pdf"
@@ -8895,7 +9129,7 @@ extension DocumentVC {
 //        //            default:
 //        //                break
 //        //            }
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -8964,7 +9198,7 @@ extension DocumentVC {
 //        }
 //    }
 //    func PanupdateUI(with response: [String: Any]) {
-//        
+//
 //        // Signature Image
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -8993,7 +9227,7 @@ extension DocumentVC {
 //                let userId =
 //                fetchedUserId?.addingPercentEncoding(
 //                    withAllowedCharacters: .urlQueryAllowed) ?? ""
-//                
+//
 //                let imageUrlString =
 //                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(PanimageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId=\(tokenId)"
 //                self.panImageUrl = imageUrlString
@@ -9028,17 +9262,17 @@ extension DocumentVC {
 //                panCopyImageView.image = UIImage(
 //                    systemName: "person.crop.circle.badge.xmark")
 //            }
-//            
+//
 //        }
 //    }
-//    
+//
 //    func CLIENTPHOTOUpload(imageData: Data) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
 //        fileName = "image.jpg"
 //        mimeType = "image/jpeg"
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -9096,7 +9330,7 @@ extension DocumentVC {
 //                            let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
 //                            ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
 //                            ?? "OCR failed."
-//                            
+//
 //                            DispatchQueue.main.async {
 //                                self.showAlert(title: "Error", message: errorMessage)
 //                            }
@@ -9107,7 +9341,7 @@ extension DocumentVC {
 //                            let errorMessage = (jsonResponse["RejectRemark"] as? String)
 //                            ?? (jsonResponse["ErrorMessage"] as? String)
 //                            ?? "Second attempt failed. Please try again."
-//                            
+//
 //                            DispatchQueue.main.async {
 //                                self.signatureAttemptLabel.text = errorMessage
 //                                print("Retry allowed for OCRCount: \(self.ocrCount)")
@@ -9154,7 +9388,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func clientImageUpdateUI(with response: [String: Any]) {
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -9181,12 +9415,12 @@ extension DocumentVC {
 //                let userId =
 //                fetchedUserId?.addingPercentEncoding(
 //                    withAllowedCharacters: .urlQueryAllowed) ?? ""
-//                
+//
 //                let imageUrlString =
 //                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(clientImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId=\(tokenId)"
 //                self.clientPhotoUrl = imageUrlString
 //                self.CPHolderView1.isHidden = false
-//                
+//
 //                CPImageView.isHidden = false
 //                CP_Long_Lat_Lbl.isHidden = false
 //                CP_Location_label.isHidden = false
@@ -9194,8 +9428,8 @@ extension DocumentVC {
 //                // Print to debug the formed URL
 //                self.ClientPhotoImageID_Verify =
 //                response["DocumentImages_Verify"] as? String
-//                
-//                
+//
+//
 //                print("Formed panView URL: \(imageUrlString)")
 //                self.CPImageView.restorationIdentifier = "clientPhoto"
 //                loadImage(
@@ -9206,19 +9440,19 @@ extension DocumentVC {
 //                        button: self.clientPhotoStatusBtn,
 //                        statusKey: "DocumentImages_Verify",
 //                        jsonResponse: response)
-//                    
-//                    
+//
+//
 //                }
 //            } else {
 //                CPImageView.image = UIImage(
 //                    systemName: "person.crop.circle.badge.xmark")
 //            }
-//            
+//
 //        }
 //    }
-//    
+//
 //    func InsertUpdateIPVAuditLog() {
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "RegId": RegId,
 //            "PanNo": PanNo,
@@ -9227,7 +9461,7 @@ extension DocumentVC {
 //        ]
 //        print(parameters)
 //        let Url = "MultiPartImageUpload/InsertUpdateIPVAuditLog"
-//        
+//
 //        apiCall(
 //            url: Url, method: "POST", parameters: parameters as [String: Any],
 //            view: self.view
@@ -9255,10 +9489,10 @@ extension DocumentVC {
 //            case .failure(let error):
 //                print("Login API call failed: \(error.localizedDescription)")
 //            }
-//            
+//
 //        }
 //    }
-//    
+//
 //    func startPeriodicViewDocumentDetails() {
 //        DispatchQueue.main.async {
 //            self.viewDocumentTimer?.invalidate() // Ensure existing timer is stopped
@@ -9267,7 +9501,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func stopPeriodicViewDocumentDetails() {
 //        DispatchQueue.main.async {
 //            self.viewDocumentTimer?.invalidate()
@@ -9275,8 +9509,8 @@ extension DocumentVC {
 //            print("Timer stopped.")
 //        }
 //    }
-//    
-//    
+//
+//
 //    func GetUserLocation(Longitude: String, Latitude: String) {
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -9308,7 +9542,7 @@ extension DocumentVC {
 //            ]
 //            print(parameters)
 //            let Url = "Client/GetUserLocation"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view
@@ -9325,8 +9559,8 @@ extension DocumentVC {
 //                                jsonResponse["Location"] as? String
 //                                ?? "location not found"
 //                                print("api is running")
-//                                
-//                                
+//
+//
 //                            }
 //                        default:
 //                            print("Unhandled error code: \(errorCode)")
@@ -9339,17 +9573,17 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func NomineeUpload(imageData: Data) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
 //        fileName = "image.jpg"
 //        mimeType = "image/jpeg"
 //        /*
-//         
+//
 //         DocumentName="NOMINEE_1/NOMINEE_2/NOMINEE_3"
-//         
+//
 //         */
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
@@ -9400,7 +9634,7 @@ extension DocumentVC {
 //                                self.ocrCount += 1
 //                                switch self.identifier {
 //                                case "NOMINEE_1":
-//                                    
+//
 //                                    self.nominee1infolbl.isHidden = false
 //                                    self.nominee1infolbl.text =
 //                                    jsonResponse["ErrorMessage"] as? String
@@ -9434,7 +9668,7 @@ extension DocumentVC {
 //                                self.updateNomineeUI(
 //                                    identifier: self.identifier ?? "",
 //                                    jsonResponse: jsonResponse)
-//                                
+//
 //                                print("Maximum OCR attempts reached.")
 //                            }
 //                        }
@@ -9477,7 +9711,7 @@ extension DocumentVC {
 //                    case "999992":
 //                        DispatchQueue.main.async {
 //                            self.regenerate(imageData: imageData)
-//                            
+//
 //                        }
 //                    default:
 //                        print("Unhandled error code: \(errorCode)")
@@ -9489,18 +9723,18 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func updateNomineeUI(identifier: String, jsonResponse: [String: Any]) {
 //        guard let errorCode = jsonResponse["ErrorCode"] as? String else {
 //            print("Invalid response: no error code found")
 //            return
 //        }
-//        
+//
 //        let errorMessage =
 //        jsonResponse["ErrorMessage"] as? String ?? "Unknown error"
 //        let statusMessage =
 //        jsonResponse["Status"] as? String ?? "No status available"
-//        
+//
 //        // Fetch the token ID for image loading
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -9521,7 +9755,7 @@ extension DocumentVC {
 //                print("No tokens available. Please reload the tokens.")
 //                return
 //            }
-//            
+//
 //            // Check if RequestID exists in the response
 //            if let nomineeImageID = jsonResponse["RequestID"] as? Int {
 //                let userId =
@@ -9529,10 +9763,10 @@ extension DocumentVC {
 //                    withAllowedCharacters: .urlQueryAllowed) ?? ""
 //                let imageUrlString =
 //                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(nomineeImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId=\(tokenId)"
-//                
+//
 //                // Print to debug the formed URL
 //                print("Formed nominee image URL: \(imageUrlString)")
-//                
+//
 //                DispatchQueue.main.async {
 //                    switch identifier {
 //                    case "NOMINEE_1":
@@ -9601,17 +9835,17 @@ extension DocumentVC {
 //                        self.nominee1infolbl.text = errorMessage
 //                        self.nominee1ImageView.image = UIImage(
 //                            systemName: "person.crop.circle.badge.xmark")
-//                        
+//
 //                    case "NOMINEE_2":
 //                        self.nominee2infolbl.text = errorMessage
 //                        self.nominee2ImageView.image = UIImage(
 //                            systemName: "person.crop.circle.badge.xmark")
-//                        
+//
 //                    case "NOMINEE_3":
 //                        self.nominee3infolbl.text = errorMessage
 //                        self.nominee3ImageView.image = UIImage(
 //                            systemName: "person.crop.circle.badge.xmark")
-//                        
+//
 //                    default:
 //                        print("Unhandled identifier: \(identifier)")
 //                    }
@@ -9619,7 +9853,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func DocumentVerify(
 //        DocumentName: String, DocumentType: String, ocrCount: Int
 //    ) {
@@ -9636,7 +9870,7 @@ extension DocumentVC {
 //        ]
 //        print(parameters)
 //        let Url = "MultiPartImageUpload/DocumentVerify"
-//        
+//
 //        apiCall(
 //            url: Url, method: "POST", parameters: parameters as [String: Any],
 //            view: self.view,
@@ -9650,17 +9884,17 @@ extension DocumentVC {
 //                    switch errorCode {
 //                    case "000000":
 //                        DispatchQueue.main.async {
-//                            
+//
 //                            switch DocumentName {
-//                                
+//
 //                            case "INCOMEPROOF":
 //                                self.IPDocumentView.isHidden = true
 //                                self.counts(shouldShow: true)
-//                                
+//
 //                                self.rejection2 = nil
 //                                self.ViewDocumentDetails()
 //                                self.incomeProofCollectionView.reloadData()
-//                                
+//
 //                            case "BANK":
 //                                self.BPDocumentView.isHidden = true
 //                                self.bpcounts(shouldShow: true)
@@ -9683,7 +9917,7 @@ extension DocumentVC {
 //                                let errorMessage =
 //                                jsonResponse["ErrorMessage"] as? String
 //                                ?? "1 attempt failed."
-//                                
+//
 //                                // Switch based on DocumentName to show relevant label message
 //                                switch DocumentName {
 //                                case "BANK":
@@ -9703,13 +9937,13 @@ extension DocumentVC {
 //                                default:
 //                                    print("Unknown DocumentName")
 //                                }
-//                                
+//
 //                                print("Retrying with OCRCount: \(ocrCount)")
 //                                // Retry API call if needed
 //                                // self.DocumentVerify(DocumentName: DocumentName, DocumentType: DocumentType)
 //                            } else {
 //                                switch DocumentName {
-//                                    
+//
 //                                case "INCOMEPROOF":
 //                                    self.DerivativeImages_Verify =
 //                                    jsonResponse["DocumentImages_Verify"]
@@ -9717,7 +9951,7 @@ extension DocumentVC {
 //                                    self.IPDocumentView.isHidden = true
 //                                    self.counts(shouldShow: true)
 //                                    self.ViewDocumentDetails()
-//                                    
+//
 //                                case "BANK":
 //                                    self.BankImages_Verify =
 //                                    jsonResponse["DocumentImages_Verify"]
@@ -9725,21 +9959,21 @@ extension DocumentVC {
 //                                    self.BPDocumentView.isHidden = true
 //                                    self.bpcounts(shouldShow: true)
 //                                    self.ViewDocumentDetails()
-//                                    
+//
 //                                case "DP_IMAGE":
 //                                    self.diCounts(shouldShow: true)
 //                                    self.ViewDocumentDetails()
-//                                    
+//
 //                                default:
 //                                    break
 //                                }
 //                                print("Maximum OCR attempts reached.")
-//                                
+//
 //                            }
 //                        }
 //                    case "801006":
 //                        DispatchQueue.main.async {
-//                            
+//
 //                            self.showAlert(
 //                                title: "Alert",
 //                                message: ErrorMessage
@@ -9749,14 +9983,14 @@ extension DocumentVC {
 //                        print("Unhandled error code: \(errorCode)")
 //                    }
 //                }
-//                
+//
 //            case .failure(let error):
 //                print("Login API call failed: \(error.localizedDescription)")
 //            }
 //        }
-//        
+//
 //    }
-//    
+//
 //    func deleteImageFromServer(requestId: String, documentType: String, completion: @escaping (Bool) -> Void) {
 //        let parameters: [String: Any] = [
 //            "RegId": RegId ?? "",
@@ -9764,9 +9998,9 @@ extension DocumentVC {
 //            "RequestId": requestId,
 //            "Documents": documentType
 //        ]
-//        
+//
 //        let url = "ImageManagement/DeleteDocumentsImageOnRequestID"
-//        
+//
 //        apiCall(url: url, method: "POST", parameters: parameters, view: self.view, loaderText: "Deleting Image...") { result in
 //            switch result {
 //            case .success(let jsonResponse):
@@ -9787,7 +10021,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 ////    func deleteImageFromServer(
 ////        requestId: String, documentType: String,
 ////        completion: @escaping (Bool) -> Void
@@ -9848,9 +10082,9 @@ extension DocumentVC {
 ////            }
 ////        }
 ////    }
-//    
+//
 //    func UpdateFinalStatus(ucccode: String) {
-//        
+//
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
 //            guard let tokenId = tokenId else {
@@ -9885,7 +10119,7 @@ extension DocumentVC {
 //            ]
 //            print(parameters)
 //            let Url = "ClientSLFinalStatus/UpdateFinalStatus"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view,
@@ -9932,7 +10166,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //}
 //
 //extension DocumentVC {
@@ -9950,13 +10184,13 @@ extension DocumentVC {
 //        } else {
 //            IPStackView2.isHidden = true
 //        }
-//        
+//
 //        // Conditionally hide or show additional elements based on incomeproofDocumenttypetext
 //        if let documentTypeText = incomeproofDocumenttypetext,
 //           !documentTypeText.isEmpty,
 //           documentTypeText == "Latest ITR" || documentTypeText == "Form 16"
 //        {
-//            
+//
 //            // Show the relevant elements if conditions are met
 //            iplabel3.isHidden = !shouldShow
 //           // yearBtn.isHidden = !shouldShow
@@ -9967,7 +10201,7 @@ extension DocumentVC {
 //            yearBtn.isHidden = true
 //            // incomeProofVerifyBtn.isHidden = true // Uncomment if needed
 //        }
-//        
+//
 //        // New condition to check imageUrls count and set visibility for IPCollectionView and IPDocumentView
 //        self.counts(shouldShow: shouldShow)
 //        if imageUrls.isEmpty {
@@ -9980,15 +10214,15 @@ extension DocumentVC {
 //        if ipverify == "Y" {
 //            self.verifyIP()
 //        }
-//        
+//
 //        if DerivativeImages_Verify == "0" {
 //            print("varify is pending")
 //        } else {
 //            IPDocumentView.isHidden = true
 //        }
-//        
+//
 //    }
-//    
+//
 //    func counts(shouldShow: Bool) {
 //        switch incomeproofDocumenttype {
 //        case "PDF":
@@ -9999,7 +10233,7 @@ extension DocumentVC {
 //                } else {
 //                    requiredCount = 2
 //                }
-//                
+//
 //                if imageUrls.count >= requiredCount {
 //                    incomeProofuploadBtn.isHidden = (incomeproofDocumenttypetext == "Salary Slip" || incomeproofDocumenttypetext == "Six Month Bank Statement" || incomeproofDocumenttypetext == "Form 16" || incomeproofDocumenttypetext == "Latest ITR" || incomeproofDocumenttypetext == "Demat Account Holding with Value")
 //                    self.incomeProofDocumentTypeBtn.isEnabled = false
@@ -10053,12 +10287,12 @@ extension DocumentVC {
 //    }
 //    func verifyIP() {
 //        //self.incomeProofuploadBtn.isHidden = true
-//        
+//
 //        self.IPStackView2.isHidden = false
-//        
+//
 //        self.incomeproofStatusLabel.isHidden = false
 //    }
-//    
+//
 //    func BankProof(shouldShow: Bool) {
 //        BPLabel1.isHidden = !shouldShow
 //        BPView1.isHidden = !shouldShow
@@ -10071,7 +10305,7 @@ extension DocumentVC {
 //        } else {
 //            BPStackview2.isHidden = true
 //        }
-//        
+//
 //        self.bpcounts(shouldShow: shouldShow)
 //        if bpImageUrls.isEmpty {
 //            BpCollectionView.isHidden = true
@@ -10083,15 +10317,15 @@ extension DocumentVC {
 //        if bpverify == "Y" {
 //            self.verifyBP()
 //        }
-//        
+//
 //        if BankImages_Verify == "0" {
-//            
+//
 //            print("varify is pending")
 //        } else {
 //            BPDocumentView.isHidden = true
 //        }
 //    }
-//    
+//
 //    func bpcounts(shouldShow: Bool) {
 //        print("documenttype:-\(bankproofDocumentType ?? "empty")")
 //        switch bankproofDocumentType {
@@ -10143,10 +10377,10 @@ extension DocumentVC {
 //    }
 //    func verifyBP() {
 //        BPStackview2.isHidden = false
-//        
+//
 //        self.BPdescriptionLabel.isHidden = false
 //    }
-//    
+//
 //    func CurrentSignature(shouldShow: Bool) {
 //        CSLabel1.isHidden = !shouldShow
 //        //        CSStackView1.isHidden = !shouldShow
@@ -10160,7 +10394,7 @@ extension DocumentVC {
 //            CSDocumentView.isHidden = !shouldShow
 //            CSStackView1.isHidden = true
 //        }
-//        
+//
 //        if SignatureImage_Verify == "1" {
 //            CSDocumentView.isHidden = false
 //            drawBtn.isHidden = true
@@ -10192,17 +10426,17 @@ extension DocumentVC {
 //        if PANImage_Verify == nil {
 //            print("varify is pending")
 //            PCHolderView.isHidden = true
-//            
+//
 //            PCStackView.isHidden = !shouldShow
 //        } else if rejection == "Rejection" {
 //            PCHolderView.isHidden = !shouldShow
-//            
+//
 //            PCStackView.isHidden = true
 //            //
 //        } else {
 //            PCHolderView.isHidden = !shouldShow
 //            //            //PANCopyBtn.isHidden = true
-//            
+//
 //            PCStackView.isHidden = true
 //        }
 //        //        if PANImage_Verify == nil{
@@ -10210,14 +10444,14 @@ extension DocumentVC {
 //        //        }else {
 //        //            PCStackView.isHidden = true
 //        //        }
-//        
+//
 //    }
 //    func ClientPhoto(shouldShow: Bool) {
 //        CPLabel1.isHidden = !shouldShow
 //        CPLabel2.isHidden = !shouldShow
 //        CPLabel3.isHidden = !shouldShow
 //        //CPStackView.isHidden = !shouldShow
-//        
+//
 //        //        CPImageView.isHidden = !shouldShow
 //        //        CP_Long_Lat_Lbl.isHidden = !shouldShow
 //        //        CpHolderView2.isHidden = !shouldShow
@@ -10247,7 +10481,7 @@ extension DocumentVC {
 //        } else {
 //            DIStackView2.isHidden = true
 //        }
-//        
+//
 //        self.diCounts(shouldShow: shouldShow)
 //        if dematimageUrls.isEmpty {
 //            DICollectionView.isHidden = true
@@ -10260,12 +10494,12 @@ extension DocumentVC {
 //            self.verifyDI()
 //        }
 //        if DP_IMAGEID_Verify == 0 {
-//            
+//
 //            print("varify is pending")
 //        } else {
 //            DIDocumentView.isHidden = true
 //        }
-//        
+//
 //    }
 //    func diCounts(shouldShow: Bool) {
 //        switch dematDocumentType {
@@ -10312,12 +10546,12 @@ extension DocumentVC {
 //    }
 //    func verifyDI() {
 //        //self.incomeProofuploadBtn.isHidden = true
-//        
+//
 //        self.DIStackView2.isHidden = false
-//        
+//
 //        self.dematDescriptionLabel.isHidden = false
 //    }
-//    
+//
 //    func NomineeDetail1(shouldShow: Bool) {
 //        NM1Label1.isHidden = !shouldShow
 //        NM1Label2.isHidden = !shouldShow
@@ -10332,7 +10566,7 @@ extension DocumentVC {
 //        } else {
 //            NM1DocumentView.isHidden = !shouldShow
 //            NM1StackView.isHidden = true
-//            
+//
 //        }
 //        // NM1DocumentView.isHidden = false
 //    }
@@ -10350,9 +10584,9 @@ extension DocumentVC {
 //        } else {
 //            NM2DocumentView.isHidden = !shouldShow
 //            NM2StackView.isHidden = true
-//            
+//
 //        }
-//        
+//
 //    }
 //    func NomineeDetail3(shouldShow: Bool) {
 //        NM3Label1.isHidden = !shouldShow
@@ -10368,7 +10602,7 @@ extension DocumentVC {
 //        } else {
 //            NM3DocumentView.isHidden = !shouldShow
 //            NM3StackView.isHidden = true
-//            
+//
 //        }
 //    }
 //}
@@ -10381,13 +10615,13 @@ extension DocumentVC {
 //        documentPicker.modalPresentationStyle = .formSheet
 //        present(documentPicker, animated: true, completion: nil)
 //    }
-//    
+//
 //    func documentPicker(
 //        _ controller: UIDocumentPickerViewController,
 //        didPickDocumentsAt urls: [URL]
 //    ) {
 //        guard let selectedURL = urls.first else { return }
-//        
+//
 //        do {
 //            // Check if the PDF is password-protected
 //            if let pdfDocument = PDFDocument(url: selectedURL) {
@@ -10395,7 +10629,7 @@ extension DocumentVC {
 //                    // Prompt for password
 //                    requestPassword { [weak self] password in
 //                        guard let self = self else { return }
-//                        
+//
 //                        if pdfDocument.unlock(withPassword: password) {
 //                            // Successfully unlocked PDF
 //                            self.handlePDF(url: selectedURL, password: password)
@@ -10417,7 +10651,7 @@ extension DocumentVC {
 //            showAlert(title: "Error", message: "Unable to read PDF file.")
 //        }
 //    }
-//    
+//
 //    func handlePDF(url: URL, password: String?) {
 //        do {
 //            let pdfData = try Data(contentsOf: url)
@@ -10427,7 +10661,7 @@ extension DocumentVC {
 //            showAlert(title: "Error", message: "Unable to read PDF file.")
 //        }
 //    }
-//    
+//
 //    func requestPassword(completion: @escaping (String) -> Void) {
 //        let alertController = UIAlertController(
 //            title: "Enter Password",
@@ -10449,17 +10683,17 @@ extension DocumentVC {
 //        alertController.addAction(cancelAction)
 //        present(alertController, animated: true, completion: nil)
 //    }
-//    
+//
 //    func documentPickerWasCancelled(
 //        _ controller: UIDocumentPickerViewController
 //    ) {
 //        controller.dismiss(animated: true, completion: nil)
 //    }
-//    
+//
 //    func uploadPDFByteArray(_ byteArray: [UInt8], password: String?) {
 //        let pdfData = Data(byteArray)
 //        // let identifier = "IncomeProof" // Adjust this as needed
-//        
+//
 //        switch identifier {
 //        case "IncomeProof":
 //            DerivativeUpload(imageData: pdfData, password: password)
@@ -10476,7 +10710,7 @@ extension DocumentVC {
 //}
 //
 //extension DocumentVC {
-//    
+//
 //    func loadImage(
 //        from urlString: String, into imageView: UIImageView,
 //        with identifier: String?
@@ -10488,13 +10722,13 @@ extension DocumentVC {
 //            }
 //            return
 //        }
-//        
+//
 //        // Reset the image view to a placeholder while loading
 //        DispatchQueue.main.async {
 //            imageView.image = UIImage(named: "pdf")
 //            // imageView.image = UIImage(systemName: "pdf") // Placeholder image
 //        }
-//        
+//
 //        // Fetch a fresh token each time for every image load request
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            tokenId in
@@ -10515,7 +10749,7 @@ extension DocumentVC {
 //                print("No tokens available. Please reload the tokens.")
 //                return
 //            }
-//            
+//
 //            // Construct the final URL with the token
 //            guard
 //                let completeUrl = URL(
@@ -10525,7 +10759,7 @@ extension DocumentVC {
 //                print("Invalid URL after inserting token.")
 //                return
 //            }
-//            
+//
 //            // Create a data task to download the image
 //            let task = URLSession.shared.dataTask(with: completeUrl) {
 //                data, response, error in
@@ -10535,19 +10769,19 @@ extension DocumentVC {
 //                    )
 //                    return
 //                }
-//                
+//
 //                if let httpResponse = response as? HTTPURLResponse,
 //                   !(200...299).contains(httpResponse.statusCode)
 //                {
 //                    print("Invalid status code: \(httpResponse.statusCode)")
 //                    return
 //                }
-//                
+//
 //                if let data = data, let image = UIImage(data: data) {
 //                    // Cache the image
 //                    self.imageCache.setObject(
 //                        image, forKey: urlString as NSString)
-//                    
+//
 //                    DispatchQueue.main.async {
 //                        // Ensure the image is set only if the identifier matches
 //                        if let imageViewIdentifier = imageView
@@ -10571,7 +10805,7 @@ extension DocumentVC {
 //            task.resume()
 //        }
 //    }
-//    
+//
 //}
 //
 ////colection view
@@ -10588,14 +10822,14 @@ extension DocumentVC {
 //        }
 //        return 0
 //    }
-//    
+//
 //    func collectionView(
 //        _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath
 //    ) -> UICollectionViewCell {
 //        let cell =
 //        collectionView.dequeueReusableCell(
 //            withReuseIdentifier: "incomeCVC", for: indexPath) as! incomeCVC
-//        
+//
 //        let imageUrlString: String
 //        if collectionView == incomeProofCollectionView {
 //            imageUrlString = imageUrls[indexPath.row]
@@ -10611,7 +10845,7 @@ extension DocumentVC {
 //            } else {
 //                cell.deleteButton.isHidden = false  // Default case
 //            }
-//       
+//
 //        } else if collectionView == BpCollectionView {
 //            imageUrlString = bpImageUrls[indexPath.row]
 //            if rejection1 == "Rejection", BankImages_Verify == "2" {
@@ -10623,7 +10857,7 @@ extension DocumentVC {
 //            } else {
 //                cell.deleteButton.isHidden = false  // Default case
 //            }
-//            
+//
 //            //cell.deleteButton.isHidden = !(BankImages_Verify == "0" || BankImages_Verify == nil)
 //        } else if collectionView == DICollectionView {
 //            imageUrlString = dematimageUrls[indexPath.row]
@@ -10641,19 +10875,19 @@ extension DocumentVC {
 //        } else {
 //            imageUrlString = ""  // Fallback if needed
 //        }
-//        
+//
 //        // Set the delegate, indexPath, and parent collection view
 //        cell.delegate = self
 //        cell.indexPath = indexPath
 //        cell.parentCollectionView = collectionView
-//        
+//
 //        cell.imageview.restorationIdentifier = imageUrlString
 //        loadImage(
 //            from: imageUrlString, into: cell.imageview, with: imageUrlString)
-//        
+//
 //        return cell
 //    }
-//    
+//
 ////    func didTapDeleteButton(
 ////        at indexPath: IndexPath, in collectionView: UICollectionView
 ////    ) {
@@ -10696,7 +10930,7 @@ extension DocumentVC {
 //        var imageUrlString: String?
 //        var documentType: String?
 //        var documentVerifyStatus: Any?
-//        
+//
 //        // Get the image URL and document type based on collection view
 //        if collectionView == incomeProofCollectionView {
 //            guard indexPath.row < imageUrls.count else { return }
@@ -10714,12 +10948,12 @@ extension DocumentVC {
 //            documentType = "DP_IMAGE"
 //            documentVerifyStatus = DP_IMAGEID_Verify
 //        }
-//        
+//
 //        guard let urlString = imageUrlString, let docType = documentType else { return }
-//        
+//
 //        // Check if we're in rejection flow and the document is rejected (status = "2")
 //        let shouldDeleteFromServer: Bool
-//        
+//
 //        if rejection == "Rejection" {
 //            if let stringStatus = documentVerifyStatus as? String {
 //                shouldDeleteFromServer = (stringStatus == "2")
@@ -10731,21 +10965,21 @@ extension DocumentVC {
 //        } else {
 //            shouldDeleteFromServer = false
 //        }
-//        
+//
 //        if shouldDeleteFromServer {
 //            // Extract RequestID and delete from server
 //            guard let requestId = extractRequestId(from: urlString) else {
 //                print("Failed to extract RequestID from URL")
 //                return
 //            }
-//            
+//
 //            // Show confirmation alert before deleting
 //            let alert = UIAlertController(
 //                title: "Delete Document",
 //                message: "Are you sure you want to delete this document? This will permanently remove it from the server.",
 //                preferredStyle: .alert
 //            )
-//            
+//
 //            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 //            alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
 //                self?.deleteImageFromServer(requestId: requestId, documentType: docType) { success in
@@ -10761,7 +10995,7 @@ extension DocumentVC {
 //                    }
 //                }
 //            })
-//            
+//
 //            present(alert, animated: true)
 //        } else {
 //            // For non-rejection flow or non-rejected documents, just remove locally
@@ -10803,7 +11037,7 @@ extension DocumentVC {
 //        // Encode the URL string to handle any special characters
 //        let encodedUrlString = imageUrlString.addingPercentEncoding(
 //            withAllowedCharacters: .urlQueryAllowed)
-//        
+//
 //        // Ensure the URL string is valid
 //        guard encodedUrlString != nil,
 //              let url = URL(string: encodedUrlString ?? "no value")
@@ -10811,7 +11045,7 @@ extension DocumentVC {
 //            print("Invalid URL string.")
 //            return nil
 //        }
-//        
+//
 //        // Create URLComponents from the URL
 //        guard
 //            let urlComponents = URLComponents(
@@ -10820,7 +11054,7 @@ extension DocumentVC {
 //            print("Failed to create URLComponents from the given string.")
 //            return nil
 //        }
-//        
+//
 //        // Find the query item with the name "id"
 //        if let requestId = urlComponents.queryItems?.first(where: {
 //            $0.name == "id"
@@ -10868,19 +11102,19 @@ extension DocumentVC {
 //}
 //
 //extension DocumentVC {
-//    
+//
 //    @IBAction func pandeleteBtn(_ sender: UIButton) {
 //        guard let panImageUrl = self.panImageUrl else {
 //            print("No image URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: panImageUrl) else {
 //            print("Failed to extract RequestID from the image URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "PANCOPY") {
 //            success in
@@ -10914,13 +11148,13 @@ extension DocumentVC {
 //            print("No signature URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: signatureUrl) else {
 //            print("Failed to extract RequestID from the signature URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "SIGNATURE") {
 //            success in
@@ -10955,13 +11189,13 @@ extension DocumentVC {
 //            print("No client photo URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: clientPhotoUrl) else {
 //            print("Failed to extract RequestID from the client photo URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(
 //            requestId: requestId, documentType: "CLIENT_PHOTO"
@@ -10996,20 +11230,20 @@ extension DocumentVC {
 //                }
 //            }
 //        }
-//        
+//
 //    }
 //    @IBAction func nominee1deleteBtn(_ sender: UIButton) {
 //        guard let nominee1Url = self.nominee1Url else {
 //            print("No nominee 1 URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: nominee1Url) else {
 //            print("Failed to extract RequestID from nominee 1 URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "NOMINEE_1") {
 //            success in
@@ -11046,13 +11280,13 @@ extension DocumentVC {
 //            print("No nominee 2 URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: nominee2Url) else {
 //            print("Failed to extract RequestID from nominee 2 URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "NOMINEE_2") {
 //            success in
@@ -11089,13 +11323,13 @@ extension DocumentVC {
 //            print("No nominee 3 URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: nominee3Url) else {
 //            print("Failed to extract RequestID from nominee 3 URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "NOMINEE_3") {
 //            success in
@@ -11128,7 +11362,7 @@ extension DocumentVC {
 //        }
 //    }
 //    func UpdateDocumentModificationStatus() {
-//        
+//
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
 //            guard let tokenId = tokenId else {
@@ -11154,11 +11388,11 @@ extension DocumentVC {
 //                "PanNo": PanNo,
 //                "RegId": RegId,
 //                "DocumentName": "Documents",
-//                
+//
 //            ]
 //            print(parameters)
 //            let Url = "MultiPartImageUpload/UpdateDocumentModificationStatus"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view,
@@ -11185,7 +11419,7 @@ extension DocumentVC {
 //                                print(
 //                                    "All TokenMobile entries deleted due to error code 999992"
 //                                )
-//                                
+//
 //                                // Regenerate tokens
 //                                CoreDataHelper.generateToken(
 //                                    decodeByteArrayToString: self
@@ -11215,15 +11449,15 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func SavePhotoAuditLogDetails() {
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "Flag":"Insert"
 //        ]
 //        print("\(parameters)")
 //        let Url = "MultiPartImageUpload/SavePhotoAuditLogDetails"
-//        
+//
 //        apiCall(url: Url, method: "POST", parameters: parameters as [String: Any], view: self.view) { result in
 //            switch result {
 //            case .success(let jsonResponse):
@@ -11236,7 +11470,7 @@ extension DocumentVC {
 //                        DispatchQueue.main.async { [self] in
 //                            print("API is running")
 //                            openCamera()
-//                            
+//
 //                            //                            let vc = self.storyboard?.instantiateViewController(identifier: "WebViewVC") as! WebViewVC
 //                            //                            vc.userId = self.fetchedUserId
 //                            //                            vc.panNo = self.PanNo
@@ -11253,7 +11487,7 @@ extension DocumentVC {
 //                    case "000023" :
 //                        DispatchQueue.main.async {
 //                            print("API is running")
-//                            
+//
 //                            //                                    self.navigationController?.popViewController(animated: true)
 //                            //completion(true)
 //                        }
@@ -11270,7 +11504,7 @@ extension DocumentVC {
 //    }
 //}
 
-    
+
 //    func photoOutput(
 //        _ output: AVCapturePhotoOutput,
 //        didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?
@@ -11279,7 +11513,7 @@ extension DocumentVC {
 //        let image = UIImage(data: imageData)
 //        // Use captured image here
 //    }
-//    
+//
 //    @IBAction func incomeProofYearBtn(_ sender: UIButton) {
 //        if let vc = storyboard?.instantiateViewController(
 //            withIdentifier: "yearVC") as? yearVC
@@ -11291,33 +11525,33 @@ extension DocumentVC {
 //            self.present(vc, animated: true, completion: nil)
 //        }
 //    }
-//    
+//
 //    @IBAction func homeBtn(_ sender: UIButton) {
 //        self.navigationController?.popToRootViewController(animated: true)
 //    }
-//    
+//
 //    @IBAction func currentSignatureBtnTapped(_ sender: UIButton) {
 //        identifier = "Signature"
 //        showImageSourceSelection()
 //    }
-//    
+//
 //    @IBAction func drawSignatureBtn(_ sender: UIButton) {
 //        let signatureVC = signatureVC()
-//        
+//
 //        // Pass required parameters if needed
 //        signatureVC.PanNo = PanNo
 //        signatureVC.RegId = RegId
 //        signatureVC.fetchedUserId = fetchedUserId
 //        signatureVC.mobiledecodeArray = mobiledecodeArray
 //        signatureVC.fetchedSessionID = fetchedSessionID
-//        
+//
 //        // Handle the saved signature + API response
 //        signatureVC.onSignatureSaved = { [weak self] image, response in
 //            guard let self = self else { return }
 //            DispatchQueue.main.async {
 //                // ✅ Show the drawn signature in your UIImageView
 //                self.signatureImageview.image = image
-//                
+//
 //                // ✅ Also call your existing UI update method with response
 //                if let response = response {
 //                    self.signatureupdateUI(with: response)
@@ -11330,13 +11564,13 @@ extension DocumentVC {
 //        nav.modalPresentationStyle = .fullScreen
 //        present(nav, animated: true)
 //    }
-//    
-//    
+//
+//
 //    @IBAction func incomeProofUploadBtn(_ sender: UIButton) {
 //        print("Incomeproof Btn Tapped!!!!!")
-//      
+//
 //        identifier = "IncomeProof"
-//        
+//
 //        switch incomeproofDocumenttype {
 //        case "PDF":
 //            openPDFPicker()
@@ -11346,30 +11580,30 @@ extension DocumentVC {
 //            break
 //        }
 //    }
-//    
+//
 //    @IBAction func doneBtn(_ sender: UIButton) {
 //       // UpdateFinalDoneStatus()
 //        if !validateLocalDocuments() {
 //               return // Alert will be shown by validateLocalDocuments
 //           }
-//           
+//
 //           if panDelete == "PAN deleted" {
 //               showAlert(title: "Alert", message: "upload your PAN Image")
 //               return
 //           }
-//           
+//
 //           // Then check server verification status
 //           self.ViewDocumentDetails()
-//           
+//
 //           DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
 //               guard let self = self else { return }
-//               
+//
 //               var unverifiedSections: [String] = []
-//               
+//
 //               // Check visible sections dynamically
 //               for (section, isVisible) in visibleSections {
 //                   guard isVisible else { continue }
-//                   
+//
 //                   switch section {
 //                   case "IncomeProof":
 //                       // First check local collection view
@@ -11382,7 +11616,7 @@ extension DocumentVC {
 //                                 status != 1 && status != 2 {
 //                           unverifiedSections.append("Income Proof")
 //                       }
-//                       
+//
 //                   case "BankProof":
 //                       if bpImageUrls.isEmpty {
 //                           unverifiedSections.append("Bank Proof (No images uploaded)")
@@ -11393,7 +11627,7 @@ extension DocumentVC {
 //                                 status != 1 && status != 2 {
 //                           unverifiedSections.append("Bank Proof")
 //                       }
-//                       
+//
 //                   case "DematImage":
 //                       if dematimageUrls.isEmpty {
 //                           unverifiedSections.append("Demat (No images uploaded)")
@@ -11404,12 +11638,12 @@ extension DocumentVC {
 //                                 status != 1 && status != 2 {
 //                           unverifiedSections.append("Demat")
 //                       }
-//                       
+//
 //                   default:
 //                       break
 //                   }
 //               }
-//               
+//
 //               // Check Signature (check local image)
 //               if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //                   unverifiedSections.append("Signature (No image uploaded)")
@@ -11420,7 +11654,7 @@ extension DocumentVC {
 //                         status != 1 && status != 2 {
 //                   unverifiedSections.append("Signature")
 //               }
-//               
+//
 //               // Check PAN Copy (check local image)
 //               if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //                   unverifiedSections.append("PAN Copy (No image uploaded)")
@@ -11431,7 +11665,7 @@ extension DocumentVC {
 //                         status != 1 && status != 2 {
 //                   unverifiedSections.append("PAN Copy")
 //               }
-//               
+//
 //               // Check Client Photo (check local image)
 //               if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //                   unverifiedSections.append("Client Photo (No image uploaded)")
@@ -11442,7 +11676,7 @@ extension DocumentVC {
 //                         status != 1 && status != 2 {
 //                   unverifiedSections.append("Client Photo")
 //               }
-//               
+//
 //               // Check Nominees if they exist and have images
 //               if !NomineeDetails1.isHidden {
 //                   if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
@@ -11452,7 +11686,7 @@ extension DocumentVC {
 //                       unverifiedSections.append("Nominee 1")
 //                   }
 //               }
-//               
+//
 //               if !NomineeDetails2.isHidden {
 //                   if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                       unverifiedSections.append("Nominee 2 (No image uploaded)")
@@ -11461,7 +11695,7 @@ extension DocumentVC {
 //                       unverifiedSections.append("Nominee 2")
 //                   }
 //               }
-//               
+//
 //               if !NomineeDetails3.isHidden {
 //                   if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                       unverifiedSections.append("Nominee 3 (No image uploaded)")
@@ -11470,7 +11704,7 @@ extension DocumentVC {
 //                       unverifiedSections.append("Nominee 3")
 //                   }
 //               }
-//               
+//
 //               // Show alert if there are unverified sections
 //               DispatchQueue.main.async {
 //                   if !unverifiedSections.isEmpty {
@@ -11488,68 +11722,68 @@ extension DocumentVC {
 //       // Add this helper method to validate local documents
 //       func validateLocalDocuments() -> Bool {
 //           var missingDocuments: [String] = []
-//           
+//
 //           // Check Income Proof
 //           if IncomeProof.isHidden == false {
 //               if imageUrls.isEmpty {
 //                   missingDocuments.append("Income Proof")
 //               }
 //           }
-//           
+//
 //           // Check Bank Proof
 //           if BankProof.isHidden == false {
 //               if bpImageUrls.isEmpty {
 //                   missingDocuments.append("Bank Proof")
 //               }
 //           }
-//           
+//
 //           // Check Demat
 //           if DematImage.isHidden == false {
 //               if dematimageUrls.isEmpty {
 //                   missingDocuments.append("Demat")
 //               }
 //           }
-//           
+//
 //           // Check Signature
 //           if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //               missingDocuments.append("Signature")
 //           }
-//           
+//
 //           // Check PAN Copy
 //           if panCopyImageView.image == nil || panCopyImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //               missingDocuments.append("PAN Copy")
 //           }
-//           
+//
 //           // Check Client Photo
 //           if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
 //               missingDocuments.append("Client Photo")
 //           }
-//           
+//
 //           // Check Nominees
 //           if !NomineeDetails1.isHidden {
 //               if nominee1ImageView.image == nil || nominee1ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                   missingDocuments.append("Nominee 1")
 //               }
 //           }
-//           
+//
 //           if !NomineeDetails2.isHidden {
 //               if nominee2ImageView.image == nil || nominee2ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                   missingDocuments.append("Nominee 2")
 //               }
 //           }
-//           
+//
 //           if !NomineeDetails3.isHidden {
 //               if nominee3ImageView.image == nil || nominee3ImageView.image == UIImage(systemName: "person.crop.circle") {
 //                   missingDocuments.append("Nominee 3")
 //               }
 //           }
-//           
+//
 //           if !missingDocuments.isEmpty {
 //               let message = "Please upload the following documents:\n" + missingDocuments.joined(separator: "\n")
 //               showAlert(title: "Missing Documents", message: message)
 //               return false
 //           }
-//           
+//
 //           return true
 //       }
 ////        if panDelete == "PAN deleted" {
@@ -11653,22 +11887,22 @@ extension DocumentVC {
 //                print("No tokens available. Please reload the tokens.")
 //                return
 //            }
-//            
+//
 //            let parameters: [String: Any] = [
 //                "PanNo": self.PanNo,
 //                "RegId": self.RegId,
 //                "DocumentName": "Documents"
 //            ]
-//            
+//
 //            print("6th api params\(parameters)")
 //            let sixthUrl = "MultipartImageUpload/UpdateDocumentModificationStatus"
-//            
+//
 //            // API call
 //            apiCall(url: sixthUrl, method: "POST", parameters: parameters, view: self.view,loaderText: "Kindly wait we are fetching your details...") { result in
 //                switch result {
 //                case .success(let jsonResponse):
 //                    print("UpdateDocumentModificationStatus: \(jsonResponse)")
-//                    
+//
 //                    if let errorCode = jsonResponse["ErrorCode"] as? String {
 //                        switch errorCode {
 //                        case "000000":
@@ -11679,7 +11913,7 @@ extension DocumentVC {
 //                                let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
 //                                self.navigationController?.pushViewController(vc, animated: true)
 //                            }
-//                            
+//
 //                        default:
 //                            print("Unhandled error code: \(errorCode)")
 //                        }
@@ -11690,24 +11924,24 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    @IBAction func submitBtn(_ sender: UIButton) {
 //        if panDelete == "PAN deleted" {
 //            showAlert(title: "Alert", message: "upload your PAN Image")
 //            return
 //        }
 //        self.ViewDocumentDetails()
-//        
+//
 //        DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
 //            [weak self] in
 //            guard let self = self else { return }
-//            
+//
 //            var unverifiedSections: [String] = []
-//            
+//
 //            // Check visible sections dynamically
 //            for (section, isVisible) in visibleSections {
 //                guard isVisible else { continue }
-//                
+//
 //                switch section {
 //                case "IncomeProof":
 //                    if let status = jsonResponse["DerivativeImages_Verify"]
@@ -11720,7 +11954,7 @@ extension DocumentVC {
 //                    {
 //                        unverifiedSections.append("Income Proof")
 //                    }
-//                    
+//
 //                case "BankProof":
 //                    if let status = jsonResponse["BankImages_Verify"]
 //                        as? String, status != "1" && status != "2"
@@ -11731,7 +11965,7 @@ extension DocumentVC {
 //                    {
 //                        unverifiedSections.append("Bank Proof")
 //                    }
-//                    
+//
 //                case "DematImage":
 //                    if let status = jsonResponse["DP_IMAGEID_Verify"]
 //                        as? String, status != "1" && status != "2"
@@ -11742,7 +11976,7 @@ extension DocumentVC {
 //                    {
 //                        unverifiedSections.append("Demat")
 //                    }
-//                    
+//
 ////                case "NomineeDetails1":
 ////                    if let nominee = jsonResponse["NOMINEE_1Images_Verify"]
 ////                        as? String, nominee != "1" && nominee != "2"
@@ -11778,18 +12012,18 @@ extension DocumentVC {
 ////                    {
 ////                        unverifiedSections.append("Nominee 3 Details")
 ////                    }
-//                    
+//
 //                default:
 //                    break
 //                }
 //            }
-//            
+//
 //            // Explicitly check Signature, PAN Copy, and Client Photo
 //            let additionalChecks: [String: String] = [
 //                "SignatureImage_Verify": "Signature",
 //                "ClientPhotoImageID_Verify": "Client Photo"
 //            ]
-//            
+//
 //            for (key, sectionName) in additionalChecks {
 //                if let status = jsonResponse[key] as? String,
 //                   status != "1" && status != "2"
@@ -11801,7 +12035,7 @@ extension DocumentVC {
 //                    unverifiedSections.append(sectionName)
 //                }
 //            }
-//            
+//
 //            // Show alert if there are unverified sections
 //            DispatchQueue.main.async {
 //                if !unverifiedSections.isEmpty {
@@ -11817,7 +12051,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //        func navigateToNextStep() {
 //            if let rejectionValue = rejection, !rejectionValue.isEmpty {
 //                UpdateDocumentModificationStatus()
@@ -11828,13 +12062,13 @@ extension DocumentVC {
 //                as! uccVC
 //                vc.modalPresentationStyle = .overCurrentContext
 //                vc.modalTransitionStyle = .crossDissolve
-//    
+//
 //                vc.delegate = self
-//    
+//
 //                self.present(vc, animated: true)
 //            }
 //        }
-//    
+//
 //    @IBAction func incomeProofDocumentTypeBtn(_ sender: UIButton) {
 //        if let vc = storyboard?.instantiateViewController(
 //            withIdentifier: "incomeproofDocumentVC") as? incomeproofDocumentVC
@@ -11846,14 +12080,14 @@ extension DocumentVC {
 //            self.present(vc, animated: true, completion: nil)
 //        }
 //    }
-//    
+//
 //    @IBAction func incomeproofYesNoBtnPressed(_ sender: UIButton) {
 //        if sender == incomeProofYesBtn {
 //            incomeProofYesBtn.isSelected = true
 //            incomeProofNoBtn.isSelected = false
 //            incomeproofDocumenttype = "PDF"
 //            IPStackView2.isHidden = false
-//            
+//
 //        } else if sender == incomeProofNoBtn {
 //            incomeProofYesBtn.isSelected = false
 //            incomeProofNoBtn.isSelected = true
@@ -11861,7 +12095,7 @@ extension DocumentVC {
 //            IPStackView2.isHidden = false
 //        }
 //    }
-//    
+//
 //    @IBAction func incomeProofVerifyBtn(_ sender: UIButton) {
 //        incomeProofOcrCount += 1
 //        DocumentVerify(
@@ -11869,13 +12103,13 @@ extension DocumentVC {
 //            DocumentType: incomeproofDocumenttypetext ?? "",
 //            ocrCount: incomeProofOcrCount)
 //    }
-//    
+//
 //    func didselectdocument(documenttype: String, identifier: String) {
 //        switch identifier {
 //        case "incomeProof":
 //            self.incomeproofDocumentTypeLabel.text = documenttype
 //            incomeproofDocumenttypetext = documenttype
-//            
+//
 //            print("income", incomeproofDocumenttypetext!)
 //            switch documenttype {
 //            case "Six Month Bank Statement":
@@ -11913,7 +12147,7 @@ extension DocumentVC {
 //                iplabel3.isHidden = true
 //                yearBtn.isHidden = true
 //                IPStackView1.isHidden = false
-//                
+//
 //            case "Demat Account Holding with Value":
 //                incomeProofVerifyBtn.isHidden = true
 //                iplabel3.isHidden = true
@@ -11947,16 +12181,16 @@ extension DocumentVC {
 //        case "IncomeYear":
 //            self.incomeProofYearBtn.setTitle(documenttype, for: .normal)
 //            year = documenttype
-//            
+//
 //            //bankproofDocumentTypetext = documenttype
 //        default:
 //            break
 //        }
 //    }
-//    
+//
 //    @IBAction func bankProofMediaUploadButton(_ sender: UIButton) {
 //        identifier = "BankProof"
-//        
+//
 //        //bankproofDocumentType
 //        switch bankproofDocumentType {
 //        case "PDF":
@@ -11984,13 +12218,13 @@ extension DocumentVC {
 //            BankProofNoBtn.isSelected = false
 //            bankproofDocumentType = "PDF"
 //            BPStackview2.isHidden = false
-//            
+//
 //        } else if sender == BankProofNoBtn {
 //            BankProofYesBtn.isSelected = false
 //            BankProofNoBtn.isSelected = true
 //            bankproofDocumentType = "IMAGE"
 //            BPStackview2.isHidden = false
-//            
+//
 //        }
 //    }
 //    @IBAction func bankProofVerifyBtn(_ sender: UIButton) {
@@ -11999,7 +12233,7 @@ extension DocumentVC {
 //            DocumentName: "BANK", DocumentType: bankproofDocumentTypetext ?? "",
 //            ocrCount: bankOcrCount)
 //    }
-//    
+//
 //    @IBAction func panCopyUploadBtn(_ sender: UIButton) {
 //        //           identifier = "PanCopy"
 //        //           showImageSourceSelection()
@@ -12026,39 +12260,39 @@ extension DocumentVC {
 //                PCStackView.isHidden = true
 //            }
 //            //            PCStackView.isHidden = false
-//            
+//
 //        } else if sender == PCNoBtn {
 //            PCYesBtn.isSelected = false
 //            PCNoBtn.isSelected = true
 //            panCopyDocumentType = "IMAGE"
 //            //PCStackView.isHidden = false
-//            
+//
 //        }
-//        
+//
 //    }
-//    
+//
 //    // Function to show the alert for camera and gallery selection
 //    func showImageSourceSelection() {
 //        let alertController = UIAlertController(
 //            title: "Choose Image", message: nil, preferredStyle: .actionSheet)
-//        
+//
 //        let cameraAction = UIAlertAction(title: "Camera", style: .default) {
 //            _ in
 //            self.openCamera()
 //        }
-//        
+//
 //        let galleryAction = UIAlertAction(title: "Gallery", style: .default) {
 //            _ in
 //            self.openGallery()
 //        }
-//        
+//
 //        let cancelAction = UIAlertAction(
 //            title: "Cancel", style: .cancel, handler: nil)
-//        
+//
 //        alertController.addAction(cameraAction)
 //        alertController.addAction(galleryAction)
 //        alertController.addAction(cancelAction)
-//        
+//
 //        // For iPad compatibility
 //        if let popoverController = alertController.popoverPresentationController
 //        {
@@ -12068,10 +12302,10 @@ extension DocumentVC {
 //                height: 0)
 //            popoverController.permittedArrowDirections = []
 //        }
-//        
+//
 //        present(alertController, animated: true, completion: nil)
 //    }
-//    
+//
 //    // Open Camera
 //    func openCamera() {
 //        if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -12083,7 +12317,7 @@ extension DocumentVC {
 //            showAlert(title: "Error", message: "Camera not available.")
 //        }
 //    }
-//    
+//
 //    // Open Gallery
 //    func openGallery() {
 //        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
@@ -12095,7 +12329,7 @@ extension DocumentVC {
 //            showAlert(title: "Error", message: "Gallery not available.")
 //        }
 //    }
-//    
+//
 //    // UIImagePickerController delegate function to handle selected image
 //    func imagePickerController(
 //        _ picker: UIImagePickerController,
@@ -12114,20 +12348,20 @@ extension DocumentVC {
 //        //                }
 //        //            }
 //        //        }
-//        
+//
 //        if let capturedImage = info[.originalImage] as? UIImage {
 //            // ✅ Now send this capturedImage to your API
 //            ValidateIsPhotoDone(image: capturedImage)
 //        }
-//        
+//
 //        guard let image = info[.originalImage] as? UIImage else {
 //            return
 //        }
 //        picker.dismiss(animated: true)
-//        
+//
 //        showCrop(image: image)
 //    }
-//    
+//
 //    func showCrop(image: UIImage) {
 //        let vc = CropViewController(croppingStyle: .default, image: image)
 //        vc.aspectRatioPreset = .presetSquare
@@ -12138,21 +12372,21 @@ extension DocumentVC {
 //        vc.delegate = self
 //        present(vc, animated: true)
 //    }
-//    
+//
 //    func cropViewController(
 //        _ cropViewController: CropViewController,
 //        didFinishCancelled cancelled: Bool
 //    ) {
 //        cropViewController.dismiss(animated: true)
 //    }
-//    
+//
 //    func cropViewController(
 //        _ cropViewController: CropViewController, didCropToImage image: UIImage,
 //        withRect cropRect: CGRect, angle: Int
 //    ) {
 //        cropViewController.dismiss(animated: true)
 //        print("did Crop")
-//        
+//
 //        // let imageView = UIImageView(frame: view.frame)
 //        guard let compressedData = image.jpegData(compressionQuality: 0.1)
 //        else { return }
@@ -12166,7 +12400,7 @@ extension DocumentVC {
 //    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
 //        picker.dismiss(animated: true, completion: nil)
 //    }
-//    
+//
 //    // Helper function to show alert messages
 //    func showAlert(title: String, message: String) {
 //        let alert = UIAlertController(
@@ -12175,7 +12409,7 @@ extension DocumentVC {
 //        alert.addAction(okAction)
 //        present(alert, animated: true, completion: nil)
 //    }
-//    
+//
 //    // MARK: - CLLocationManagerDelegate
 //    func locationManager(
 //        _ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]
@@ -12188,25 +12422,25 @@ extension DocumentVC {
 //        //        CP_Long_Lat_Lbl.text = "Latitude: \(latitude), Longitude: \(longitude)"
 //        //        CP_Location_label.text = "Latitude: \(latitude), Longitude: \(longitude)"
 //        // Use location.coordinate.latitude and location.coordinate.longitude
-//        
+//
 //        guard let location = locations.last else { return }
 //        let latitude = location.coordinate.latitude
 //        let longitude = location.coordinate.longitude
 //        print("Latitude: \(latitude), Longitude: \(longitude)")
-//        
+//
 //        // Update labels
 //        CP_Long_Lat_Lbl.text = "Latitude: \(latitude), Longitude: \(longitude)"
 //        CP_Location_label.text =
 //        "Latitude: \(latitude), Longitude: \(longitude)"
-//        
+//
 //        // Store location for later use
 //        self.Latitude = "\(latitude)"
 //        self.Longitude = "\(longitude)"
-//        
+//
 //        // Stop location updates to conserve battery
 //        locationManager.stopUpdatingLocation()
 //    }
-//    
+//
 //    @IBAction func capturePhotoButtonPressed(_ sender: UIButton) {
 //        locationManager = CLLocationManager()
 //        locationManager.delegate = self
@@ -12214,8 +12448,8 @@ extension DocumentVC {
 //        locationManager.startUpdatingLocation()
 //        identifier = "ClientPhoto"
 //        DispatchQueue.main.async { [self] in
-//            
-//            
+//
+//
 //            self.GetUserLocation(Longitude: Longitude ?? "", Latitude: Latitude ?? "")
 //            self.SavePhotoAuditLogDetails()
 //        }
@@ -12227,15 +12461,15 @@ extension DocumentVC {
 //    //
 //    //        let settings = AVCapturePhotoSettings()
 //    //        photoOutput.capturePhoto(with: settings, delegate: self)
-//    
-//    
+//
+//
 //    @IBAction func IPVlinkBtn(_ sender: UIButton) {
 //        InsertUpdateIPVAuditLog()
 //    }
-//    
+//
 //    @IBAction func dematUploadBtn(_ sender: UIButton) {
 //        identifier = "Demat"
-//        
+//
 //        //dematDocumentType
 //        switch dematDocumentType {
 //        case "PDF":
@@ -12245,7 +12479,7 @@ extension DocumentVC {
 //        default:
 //            break
 //        }
-//        
+//
 //    }
 //    @IBAction func DematYesNoBtnPressed(_ sender: UIButton) {
 //        if sender == dematYesBtn {
@@ -12253,13 +12487,13 @@ extension DocumentVC {
 //            dematNoBtn.isSelected = false
 //            dematDocumentType = "PDF"
 //            DIStackView2.isHidden = false
-//            
+//
 //        } else if sender == dematNoBtn {
 //            dematYesBtn.isSelected = false
 //            dematNoBtn.isSelected = true
 //            dematDocumentType = "IMAGE"
 //            DIStackView2.isHidden = false
-//            
+//
 //        }
 //    }
 //    @IBAction func DematVerifyBtn(_ sender: UIButton) {
@@ -12268,7 +12502,7 @@ extension DocumentVC {
 //            DocumentName: "DP_IMAGE", DocumentType: "DP_IMAGE",
 //            ocrCount: dematOcrCount)
 //    }
-//    
+//
 //    @IBAction func nominee1UploadBtn(_ sender: UIButton) {
 //        identifier = "NOMINEE_1"
 //        showImageSourceSelection()
@@ -12282,12 +12516,12 @@ extension DocumentVC {
 //        identifier = "NOMINEE_3"
 //        showImageSourceSelection()
 //    }
-//    
+//
 //    @IBAction func BackBtn(_ sender: UIButton) {
 //        delegate?.reloadPageData()
 //        self.navigationController?.popViewController(animated: true)
 //    }
-//    
+//
 //    @IBAction func TermsAndConditionsBtn(_ sender: UIButton) {
 //        if sender.isSelected {
 //            // If the button is selected and user clicks, deselect it and show terms and conditions page
@@ -12298,21 +12532,21 @@ extension DocumentVC {
 //            {
 //                vc.modalPresentationStyle = .overCurrentContext
 //                vc.modalTransitionStyle = .crossDissolve
-//                
+//
 //                // Closure or delegate to set the button to selected when termsVC is dismissed
 //                vc.dismissHandler = { [weak self] in
 //                    self?.termsnconditionBtn.isSelected = true
 //                }
-//                
+//
 //                present(vc, animated: true, completion: nil)
 //            }
 //        }
 //    }
-//    
+//
 //}
 //
 //extension DocumentVC {
-//    
+//
 //    @IBAction func IncomeProofBtn(_ sender: UIButton) {
 //        if sender.isSelected {
 //            sender.isSelected = false
@@ -12394,12 +12628,12 @@ extension DocumentVC {
 //            NomineeDetail3(shouldShow: true)
 //        }
 //    }
-//    
+//
 //}
 //
 //extension DocumentVC {
 //    func ValidateToken() {
-//        
+//
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
 //            guard let tokenId = tokenId else {
@@ -12425,7 +12659,7 @@ extension DocumentVC {
 //            ]
 //            print(parameters)
 //            let Url = "TokenAuthentication/ValidateToken"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view
@@ -12446,7 +12680,7 @@ extension DocumentVC {
 //                                print(
 //                                    "All TokenMobile entries deleted due to error code 999992"
 //                                )
-//                                
+//
 //                                // Regenerate tokens
 //                                CoreDataHelper.generateToken(
 //                                    decodeByteArrayToString: self
@@ -12475,11 +12709,11 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func GetNomineeDocTypeMaster() {
-//        
+//
 //        let Url = "DropDownManagement/GetNomineeDocTypeMaster"
-//        
+//
 //        apiCall(url: Url, method: "POST", parameters: [:], view: self.view) {
 //            result in
 //            switch result {
@@ -12500,9 +12734,9 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func ViewDocumentDetails() {
-//        
+//
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
 //            guard let tokenId = tokenId else {
@@ -12530,7 +12764,7 @@ extension DocumentVC {
 //            ]
 //            print(parameters)
 //            let Url = "Client/ViewDocumentDetails"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view,
@@ -12544,11 +12778,11 @@ extension DocumentVC {
 //                        switch errorCode {
 //                        case "000000":
 //                            DispatchQueue.main.async {
-//                                
+//
 //                                print("api is running")
 //                                self.updateButtonImages(with: jsonResponse)
 //                                self.updateViewVisibility(with: jsonResponse)
-//                                
+//
 //                                if let panDocumentSource = jsonResponse["PanDocumentSource"] as? String, panDocumentSource.uppercased() == "DIGILOCKER" {
 //                                    self.panMsg.text = "PAN card has been fetched successfully."
 //                                 } else {
@@ -12568,7 +12802,7 @@ extension DocumentVC {
 //                                 } else {
 //                                     self.incomeProofmsg.text = ""
 //                                 }
-//                                
+//
 //                                if self.IPVStatus == "IPV" {
 //                                    if let clientPhotoID = jsonResponse["ClientPhotoImageID"] as? String, !clientPhotoID.isEmpty {
 //                                        self.updateClientPhotoUI(with: jsonResponse) // Update only Client Photo UI
@@ -12586,7 +12820,7 @@ extension DocumentVC {
 //                                print(
 //                                    "All TokenMobile entries deleted due to error code 999992"
 //                                )
-//                                
+//
 //                                // Regenerate tokens
 //                                CoreDataHelper.generateToken(
 //                                    decodeByteArrayToString: self
@@ -12626,14 +12860,14 @@ extension DocumentVC {
 //            BankProof.isHidden = false
 //            visibleSections["BankProof"] = true
 //        }
-//        
+//
 //        // Check for "DerivativeImages_Verify" field
 //        if let segments = jsonResponse["Segments"] as? String {
 //            let segmentsArray = segments.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
-//            
+//
 //            let derivativeSegments = ["EQUITY DERIVATIVE", "COMMODITY", "CURRENCY"]
 //            let hasDerivativeSegment = segmentsArray.contains { derivativeSegments.contains($0) }
-//            
+//
 //            // Show DerivativeButton if any derivative-related segment is found
 //            if hasDerivativeSegment {
 //                IncomeProof.isHidden = false
@@ -12647,7 +12881,7 @@ extension DocumentVC {
 //            IncomeProof.isHidden = true
 //            visibleSections["IncomeProof"] = false
 //        }
-//        
+//
 //        // Check for "DP_IMAGEID_Verify" field
 //        if let isDpAccountNew = jsonResponse["IsDpAccountNew"] as? String,
 //           isDpAccountNew == "Y"
@@ -12658,7 +12892,7 @@ extension DocumentVC {
 //            DematImage.isHidden = false
 //            visibleSections["DematImage"] = true
 //        }
-//        
+//
 //        // Check for "NOMINEE_1Images_Verify" field
 ////        if let nominee1ImagesVerify = jsonResponse["Nom1NomineeOrGuardianName"]
 ////            as? String, nominee1ImagesVerify.isEmpty
@@ -12692,7 +12926,7 @@ extension DocumentVC {
 ////            visibleSections["NomineeDetails3"] = true
 ////        }
 //    }
-//    
+//
 //    func updateButtonImages(with jsonResponse: [String: Any]) {
 //        updateButtonImage(
 //            button: bankProofStatusBtn, statusKey: "BankImages_Verify",
@@ -12712,7 +12946,7 @@ extension DocumentVC {
 //        updateButtonImage(
 //            button: dematStatusBtn, statusKey: "DP_IMAGEID_Verify",
 //            jsonResponse: jsonResponse)
-//        
+//
 //        updateButtonImage(
 //            button: nominee1StatusBtn, statusKey: "NOMINEE_1Images_Verify",
 //            jsonResponse: jsonResponse)
@@ -12722,7 +12956,7 @@ extension DocumentVC {
 //        updateButtonImage(
 //            button: nominee3StatusBtn, statusKey: "NOMINEE_3Images_Verify",
 //            jsonResponse: jsonResponse)
-//        
+//
 //        handleDeleteButtonVisibility(with: jsonResponse)
 //    }
 //    func handleDeleteButtonVisibility(with jsonResponse: [String: Any]) {
@@ -12737,7 +12971,7 @@ extension DocumentVC {
 //            nominee3deleteBtn.isHidden = true
 //            return
 //        }
-//        
+//
 //        // If rejection is not "Rejection", hide all delete buttons
 //        if rejection != "Rejection" {
 //            pandeleteBtn.isHidden = true
@@ -12748,43 +12982,43 @@ extension DocumentVC {
 //            nominee3deleteBtn.isHidden = true
 //            return
 //        }
-//        
+//
 //        // Check respective verify values from the JSON response
 //        if let panVerify = jsonResponse["PANImage_Verify"] as? String {
 //            pandeleteBtn.isHidden = panVerify != "2"
 //        }
-//        
+//
 //        if let signatureVerify = jsonResponse["SignatureImage_Verify"]
 //            as? String
 //        {
 //            signaturedeleteBtn.isHidden = signatureVerify != "2"
 //        }
-//        
+//
 //        if let clientPhotoVerify = jsonResponse["ClientPhotoImageID_Verify"]
 //            as? String
 //        {
 //            clientphotodeleteBtn.isHidden = clientPhotoVerify != "2"
 //        }
-//        
+//
 //        if let nominee1Verify = jsonResponse["NOMINEE_1Images_Verify"]
 //            as? String
 //        {
 //            nominee1deleteBtn.isHidden = nominee1Verify != "2"
 //        }
-//        
+//
 //        if let nominee2Verify = jsonResponse["NOMINEE_2Images_Verify"]
 //            as? String
 //        {
 //            nominee2deleteBtn.isHidden = nominee2Verify != "2"
 //        }
-//        
+//
 //        if let nominee3Verify = jsonResponse["NOMINEE_3Images_Verify"]
 //            as? String
 //        {
 //            nominee3deleteBtn.isHidden = nominee3Verify != "2"
 //        }
 //    }
-//    
+//
 //    private func updateButtonImage(
 //        button: UIButton, statusKey: String, jsonResponse: [String: Any]
 //    ) {
@@ -12798,7 +13032,7 @@ extension DocumentVC {
 //            button.setImage(nil, for: .normal)  // No image if status is unavailable
 //            return
 //        }
-//        
+//
 //        // Now, use the `statusValue` as a string for comparison
 //        switch statusValue {
 //        case "0":
@@ -12816,7 +13050,7 @@ extension DocumentVC {
 //            button.setImage(nil, for: .normal)  // Default to no image for unexpected values
 //        }
 //    }
-//    
+//
 //    func ValidateIsPhotoDone(image: UIImage) {
 //        let parameters: [String: Any?] = [
 //            "TransactionID": transactionId,
@@ -12832,9 +13066,9 @@ extension DocumentVC {
 //            "Location": location,
 //            "OCR_Count": "\(ocrCount ?? 1)",
 //        ]
-//        
+//
 //        let apiUrl = "MultiPartImageUpload/ValidateIsPhotoDone"
-//        
+//
 //        DispatchQueue.main.async {
 //            apiCall(url: apiUrl, method: "POST", parameters: parameters as [String: Any], view: self.view) { result in
 //                switch result {
@@ -12845,16 +13079,16 @@ extension DocumentVC {
 //                            switch errorCode {
 //                            case "000000":
 //                                self.ocrCount = 0
-//                                
+//
 //                                self.navigationController?.popViewController(animated: true)
-//                                
+//
 //                            case "801005":
 //                                if self.ocrCount ?? 0 < 2 {
 //                                    self.ocrCount += 1 // Increase count correctly
 //                                }
-//                                
+//
 //                                self.navigationController?.popViewController(animated: true)
-//                                
+//
 //                            default:
 //                                print("Unhandled error code: \(errorCode)")
 //                            }
@@ -12866,12 +13100,12 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //
 //    func updateClientPhotoUI(with response: [String: Any]) {
 //        let latitude = response["Latitude"] as? String ?? "Latitude"
 //        let longitude = response["Longitude"] as? String ?? "Longitude"
-//        
+//
 //        guard let ClientPhotoImageID = response["ClientPhotoImageID"] as? String, !ClientPhotoImageID.isEmpty else {
 //            DispatchQueue.main.async {
 //                self.CPImageView.image = UIImage(systemName: "person.crop.circle.badge.xmark")
@@ -12891,7 +13125,7 @@ extension DocumentVC {
 //
 //            let userIdEncoded = self.fetchedUserId?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
 //            let imageUrlString = "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(ClientPhotoImageID)&ImageType=ThumbNail&UserId=\(userIdEncoded)&TokenId=\(tokenId)"
-//            
+//
 //            print("Full Client Photo URL: \(imageUrlString)")
 //
 //            DispatchQueue.main.async {
@@ -12899,10 +13133,10 @@ extension DocumentVC {
 //                self.CP_Long_Lat_Lbl.text = "Your Lat/Long \n \(latitude), \(longitude)"
 //                self.GetUserLocation(Longitude: longitude, Latitude: latitude)
 //                self.CPImageView.restorationIdentifier = "CLIENTPHOTO"
-//                
+//
 //                // Load image into CPImageView
 //                self.loadImage(from: imageUrlString, into: self.CPImageView, with: "CLIENTPHOTO")
-//                
+//
 //                // Force UI refresh
 //                self.CPImageView.setNeedsDisplay()
 //                self.CPImageView.setNeedsLayout()
@@ -12963,7 +13197,7 @@ extension DocumentVC {
 //                //                self.signatureImageview.image = UIImage(systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        // Update NOMINEE_1ImageID Image
 //        if let NOMINEE_1ImageID = response["NOMINEE_1ImageID"] as? String,
 //           !NOMINEE_1ImageID.isEmpty
@@ -12990,8 +13224,8 @@ extension DocumentVC {
 //                }
 //            }
 //            //NM1Label1
-//            
-//            
+//
+//
 //            self.nominee_1DocumentTypelbl.text =
 //            response["NOMINEE_1DocumentType"] as? String
 //            if let nominee1ImagesVerify = response["NOMINEE_1Images_Verify"]
@@ -13015,7 +13249,7 @@ extension DocumentVC {
 //                // Handle the case where the key is not present or is not an integer
 //                print("NOMINEE_1Images_Verify key not found or invalid type")
 //            }
-//            
+//
 //        } else {
 //            DispatchQueue.main.async {
 //                self.nominee_1nameLabel.text =
@@ -13032,7 +13266,7 @@ extension DocumentVC {
 //                //                self.nominee1ImageView.image = UIImage(systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        //nominee2
 //        if let NOMINEE_2ImageID = response["NOMINEE_2ImageID"] as? String,
 //           !NOMINEE_2ImageID.isEmpty
@@ -13064,24 +13298,24 @@ extension DocumentVC {
 //            if let nominee2ImagesVerify = response["NOMINEE_2Images_Verify"]
 //                as? String
 //            {
-//                
+//
 //                self.nominee2ImagesVerify = nominee2ImagesVerify
-//                
+//
 //            } else {
 //                // Handle the case where the key is not present or is not an integer
 //                print("NOMINEE_2Image key not found or invalid type")
 //            }
-//            
+//
 //        } else {
 //            DispatchQueue.main.async {
 //                self.NM2Label3.text = response["Nom2NomineeOrGuardianName"] as? String
 //                self.nominee_2DocumentTypelbl.text =
 //                response["NOMINEE_2DocumentType"] as? String
-//                
+//
 //                //                self.nominee2ImageView.image = UIImage(systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        //nominee3
 //        if let NOMINEE_3ImageID = response["NOMINEE_3ImageID"] as? String,
 //           !NOMINEE_3ImageID.isEmpty
@@ -13092,7 +13326,7 @@ extension DocumentVC {
 //            let ImageUrlString =
 //            "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(NOMINEE_3ImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId={tokenId}"
 //            self.nominee3Url = ImageUrlString
-//            
+//
 //            self.nominee3ImageView.restorationIdentifier = "nominee3"
 //            loadImage(
 //                from: ImageUrlString, into: self.nominee3ImageView,
@@ -13113,12 +13347,12 @@ extension DocumentVC {
 //            {
 //                // If the value is 0, show the buttons, otherwise hide them
 //                self.nominee3ImagesVerify = nominee3ImagesVerify
-//                
+//
 //            } else {
 //                // Handle the case where the key is not present or is not an integer
 //                print("NOMINEE_3Images_Verify key not found or invalid type")
 //            }
-//            
+//
 //        } else {
 //            DispatchQueue.main.async {
 //                //                self.nominee3ImageView.image = UIImage(systemName: "person.crop.circle.badge.xmark")
@@ -13135,7 +13369,7 @@ extension DocumentVC {
 //                }
 //            }
 //        }
-//        
+//
 //        // Update ClientPhotoImageID Image
 //        let Latitude = response["Latitude"] as? String
 //        let Longitude = response["Longitude"] as? String
@@ -13148,7 +13382,7 @@ extension DocumentVC {
 //            let ImageUrlString =
 //            "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(ClientPhotoImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId={tokenId}"
 //            self.clientPhotoUrl = ImageUrlString
-//            
+//
 //            self.CPImageView.restorationIdentifier = "CLIENTPHOTO"
 //            loadImage(
 //                from: ImageUrlString, into: self.CPImageView,
@@ -13172,7 +13406,7 @@ extension DocumentVC {
 //                    systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        // Update Pan Image
 //        if let PANImageID = response["PANImageID"] as? String,
 //           !PANImageID.isEmpty
@@ -13197,7 +13431,7 @@ extension DocumentVC {
 //                    systemName: "person.crop.circle.badge.xmark")
 //            }
 //        }
-//        
+//
 //        // Update Collection View Images
 //        if let derivativeImageIDsString = response["DerivativeImageID"]
 //            as? String, !derivativeImageIDsString.isEmpty
@@ -13205,15 +13439,15 @@ extension DocumentVC {
 //            let userId =
 //            fetchedUserId?.addingPercentEncoding(
 //                withAllowedCharacters: .urlQueryAllowed) ?? ""
-//            
+//
 //            // Split the IDs and form URLs for each
 //            let derivativeImageIDs = derivativeImageIDsString.split(
 //                separator: ","
 //            ).map { $0.trimmingCharacters(in: .whitespaces) }
-//            
+//
 //            // Clear previous images
 //            imageUrls.removeAll()
-//            
+//
 //            // Generate URLs and update the imageUrls array
 //            for imageID in derivativeImageIDs {
 //                let imageUrlString =
@@ -13235,13 +13469,13 @@ extension DocumentVC {
 //                    incomeProofNoBtn.isSelected = true
 //                }
 //            }
-//            
+//
 //            if let assesmentYear = response["AssesmentYear"] as? String,
 //               !assesmentYear.isEmpty {
 //                self.incomeProofYearBtn.setTitle(assesmentYear, for: .normal)
 //                self.year = assesmentYear
 //            }
-//            
+//
 //            if let DerivativeImages_Verify = response["DerivativeImages_Verify"]
 //                as? String
 //            {
@@ -13256,8 +13490,8 @@ extension DocumentVC {
 //                    incomeProofVerifyBtn.isHidden = true
 //                    self.incomeProofDocumentTypeBtn.isEnabled = false
 //                    self.incomeProofYearBtn.isEnabled = false
-//                    
-//                   
+//
+//
 //                    if incomeproofDocumenttype == "PDF" {
 //                        incomeProofNoBtn.isEnabled = false
 //                    } else if incomeproofDocumenttype == "IMAGE" {
@@ -13268,7 +13502,7 @@ extension DocumentVC {
 //                // Handle the case where the key is not present or is not an integer
 //                print("NOMINEE_1Images_Verify key not found or invalid type")
 //            }
-//            
+//
 //            DispatchQueue.main.async {
 //                self.incomeProofCollectionView.reloadData()
 //            }
@@ -13280,15 +13514,15 @@ extension DocumentVC {
 //            let userId =
 //            fetchedUserId?.addingPercentEncoding(
 //                withAllowedCharacters: .urlQueryAllowed) ?? ""
-//            
+//
 //            // Split the IDs and form URLs for each
 //            let bankImageIDs = bankImageIDsString.split(separator: ",").map {
 //                $0.trimmingCharacters(in: .whitespaces)
 //            }
-//            
+//
 //            // Clear previous images
 //            bpImageUrls.removeAll()
-//            
+//
 //            // Generate URLs and update the bpImageUrls array
 //            for imageID in bankImageIDs {
 //                let imageUrlString =
@@ -13298,7 +13532,7 @@ extension DocumentVC {
 //            let documentType = response["BankDocumentType"] as? String
 //            self.BankProofDocumentTypelbl.text = documentType
 //            self.bankproofDocumentTypetext = documentType
-//            
+//
 //            if let derivativeType = response["BankType"] as? String {
 //                bankproofDocumentType = derivativeType
 //                if derivativeType == "PDF" {
@@ -13337,7 +13571,7 @@ extension DocumentVC {
 //                self.BpCollectionView.reloadData()
 //            }
 //        }
-//        
+//
 //        // Update demat Proof Collection View Images
 //        if let dematImageIDsString = response["DP_IMAGEID"] as? String,
 //           !dematImageIDsString.isEmpty
@@ -13345,15 +13579,15 @@ extension DocumentVC {
 //            let userId =
 //            fetchedUserId?.addingPercentEncoding(
 //                withAllowedCharacters: .urlQueryAllowed) ?? ""
-//            
+//
 //            // Split the IDs and form URLs for each
 //            let dematImageIDs = dematImageIDsString.split(separator: ",").map {
 //                $0.trimmingCharacters(in: .whitespaces)
 //            }
-//            
+//
 //            // Clear previous images
 //            dematimageUrls.removeAll()
-//            
+//
 //            // Generate URLs and update the bpImageUrls array
 //            for imageID in dematImageIDs {
 //                let imageUrlString =
@@ -13370,7 +13604,7 @@ extension DocumentVC {
 //                    dematNoBtn.isSelected = true
 //                }
 //            }
-//            
+//
 //            if let DPVerify = response["DP_IMAGEID_Verify"] as? Int {
 //                // If the value is 0, show the buttons, otherwise hide them
 //                self.DP_IMAGEID_Verify = DPVerify
@@ -13384,7 +13618,7 @@ extension DocumentVC {
 //                    if self.dematDocumentType == "PDF" {
 //                        dematNoBtn.isEnabled = false
 //                    } else if dematDocumentType == "IMAGE" {
-//                        
+//
 //                        dematYesBtn.isEnabled = false
 //                    }
 //                }
@@ -13397,13 +13631,13 @@ extension DocumentVC {
 //                self.DICollectionView.reloadData()
 //            }
 //        }
-//        
+//
 //    }
-//    
+//
 //    func MediaDownload() {
-//        
+//
 //        let Url = "MultiPartImageUpload/MediaDownload"
-//        
+//
 //        apiCall(url: Url, method: "POST", parameters: [:], view: self.view) {
 //            result in
 //            switch result {
@@ -13424,7 +13658,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func SignatureUpload(imageData: Data) {
 //        guard ocrCount <= 3 else {
 //            print("OCR attempts exceeded. No further attempts allowed.")
@@ -13432,7 +13666,7 @@ extension DocumentVC {
 //        }
 //        let imageFileName = "image.jpg"
 //        let imageMimeType = "image/jpeg"
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -13449,7 +13683,7 @@ extension DocumentVC {
 //            "IPAddress": "",
 //            "DeviceType": "",
 //        ]
-//        
+//
 //        let url = "\(self.prefixUrl)MultiPartImageUpload/SignatureUpload"
 //        print("signature url:", url)
 //        uploadDocument(
@@ -13476,7 +13710,7 @@ extension DocumentVC {
 //                            //self.updateButtonImage(button: self.currentSignatureStatusBtn, statusKey: "DocumentImages_Verify", jsonResponse: jsonResponse)
 //                            self.signatureupdateUI(with: jsonResponse)
 //                            self.ocrCount = 1
-//                            
+//
 //                        }
 //                    case "801005":
 //                        // Increment OCR count and retry if less than 3
@@ -13505,7 +13739,7 @@ extension DocumentVC {
 //                                ?? "1 attempt failed."
 //                                print(
 //                                    "Retrying with OCRCount: \(self.ocrCount)")
-//                                
+//
 //                                self.showAlert(title: "Invalid Signature", message: errorMessage)
 //                                //self.SignatureUpload(imageData: imageData) // Retry API call
 //                            } else {
@@ -13531,7 +13765,7 @@ extension DocumentVC {
 //    func regenerate(imageData: Data) {
 //        CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
 //        print("All TokenMobile entries deleted due to error code 999992")
-//        
+//
 //        // Regenerate tokens
 //        CoreDataHelper.generateToken(
 //            decodeByteArrayToString: self.mobiledecodeArray ?? "",
@@ -13547,7 +13781,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func signatureupdateUI(with response: [String: Any]) {
 //        DispatchQueue.main.async {
 //            CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
@@ -13569,32 +13803,32 @@ extension DocumentVC {
 //                    }
 //                    return
 //                }
-//                
+//
 //                if let signatureImageID = response["RequestID"] as? Int {
 //                    let userId = fetchedUserId?.addingPercentEncoding(
 //                        withAllowedCharacters: .urlQueryAllowed
 //                    ) ?? ""
-//                    
+//
 //                    // ✅ Use IMAGE instead of ThumbNail for actual signature
 //                    let imageUrlString =
 //                    "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(signatureImageID)&ImageType=IMAGE&UserId=\(userId)&TokenId=\(tokenId)"
-//                    
+//
 //                    self.signatureUrl = imageUrlString
 //                    print("Formed signature URL: \(imageUrlString)")
-//                    
+//
 //                    self.signatureImageview.restorationIdentifier = "signatureview"
 //                    self.signatureImageview.isHidden = false
 //                    self.CSDocumentView.isHidden = false  // Show document view
 //                    self.CSStackView1.isHidden = false     // Hide upload controls
 //                    self.drawBtn.isHidden = true          // Hide draw button
 //                    self.CurrentSignBtn.isHidden = true
-//                    
+//
 //                    loadImage(
 //                        from: imageUrlString,
 //                        into: self.signatureImageview,
 //                        with: "signatureview"
 //                    )
-//                    
+//
 //                    DispatchQueue.main.async {
 //                        self.updateButtonImage(
 //                            button: self.currentSignatureStatusBtn,
@@ -13602,12 +13836,12 @@ extension DocumentVC {
 //                            jsonResponse: response
 //                        )
 //                    }
-//                    
+//
 //                    // Hide/Show UI
 //                    self.drawBtn.isHidden = true
 //                    self.CurrentSignBtn.isHidden = true
 //                    self.CSDocumentView.isHidden = false
-//                    
+//
 //                } else {
 //                    self.signatureImageview.image = UIImage(
 //                        systemName: "person.crop.circle.badge.xmark"
@@ -13618,10 +13852,10 @@ extension DocumentVC {
 //    }
 //
 //    func DerivativeUpload(imageData: Data, password: String?) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
-//        
+//
 //        switch incomeproofDocumenttype {
 //        case "PDF":
 //            if incomeproofDocumenttype != lastderivativeDocumentType {
@@ -13630,7 +13864,7 @@ extension DocumentVC {
 //            lastderivativeDocumentType = incomeproofDocumenttype
 //            fileName = "document.pdf"
 //            mimeType = "application/pdf"
-//            
+//
 //            if incomeproofDocumenttypetext == "Latest ITR"
 //                || incomeproofDocumenttypetext == "Form 16"
 //            {
@@ -13648,7 +13882,7 @@ extension DocumentVC {
 //            //            if incomeproofDocumenttypetext == "Six Month Bank Statement" {
 //            //                           incomeProofOcrCount = 1 // Start with 1, allowing only 1 attempt
 //            //                       }
-//            
+//
 //        case "IMAGE":
 //            if incomeproofDocumenttype != lastderivativeDocumentType {
 //                incomeProofOcrCount = 0  // Reset to 1 for PDFs
@@ -13656,16 +13890,16 @@ extension DocumentVC {
 //            lastderivativeDocumentType = incomeproofDocumenttype
 //            fileName = "image.jpg"
 //            mimeType = "image/jpeg"
-//            
+//
 //            if incomeproofDocumenttypetext == "Salary Slip" || incomeproofDocumenttypetext == "Demat Account Holding with Value" {
 //                incomeProofOcrCount = 1 // Start with 1, allowing only 1 attempt
 //            }
-//            
-//            
+//
+//
 //        default:
 //            break
 //        }
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -13711,13 +13945,13 @@ extension DocumentVC {
 //                            self.incomeProofYearBtn.isHidden = true
 //                            self.yearBtn.isHidden = true
 //                            self.iplabel3.isHidden = true
-//            
+//
 //                            //self.IPStackView2.isHidden = true
-//                            
+//
 //                            self.IPDocumentView.isHidden = false
 //                            self.updateCollectionViewWithUploadedImage(
 //                                from: jsonResponse, identifier: "IncomeProof")
-//                            
+//
 //                        }
 //                    case "801005":
 //                        // Increment OCR count and retry if less than 3
@@ -13768,7 +14002,7 @@ extension DocumentVC {
 //            return
 //        }
 //        print("update ui calll...")
-//        
+//
 //        let userId =
 //        fetchedUserId?.addingPercentEncoding(
 //            withAllowedCharacters: .urlQueryAllowed) ?? ""
@@ -13779,7 +14013,7 @@ extension DocumentVC {
 //        //
 //        //
 //        //
-//        
+//
 //        print("identifier document demat:\(identifier)")
 //
 //        DispatchQueue.main.async {
@@ -13802,7 +14036,7 @@ extension DocumentVC {
 //                self.BpCollectionView.reloadData()
 //            case "Demat":
 //                self.diCounts(shouldShow: true)
-//                
+//
 //                let DP_IMAGEID_Verify =
 //                jsonResponse["DocumentImages_Verify"] as? String
 //                self.DP_IMAGEID_Verify = Int(DP_IMAGEID_Verify ?? "0")
@@ -13819,20 +14053,20 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func BankUpload(imageData: Data, password: String?) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
-//        
-//        
-//        
+//
+//
+//
 //        switch bankproofDocumentType {
 //        case "PDF":
 //            if bankproofDocumentType != lastbankDocumentType {
 //                bankOcrCount = 1  // Reset count if document type changes
 //            }
-//            
+//
 //            lastbankDocumentType = bankproofDocumentType
 //            fileName = "document.pdf"
 //            mimeType = "application/pdf"
@@ -13840,14 +14074,14 @@ extension DocumentVC {
 //            if bankproofDocumentType != lastbankDocumentType {
 //                bankOcrCount = 0  // Reset count if document type changes
 //            }
-//            
+//
 //            lastbankDocumentType = bankproofDocumentType
 //            fileName = "image.jpg"
 //            mimeType = "image/jpeg"
 //        default:
 //            break
 //        }
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -13897,7 +14131,7 @@ extension DocumentVC {
 ////                            self.BPDocumentView.isHidden = false
 //                            self.updateCollectionViewWithUploadedImage(
 //                                from: jsonResponse, identifier: "Bank")
-//                            
+//
 //                            self.DocumentVerify(DocumentName: "BANK",DocumentType: self.bankproofDocumentTypetext ?? "",ocrCount: self.bankOcrCount)
 //                        }
 //                    case "801005":
@@ -13936,19 +14170,19 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func dematUpload(imageData: Data, password: String?) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
-//        
+//
 //        if dematDocumentType != lastDematDocumentType {
 //            dematOcrCount = 1  // Reset count if document type changes
 //        }
-//        
+//
 //        // Update the last document type to the current one
 //        lastDematDocumentType = dematDocumentType
-//        
+//
 //        switch dematDocumentType {
 //        case "PDF":
 //            fileName = "document.pdf"
@@ -13972,7 +14206,7 @@ extension DocumentVC {
 //         RejectRemark=""
 //         Status=""
 //         */
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -13980,7 +14214,7 @@ extension DocumentVC {
 //            "MOBRequestID": "",
 //            "Type": dematDocumentType,
 //            "Password": password,
-//            
+//
 //            "DocumentName": "DP_IMAGE",
 //            "Status": "",
 //            "OCRCount": "\(dematOcrCount)",
@@ -14061,13 +14295,13 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func PANUpload(imageData: Data, password: String?) {
-//        
+//
 //        var fileName: String = "image.jpg"
 //        var mimeType: String = "image/jpeg"
 //        //var ocrpancount = 1
-//        
+//
 //        //            switch panCopyDocumentType {
 //        //            case "PDF":
 //        //                fileName = "document.pdf"
@@ -14079,7 +14313,7 @@ extension DocumentVC {
 //        //            default:
 //        //                break
 //        //            }
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -14148,7 +14382,7 @@ extension DocumentVC {
 //        }
 //    }
 //    func PanupdateUI(with response: [String: Any]) {
-//        
+//
 //        // Signature Image
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -14177,7 +14411,7 @@ extension DocumentVC {
 //                let userId =
 //                fetchedUserId?.addingPercentEncoding(
 //                    withAllowedCharacters: .urlQueryAllowed) ?? ""
-//                
+//
 //                let imageUrlString =
 //                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(PanimageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId=\(tokenId)"
 //                self.panImageUrl = imageUrlString
@@ -14212,17 +14446,17 @@ extension DocumentVC {
 //                panCopyImageView.image = UIImage(
 //                    systemName: "person.crop.circle.badge.xmark")
 //            }
-//            
+//
 //        }
 //    }
-//    
+//
 //    func CLIENTPHOTOUpload(imageData: Data) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
 //        fileName = "image.jpg"
 //        mimeType = "image/jpeg"
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
 //            "RegId": RegId,
@@ -14280,7 +14514,7 @@ extension DocumentVC {
 //                            let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
 //                            ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
 //                            ?? "OCR failed."
-//                            
+//
 //                            DispatchQueue.main.async {
 //                                self.showAlert(title: "Error", message: errorMessage)
 //                            }
@@ -14291,7 +14525,7 @@ extension DocumentVC {
 //                            let errorMessage = (jsonResponse["RejectRemark"] as? String)
 //                            ?? (jsonResponse["ErrorMessage"] as? String)
 //                            ?? "Second attempt failed. Please try again."
-//                            
+//
 //                            DispatchQueue.main.async {
 //                                self.signatureAttemptLabel.text = errorMessage
 //                                print("Retry allowed for OCRCount: \(self.ocrCount)")
@@ -14338,7 +14572,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func clientImageUpdateUI(with response: [String: Any]) {
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -14368,12 +14602,12 @@ extension DocumentVC {
 //                let userId =
 //                fetchedUserId?.addingPercentEncoding(
 //                    withAllowedCharacters: .urlQueryAllowed) ?? ""
-//                
+//
 //                let imageUrlString =
 //                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(clientImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId=\(tokenId)"
 //                self.clientPhotoUrl = imageUrlString
 //                self.CPHolderView1.isHidden = false
-//                
+//
 //                CPImageView.isHidden = false
 //                CP_Long_Lat_Lbl.isHidden = false
 //                CP_Location_label.isHidden = false
@@ -14381,8 +14615,8 @@ extension DocumentVC {
 //                // Print to debug the formed URL
 //                self.ClientPhotoImageID_Verify =
 //                response["DocumentImages_Verify"] as? String
-//                
-//                
+//
+//
 //                print("Formed panView URL: \(imageUrlString)")
 //                self.CPImageView.restorationIdentifier = "clientPhoto"
 //                loadImage(
@@ -14393,19 +14627,19 @@ extension DocumentVC {
 //                        button: self.clientPhotoStatusBtn,
 //                        statusKey: "DocumentImages_Verify",
 //                        jsonResponse: response)
-//                    
-//                    
+//
+//
 //                }
 //            } else {
 //                CPImageView.image = UIImage(
 //                    systemName: "person.crop.circle.badge.xmark")
 //            }
-//            
+//
 //        }
 //    }
-//    
+//
 //    func InsertUpdateIPVAuditLog() {
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "RegId": RegId,
 //            "PanNo": PanNo,
@@ -14414,7 +14648,7 @@ extension DocumentVC {
 //        ]
 //        print(parameters)
 //        let Url = "MultiPartImageUpload/InsertUpdateIPVAuditLog"
-//        
+//
 //        apiCall(
 //            url: Url, method: "POST", parameters: parameters as [String: Any],
 //            view: self.view
@@ -14442,10 +14676,10 @@ extension DocumentVC {
 //            case .failure(let error):
 //                print("Login API call failed: \(error.localizedDescription)")
 //            }
-//            
+//
 //        }
 //    }
-//    
+//
 //    func startPeriodicViewDocumentDetails() {
 //        DispatchQueue.main.async {
 //            self.viewDocumentTimer?.invalidate() // Ensure existing timer is stopped
@@ -14454,7 +14688,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func stopPeriodicViewDocumentDetails() {
 //        DispatchQueue.main.async {
 //            self.viewDocumentTimer?.invalidate()
@@ -14462,8 +14696,8 @@ extension DocumentVC {
 //            print("Timer stopped.")
 //        }
 //    }
-//    
-//    
+//
+//
 //    func GetUserLocation(Longitude: String, Latitude: String) {
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -14495,7 +14729,7 @@ extension DocumentVC {
 //            ]
 //            print(parameters)
 //            let Url = "Client/GetUserLocation"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view
@@ -14512,8 +14746,8 @@ extension DocumentVC {
 //                                jsonResponse["Location"] as? String
 //                                ?? "location not found"
 //                                print("api is running")
-//                                
-//                                
+//
+//
 //                            }
 //                        default:
 //                            print("Unhandled error code: \(errorCode)")
@@ -14526,17 +14760,17 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func NomineeUpload(imageData: Data) {
-//        
+//
 //        var fileName: String = ""
 //        var mimeType: String = ""
 //        fileName = "image.jpg"
 //        mimeType = "image/jpeg"
 //        /*
-//         
+//
 //         DocumentName="NOMINEE_1/NOMINEE_2/NOMINEE_3"
-//         
+//
 //         */
 //        let parameters: [String: Any?] = [
 //            "PanNo": PanNo,
@@ -14587,7 +14821,7 @@ extension DocumentVC {
 //                                self.ocrCount += 1
 //                                switch self.identifier {
 //                                case "NOMINEE_1":
-//                                    
+//
 //                                    self.nominee1infolbl.isHidden = false
 //                                    self.nominee1infolbl.text =
 //                                    jsonResponse["ErrorMessage"] as? String
@@ -14621,7 +14855,7 @@ extension DocumentVC {
 //                                self.updateNomineeUI(
 //                                    identifier: self.identifier ?? "",
 //                                    jsonResponse: jsonResponse)
-//                                
+//
 //                                print("Maximum OCR attempts reached.")
 //                            }
 //                        }
@@ -14664,7 +14898,7 @@ extension DocumentVC {
 //                    case "999992":
 //                        DispatchQueue.main.async {
 //                            self.regenerate(imageData: imageData)
-//                            
+//
 //                        }
 //                    default:
 //                        print("Unhandled error code: \(errorCode)")
@@ -14676,18 +14910,18 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func updateNomineeUI(identifier: String, jsonResponse: [String: Any]) {
 //        guard let errorCode = jsonResponse["ErrorCode"] as? String else {
 //            print("Invalid response: no error code found")
 //            return
 //        }
-//        
+//
 //        let errorMessage =
 //        jsonResponse["ErrorMessage"] as? String ?? "Unknown error"
 //        let statusMessage =
 //        jsonResponse["Status"] as? String ?? "No status available"
-//        
+//
 //        // Fetch the token ID for image loading
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -14708,7 +14942,7 @@ extension DocumentVC {
 //                print("No tokens available. Please reload the tokens.")
 //                return
 //            }
-//            
+//
 //            // Check if RequestID exists in the response
 //            if let nomineeImageID = jsonResponse["RequestID"] as? Int {
 //                let userId =
@@ -14716,10 +14950,10 @@ extension DocumentVC {
 //                    withAllowedCharacters: .urlQueryAllowed) ?? ""
 //                let imageUrlString =
 //                "\(self.prefixUrl)MultiPartImageUpload/MediaDownload?id=\(nomineeImageID)&ImageType=ThumbNail&UserId=\(userId)&TokenId=\(tokenId)"
-//                
+//
 //                // Print to debug the formed URL
 //                print("Formed nominee image URL: \(imageUrlString)")
-//                
+//
 //                DispatchQueue.main.async {
 //                    switch identifier {
 //                    case "NOMINEE_1":
@@ -14788,17 +15022,17 @@ extension DocumentVC {
 //                        self.nominee1infolbl.text = errorMessage
 //                        self.nominee1ImageView.image = UIImage(
 //                            systemName: "person.crop.circle.badge.xmark")
-//                        
+//
 //                    case "NOMINEE_2":
 //                        self.nominee2infolbl.text = errorMessage
 //                        self.nominee2ImageView.image = UIImage(
 //                            systemName: "person.crop.circle.badge.xmark")
-//                        
+//
 //                    case "NOMINEE_3":
 //                        self.nominee3infolbl.text = errorMessage
 //                        self.nominee3ImageView.image = UIImage(
 //                            systemName: "person.crop.circle.badge.xmark")
-//                        
+//
 //                    default:
 //                        print("Unhandled identifier: \(identifier)")
 //                    }
@@ -14806,7 +15040,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func DocumentVerify(
 //        DocumentName: String, DocumentType: String, ocrCount: Int
 //    ) {
@@ -14823,7 +15057,7 @@ extension DocumentVC {
 //        ]
 //        print(parameters)
 //        let Url = "MultiPartImageUpload/DocumentVerify"
-//        
+//
 //        apiCall(
 //            url: Url, method: "POST", parameters: parameters as [String: Any],
 //            view: self.view,
@@ -14837,17 +15071,17 @@ extension DocumentVC {
 //                    switch errorCode {
 //                    case "000000":
 //                        DispatchQueue.main.async {
-//                            
+//
 //                            switch DocumentName {
-//                                
+//
 //                            case "INCOMEPROOF":
 //                                self.IPDocumentView.isHidden = true
 //                                self.counts(shouldShow: true)
-//                                
+//
 //                                self.rejection2 = nil
 //                                self.ViewDocumentDetails()
 //                                self.incomeProofCollectionView.reloadData()
-//                                
+//
 //                            case "BANK":
 //                                self.BPDocumentView.isHidden = true
 //                                self.bpcounts(shouldShow: true)
@@ -14870,7 +15104,7 @@ extension DocumentVC {
 //                                let errorMessage =
 //                                jsonResponse["ErrorMessage"] as? String
 //                                ?? "1 attempt failed."
-//                                
+//
 //                                // Switch based on DocumentName to show relevant label message
 //                                switch DocumentName {
 //                                case "BANK":
@@ -14890,13 +15124,13 @@ extension DocumentVC {
 //                                default:
 //                                    print("Unknown DocumentName")
 //                                }
-//                                
+//
 //                                print("Retrying with OCRCount: \(ocrCount)")
 //                                // Retry API call if needed
 //                                // self.DocumentVerify(DocumentName: DocumentName, DocumentType: DocumentType)
 //                            } else {
 //                                switch DocumentName {
-//                                    
+//
 //                                case "INCOMEPROOF":
 //                                    self.DerivativeImages_Verify =
 //                                    jsonResponse["DocumentImages_Verify"]
@@ -14904,7 +15138,7 @@ extension DocumentVC {
 //                                    self.IPDocumentView.isHidden = true
 //                                    self.counts(shouldShow: true)
 //                                    self.ViewDocumentDetails()
-//                                    
+//
 //                                case "BANK":
 //                                    self.BankImages_Verify =
 //                                    jsonResponse["DocumentImages_Verify"]
@@ -14912,21 +15146,21 @@ extension DocumentVC {
 //                                    self.BPDocumentView.isHidden = true
 //                                    self.bpcounts(shouldShow: true)
 //                                    self.ViewDocumentDetails()
-//                                    
+//
 //                                case "DP_IMAGE":
 //                                    self.diCounts(shouldShow: true)
 //                                    self.ViewDocumentDetails()
-//                                    
+//
 //                                default:
 //                                    break
 //                                }
 //                                print("Maximum OCR attempts reached.")
-//                                
+//
 //                            }
 //                        }
 //                    case "801006":
 //                        DispatchQueue.main.async {
-//                            
+//
 //                            self.showAlert(
 //                                title: "Alert",
 //                                message: ErrorMessage
@@ -14936,14 +15170,14 @@ extension DocumentVC {
 //                        print("Unhandled error code: \(errorCode)")
 //                    }
 //                }
-//                
+//
 //            case .failure(let error):
 //                print("Login API call failed: \(error.localizedDescription)")
 //            }
 //        }
-//        
+//
 //    }
-//    
+//
 //    func deleteImageFromServer(requestId: String, documentType: String, completion: @escaping (Bool) -> Void) {
 //        let parameters: [String: Any] = [
 //            "RegId": RegId ?? "",
@@ -14951,9 +15185,9 @@ extension DocumentVC {
 //            "RequestId": requestId,
 //            "Documents": documentType
 //        ]
-//        
+//
 //        let url = "ImageManagement/DeleteDocumentsImageOnRequestID"
-//        
+//
 //        apiCall(url: url, method: "POST", parameters: parameters, view: self.view, loaderText: "Deleting Image...") { result in
 //            switch result {
 //            case .success(let jsonResponse):
@@ -14974,7 +15208,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 ////    func deleteImageFromServer(
 ////        requestId: String, documentType: String,
 ////        completion: @escaping (Bool) -> Void
@@ -15035,9 +15269,9 @@ extension DocumentVC {
 ////            }
 ////        }
 ////    }
-//    
+//
 //    func UpdateFinalStatus(ucccode: String) {
-//        
+//
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
 //            guard let tokenId = tokenId else {
@@ -15072,7 +15306,7 @@ extension DocumentVC {
 //            ]
 //            print(parameters)
 //            let Url = "ClientSLFinalStatus/UpdateFinalStatus"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view,
@@ -15119,7 +15353,7 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //}
 //
 //extension DocumentVC {
@@ -15137,13 +15371,13 @@ extension DocumentVC {
 //        } else {
 //            IPStackView2.isHidden = true
 //        }
-//        
+//
 //        // Conditionally hide or show additional elements based on incomeproofDocumenttypetext
 //        if let documentTypeText = incomeproofDocumenttypetext,
 //           !documentTypeText.isEmpty,
 //           documentTypeText == "Latest ITR" || documentTypeText == "Form 16"
 //        {
-//            
+//
 //            // Show the relevant elements if conditions are met
 //            iplabel3.isHidden = !shouldShow
 //           // yearBtn.isHidden = !shouldShow
@@ -15154,7 +15388,7 @@ extension DocumentVC {
 //            yearBtn.isHidden = true
 //            // incomeProofVerifyBtn.isHidden = true // Uncomment if needed
 //        }
-//        
+//
 //        // New condition to check imageUrls count and set visibility for IPCollectionView and IPDocumentView
 //        self.counts(shouldShow: shouldShow)
 //        if imageUrls.isEmpty {
@@ -15167,15 +15401,15 @@ extension DocumentVC {
 //        if ipverify == "Y" {
 //            self.verifyIP()
 //        }
-//        
+//
 //        if DerivativeImages_Verify == "0" {
 //            print("varify is pending")
 //        } else {
 //            IPDocumentView.isHidden = true
 //        }
-//        
+//
 //    }
-//    
+//
 //    func counts(shouldShow: Bool) {
 //        switch incomeproofDocumenttype {
 //        case "PDF":
@@ -15186,7 +15420,7 @@ extension DocumentVC {
 //                } else {
 //                    requiredCount = 2
 //                }
-//                
+//
 //                if imageUrls.count >= requiredCount {
 //                    incomeProofuploadBtn.isHidden = (incomeproofDocumenttypetext == "Salary Slip" || incomeproofDocumenttypetext == "Six Month Bank Statement" || incomeproofDocumenttypetext == "Form 16" || incomeproofDocumenttypetext == "Latest ITR" || incomeproofDocumenttypetext == "Demat Account Holding with Value")
 //                    self.incomeProofDocumentTypeBtn.isEnabled = false
@@ -15240,12 +15474,12 @@ extension DocumentVC {
 //    }
 //    func verifyIP() {
 //        //self.incomeProofuploadBtn.isHidden = true
-//        
+//
 //        self.IPStackView2.isHidden = false
-//        
+//
 //        self.incomeproofStatusLabel.isHidden = false
 //    }
-//    
+//
 //    func BankProof(shouldShow: Bool) {
 //        BPLabel1.isHidden = !shouldShow
 //        BPView1.isHidden = !shouldShow
@@ -15258,7 +15492,7 @@ extension DocumentVC {
 //        } else {
 //            BPStackview2.isHidden = true
 //        }
-//        
+//
 //        self.bpcounts(shouldShow: shouldShow)
 //        if bpImageUrls.isEmpty {
 //            //BpCollectionView.isHidden = true
@@ -15270,15 +15504,15 @@ extension DocumentVC {
 //        if bpverify == "Y" {
 //            self.verifyBP()
 //        }
-//        
+//
 //        if BankImages_Verify == "0" {
-//            
+//
 //            print("varify is pending")
 //        } else {
 //            BPDocumentView.isHidden = true
 //        }
 //    }
-//    
+//
 //    func bpcounts(shouldShow: Bool) {
 //        print("documenttype:-\(bankproofDocumentType ?? "empty")")
 //        switch bankproofDocumentType {
@@ -15330,10 +15564,10 @@ extension DocumentVC {
 //    }
 //    func verifyBP() {
 //        BPStackview2.isHidden = false
-//        
+//
 //        self.BPdescriptionLabel.isHidden = false
 //    }
-//    
+//
 //    func CurrentSignature(shouldShow: Bool) {
 //        CSLabel1.isHidden = !shouldShow
 //        //        CSStackView1.isHidden = !shouldShow
@@ -15373,17 +15607,17 @@ extension DocumentVC {
 //        if PANImage_Verify == nil {
 //            print("varify is pending")
 //            PCHolderView.isHidden = true
-//            
+//
 //            PCStackView.isHidden = !shouldShow
 //        } else if rejection == "Rejection" {
 //            PCHolderView.isHidden = !shouldShow
-//            
+//
 //            PCStackView.isHidden = true
 //            //
 //        } else {
 //            PCHolderView.isHidden = !shouldShow
 //            //            //PANCopyBtn.isHidden = true
-//            
+//
 //            PCStackView.isHidden = true
 //        }
 //        //        if PANImage_Verify == nil{
@@ -15391,14 +15625,14 @@ extension DocumentVC {
 //        //        }else {
 //        //            PCStackView.isHidden = true
 //        //        }
-//        
+//
 //    }
 //    func ClientPhoto(shouldShow: Bool) {
 ////        CPLabel1.isHidden = !shouldShow
 ////        CPLabel2.isHidden = !shouldShow
 ////        CPLabel3.isHidden = !shouldShow
 //        //CPStackView.isHidden = !shouldShow
-//        
+//
 //        //        CPImageView.isHidden = !shouldShow
 //        //        CP_Long_Lat_Lbl.isHidden = !shouldShow
 //        //        CpHolderView2.isHidden = !shouldShow
@@ -15428,7 +15662,7 @@ extension DocumentVC {
 //        } else {
 //            DIStackView2.isHidden = true
 //        }
-//        
+//
 //        self.diCounts(shouldShow: shouldShow)
 //        if dematimageUrls.isEmpty {
 //            DICollectionView.isHidden = true
@@ -15441,12 +15675,12 @@ extension DocumentVC {
 //            self.verifyDI()
 //        }
 //        if DP_IMAGEID_Verify == 0 {
-//            
+//
 //            print("varify is pending")
 //        } else {
 //            DIDocumentView.isHidden = true
 //        }
-//        
+//
 //    }
 //    func diCounts(shouldShow: Bool) {
 //        switch dematDocumentType {
@@ -15493,12 +15727,12 @@ extension DocumentVC {
 //    }
 //    func verifyDI() {
 //        //self.incomeProofuploadBtn.isHidden = true
-//        
+//
 //        self.DIStackView2.isHidden = false
-//        
+//
 //        self.dematDescriptionLabel.isHidden = false
 //    }
-//    
+//
 //    func NomineeDetail1(shouldShow: Bool) {
 //        NM1Label1.isHidden = !shouldShow
 //        NM1Label2.isHidden = !shouldShow
@@ -15513,7 +15747,7 @@ extension DocumentVC {
 //        } else {
 //            NM1DocumentView.isHidden = !shouldShow
 //            NM1StackView.isHidden = true
-//            
+//
 //        }
 //        // NM1DocumentView.isHidden = false
 //    }
@@ -15531,9 +15765,9 @@ extension DocumentVC {
 //        } else {
 //            NM2DocumentView.isHidden = !shouldShow
 //            NM2StackView.isHidden = true
-//            
+//
 //        }
-//        
+//
 //    }
 //    func NomineeDetail3(shouldShow: Bool) {
 //        NM3Label1.isHidden = !shouldShow
@@ -15549,7 +15783,7 @@ extension DocumentVC {
 //        } else {
 //            NM3DocumentView.isHidden = !shouldShow
 //            NM3StackView.isHidden = true
-//            
+//
 //        }
 //    }
 //}
@@ -15562,13 +15796,13 @@ extension DocumentVC {
 //        documentPicker.modalPresentationStyle = .formSheet
 //        present(documentPicker, animated: true, completion: nil)
 //    }
-//    
+//
 //    func documentPicker(
 //        _ controller: UIDocumentPickerViewController,
 //        didPickDocumentsAt urls: [URL]
 //    ) {
 //        guard let selectedURL = urls.first else { return }
-//        
+//
 //        do {
 //            // Check if the PDF is password-protected
 //            if let pdfDocument = PDFDocument(url: selectedURL) {
@@ -15576,7 +15810,7 @@ extension DocumentVC {
 //                    // Prompt for password
 //                    requestPassword { [weak self] password in
 //                        guard let self = self else { return }
-//                        
+//
 //                        if pdfDocument.unlock(withPassword: password) {
 //                            // Successfully unlocked PDF
 //                            self.handlePDF(url: selectedURL, password: password)
@@ -15598,7 +15832,7 @@ extension DocumentVC {
 //            showAlert(title: "Error", message: "Unable to read PDF file.")
 //        }
 //    }
-//    
+//
 //    func handlePDF(url: URL, password: String?) {
 //        do {
 //            let pdfData = try Data(contentsOf: url)
@@ -15608,7 +15842,7 @@ extension DocumentVC {
 //            showAlert(title: "Error", message: "Unable to read PDF file.")
 //        }
 //    }
-//    
+//
 //    func requestPassword(completion: @escaping (String) -> Void) {
 //        let alertController = UIAlertController(
 //            title: "Enter Password",
@@ -15630,17 +15864,17 @@ extension DocumentVC {
 //        alertController.addAction(cancelAction)
 //        present(alertController, animated: true, completion: nil)
 //    }
-//    
+//
 //    func documentPickerWasCancelled(
 //        _ controller: UIDocumentPickerViewController
 //    ) {
 //        controller.dismiss(animated: true, completion: nil)
 //    }
-//    
+//
 //    func uploadPDFByteArray(_ byteArray: [UInt8], password: String?) {
 //        let pdfData = Data(byteArray)
 //        // let identifier = "IncomeProof" // Adjust this as needed
-//        
+//
 //        switch identifier {
 //        case "IncomeProof":
 //            DerivativeUpload(imageData: pdfData, password: password)
@@ -15657,7 +15891,7 @@ extension DocumentVC {
 //}
 //
 //extension DocumentVC {
-//    
+//
 //    func loadImage(
 //        from urlString: String, into imageView: UIImageView,
 //        with identifier: String?
@@ -15669,13 +15903,13 @@ extension DocumentVC {
 //            }
 //            return
 //        }
-//        
+//
 //        // Reset the image view to a placeholder while loading
 //        DispatchQueue.main.async {
 //            imageView.image = UIImage(named: "pdf")
 //            // imageView.image = UIImage(systemName: "pdf") // Placeholder image
 //        }
-//        
+//
 //        // Fetch a fresh token each time for every image load request
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            tokenId in
@@ -15696,7 +15930,7 @@ extension DocumentVC {
 //                print("No tokens available. Please reload the tokens.")
 //                return
 //            }
-//            
+//
 //            // Construct the final URL with the token
 //            guard
 //                let completeUrl = URL(
@@ -15706,7 +15940,7 @@ extension DocumentVC {
 //                print("Invalid URL after inserting token.")
 //                return
 //            }
-//            
+//
 //            // Create a data task to download the image
 //            let task = URLSession.shared.dataTask(with: completeUrl) {
 //                data, response, error in
@@ -15716,19 +15950,19 @@ extension DocumentVC {
 //                    )
 //                    return
 //                }
-//                
+//
 //                if let httpResponse = response as? HTTPURLResponse,
 //                   !(200...299).contains(httpResponse.statusCode)
 //                {
 //                    print("Invalid status code: \(httpResponse.statusCode)")
 //                    return
 //                }
-//                
+//
 //                if let data = data, let image = UIImage(data: data) {
 //                    // Cache the image
 //                    self.imageCache.setObject(
 //                        image, forKey: urlString as NSString)
-//                    
+//
 //                    DispatchQueue.main.async {
 //                        // Ensure the image is set only if the identifier matches
 //                        if let imageViewIdentifier = imageView
@@ -15752,7 +15986,7 @@ extension DocumentVC {
 //            task.resume()
 //        }
 //    }
-//    
+//
 //}
 //
 ////colection view
@@ -15769,14 +16003,14 @@ extension DocumentVC {
 //        }
 //        return 0
 //    }
-//    
+//
 //    func collectionView(
 //        _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath
 //    ) -> UICollectionViewCell {
 //        let cell =
 //        collectionView.dequeueReusableCell(
 //            withReuseIdentifier: "incomeCVC", for: indexPath) as! incomeCVC
-//        
+//
 //        let imageUrlString: String
 //        if collectionView == incomeProofCollectionView {
 //            imageUrlString = imageUrls[indexPath.row]
@@ -15792,7 +16026,7 @@ extension DocumentVC {
 //            } else {
 //                cell.deleteButton.isHidden = false  // Default case
 //            }
-//       
+//
 //        } else if collectionView == BpCollectionView {
 //            imageUrlString = bpImageUrls[indexPath.row]
 //            if rejection1 == "Rejection", BankImages_Verify == "2" {
@@ -15804,7 +16038,7 @@ extension DocumentVC {
 //            } else {
 //                cell.deleteButton.isHidden = false  // Default case
 //            }
-//            
+//
 //            //cell.deleteButton.isHidden = !(BankImages_Verify == "0" || BankImages_Verify == nil)
 //        } else if collectionView == DICollectionView {
 //            imageUrlString = dematimageUrls[indexPath.row]
@@ -15822,19 +16056,19 @@ extension DocumentVC {
 //        } else {
 //            imageUrlString = ""  // Fallback if needed
 //        }
-//        
+//
 //        // Set the delegate, indexPath, and parent collection view
 //        cell.delegate = self
 //        cell.indexPath = indexPath
 //        cell.parentCollectionView = collectionView
-//        
+//
 //        cell.imageview.restorationIdentifier = imageUrlString
 //        loadImage(
 //            from: imageUrlString, into: cell.imageview, with: imageUrlString)
-//        
+//
 //        return cell
 //    }
-//    
+//
 ////    func didTapDeleteButton(
 ////        at indexPath: IndexPath, in collectionView: UICollectionView
 ////    ) {
@@ -15877,7 +16111,7 @@ extension DocumentVC {
 //        var imageUrlString: String?
 //        var documentType: String?
 //        var documentVerifyStatus: Any?
-//        
+//
 //        // Get the image URL and document type based on collection view
 //        if collectionView == incomeProofCollectionView {
 //            guard indexPath.row < imageUrls.count else { return }
@@ -15895,12 +16129,12 @@ extension DocumentVC {
 //            documentType = "DP_IMAGE"
 //            documentVerifyStatus = DP_IMAGEID_Verify
 //        }
-//        
+//
 //        guard let urlString = imageUrlString, let docType = documentType else { return }
-//        
+//
 //        // Check if we're in rejection flow and the document is rejected (status = "2")
 //        let shouldDeleteFromServer: Bool
-//        
+//
 //        if rejection == "Rejection" {
 //            if let stringStatus = documentVerifyStatus as? String {
 //                shouldDeleteFromServer = (stringStatus == "2")
@@ -15912,21 +16146,21 @@ extension DocumentVC {
 //        } else {
 //            shouldDeleteFromServer = false
 //        }
-//        
+//
 //        if shouldDeleteFromServer {
 //            // Extract RequestID and delete from server
 //            guard let requestId = extractRequestId(from: urlString) else {
 //                print("Failed to extract RequestID from URL")
 //                return
 //            }
-//            
+//
 //            // Show confirmation alert before deleting
 //            let alert = UIAlertController(
 //                title: "Delete Document",
 //                message: "Are you sure you want to delete this document? This will permanently remove it from the server.",
 //                preferredStyle: .alert
 //            )
-//            
+//
 //            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 //            alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
 //                self?.deleteImageFromServer(requestId: requestId, documentType: docType) { success in
@@ -15942,7 +16176,7 @@ extension DocumentVC {
 //                    }
 //                }
 //            })
-//            
+//
 //            present(alert, animated: true)
 //        } else {
 //            // For non-rejection flow or non-rejected documents, just remove locally
@@ -15984,7 +16218,7 @@ extension DocumentVC {
 //        // Encode the URL string to handle any special characters
 //        let encodedUrlString = imageUrlString.addingPercentEncoding(
 //            withAllowedCharacters: .urlQueryAllowed)
-//        
+//
 //        // Ensure the URL string is valid
 //        guard encodedUrlString != nil,
 //              let url = URL(string: encodedUrlString ?? "no value")
@@ -15992,7 +16226,7 @@ extension DocumentVC {
 //            print("Invalid URL string.")
 //            return nil
 //        }
-//        
+//
 //        // Create URLComponents from the URL
 //        guard
 //            let urlComponents = URLComponents(
@@ -16001,7 +16235,7 @@ extension DocumentVC {
 //            print("Failed to create URLComponents from the given string.")
 //            return nil
 //        }
-//        
+//
 //        // Find the query item with the name "id"
 //        if let requestId = urlComponents.queryItems?.first(where: {
 //            $0.name == "id"
@@ -16049,19 +16283,19 @@ extension DocumentVC {
 //}
 //
 //extension DocumentVC {
-//    
+//
 //    @IBAction func pandeleteBtn(_ sender: UIButton) {
 //        guard let panImageUrl = self.panImageUrl else {
 //            print("No image URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: panImageUrl) else {
 //            print("Failed to extract RequestID from the image URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "PANCOPY") {
 //            success in
@@ -16095,13 +16329,13 @@ extension DocumentVC {
 //            print("No signature URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: signatureUrl) else {
 //            print("Failed to extract RequestID from the signature URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "SIGNATURE") {
 //            success in
@@ -16136,13 +16370,13 @@ extension DocumentVC {
 //            print("No client photo URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: clientPhotoUrl) else {
 //            print("Failed to extract RequestID from the client photo URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(
 //            requestId: requestId, documentType: "CLIENT_PHOTO"
@@ -16177,20 +16411,20 @@ extension DocumentVC {
 //                }
 //            }
 //        }
-//        
+//
 //    }
 //    @IBAction func nominee1deleteBtn(_ sender: UIButton) {
 //        guard let nominee1Url = self.nominee1Url else {
 //            print("No nominee 1 URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: nominee1Url) else {
 //            print("Failed to extract RequestID from nominee 1 URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "NOMINEE_1") {
 //            success in
@@ -16227,13 +16461,13 @@ extension DocumentVC {
 //            print("No nominee 2 URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: nominee2Url) else {
 //            print("Failed to extract RequestID from nominee 2 URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "NOMINEE_2") {
 //            success in
@@ -16270,13 +16504,13 @@ extension DocumentVC {
 //            print("No nominee 3 URL available to delete.")
 //            return
 //        }
-//        
+//
 //        // Extract RequestID from the URL
 //        guard let requestId = extractRequestId(from: nominee3Url) else {
 //            print("Failed to extract RequestID from nominee 3 URL.")
 //            return
 //        }
-//        
+//
 //        // Call the delete API
 //        deleteImageFromServer(requestId: requestId, documentType: "NOMINEE_3") {
 //            success in
@@ -16309,7 +16543,7 @@ extension DocumentVC {
 //        }
 //    }
 //    func UpdateDocumentModificationStatus() {
-//        
+//
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
 //            guard let tokenId = tokenId else {
@@ -16335,11 +16569,11 @@ extension DocumentVC {
 //                "PanNo": PanNo,
 //                "RegId": RegId,
 //                "DocumentName": "Documents",
-//                
+//
 //            ]
 //            print(parameters)
 //            let Url = "MultiPartImageUpload/UpdateDocumentModificationStatus"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view,
@@ -16366,7 +16600,7 @@ extension DocumentVC {
 //                                print(
 //                                    "All TokenMobile entries deleted due to error code 999992"
 //                                )
-//                                
+//
 //                                // Regenerate tokens
 //                                CoreDataHelper.generateToken(
 //                                    decodeByteArrayToString: self
@@ -16396,15 +16630,15 @@ extension DocumentVC {
 //            }
 //        }
 //    }
-//    
+//
 //    func SavePhotoAuditLogDetails() {
-//        
+//
 //        let parameters: [String: Any?] = [
 //            "Flag":"Insert"
 //        ]
 //        print("\(parameters)")
 //        let Url = "MultiPartImageUpload/SavePhotoAuditLogDetails"
-//        
+//
 //        apiCall(url: Url, method: "POST", parameters: parameters as [String: Any], view: self.view) { result in
 //            switch result {
 //            case .success(let jsonResponse):
@@ -16417,7 +16651,7 @@ extension DocumentVC {
 //                        DispatchQueue.main.async { [self] in
 //                            print("API is running")
 //                            openCamera()
-//                            
+//
 //                            //                            let vc = self.storyboard?.instantiateViewController(identifier: "WebViewVC") as! WebViewVC
 //                            //                            vc.userId = self.fetchedUserId
 //                            //                            vc.panNo = self.PanNo
@@ -16434,7 +16668,7 @@ extension DocumentVC {
 //                    case "000023" :
 //                        DispatchQueue.main.async {
 //                            print("API is running")
-//                            
+//
 //                            //                                    self.navigationController?.popViewController(animated: true)
 //                            //completion(true)
 //                        }

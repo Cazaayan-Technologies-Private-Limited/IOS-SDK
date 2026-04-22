@@ -67,7 +67,7 @@ class ApplicationFormVC: UIViewController {
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = .appBackground
         
-        if let savedPan = UserDefaults.standard.string(forKey: "SavedPAN") {
+        if let savedPan = UserDefaults.standard.string(forKey: "PanNo") {
             self.panNo = savedPan
             print("✅ Retrieved PAN: \(savedPan)")
         } else {
@@ -137,15 +137,19 @@ class ApplicationFormVC: UIViewController {
         case "Trading":
             let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
             let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-            let savedPAN = UserDefaults.standard.string(forKey: "SavedPAN")
+            let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
             let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+            
+            let regId = UserDefaults.standard.string(forKey: "RegId")
+            let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+            
             vc.panNo = finalPAN
-            vc.regId = regId
+            vc.regId = regIdFinal
             self.navigationController?.pushViewController(vc, animated: true)
         case "Bank":
             let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
             let vc = storyboard.instantiateViewController(identifier: "BankVC") as! BankVC
-            let savedPAN = UserDefaults.standard.string(forKey: "SavedPAN")
+            let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
             let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
             vc.panNo = finalPAN
             vc.regId = regId

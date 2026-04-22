@@ -7,12 +7,12 @@ protocol mobileOtpDelegate:AnyObject{
 class MobileOTPVC: UIViewController , UITextFieldDelegate{
     
     @IBOutlet weak var Label1: UILabel!
-   // @IBOutlet weak var ChangeNumberBtn: UIButton!
-   // @IBOutlet weak var OTPTF: UITextField!
+    // @IBOutlet weak var ChangeNumberBtn: UIButton!
+    // @IBOutlet weak var OTPTF: UITextField!
     @IBOutlet weak var TimeLbl: UILabel!
     @IBOutlet weak var ResendOTP: UIButton!
-  //  @IBOutlet weak var relationshipBtn: UIButton!
- //   @IBOutlet weak var mainView: UIView!
+    //  @IBOutlet weak var relationshipBtn: UIButton!
+    //   @IBOutlet weak var mainView: UIView!
     
     @IBOutlet weak var passText1: UITextField!
     @IBOutlet weak var passText2: UITextField!
@@ -58,13 +58,13 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
         }
         //OTPTF.layer.borderWidth = 0.5
         //OTPTF.layer.cornerRadius = 10
-       // OTPTF.layer.borderColor = UIColor.lightGray.cgColor
+        // OTPTF.layer.borderColor = UIColor.lightGray.cgColor
         print(phoneNumber!)
         startTimer()
         setupResendButton()
         Label1.text = "We have sent a 6 digit code to +91 \(phoneNumber ?? "")"
         print("errorcode:-\(errorCodes)")
-       // OTPTF.delegate = self
+        // OTPTF.delegate = self
         //OTPTF.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         OTPGeneratorApi(phoneNumber: phoneNumber!)
         
@@ -80,10 +80,10 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
                 print("No UserID or SessionID found.")
             }
         }
-     //   view.backgroundColor = .white
+        //   view.backgroundColor = .white
         navigationItem.hidesBackButton = true
-       // mainView.layer.cornerRadius = 20
-      //  mainView.layer.borderWidth = 0.5
+        // mainView.layer.cornerRadius = 20
+        //  mainView.layer.borderWidth = 0.5
         //mainView.layer.borderColor = UIColor.black.cgColor
         passText1.layer.cornerRadius = 10
         passText2.layer.cornerRadius = 10
@@ -114,7 +114,7 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
         view6.layer.borderWidth = 0.5
         
         let textFields = [passText1, passText2, passText3, passText4, passText5, passText6]
-
+        
         for (index, tf) in textFields.enumerated() {
             tf?.delegate = self
             tf?.keyboardType = .numberPad
@@ -122,7 +122,7 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
             tf?.tag = index
             tf?.addTarget(self, action: #selector(textDidChange(_:)), for: .editingChanged)
         }
-
+        
         passText1.becomeFirstResponder()
         ResendOTP.tintColor = .appPrimary
         homeBtn.tintColor = .appPrimary
@@ -162,17 +162,17 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
-
+        
         // Allow only numbers
         if !string.isEmpty && !CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: string)) {
             return false
         }
-
+        
         // Allow backspace
         if string.isEmpty {
             return true
         }
-
+        
         // Only 1 character per field
         return textField.text?.isEmpty ?? true
     }
@@ -188,9 +188,9 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
     }
     
     @objc func textDidChange(_ textField: UITextField) {
-
+        
         let textFields = [passText1, passText2, passText3, passText4, passText5, passText6]
-
+        
         if let text = textField.text, text.count == 1 {
             if textField.tag < textFields.count - 1 {
                 textFields[textField.tag + 1]?.becomeFirstResponder()
@@ -214,7 +214,7 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
     
     func verifyOTPIfNeeded() {
         let otp = getEnteredOTP()
-
+        
         if otp.count == 6 {
             enteredOTP = otp
             if let phoneNumber = phoneNumber {
@@ -223,35 +223,35 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
         }
     }
     
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        let maxLength = 6
-//        
-//        // Current text in the text field
-//        let currentString: NSString = textField.text as NSString? ?? ""
-//        
-//        // New string after applying the replacement
-//        let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
-//        
-//        // Ensure the new string length doesn't exceed the maximum limit and only allow digits
-//        let allowedCharacterSet = CharacterSet.decimalDigits
-//        let replacementCharacterSet = CharacterSet(charactersIn: string)
-//        
-//        let isReplacementStringNumeric = allowedCharacterSet.isSuperset(of: replacementCharacterSet)
-//        
-//        return newString.length <= maxLength && isReplacementStringNumeric
-//    }
+    //    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    //        let maxLength = 6
+    //
+    //        // Current text in the text field
+    //        let currentString: NSString = textField.text as NSString? ?? ""
+    //
+    //        // New string after applying the replacement
+    //        let newString: NSString = currentString.replacingCharacters(in: range, with: string) as NSString
+    //
+    //        // Ensure the new string length doesn't exceed the maximum limit and only allow digits
+    //        let allowedCharacterSet = CharacterSet.decimalDigits
+    //        let replacementCharacterSet = CharacterSet(charactersIn: string)
+    //
+    //        let isReplacementStringNumeric = allowedCharacterSet.isSuperset(of: replacementCharacterSet)
+    //
+    //        return newString.length <= maxLength && isReplacementStringNumeric
+    //    }
     
     func GetInput(){
         let otp = getEnteredOTP()
-
+        
         guard otp.count == 6 else {
             showAlert(message: "Please enter valid OTP")
             return
         }
-
+        
         OTP = otp
         print("Entered OTP:", OTP)
-
+        
         print("MD5 Hash:", MD5(OTP))
         
     }
@@ -262,22 +262,22 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
         self.navigationController?.popViewController(animated: true)
     }
     
-//    @IBAction func homeBtn(_ sender: UIButton) {
-//        self.navigationController?.popToRootViewController(animated: true)
-//    }
+    //    @IBAction func homeBtn(_ sender: UIButton) {
+    //        self.navigationController?.popToRootViewController(animated: true)
+    //    }
     
-//    @IBAction func relationshipBtn(_ sender: UIButton) {
-//        let vc = storyboard?.instantiateViewController(identifier: "relationshipVC") as! relationshipVC
-//        vc.modalTransitionStyle = .crossDissolve
-//        vc.modalPresentationStyle = .overCurrentContext
-//        vc.relations = relations
-//        vc.delegate = self
-//        //        vc.onSelectRelation = { [weak self] selectedRelation in
-//        //                self?.relationshipBtn.setTitle(selectedRelation, for: .normal)
-//        //                self?.relationshipBtn.isEnabled = false // Disable button after selection
-//        //            }
-//        present(vc, animated: true)
-//    }
+    //    @IBAction func relationshipBtn(_ sender: UIButton) {
+    //        let vc = storyboard?.instantiateViewController(identifier: "relationshipVC") as! relationshipVC
+    //        vc.modalTransitionStyle = .crossDissolve
+    //        vc.modalPresentationStyle = .overCurrentContext
+    //        vc.relations = relations
+    //        vc.delegate = self
+    //        //        vc.onSelectRelation = { [weak self] selectedRelation in
+    //        //                self?.relationshipBtn.setTitle(selectedRelation, for: .normal)
+    //        //                self?.relationshipBtn.isEnabled = false // Disable button after selection
+    //        //            }
+    //        present(vc, animated: true)
+    //    }
     
     
     @IBAction func ResendOtpBtn(_ sender: UIButton) {
@@ -311,7 +311,7 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
 }
 
 extension MobileOTPVC{
-
+    
     func OtpVerification(phoneNumber: String) {
         GetInput()
         let decodeByteArrayToString = String(decoding: MD5ByteArray, as: UTF8.self)
@@ -362,7 +362,7 @@ extension MobileOTPVC{
                     case "400001":
                         DispatchQueue.main.async {
                             self.showTemporaryAlert(message: ErrorMessage ?? "")
-                           // self.OTPTF?.text = nil
+                            // self.OTPTF?.text = nil
                         }
                     default:
                         print("Unhandled error code: \(errorCode)")
@@ -373,9 +373,7 @@ extension MobileOTPVC{
             }
         }
     }
-    
-    
-    
+  
     func OTPGeneratorApi(phoneNumber: String) {
         let apiUrlString = "OTPManagement/SendOTPToMobileClient"
         guard let apiUrl = URL(string: apiUrlString) else {
@@ -413,7 +411,7 @@ extension MobileOTPVC{
                             if let relationsDict = jsonResponse["Relations"] as? [String: Any],
                                let relationsList = relationsDict["list"] as? [[String: Any]] {
                                 self.relations = relationsList // Save the relations data
-                             //   self.setRelationshipButton() // Set button title and selection state
+                                //   self.setRelationshipButton() // Set button title and selection state
                             } else {
                                 print("Error: Could not parse 'Relations' from response")
                             }
@@ -450,33 +448,33 @@ extension MobileOTPVC{
         }
     }
     
-//    func setRelationshipButton() {
-//        // Check for a relation with DefaultSelect = 1
-//        if let selectedRelation = relations.first(where: { $0["DefaultSelect"] as? Int == 1 }) {
-//            let relationName = selectedRelation["Relation"] as? String ?? "Select Relationship"
-//            relation = relationName
-//            relationshipBtn.setTitle(relationName, for: .normal)
-//            relationshipBtn.isEnabled = false // Disable if there's a selected relation
-//        } else {
-//            // If no DefaultSelect = 1, look for a relation with "Relation = SELF"
-//            if let selfRelation = relations.first(where: { $0["Relation"] as? String == "SELF" }) {
-//                let relationName = selfRelation["Relation"] as? String ?? "Select Relationship"
-//                relation = relationName
-//                relationshipBtn.setTitle(relationName, for: .normal)
-//            } else if let firstRelation = relations.first {
-//                // If "SELF" is not found, select the first relation in the list
-//                let relationName = firstRelation["Relation"] as? String ?? "Select Relationship"
-//                relation = relationName
-//                relationshipBtn.setTitle(relationName, for: .normal)
-//            } else {
-//                // If no relations are available, set to default text
-//                relationshipBtn.setTitle("Select Relationship", for: .normal)
-//            }
-//            
-//            // Enable the button for user selection if no default was selected
-//            relationshipBtn.isEnabled = true
-//        }
-//    }
+    //    func setRelationshipButton() {
+    //        // Check for a relation with DefaultSelect = 1
+    //        if let selectedRelation = relations.first(where: { $0["DefaultSelect"] as? Int == 1 }) {
+    //            let relationName = selectedRelation["Relation"] as? String ?? "Select Relationship"
+    //            relation = relationName
+    //            relationshipBtn.setTitle(relationName, for: .normal)
+    //            relationshipBtn.isEnabled = false // Disable if there's a selected relation
+    //        } else {
+    //            // If no DefaultSelect = 1, look for a relation with "Relation = SELF"
+    //            if let selfRelation = relations.first(where: { $0["Relation"] as? String == "SELF" }) {
+    //                let relationName = selfRelation["Relation"] as? String ?? "Select Relationship"
+    //                relation = relationName
+    //                relationshipBtn.setTitle(relationName, for: .normal)
+    //            } else if let firstRelation = relations.first {
+    //                // If "SELF" is not found, select the first relation in the list
+    //                let relationName = firstRelation["Relation"] as? String ?? "Select Relationship"
+    //                relation = relationName
+    //                relationshipBtn.setTitle(relationName, for: .normal)
+    //            } else {
+    //                // If no relations are available, set to default text
+    //                relationshipBtn.setTitle("Select Relationship", for: .normal)
+    //            }
+    //
+    //            // Enable the button for user selection if no default was selected
+    //            relationshipBtn.isEnabled = true
+    //        }
+    //    }
     
     func callInsertClientRegisterApi(phonenumber : String) {
         
@@ -680,7 +678,9 @@ extension MobileOTPVC{
                     let PANName = jsonResponse["PANName"] as? String
                     let RegId = jsonResponse["RegId"] as? String
                     let FinalStatusValue = jsonResponse["FinalStatusValue"] as? String
+                    let isPdfGenerated = jsonResponse["IsPdfGenerated"] as? String ?? "0"
                     let ErrorMessage = jsonResponse["ErrorMessage"] as? String
+                    let finalStatus = jsonResponse["FinalStatus"] as? String ?? "0"
                     if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
                         case "999992":
@@ -708,12 +708,12 @@ extension MobileOTPVC{
                                 }
                                 return
                             }
-                            if let finalStatus = FinalStatusValue,
-                               (finalStatus == "3"){
-                                
+
+                            
+                            if finalStatus == "3" && isPdfGenerated == "0" {
                                 DispatchQueue.main.async {
-                                    let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
-                                    let vc = storyboard.instantiateViewController(identifier: "EsignVC") as! EsignVC
+                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
+                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
                                     vc.PanNo = PanNo
                                     vc.RegId = RegId
                                     self.navigationController?.pushViewController(vc, animated: true)
@@ -721,8 +721,7 @@ extension MobileOTPVC{
                                 return
                             }
                             
-                            if let finalStatus = FinalStatusValue,
-                               (finalStatus == "4" || FinalStatusValue == "KYC DONE"){
+                           if finalStatus == "4" {
                                 
                                 DispatchQueue.main.async {
                                     let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
@@ -733,7 +732,7 @@ extension MobileOTPVC{
                                 }
                                 return
                             }
-                
+                            
                             let EmailId = jsonResponse["EmailId"] as? String
                             
                             if EmailId?.isEmpty == true {
@@ -772,7 +771,6 @@ extension MobileOTPVC{
                 }
             }
         }
-        
     }
     
     func PanPage(userId:String,EmailId:String){

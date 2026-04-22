@@ -32,6 +32,7 @@ class PanVerifyPopupVC: UIViewController {
     weak var delegate: PanVerifyPopupVCDelegate?
     weak var delegate1: ReloadPageDelegate?
     var identifier: String = ""
+    var regId: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -173,8 +174,11 @@ class PanVerifyPopupVC: UIViewController {
                         case "000000":
                             DispatchQueue.main.async {
                                 let panNo = jsonResponse["PanNo"] as? String
-                                       // Save PAN locally
-                                UserDefaults.standard.set(panNo, forKey: "SavedPAN")
+                                UserDefaults.standard.set(panNo, forKey: "PanNo")
+                                
+                                let regId = jsonResponse["RegId"] as? String
+                                UserDefaults.standard.set(regId, forKey: "RegId")
+                                
                                 self.delegate?.didReceiveApiResponse(
                                     panName: jsonResponse["PANName"] as? String,
                                     panNo: jsonResponse["PanNo"] as? String,
