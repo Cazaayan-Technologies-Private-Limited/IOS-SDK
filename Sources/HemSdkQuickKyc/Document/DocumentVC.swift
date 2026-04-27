@@ -1070,6 +1070,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                             print("errorcode 000000 called")
                             DispatchQueue.main.async{
                                 print("done")
+                                self.UpdateFinalStatus()
                                 //                                let storyboard = UIStoryboard(name: "Rejection", bundle: Bundle.module)
                                 //                                let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
                                 //                                self.navigationController?.pushViewController(vc, animated: true)
@@ -3978,7 +3979,7 @@ extension DocumentVC {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -4100,7 +4101,7 @@ extension DocumentVC {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -4323,7 +4324,7 @@ extension DocumentVC {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -4673,7 +4674,7 @@ extension DocumentVC {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -5427,7 +5428,7 @@ extension DocumentVC {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Call SIXTHAPI after tokenMobile API call is successful
@@ -6197,7 +6198,7 @@ extension DocumentVC {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -6253,7 +6254,7 @@ extension DocumentVC {
                                         .mobiledecodeArray ?? "",
                                     USERID: self.fetchedUserId ?? "",
                                     SessionId: self.fetchedSessionID ?? "",
-                                    entityName: "TokenMobile", deviceType: "M",
+                                    entityName: "TokenMobile", deviceType: "W",
                                     in: self.view
                                 ) { success in
                                     if success {

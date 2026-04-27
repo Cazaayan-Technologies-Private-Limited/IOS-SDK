@@ -354,11 +354,18 @@ extension MobileOTPVC{
                             else {
                                 FifthApi(phoneNumber: phoneNumber, decodeByteArrayToString: decodeByteArrayToString)
                             }
+                        
                         }
+                        
                     case "000000":
                         DispatchQueue.main.async {
                             self.navigateToEmailIdVC(userId: self.userID, sessionID: self.sessionID, phoneNumber: phoneNumber)
+                
+                            
+                            
+                            print("OTP generation successful")
                         }
+                        
                     case "400001":
                         DispatchQueue.main.async {
                             self.showTemporaryAlert(message: ErrorMessage ?? "")
@@ -373,7 +380,7 @@ extension MobileOTPVC{
             }
         }
     }
-  
+    
     func OTPGeneratorApi(phoneNumber: String) {
         let apiUrlString = "OTPManagement/SendOTPToMobileClient"
         guard let apiUrl = URL(string: apiUrlString) else {
@@ -543,14 +550,8 @@ extension MobileOTPVC{
                 print("Login API call failed: \(error.localizedDescription)")
             }
         }
-        
-        
-        
     }
-    
-    
-    
-    
+
     func FifthApi(phoneNumber:String,decodeByteArrayToString:String){
         var parameters: [String: Any] = [
             "MobileNo": phoneNumber,
@@ -560,6 +561,7 @@ extension MobileOTPVC{
             "IPAddress": "1",
             "MobileRelation": "SELF"
         ]
+        
         
         // URL for the login endpoint
         let fifthUrl = "Login/validateClientLogin"
@@ -681,6 +683,7 @@ extension MobileOTPVC{
                     let isPdfGenerated = jsonResponse["IsPdfGenerated"] as? String ?? "0"
                     let ErrorMessage = jsonResponse["ErrorMessage"] as? String
                     let finalStatus = jsonResponse["FinalStatus"] as? String ?? "0"
+                    let isPDFSign = jsonResponse["IsPDFSign"] as? String ?? "0"
                     if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
                         case "999992":
@@ -708,7 +711,7 @@ extension MobileOTPVC{
                                 }
                                 return
                             }
-
+                            
                             
                             if finalStatus == "3" && isPdfGenerated == "0" {
                                 DispatchQueue.main.async {
@@ -721,14 +724,18 @@ extension MobileOTPVC{
                                 return
                             }
                             
-                           if finalStatus == "4" {
-                                
+                            if finalStatus == "4" && isPdfGenerated == "1" && isPDFSign == "0" {
+                                print("✅ Navigating to ApplicationStatusVC - FinalStatus: \(finalStatus), isPdfGenerated: \(isPdfGenerated), isPDFSign: \(isPDFSign)")
                                 DispatchQueue.main.async {
                                     let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
-                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatusVC") as! ApplicationStatusVC
-                                    vc.PanNo = PanNo
-                                    vc.RegId = RegId
-                                    self.navigationController?.pushViewController(vc, animated: true)
+                                    if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {
+                                        vc.PanNo = PanNo
+                                        vc.RegId = RegId
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    } else {
+                                        print("❌ Could not instantiate ApplicationStatusVC")
+                                        self.sectionPage() // Fallback
+                                    }
                                 }
                                 return
                             }
@@ -759,7 +766,7 @@ extension MobileOTPVC{
                                 return
                             }
                             
-                        self.sectionPage()
+                            self.sectionPage()
                         case "000001":
                             self.showAlert(message: ErrorMessage ?? "")
                         default:

@@ -55,6 +55,10 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
     @IBOutlet weak var upiIDBtn: UIButton!
     @IBOutlet weak var homeBtn: UIButton!
     @IBOutlet weak var connectToCams: UIButton!
+    @IBOutlet weak var bankView: UIView!
+    @IBOutlet weak var confirmView: UIView!
+    @IBOutlet weak var ifscView: UIView!
+    @IBOutlet weak var micrView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,21 +76,21 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
         
         navigationItem.hidesBackButton = true
         
-        AccountNumberTF.layer.cornerRadius = 10
-        AccountNumberTF.layer.borderWidth = 1
-        AccountNumberTF.layer.borderColor = UIColor.appBorder.cgColor
+        bankView.layer.cornerRadius = 10
+        bankView.layer.borderWidth = 1
+        bankView.layer.borderColor = UIColor.appBorder.cgColor
         
-        ConfirmAccountNumberTF.layer.cornerRadius = 10
-        ConfirmAccountNumberTF.layer.borderWidth = 1
-        ConfirmAccountNumberTF.layer.borderColor = UIColor.appBorder.cgColor
+        confirmView.layer.cornerRadius = 10
+        confirmView.layer.borderWidth = 1
+        confirmView.layer.borderColor = UIColor.appBorder.cgColor
         
-        IFSCTF.layer.cornerRadius = 10
-        IFSCTF.layer.borderWidth = 1
-        IFSCTF.layer.borderColor = UIColor.appBorder.cgColor
+        ifscView.layer.cornerRadius = 10
+        ifscView.layer.borderWidth = 1
+        ifscView.layer.borderColor = UIColor.appBorder.cgColor
         
-        MICRTF.layer.cornerRadius = 10
-        MICRTF.layer.borderWidth = 1
-        MICRTF.layer.borderColor = UIColor.appBorder.cgColor
+        micrView.layer.cornerRadius = 10
+        micrView.layer.borderWidth = 1
+        micrView.layer.borderColor = UIColor.appBorder.cgColor
         
         // SubmitBtn.isEnabled = false
         SubmitBtn.layer.cornerRadius = 10
@@ -98,16 +102,17 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
         
         connectToCams.backgroundColor = .appPrimary
         connectToCams.layer.cornerRadius = 10
+        //connectToCams.isHidden = true
         
         SIXTHAPI(userID: fetchedUserId ?? "")
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if let userId = fetchedUserId {
-            SIXTHAPI(userID: userId)
-        }
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        if let userId = fetchedUserId {
+//            SIXTHAPI(userID: userId)845204
+//        }
+//    }
     
     private func fetchUserId() {
         CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
@@ -265,37 +270,33 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        // Validate account number and confirm account number
-        if textField == AccountNumberTF || textField == ConfirmAccountNumberTF {
-            if let accountNumber = AccountNumberTF.text, let confirmNumber = ConfirmAccountNumberTF.text {
-                
-                let exclamationImage = UIImage(systemName: "exclamationmark.circle.fill")
-                let checkmarkImage = UIImage(systemName: "checkmark.circle.fill")
-                
-                // If the account numbers match
-                if confirmNumber == accountNumber, !accountNumber.isEmpty {
+
+            // ✅ Convert IFSC to uppercase automatically
+            if textField == IFSCTF {
+                textField.text = textField.text?.uppercased()
+            }
+            
+            // Validate account number and confirm account number
+            if textField == AccountNumberTF || textField == ConfirmAccountNumberTF {
+                if let accountNumber = AccountNumberTF.text, let confirmNumber = ConfirmAccountNumberTF.text {
                     
-                    SubmitBtn.isEnabled = true
-                    IFSCTF.isEnabled = true
-                } else {
-                    // If the account numbers don't match, show the exclamation mark
-                    
-                    IFSCTF.isEnabled = false
+                    if confirmNumber == accountNumber, !accountNumber.isEmpty {
+                        SubmitBtn.isEnabled = true
+                        IFSCTF.isEnabled = true
+                    } else {
+                        IFSCTF.isEnabled = false
+                    }
+                }
+            }
+            
+            // Validate IFSC code
+            if textField == IFSCTF {
+                if let ifscCode = IFSCTF.text, ifscCode.count == 11 {
+                    IFSCSearchWithoutBankName(ifscCode: ifscCode)
                 }
             }
         }
-        
-        // Validate IFSC code
-        if textField == IFSCTF {
-            if let ifscCode = IFSCTF.text, ifscCode.count == 11 {
-                // Call the IFSC search method
-                IFSCSearchWithoutBankName(ifscCode: ifscCode)
-            }
-        }
-        
-        // Validate UPI ID
-        
-    }
+
     
     func isAccountNumberValid() -> Bool {
         guard let accountNumber = AccountNumberTF.text else { return false }
@@ -416,7 +417,7 @@ extension BankVC{
                                 DispatchQueue.main.async {
                                     self.navigateToNextPage()
                                 }
-                            } else if self.isPennyDrop == "N" && self.isDerivative == "N" {
+                            } else if self.isPennyDrop == "N" && self.isDerivative == "N" || self.isPennyDrop == "Y" && self.isDerivative == "N" {
                                 self.navigateToNextPage()
                             } else {
                                 self.SIXTHAPI(userID: self.fetchedUserId ?? "")
@@ -600,7 +601,15 @@ extension BankVC{
     
     func updateSixth() {
         self.connectToCams.isHidden = true
-        
+        if (self.isPennyDropSixth ?? "").isEmpty &&
+            self.isDerivative == "Y" &&
+            (self.camsClickCount ?? "").isEmpty &&
+            self.consent == "N" {
+            
+            self.connectToCams.isHidden = true
+            print("🔴 Button hidden due to empty PennyDrop + Derivative Y + Consent N + CAMSClickCount empty")
+            return
+        }
         
         // 🟢 CASE 1: Derivative = Y, PennyDrop = Y
         if self.isDerivative == "Y" {

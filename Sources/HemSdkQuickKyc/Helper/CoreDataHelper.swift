@@ -431,6 +431,7 @@ public class CoreDataHelper {
                                     tokenIds.append(tokenId)
                                 }
                             }
+                            print("✅ Token IDs received: \(tokenIds)")
                             
                             DispatchQueue.main.async {
                                 saveTokenIds(tokenIds, entityName: entityName)

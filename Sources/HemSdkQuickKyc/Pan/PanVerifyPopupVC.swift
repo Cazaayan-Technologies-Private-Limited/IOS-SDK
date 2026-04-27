@@ -6,6 +6,7 @@
 //
 import UIKit
 
+@MainActor
 protocol PanVerifyPopupVCDelegate: AnyObject {
     func didReceiveApiResponse(panName: String?, panNo: String?, regId: String?, ErrorCode: String?)
 }
