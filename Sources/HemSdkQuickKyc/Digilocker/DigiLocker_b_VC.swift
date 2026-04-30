@@ -54,7 +54,7 @@ protocol DigiLocker_b_VCDelegate: AnyObject {
 }
 
 class DigiLocker_b_VC: UIViewController {
-
+    
     @IBOutlet weak var NAMELabel: UILabel!
     @IBOutlet weak var dobLabel: UILabel!
     @IBOutlet weak var genderLabel: UILabel!

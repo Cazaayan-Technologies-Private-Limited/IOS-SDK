@@ -107,12 +107,12 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
         SIXTHAPI(userID: fetchedUserId ?? "")
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        if let userId = fetchedUserId {
-//            SIXTHAPI(userID: userId)845204
-//        }
-//    }
+    //    override func viewWillAppear(_ animated: Bool) {
+    //        super.viewWillAppear(animated)
+    //        if let userId = fetchedUserId {
+    //            SIXTHAPI(userID: userId)845204
+    //        }
+    //    }
     
     private func fetchUserId() {
         CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
@@ -270,33 +270,33 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-
-            // ✅ Convert IFSC to uppercase automatically
-            if textField == IFSCTF {
-                textField.text = textField.text?.uppercased()
-            }
-            
-            // Validate account number and confirm account number
-            if textField == AccountNumberTF || textField == ConfirmAccountNumberTF {
-                if let accountNumber = AccountNumberTF.text, let confirmNumber = ConfirmAccountNumberTF.text {
-                    
-                    if confirmNumber == accountNumber, !accountNumber.isEmpty {
-                        SubmitBtn.isEnabled = true
-                        IFSCTF.isEnabled = true
-                    } else {
-                        IFSCTF.isEnabled = false
-                    }
-                }
-            }
-            
-            // Validate IFSC code
-            if textField == IFSCTF {
-                if let ifscCode = IFSCTF.text, ifscCode.count == 11 {
-                    IFSCSearchWithoutBankName(ifscCode: ifscCode)
+        
+        // ✅ Convert IFSC to uppercase automatically
+        if textField == IFSCTF {
+            textField.text = textField.text?.uppercased()
+        }
+        
+        // Validate account number and confirm account number
+        if textField == AccountNumberTF || textField == ConfirmAccountNumberTF {
+            if let accountNumber = AccountNumberTF.text, let confirmNumber = ConfirmAccountNumberTF.text {
+                
+                if confirmNumber == accountNumber, !accountNumber.isEmpty {
+                    SubmitBtn.isEnabled = true
+                    IFSCTF.isEnabled = true
+                } else {
+                    IFSCTF.isEnabled = false
                 }
             }
         }
-
+        
+        // Validate IFSC code
+        if textField == IFSCTF {
+            if let ifscCode = IFSCTF.text, ifscCode.count == 11 {
+                IFSCSearchWithoutBankName(ifscCode: ifscCode)
+            }
+        }
+    }
+    
     
     func isAccountNumberValid() -> Bool {
         guard let accountNumber = AccountNumberTF.text else { return false }

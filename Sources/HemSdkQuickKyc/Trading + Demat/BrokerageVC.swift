@@ -12,7 +12,7 @@ enum BrokerageFilter {
     case commodity
 }
 
-class BrokerageVC: UIViewController, @MainActor BrokerageCellDelegate {
+class BrokerageVC: UIViewController, BrokerageCellDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -109,8 +109,8 @@ class BrokerageVC: UIViewController, @MainActor BrokerageCellDelegate {
                         print("BrokeragePlan Response: \(jsonResponse)")
                         
                         if let list = jsonResponse["List"] as? [[String: Any]] {
-                            DispatchQueue.main.async {
-
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
                                 // ✅ convert dictionary → model
                                 self.allPlans = list.map { BrokeragePlan(dict: $0) }
 

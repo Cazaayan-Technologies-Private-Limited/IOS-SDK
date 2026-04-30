@@ -94,52 +94,56 @@ class WebViewVC: UIViewController, WKNavigationDelegate, WKUIDelegate, UIImagePi
         }
     }
     
-    func ValidateIsPhotoDone(completion: @escaping (Bool) -> Void) {
-        let parameters: [String: Any?] = [
-            "TransactionID": transactionId,
+    func ValidateIsPhotoDone(completion: @escaping @Sendable (Bool) -> Void) {
+        let parameters: [String: Any] = [
+            "TransactionID": transactionId ?? "",
             "URL": "",
             "ErrorMessage": "",
             "ErrorCode": "",
-            "RegId": regID,
-            "PanNo": panNo,
-            "UserId": userId,
+            "RegId": regID ?? "",
+            "PanNo": panNo ?? "",
+            "UserId": userId ?? "",
             "Flag": "Insert",
-            "Latitude": latitude,
-            "Longitude": longitude,
-            "Location": location,
+            "Latitude": latitude ?? "",
+            "Longitude": longitude ?? "",
+            "Location": location ?? "",
             "OCR_Count": "\(ocrCount ?? 1)",
         ]
         
         let apiUrl = "MultiPartImageUpload/ValidateIsPhotoDone"
         
-        DispatchQueue.main.async {
-            apiCall(url: apiUrl, method: "POST", parameters: parameters as [String: Any], view: self.view) { result in
+        Task { @MainActor in
+            apiCall(url: apiUrl, method: "POST", parameters: parameters, view: self.view) { result in
                 switch result {
                 case .success(let jsonResponse):
                     print("ValidateIsPhotoDone:-\(jsonResponse)")
-                    if let errorCode = jsonResponse["ErrorCode"] as? String {
-                        DispatchQueue.main.async {
-                            switch errorCode {
-                            case "000000":
-                                self.ocrCount = 0
-                                
-                                self.navigationController?.popViewController(animated: true)
-                                self.delegate?.webViewDidFinishLoad(ocrcount: self.ocrCount ?? 0, response: jsonResponse)
-                                completion(true)
-                            case "801005", "801006":
-                                if self.ocrCount ?? 0 < 3 {
-                                    self.ocrCount! += 1 // Increase count correctly
-                                }
-             
-                                self.navigationController?.popViewController(animated: true)
-                                self.delegate?.webViewDidFinishLoad(ocrcount: self.ocrCount ?? 1, response: jsonResponse)
-                                completion(true)
-                            default:
-                                completion(false)
-                            }
-                        }
+                    
+                    guard let errorCode = jsonResponse["ErrorCode"] as? String else {
+                        completion(false)
+                        return
                     }
-                case .failure:
+                    
+                    switch errorCode {
+                    case "000000":
+                        self.ocrCount = 0
+                        self.navigationController?.popViewController(animated: true)
+                        self.delegate?.webViewDidFinishLoad(ocrcount: 0, response: jsonResponse)
+                        completion(true)
+                        
+                    case "801005", "801006":
+                        if (self.ocrCount ?? 0) < 3 {
+                            self.ocrCount = (self.ocrCount ?? 0) + 1
+                        }
+                        self.navigationController?.popViewController(animated: true)
+                        self.delegate?.webViewDidFinishLoad(ocrcount: self.ocrCount ?? 1, response: jsonResponse)
+                        completion(true)
+                        
+                    default:
+                        completion(false)
+                    }
+                    
+                case .failure(let error):
+                    print("API Error: \(error)")
                     completion(false)
                 }
             }

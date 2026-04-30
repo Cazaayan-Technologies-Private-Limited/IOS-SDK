@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 protocol CommodityCategoryVCDelegate: AnyObject {
     func didSelectCommodityValues(selectedValues: [String: String])
 }
@@ -33,24 +34,26 @@ class commodityCategoryVC: UIViewController {
         self.selectCategory.layer.cornerRadius = 15
         
         CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
-            guard let self = self else { return }
-            if let userId = userId, let sessionID = sessionID {
-                self.fetchedUserId = userId
-                self.fetchedSessionID = sessionID
-                self.mobiledecodeArray = decodeByteArrayString
-                print("UserID: \(userId), SessionID: \(sessionID)")
-                
-                // ✅ Fetch category master first, then trading details
-                self.GetCommodityCategoriMaster {
-                    self.ViewTradingDetails()
+            Task { @MainActor in
+                guard let self = self else { return }
+                if let userId = userId, let sessionID = sessionID {
+                    self.fetchedUserId = userId
+                    self.fetchedSessionID = sessionID
+                    self.mobiledecodeArray = decodeByteArrayString
+                    print("UserID: \(userId), SessionID: \(sessionID)")
+                    
+                    // ✅ Fetch category master first, then trading details
+                    self.GetCommodityCategoriMaster {
+                        self.ViewTradingDetails()
+                    }
+                } else {
+                    print("No UserID or SessionID found.")
                 }
-            } else {
-                print("No UserID or SessionID found.")
             }
         }
     }
     
-    func GetCommodityCategoriMaster(completion: (() -> Void)? = nil) {
+    func GetCommodityCategoriMaster(completion: (@Sendable () -> Void)? = nil) {
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
             guard let tokenId = tokenId else {
                 CoreDataHelper.generateToken(
@@ -90,19 +93,19 @@ class commodityCategoryVC: UIViewController {
                     if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000000",
                        let categories = jsonResponse["CommodityCategori"] as? [[String: Any]] {
                         
-                        // Store the raw dictionary response
-                        self.commodityCategories = categories
+                        let safeCategories = categories   // ✅ copy outside
                         
-                        // Reload table view on the main thread
-                        DispatchQueue.main.async {
-                            self.commodityCategoryTableview.reloadData()
-                            completion?()
-                        }
+                        self.commodityCategories = safeCategories
+                        self.commodityCategoryTableview.reloadData()
+                        completion?()
+                        //}
                     } else {
                         print("Error: \(jsonResponse)")
+                        
                     }
                 case .failure(let error):
                     print("API call failed: \(error.localizedDescription)")
+                    
                 }
             }
         }
@@ -140,34 +143,34 @@ class commodityCategoryVC: UIViewController {
             ]
             print(parameters)
             let Url = "TradingDetails/ViewTradingDetails"
-            
-            apiCall(
-                url: Url, method: "POST",
-                parameters: parameters as [String: Any], view: self.view
-            ) { result in
-                switch result {
-                case .success(let jsonResponse):
-                    print("ViewTradingDetails Response: \(jsonResponse)")
-                    //                    let DigiLockerURL = jsonResponse["DigiLockerURL"] as? String
-                    //                    let TransactionID = jsonResponse["TransactionID"] as? String
-                    if let errorCode = jsonResponse["ErrorCode"] as? String {
-                        switch errorCode {
-                        case "000000":
-                            DispatchQueue.main.async {
-                                self.updateui(with: jsonResponse)
+            Task { @MainActor in
+                apiCall(
+                    url: Url, method: "POST",
+                    parameters: parameters as [String: Any], view: self.view
+                ) { result in
+                    switch result {
+                    case .success(let jsonResponse):
+                        guard let errorCode = jsonResponse["ErrorCode"] as? String else { return }
+                        
+                        if errorCode == "000000" {
+                            
+                            let safeResponse = jsonResponse // snapshot
+                            
+                            Task { @MainActor in
+                                self.updateui(with: safeResponse)
                             }
-                        default:
-                            print("Unhandled error code: \(errorCode)")
                         }
+                    case .failure(let error):
+                        print(
+                            "Login API call failed: \(error.localizedDescription)")
                     }
-                case .failure(let error):
-                    print(
-                        "Login API call failed: \(error.localizedDescription)")
+                    
                 }
             }
         }
     }
     
+
     func updateui(with response: [String: Any]) {
         if let rawKeys = response["CommodityCategoriKey"] as? [Any],
            let rawValues = response["CommodityCategoriValue"] as? [Any] {
@@ -199,7 +202,7 @@ class commodityCategoryVC: UIViewController {
             }
         }
     }
-
+    
     // Recursive function to flatten nested arrays
     func flattenArray(_ array: [Any]) -> [String] {
         var result: [String] = []
@@ -236,7 +239,7 @@ class commodityCategoryVC: UIViewController {
 }
 
 
-extension commodityCategoryVC: UITableViewDelegate,UITableViewDataSource,@MainActor CommodityTVCDelegate, @MainActor CategoryPopupDelegate{
+extension commodityCategoryVC: UITableViewDelegate,UITableViewDataSource, CommodityTVCDelegate,  CategoryPopupDelegate{
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -245,57 +248,57 @@ extension commodityCategoryVC: UITableViewDelegate,UITableViewDataSource,@MainAc
     
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "CommodityTVC",
             for: indexPath
         ) as! CommodityTVC
-
+        
         let category = commodityCategories[indexPath.row]
-
+        
         guard
             let categoryName = category["CategoriName"] as? String,
             let commodityValue = category["CommodityValue"] as? [[String: Any]]
         else {
             return cell
         }
-
+        
         let values = commodityValue.compactMap {
             $0["CategoriValueName"] as? String
         }
-
+        
         cell.commodityNameLabel?.text = categoryName
         cell.commodityValues = values
         cell.delegate = self
-
+        
         let selectedValue =
-            selectedCommodityValues[categoryName] ?? "Others"
-
+        selectedCommodityValues[categoryName] ?? "Others"
+        
         cell.updateCommodityButton(with: selectedValue)
         cell.layer.cornerRadius = 10
-
+        
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "CommodityTVC", for: indexPath) as! CommodityTVC
-//        let category = commodityCategories[indexPath.row]
-//        if let categoryName = category["CategoriName"] as? String,
-//           let commodityValue = category["CommodityValue"] as? [[String: Any]] {
-//            
-//            let values = commodityValue.compactMap { $0["CategoriValueName"] as? String }
-//            cell.commodityNameLabel.text = categoryName
-//            cell.commodityValues = values
-//            cell.delegate = self // Set delegate
-//            
-//            // Set the button title based on the selected value or default to "Select"
-//            let selectedValue = selectedCommodityValues[categoryName] ?? "Others"
-//            cell.updateCommodityButton(with: selectedValue)
-//            
-//            cell.layer.cornerRadius = 10
-//        }
-//        return cell
-//    }
+    //    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    //        let cell = tableView.dequeueReusableCell(withIdentifier: "CommodityTVC", for: indexPath) as! CommodityTVC
+    //        let category = commodityCategories[indexPath.row]
+    //        if let categoryName = category["CategoriName"] as? String,
+    //           let commodityValue = category["CommodityValue"] as? [[String: Any]] {
+    //
+    //            let values = commodityValue.compactMap { $0["CategoriValueName"] as? String }
+    //            cell.commodityNameLabel.text = categoryName
+    //            cell.commodityValues = values
+    //            cell.delegate = self // Set delegate
+    //
+    //            // Set the button title based on the selected value or default to "Select"
+    //            let selectedValue = selectedCommodityValues[categoryName] ?? "Others"
+    //            cell.updateCommodityButton(with: selectedValue)
+    //
+    //            cell.layer.cornerRadius = 10
+    //        }
+    //        return cell
+    //    }
     
     func didTapDropdown(for cell: CommodityTVC, with values: [String]) {
         if let popupVC = storyboard?.instantiateViewController(withIdentifier: "categoryPopUPValuesVC") as? categoryPopUPValuesVC {

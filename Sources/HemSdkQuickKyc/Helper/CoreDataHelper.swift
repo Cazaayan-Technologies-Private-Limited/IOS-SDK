@@ -223,7 +223,7 @@
 import UIKit
 import CoreData
 
-public class CoreDataHelper {
+@MainActor public class CoreDataHelper {
     
     // MARK: - Shared Managed Context (must be set by the host app)
     @MainActor public static var managedContext: NSManagedObjectContext!
@@ -362,7 +362,7 @@ public class CoreDataHelper {
         }
     }
     
-    @MainActor public static func fetchUserId(entityName: String, completion: @escaping (String?, String?, String?) -> Void) {
+static func fetchUserId(entityName: String, completion: @escaping (String?, String?, String?) -> Void) {
         guard let managedContext = managedContext else {
             print("❌ CoreDataHelper not configured.")
             completion(nil, nil, nil)
@@ -406,7 +406,7 @@ public class CoreDataHelper {
         }
     }
     
-    @MainActor static func generateToken(decodeByteArrayToString: String, USERID: String, SessionId: String, entityName: String, deviceType: String, in view: UIView, completion: @escaping (Bool) -> Void) {
+    @MainActor static func generateToken(decodeByteArrayToString: String, USERID: String, SessionId: String, entityName: String, deviceType: String, in view: UIView, completion: @escaping @Sendable (Bool) -> Void) {
         let tokenParameters: [String: Any] = [
             "UserId": USERID,
             "Password": decodeByteArrayToString,

@@ -12,7 +12,7 @@
 //    @IBOutlet weak var backgroundView: UIView!
 //    @IBOutlet weak var holderview: UIView!
 //    @IBOutlet weak var continueBtn: UIButton!
-//    
+//
 //    var digilockerDone:String?
 //    var EmailId: String?
 //    var panNo: String?
@@ -26,14 +26,14 @@
 //    var identifier1: String?
 //    weak var delegate: VerticsVCDelegate?
 //    var responseData: [String: Any]?
-//    
+//
 //    override func viewDidLoad() {
 //        super.viewDidLoad()
 //
 //        CoreDataHelper.fetchUserId(entityName: "MobileUser") {
 //            [weak self] userId, sessionID, decodeByteArrayString in
 //            guard let self = self else { return }
-//            
+//
 //            if let userId = userId, let sessionID = sessionID {
 //                self.fetchedUserId = userId
 //                self.fetchedSessionID = sessionID
@@ -61,7 +61,7 @@
 //        // Handle the received data
 //        self.responseData = data
 //        print("Received data: \(data)")
-//        
+//
 //        // Check the error code in the response
 //        if let errorCode = data["ErrorCode"] as? String {
 //            if errorCode == "000000" {
@@ -72,11 +72,11 @@
 //                let fatherName = data["FatherSpouseName"] as? String
 //                let address =
 //                "\(data["Address1"] as? String ?? ""), \(data["Address2"] as? String ?? ""), \(data["Address3"] as? String ?? ""), \(data["City"] as? String ?? ""), \(data["State"] as? String ?? ""), \(data["PinCode"] as? String ?? "")"
-//                
+//
 //                // Automatically present the DigiLocker_b_VC screen with the data
-//                
+//
 //                self.navigationController?.popViewController(animated: true)
-//                
+//
 //                // 2. Delay presentation until pop finishes
 //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 //                    let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
@@ -96,12 +96,12 @@
 //                }
 //            } else if errorCode == "000023" {
 //                self.navigationController?.popViewController(animated: true)
-//                
+//
 //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 //                    let errorMessage = data["ErrorMessage"] as? String
 //                    let aadhaarName = data["NameAsPerAadhaar"] as? String
 //                    let panName = data["PANName"] as? String
-//                    
+//
 //                    let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
 //                    let vc =
 //                    storyboard.instantiateViewController(
@@ -124,12 +124,12 @@
 //            print("No ErrorCode found in the response.")
 //        }
 //    }
-//    
+//
 //    func didDismissDigiLockerVC() {
 //        print("Forwarding data to NomineeVC")
 //        print("responseData:", responseData)
 //        print("identifier1:", identifier1)
-//        
+//
 //        if identifier3 == "DigiLockerA" {
 //            let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
 //            let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
@@ -144,7 +144,7 @@
 //            self.navigationController?.popViewController(animated: true)
 //        }
 //    }
-//    
+//
 //    @IBAction func ConnectToDigiLockerBtn(_ sender: UIButton) {
 //        saveDigiLocker()
 //    }
@@ -178,7 +178,7 @@
 //            ]
 //            print(parameters)
 //            let Url = "TokenAuthentication/ValidateToken"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view
@@ -186,7 +186,7 @@
 //                switch result {
 //                case .success(let jsonResponse):
 //                    print("TOKEN Authentication Response: \(jsonResponse)")
-//                    
+//
 //                case .failure(let error):
 //                    print(
 //                        "Login API call failed: \(error.localizedDescription)")
@@ -194,7 +194,7 @@
 //            }
 //        }
 //    }
-//    
+//
 //    func saveDigiLocker() {
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -221,7 +221,7 @@
 //            ]
 //            print(parameters)
 //            let Url = "AadhaarData/SaveDigiLockerAuditLogDetails"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view,
@@ -296,9 +296,9 @@
 //            }
 //        }
 //    }
-//    
+//
 //    func navigateToVeriticsVC(DigiLockerURL: String, TransactionID: String) {
-//        
+//
 //        let vc = VerticsVC()
 //        vc.DigiLockerURL = DigiLockerURL
 //        vc.TransactionID = TransactionID
@@ -313,7 +313,7 @@
 //        navigationController?.pushViewController(vc, animated: true)
 //    }
 //}
-// 
+//
 //import UIKit
 //
 //class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor DigiLocker_b_VCDelegate {
@@ -321,7 +321,7 @@
 //    @IBOutlet weak var backgroundView: UIView!
 //    @IBOutlet weak var holderview: UIView!
 //    @IBOutlet weak var continueBtn: UIButton!
-//    
+//
 //    var digilockerDone:String?
 //    var EmailId: String?
 //    var panNo: String?
@@ -335,14 +335,14 @@
 //    var identifier1: String?
 //    weak var delegate: VerticsVCDelegate?
 //    var responseData: [String: Any]?
-//    
+//
 //    override func viewDidLoad() {
 //        super.viewDidLoad()
 //
 //        CoreDataHelper.fetchUserId(entityName: "MobileUser") {
 //            [weak self] userId, sessionID, decodeByteArrayString in
 //            guard let self = self else { return }
-//            
+//
 //            if let userId = userId, let sessionID = sessionID {
 //                self.fetchedUserId = userId
 //                self.fetchedSessionID = sessionID
@@ -370,7 +370,7 @@
 //        // Handle the received data
 //        self.responseData = data
 //        print("Received data: \(data)")
-//        
+//
 //        // Check the error code in the response
 //        if let errorCode = data["ErrorCode"] as? String {
 //            if errorCode == "000000" {
@@ -381,11 +381,11 @@
 //                let fatherName = data["FatherSpouseName"] as? String
 //                let address =
 //                "\(data["Address1"] as? String ?? ""), \(data["Address2"] as? String ?? ""), \(data["Address3"] as? String ?? ""), \(data["City"] as? String ?? ""), \(data["State"] as? String ?? ""), \(data["PinCode"] as? String ?? "")"
-//                
+//
 //                // Automatically present the DigiLocker_b_VC screen with the data
-//                
+//
 ////                self.navigationController?.popViewController(animated: true)
-//                
+//
 //                // 2. Delay presentation until pop finishes
 //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 //                    let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
@@ -406,12 +406,12 @@
 //                }
 //            } else if errorCode == "000023" {
 //                //self.navigationController?.popViewController(animated: true)
-//                
+//
 //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 //                    let errorMessage = data["ErrorMessage"] as? String
 //                    let aadhaarName = data["NameAsPerAadhaar"] as? String
 //                    let panName = data["PANName"] as? String
-//                    
+//
 //                    let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
 //                    let vc =
 //                    storyboard.instantiateViewController(
@@ -435,7 +435,7 @@
 //            print("No ErrorCode found in the response.")
 //        }
 //    }
-//    
+//
 //    func didDismissDigiLockerVC() {
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
 //                if self.identifier3 == "DigiLockerA" {
@@ -443,9 +443,9 @@
 //                    let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
 //                    vc.panNo = self.panNo
 //                    vc.regId = self.RegId
-//                    
+//
 //                    self.navigationController?.setViewControllers([vc], animated: true)
-//                    
+//
 //                } else if self.identifier3 == "NomineeVC" {
 //                    if let data = self.responseData, let id = self.identifier1 {
 //                        self.delegate?.didReceiveApiResponse(data: data, identifier1: id, identifier3: self.identifier3 ?? "")
@@ -456,7 +456,7 @@
 ////        print("Forwarding data to NomineeVC")
 ////        print("responseData:", responseData)
 ////        print("identifier1:", identifier1)
-////        
+////
 ////        if identifier3 == "DigiLockerA" {
 ////            let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
 ////            let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
@@ -471,7 +471,7 @@
 ////            self.navigationController?.popViewController(animated: true)
 ////        }
 //    }
-//    
+//
 //    @IBAction func ConnectToDigiLockerBtn(_ sender: UIButton) {
 //        saveDigiLocker()
 //    }
@@ -505,7 +505,7 @@
 //            ]
 //            print(parameters)
 //            let Url = "TokenAuthentication/ValidateToken"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view
@@ -513,7 +513,7 @@
 //                switch result {
 //                case .success(let jsonResponse):
 //                    print("TOKEN Authentication Response: \(jsonResponse)")
-//                    
+//
 //                case .failure(let error):
 //                    print(
 //                        "Login API call failed: \(error.localizedDescription)")
@@ -521,7 +521,7 @@
 //            }
 //        }
 //    }
-//    
+//
 //    func saveDigiLocker() {
 //        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
 //            [self] tokenId in
@@ -548,7 +548,7 @@
 //            ]
 //            print(parameters)
 //            let Url = "AadhaarData/SaveDigiLockerAuditLogDetails"
-//            
+//
 //            apiCall(
 //                url: Url, method: "POST",
 //                parameters: parameters as [String: Any], view: self.view,
@@ -623,9 +623,9 @@
 //            }
 //        }
 //    }
-//    
+//
 //    func navigateToVeriticsVC(DigiLockerURL: String, TransactionID: String) {
-//        
+//
 //        let vc = VerticsVC()
 //        vc.DigiLockerURL = DigiLockerURL
 //        vc.TransactionID = TransactionID
@@ -640,11 +640,11 @@
 //        navigationController?.pushViewController(vc, animated: true)
 //    }
 //}
- 
+
 import UIKit
 
 class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor DigiLocker_b_VCDelegate {
-
+    
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var holderview: UIView!
     @IBOutlet weak var continueBtn: UIButton!
@@ -667,7 +667,7 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         CoreDataHelper.fetchUserId(entityName: "MobileUser") {
             [weak self] userId, sessionID, decodeByteArrayString in
             guard let self = self else { return }
@@ -713,27 +713,27 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
                 
                 // Automatically present the DigiLocker_b_VC screen with the data
                 
-//                self.navigationController?.popViewController(animated: true)
+                //                self.navigationController?.popViewController(animated: true)
                 
                 // 2. Delay presentation until pop finishes
                 DispatchQueue.main.async {
                     guard let nav = self.navigationController else { return }
-
+                    
                     let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
                     if let digiLockerVC = storyboard.instantiateViewController(
                         withIdentifier: "DigiLocker_b_VC"
                     ) as? DigiLocker_b_VC {
-
+                        
                         digiLockerVC.name = name
                         digiLockerVC.dob = dob
                         digiLockerVC.gender = gender
                         digiLockerVC.fatherName = fatherName
                         digiLockerVC.address = address
                         digiLockerVC.delegate = self
-
+                        
                         // ✅ VERY IMPORTANT
                         digiLockerVC.identifier3 = identifier3
-
+                        
                         nav.pushViewController(digiLockerVC, animated: true)
                     }
                 }
@@ -772,54 +772,54 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
     func didDismissDigiLockerVC() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             guard let pan = self.panNo, !pan.isEmpty else {
-                     print("❌ PAN missing, not navigating")
-                     return
-                 }
-            
-                if self.identifier3 == "DigiLockerA" {
-                    let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
-                    let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
-                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
-                    
-                    let regId = UserDefaults.standard.string(forKey: "RegId")
-                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
-                    
-                    vc.panNo = finalPAN
-                    vc.regId = regIdFinal
-                    
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    
-                } else if self.identifier3 == "NomineeVC" {
-                    if let data = self.responseData, let id = self.identifier1 {
-                        self.delegate?.didReceiveApiResponse(data: data, identifier1: id, identifier3: self.identifier3 ?? "")
-                    }
-                    self.navigationController?.popViewController(animated: true)
-                }
+                print("❌ PAN missing, not navigating")
+                return
             }
-//        print("Forwarding data to NomineeVC")
-//        print("responseData:", responseData)
-//        print("identifier1:", identifier1)
-//
-//        if identifier3 == "DigiLockerA" {
-//            let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
-//            let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-//            vc.panNo = panNo
-//            vc.regId = RegId
-//            //vc.delegate = self
-//            self.navigationController?.setViewControllers([vc], animated: true)
-//        } else if identifier3 == "NomineeVC" {
-//            if let data = responseData, let id = identifier1 {
-//                delegate?.didReceiveApiResponse(data: data, identifier1: id, identifier3: identifier3 ?? "")
-//                 }
-//            self.navigationController?.popViewController(animated: true)
-//        }
+            
+            if self.identifier3 == "DigiLockerA" {
+                let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
+                let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
+                let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                
+                let regId = UserDefaults.standard.string(forKey: "RegId")
+                let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                
+                vc.panNo = finalPAN
+                vc.regId = regIdFinal
+                
+                self.navigationController?.pushViewController(vc, animated: true)
+                
+            } else if self.identifier3 == "NomineeVC" {
+                if let data = self.responseData, let id = self.identifier1 {
+                    self.delegate?.didReceiveApiResponse(data: data, identifier1: id, identifier3: self.identifier3 ?? "")
+                }
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+        //        print("Forwarding data to NomineeVC")
+        //        print("responseData:", responseData)
+        //        print("identifier1:", identifier1)
+        //
+        //        if identifier3 == "DigiLockerA" {
+        //            let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
+        //            let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
+        //            vc.panNo = panNo
+        //            vc.regId = RegId
+        //            //vc.delegate = self
+        //            self.navigationController?.setViewControllers([vc], animated: true)
+        //        } else if identifier3 == "NomineeVC" {
+        //            if let data = responseData, let id = identifier1 {
+        //                delegate?.didReceiveApiResponse(data: data, identifier1: id, identifier3: identifier3 ?? "")
+        //                 }
+        //            self.navigationController?.popViewController(animated: true)
+        //        }
     }
     
     @IBAction func ConnectToDigiLockerBtn(_ sender: UIButton) {
         saveDigiLocker()
     }
-
+    
     func tokenAuthentication() {
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
             [self] tokenId in
@@ -975,8 +975,8 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
         vc.TransactionID = TransactionID
         vc.RegId = RegId
         vc.panNo = panNo
-//        vc.identifier3 = "DigiLockerA"
-//        vc.identifier3 = "NomineeVC"
+        //        vc.identifier3 = "DigiLockerA"
+        //        vc.identifier3 = "NomineeVC"
         //vc.identifier1 = identifier1
         vc.identifier3 = "DigiLockerA"
         vc.delegate = self

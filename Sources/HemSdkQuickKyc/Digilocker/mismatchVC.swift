@@ -400,10 +400,10 @@ class mismatchVC: UIViewController {
     }
     
     @IBAction func confirmBtn(_ sender: Any) {
-//        self.dismiss(animated: true) {
-//            //            self.delegate?.didDismissDigiLockerVC()
-//            self.ValidatesaveDigiLocker()
-//        }
+        //        self.dismiss(animated: true) {
+        //            //            self.delegate?.didDismissDigiLockerVC()
+        //            self.ValidatesaveDigiLocker()
+        //        }
         self.ValidatesaveDigiLocker()
     }
     //    func ValidatesaveDigiLocker(completion: @escaping (Bool) -> Void) {
@@ -487,13 +487,13 @@ class mismatchVC: UIViewController {
                         switch errorCode {
                         case "000000":
                             DispatchQueue.main.async {
-
-//                                  let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
-//                                  let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-//                                  vc.panNo = self.panNo
-//                                  vc.regId = self.regid
-//
-//                                  self.navigationController?.pushViewController(vc, animated: true)
+                                
+                                //                                  let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
+                                //                                  let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
+                                //                                  vc.panNo = self.panNo
+                                //                                  vc.regId = self.regid
+                                //
+                                //                                  self.navigationController?.pushViewController(vc, animated: true)
                                 if self.identifier3 == "NomineeVC" {
                                     
                                     self.navigationController?.popViewController(animated: true)
@@ -517,18 +517,18 @@ class mismatchVC: UIViewController {
                                     
                                     self.navigationController?.pushViewController(vc, animated: true)
                                 }
-                              }
-//                            DispatchQueue.main.async {
-//                                 self.dismiss(animated: true) {
-//                                     //self.delegate?.didDismissDigiLockerVC()
-//                                     let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
-//                                     let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
-//                                     vc.panNo = self.panNo
-//                                     vc.regId = self.regid
-//                                     self.navigationController?.pushViewController(vc, animated: true)
-//                                 }
-//                            
-//                             }
+                            }
+                            //                            DispatchQueue.main.async {
+                            //                                 self.dismiss(animated: true) {
+                            //                                     //self.delegate?.didDismissDigiLockerVC()
+                            //                                     let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
+                            //                                     let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
+                            //                                     vc.panNo = self.panNo
+                            //                                     vc.regId = self.regid
+                            //                                     self.navigationController?.pushViewController(vc, animated: true)
+                            //                                 }
+                            //                            
+                            //                             }
                         default:
                             print("Unhandled error code: \(errorCode)")
                         }

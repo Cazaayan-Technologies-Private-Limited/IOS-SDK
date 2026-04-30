@@ -17,7 +17,6 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
     @IBOutlet weak var submitBtn: UIButton!
     @IBOutlet weak var rejectionCollectionView: UICollectionView!
     
-    
     var panNo: String?
     var uccCode: String?
     var regId: String?

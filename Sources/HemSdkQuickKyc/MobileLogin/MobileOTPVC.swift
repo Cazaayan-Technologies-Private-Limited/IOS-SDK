@@ -354,13 +354,13 @@ extension MobileOTPVC{
                             else {
                                 FifthApi(phoneNumber: phoneNumber, decodeByteArrayToString: decodeByteArrayToString)
                             }
-                        
+                            
                         }
                         
                     case "000000":
                         DispatchQueue.main.async {
                             self.navigateToEmailIdVC(userId: self.userID, sessionID: self.sessionID, phoneNumber: phoneNumber)
-                
+                            
                             
                             
                             print("OTP generation successful")
@@ -380,7 +380,6 @@ extension MobileOTPVC{
             }
         }
     }
-    
     func OTPGeneratorApi(phoneNumber: String) {
         let apiUrlString = "OTPManagement/SendOTPToMobileClient"
         guard let apiUrl = URL(string: apiUrlString) else {
@@ -401,59 +400,129 @@ extension MobileOTPVC{
             "OTP": "",
         ]
         print(parameters)
-        apiCall(url: apiUrlString, method: "POST", parameters: parameters, view: self.view,loaderText: "Getting an OTP, please wait...") { result in
+        
+        apiCall(url: apiUrlString, method: "POST", parameters: parameters, view: self.view, loaderText: "Getting an OTP, please wait...") { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success(let jsonResponse):
                 print("2ND Response: \(jsonResponse)")
-                let ErrorMessage = jsonResponse["ErrorMessage"] as? String
-                self.errorCodes = (jsonResponse["ErrorCode"] as? String)!
                 
-                print("errorcodes\(self.errorCodes)")
-                if let errorCode = jsonResponse["ErrorCode"] as? String {
-                    switch errorCode {
-                    case "000000":
-                        DispatchQueue.main.async {
-                            
-                            
-                            if let relationsDict = jsonResponse["Relations"] as? [String: Any],
-                               let relationsList = relationsDict["list"] as? [[String: Any]] {
-                                self.relations = relationsList // Save the relations data
-                                //   self.setRelationshipButton() // Set button title and selection state
-                            } else {
-                                print("Error: Could not parse 'Relations' from response")
-                            }
-                            
-                            print("otp generation is called")
-                        }
-                        //self.showTemporaryAlert(message: "OTP sent successfully")
-                    case "200000":
-                        DispatchQueue.main.async {
-                            
-                            if let relationsDict = jsonResponse["Relations"] as? [String: Any],
-                               let relationsList = relationsDict["list"] as? [[String: Any]] {
-                                self.relations = relationsList // Save the relations data
-                                //self.setRelationshipButton() // Set button title and selection state
-                            } else {
-                                print("Error: Could not parse 'Relations' from response")
-                            }
-                        }
-                        print("otp generation is called")
-                        //self.showTemporaryAlert(message: "OTP sent successfully")
-                    case "400000":
-                        
-                        self.showTemporaryAlert(message:ErrorMessage ?? "" )
-                        print("Exceeded maximum tries. please try after 15 minutes.,")
-                        //self.showTemporaryAlert(message: "OTP sent successfully")
-                    default:
-                        print("Unhandled error code: \(errorCode)")
-                        self.showTemporaryAlert(message:ErrorMessage ?? "" )
+                // Extract values safely
+                let errorMessage = jsonResponse["ErrorMessage"] as? String
+                let errorCode = jsonResponse["ErrorCode"] as? String ?? ""
+                self.errorCodes = errorCode
+                
+                let relationsList = (jsonResponse["Relations"] as? [String: Any])?["list"] as? [[String: Any]]
+                
+                print("errorcodes: \(self.errorCodes)")
+                
+                // Use MainActor.run for UI updates
+                switch errorCode {
+                case "000000", "200000":
+                    
+                    if let relationsList = relationsList {
+                        self.relations = relationsList
+                    } else {
+                        print("Error: Could not parse 'Relations' from response")
+                    }
+                    print("otp generation is called")
+                    // }
+                    
+                case "400000":
+                    DispatchQueue.main.async {
+                        self.showTemporaryAlert(message: errorMessage ?? "")
+                    }
+                    print("Exceeded maximum tries. Please try after 15 minutes.")
+                    
+                default:
+                    print("Unhandled error code: \(errorCode)")
+                    DispatchQueue.main.async{
+                        self.showTemporaryAlert(message: errorMessage ?? "")
                     }
                 }
+                
             case .failure(let error):
                 print("Login API call failed: \(error.localizedDescription)")
             }
         }
     }
+    //    func OTPGeneratorApi(phoneNumber: String) {
+    //        let apiUrlString = "OTPManagement/SendOTPToMobileClient"
+    //        guard let apiUrl = URL(string: apiUrlString) else {
+    //            showAlert(message: "Invalid API URL")
+    //            return
+    //        }
+    //
+    //        var request = URLRequest(url: apiUrl)
+    //        request.httpMethod = "POST"
+    //        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    //
+    //        let parameters: [String: Any] = [
+    //            "MobileNo": "",
+    //            "DeviceType": "W",
+    //            "RmCode": "",
+    //            "Branch": "",
+    //            "PhoneNumber": phoneNumber,
+    //            "OTP": "",
+    //        ]
+    //        print(parameters)
+    //        apiCall(url: apiUrlString, method: "POST", parameters: parameters, view: self.view,loaderText: "Getting an OTP, please wait...") { result in
+    //            switch result {
+    //            case .success(let jsonResponse):
+    //                print("2ND Response: \(jsonResponse)")
+    //                let ErrorMessage = jsonResponse["ErrorMessage"] as? String
+    //              //  self.errorCodes = (jsonResponse["ErrorCode"] as? String)!
+    //                let errorCode = jsonResponse["ErrorCode"] as? String ?? ""
+    //                self.errorCodes = errorCode
+    //
+    //                var relationsList: [[String: Any]]?
+    //                          if let relationsDict = jsonResponse["Relations"] as? [String: Any],
+    //                             let list = relationsDict["list"] as? [[String: Any]] {
+    //                              relationsList = list
+    //                          }
+    //
+    //                print("errorcodes\(self.errorCodes)")
+    //                if let errorCode = jsonResponse["ErrorCode"] as? String {
+    //                    switch errorCode {
+    //                    case "000000":
+    //                        MainActor.run {
+    //                                            if let relationsList = relationsList {
+    //                                                self.relations = relationsList
+    //                                            } else {
+    //                                                print("Error: Could not parse 'Relations' from response")
+    //                                            }
+    //                                            print("otp generation is called")
+    //                                        }
+    //                        //self.showTemporaryAlert(message: "OTP sent successfully")
+    //                    case "200000":
+    //                        DispatchQueue.main.async {
+    //
+    //                            if let relationsDict = jsonResponse["Relations"] as? [String: Any],
+    //                               let relationsList = relationsDict["list"] as? [[String: Any]] {
+    //                                self.relations = relationsList // Save the relations data
+    //                                //self.setRelationshipButton() // Set button title and selection state
+    //                            } else {
+    //                                print("Error: Could not parse 'Relations' from response")
+    //                            }
+    //                        }
+    //                        print("otp generation is called")
+    //                        //self.showTemporaryAlert(message: "OTP sent successfully")
+    //                    case "400000":
+    //
+    //                        self.showTemporaryAlert(message:ErrorMessage ?? "" )
+    //                        print("Exceeded maximum tries. please try after 15 minutes.,")
+    //                        //self.showTemporaryAlert(message: "OTP sent successfully")
+    //                    default:
+    //                        print("Unhandled error code: \(errorCode)")
+    //                        self.showTemporaryAlert(message:ErrorMessage ?? "" )
+    //                    }
+    //                }
+    //            case .failure(let error):
+    //                print("Login API call failed: \(error.localizedDescription)")
+    //            }
+    //        }
+    //    }
     
     //    func setRelationshipButton() {
     //        // Check for a relation with DefaultSelect = 1
@@ -528,8 +597,9 @@ extension MobileOTPVC{
                 print("4TH Response: \(jsonResponse)")
                 userID = (jsonResponse["UserID"] as? String)!
                 sessionID = (jsonResponse["SessionId"] as? String)!
-                CoreDataHelper.saveUserId(userID, sessionID: sessionID, decodeByteArrayString: decodeByteArrayToString , entityName: "MobileUser") // Save userId to Core Data
-                
+                DispatchQueue.main.async { [self] in
+                    CoreDataHelper.saveUserId(self.userID, sessionID: sessionID, decodeByteArrayString: decodeByteArrayToString , entityName: "MobileUser") // Save userId to Core Data
+                }
                 //phoneNumber = (jsonResponse["MobileNumber"] as? String)!
                 if let errorCode = jsonResponse["ErrorCode"] as? String {
                     
@@ -551,7 +621,7 @@ extension MobileOTPVC{
             }
         }
     }
-
+    
     func FifthApi(phoneNumber:String,decodeByteArrayToString:String){
         var parameters: [String: Any] = [
             "MobileNo": phoneNumber,
@@ -583,7 +653,9 @@ extension MobileOTPVC{
                            let sessionId = jsonResponse["SessionId"] as? String
                         {
                             // Save UserID and SessionId to Core Data
-                            CoreDataHelper.saveUserId(userID, sessionID: sessionId, decodeByteArrayString: decodeByteArrayToString, entityName: "MobileUser")
+                            DispatchQueue.main.async {
+                                CoreDataHelper.saveUserId(userID, sessionID: sessionId, decodeByteArrayString: decodeByteArrayToString, entityName: "MobileUser")
+                            }
                             DispatchQueue.main.async {
                                 // Check if TokenMobile is empty
                                 if !CoreDataHelper.areTokensAvailable(entityName: "TokenMobile") {
@@ -724,7 +796,7 @@ extension MobileOTPVC{
                                 return
                             }
                             
-                            if finalStatus == "4" && isPdfGenerated == "1" && isPDFSign == "0" {
+                            if finalStatus == "4" && isPdfGenerated == "1" && isPDFSign == "0"{
                                 print("✅ Navigating to ApplicationStatusVC - FinalStatus: \(finalStatus), isPdfGenerated: \(isPdfGenerated), isPDFSign: \(isPDFSign)")
                                 DispatchQueue.main.async {
                                     let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
@@ -735,6 +807,19 @@ extension MobileOTPVC{
                                     } else {
                                         print("❌ Could not instantiate ApplicationStatusVC")
                                         self.sectionPage() // Fallback
+                                    }
+                                }
+                                return
+                            }
+                            
+                            if finalStatus == "7" && isPdfGenerated == "0" && isPDFSign == "0"{
+                                print("✅ Navigating to ApplicationStatusVC - FinalStatus: \(finalStatus), isPdfGenerated: \(isPdfGenerated), isPDFSign: \(isPDFSign)")
+                                DispatchQueue.main.async {
+                                    let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
+                                    if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {
+                                        vc.PanNo = PanNo
+                                        vc.RegId = RegId
+                                        self.navigationController?.pushViewController(vc, animated: true)
                                     }
                                 }
                                 return

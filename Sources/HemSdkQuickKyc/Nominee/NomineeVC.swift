@@ -3014,48 +3014,49 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             ]
             
             let url = "NomineeDetails/InsertUpdateNomineeDetailsWeb"
-            
-            apiCall(url: url, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
-                switch result {
-                case .success(let jsonResponse):
-                    print("InsertUpdateNomineeDetailsWeb Response: \(jsonResponse)")
-                    if let errorCode = jsonResponse["ErrorCode"] as? String {
-                        if errorCode == "000000" {
-                            DispatchQueue.main.async {
-                                
-                                let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module )
-                                if let nextVC = storyboard.instantiateViewController(withIdentifier: "DocumentVC") as? DocumentVC {
-                                    nextVC.PanNo = self.panNo
-                                    nextVC.RegId = self.RegId
-                                    nextVC.delegate = self
-                                    self.navigationController?.pushViewController(nextVC, animated: true)
+            Task { @MainActor in
+                apiCall(url: url, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
+                    switch result {
+                    case .success(let jsonResponse):
+                        print("InsertUpdateNomineeDetailsWeb Response: \(jsonResponse)")
+                        if let errorCode = jsonResponse["ErrorCode"] as? String {
+                            if errorCode == "000000" {
+                                DispatchQueue.main.async {
+                                    
+                                    let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module )
+                                    if let nextVC = storyboard.instantiateViewController(withIdentifier: "DocumentVC") as? DocumentVC {
+                                        nextVC.PanNo = self.panNo
+                                        nextVC.RegId = self.RegId
+                                        nextVC.delegate = self
+                                        self.navigationController?.pushViewController(nextVC, animated: true)
+                                    }
                                 }
-                            }
-                        } else if errorCode == "999992" {
-                            // Handle invalid token case
-                            print("Invalid token detected. Attempting to refresh token.")
-                            CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
-                                if success {
-                                    self.insertUpdateNomineeDetailsWebWithMinimalParams()
-                                } else {
-                                    DispatchQueue.main.async {
-                                        self.showAlert(message: "Token refresh failed. Please try again.")
+                            } else if errorCode == "999992" {
+                                // Handle invalid token case
+                                print("Invalid token detected. Attempting to refresh token.")
+                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+                                    if success {
+                                        self.insertUpdateNomineeDetailsWebWithMinimalParams()
+                                    } else {
+                                        DispatchQueue.main.async {
+                                            self.showAlert(message: "Token refresh failed. Please try again.")
+                                        }
+                                    }
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    if let errorMessage = jsonResponse["ErrorMessage"] as? String {
+                                        self.showAlert(message: errorMessage)
+                                    } else {
+                                        self.showAlert(message: "Unhandled error code")
                                     }
                                 }
                             }
-                        } else {
-                            DispatchQueue.main.async {
-                                if let errorMessage = jsonResponse["ErrorMessage"] as? String {
-                                    self.showAlert(message: errorMessage)
-                                } else {
-                                    self.showAlert(message: "Unhandled error code")
-                                }
-                            }
                         }
-                    }
-                case .failure(let error):
-                    DispatchQueue.main.async {
-                        self.showAlert(message: "API call failed: \(error.localizedDescription)")
+                    case .failure(let error):
+                        DispatchQueue.main.async {
+                            self.showAlert(message: "API call failed: \(error.localizedDescription)")
+                        }
                     }
                 }
             }

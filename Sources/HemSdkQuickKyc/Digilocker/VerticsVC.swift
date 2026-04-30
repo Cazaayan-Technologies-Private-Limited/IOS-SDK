@@ -340,7 +340,7 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
     public init() {
         super.init(nibName: nil, bundle: Bundle.module)
     }
-     
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)   // ✅ DO NOT crash
     }
@@ -434,7 +434,7 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
             
             present(alert, animated: true)
         } else if identifier3 == "NomineeVC" {
-                self.navigationController?.popViewController(animated: true)
+            self.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -445,7 +445,7 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
         startApiCallTimer()
     }
     
-    func ValidatesaveDigiLocker(completion: @escaping (Bool) -> Void) {
+    func ValidatesaveDigiLocker(completion: @escaping @Sendable (Bool) -> Void) {
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [weak self] tokenId in
             guard let self = self else { return }
             // 🔁 Token missing → generate & retry

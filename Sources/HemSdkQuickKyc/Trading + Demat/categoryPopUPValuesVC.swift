@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 protocol CategoryPopupDelegate: AnyObject {
     func didSelectValue(_ value: String)
 }

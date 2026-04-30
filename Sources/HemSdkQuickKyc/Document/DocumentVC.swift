@@ -2956,7 +2956,7 @@ extension DocumentVC {
                         in: self.view
                     ) { success in
                         if success {
-                            self.signatureupdateUI(with: response)
+                            self.signatureupdateUI(with: self.jsonResponse)
                         } else {
                             print("Token generation failed.")
                         }
@@ -3206,20 +3206,20 @@ extension DocumentVC {
                 //self.updateButtondpimage(button: self.dematStatusBtn, statusKey: "DocumentImages_Verify", jsonResponse: jsonResponse)
                 self.DICollectionView.reloadData()
                 if let verifyStatus = jsonResponse["DocumentImages_Verify"] as? String {
-                        if verifyStatus == "0" {
-                            self.DematImageVerifyBtn.isHidden = false
-                        } else {
-                            self.DematImageVerifyBtn.isHidden = true  // ✅ Hide when verified (1 or 2)
-                        }
-                    } else if let verifyStatus = jsonResponse["DocumentImages_Verify"] as? Int {
-                        if verifyStatus == 0 {
-                            self.DematImageVerifyBtn.isHidden = false
-                        } else {
-                            self.DematImageVerifyBtn.isHidden = true  // ✅ Hide when verified (1 or 2)
-                        }
-                    } else {
+                    if verifyStatus == "0" {
                         self.DematImageVerifyBtn.isHidden = false
+                    } else {
+                        self.DematImageVerifyBtn.isHidden = true  // ✅ Hide when verified (1 or 2)
                     }
+                } else if let verifyStatus = jsonResponse["DocumentImages_Verify"] as? Int {
+                    if verifyStatus == 0 {
+                        self.DematImageVerifyBtn.isHidden = false
+                    } else {
+                        self.DematImageVerifyBtn.isHidden = true  // ✅ Hide when verified (1 or 2)
+                    }
+                } else {
+                    self.DematImageVerifyBtn.isHidden = false
+                }
             default:
                 break
             }
@@ -3566,7 +3566,7 @@ extension DocumentVC {
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
-                        self.PanupdateUI(with: response)
+                        self.PanupdateUI(with: self.jsonResponse)
                     } else {
                         print("Token generation failed.")
                     }
@@ -3983,7 +3983,7 @@ extension DocumentVC {
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
-                        self.clientImageUpdateUI(with: response)
+                        self.clientImageUpdateUI(with: self.jsonResponse)
                     } else {
                         print("Token generation failed.")
                     }
@@ -4328,7 +4328,7 @@ extension DocumentVC {
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
-                        self.updateNomineeUI(identifier: identifier, jsonResponse: jsonResponse)
+                        self.updateNomineeUI(identifier: identifier, jsonResponse: self.jsonResponse)
                     } else {
                         print("Token generation failed.")
                     }
@@ -4871,10 +4871,10 @@ extension DocumentVC {
                     IPCollectionView.isHidden = !shouldShow
                     
                     if DerivativeImages_Verify != "0" {
-                                      incomeProofVerifyBtn.isHidden = true
-                                  } else {
-                                      incomeProofVerifyBtn.isHidden = false
-                                  }
+                        incomeProofVerifyBtn.isHidden = true
+                    } else {
+                        incomeProofVerifyBtn.isHidden = false
+                    }
                 } else if imageUrls.isEmpty {
                     incomeProofuploadBtn.isHidden = false
                     IPCollectionView.isHidden = true
@@ -4889,10 +4889,10 @@ extension DocumentVC {
                     incomeProofuploadBtn.isHidden = false
                     incomeProofVerifyBtn.isHidden = true  // Hide Verify button when count is less than required
                     if DerivativeImages_Verify != "0" {
-                                        incomeProofVerifyBtn.isHidden = true
-                                    } else {
-                                        incomeProofVerifyBtn.isHidden = false
-                                    }
+                        incomeProofVerifyBtn.isHidden = true
+                    } else {
+                        incomeProofVerifyBtn.isHidden = false
+                    }
                     self.incomeProofDocumentTypeBtn.isEnabled = false
                     incomeProofNoBtn.isEnabled = false
                 }
@@ -5174,10 +5174,10 @@ extension DocumentVC {
                     DematImgBtn.isHidden = true
                     DIStackView2.isHidden = true
                     if DP_IMAGEID_Verify == 0 {
-                                  DematImageVerifyBtn.isHidden = false
-                              } else {
-                                  DematImageVerifyBtn.isHidden = true  // ✅ Hide when verified
-                              }
+                        DematImageVerifyBtn.isHidden = false
+                    } else {
+                        DematImageVerifyBtn.isHidden = true  // ✅ Hide when verified
+                    }
                     
                     dematNoBtn.isEnabled = false
                     dematYesBtn.isEnabled = true

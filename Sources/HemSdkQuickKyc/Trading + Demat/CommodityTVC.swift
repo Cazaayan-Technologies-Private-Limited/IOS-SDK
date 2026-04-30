@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 protocol CommodityTVCDelegate: AnyObject {
     func didTapDropdown(for cell: CommodityTVC, with values: [String])
 }

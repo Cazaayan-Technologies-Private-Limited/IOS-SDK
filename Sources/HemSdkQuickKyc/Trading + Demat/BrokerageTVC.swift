@@ -21,6 +21,7 @@ struct BrokeragePlan {
     }
 }
 
+@MainActor
 protocol BrokerageCellDelegate: AnyObject {
     func didTapClose()
     func didSelectPlan(_ plan: BrokeragePlan)

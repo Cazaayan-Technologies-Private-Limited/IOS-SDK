@@ -274,6 +274,9 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                     print("PANPOP api Response: \(jsonResponse)")
                     
                     let ErrorMessage = jsonResponse["ErrorMessage"] as? String
+                    let PANName = jsonResponse["PANName"] as? String
+                    let panNo = jsonResponse["PanNo"] as? String
+                    let RegId = jsonResponse["RegId"] as? String
                     if let errorCode = jsonResponse["ErrorCode"] as? String {
                         
                         switch errorCode {
@@ -299,14 +302,15 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                             }
                             
                         case "000000":
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async { [weak self] in
+                                                       guard let self = self else { return }
                                 let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
                                 if let nextVC = storyboard.instantiateViewController(withIdentifier: "DigiLocker_a") as? DigiLocker_a {
                                     
                                     nextVC.EmailId = self.emailID
-                                    nextVC.PANName = jsonResponse["PANName"] as? String
-                                    nextVC.panNo = jsonResponse["PanNo"] as? String
-                                    nextVC.RegId = jsonResponse["RegId"] as? String
+                                    nextVC.PANName = self.panName
+                                    nextVC.panNo = self.panNo
+                                    nextVC.RegId = self.regId
                                     
                                     self.navigationController?.pushViewController(nextVC, animated: true)
                                 }
