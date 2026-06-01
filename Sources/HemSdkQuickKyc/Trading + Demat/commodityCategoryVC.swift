@@ -217,7 +217,7 @@ class commodityCategoryVC: UIViewController {
     }
     
     @IBAction func backbtn(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true)
     }
     
     @IBAction func selectCategoryBtn(_ sender: UIButton) {

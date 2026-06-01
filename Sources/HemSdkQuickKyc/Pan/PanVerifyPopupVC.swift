@@ -40,7 +40,12 @@ class PanVerifyPopupVC: UIViewController {
         self.holderview.layer.cornerRadius = 20
         self.proceedBtn.layer.cornerRadius = 20
         PANNAME.text = panName
-        PANNumber.text = panNo
+        if let pan = panNo, pan.count >= 5 {
+            let maskedPan = "XXXXX" + pan.dropFirst(5)
+            PANNumber.text = maskedPan
+        } else {
+            PANNumber.text = panNo
+        }
         print("PAN Name: \(panName ?? "")")
         print("DOB: \(dob ?? "")")
         print("Request ID: \(requestId ?? "")")
@@ -217,6 +222,7 @@ class PanVerifyPopupVC: UIViewController {
             // Dismiss the current screen after alert is dismissed
             self.dismiss(animated: true, completion: nil)
         }
+        okAction.setValue(UIColor.appBackground, forKey: "titleTextColor")
         alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
     }

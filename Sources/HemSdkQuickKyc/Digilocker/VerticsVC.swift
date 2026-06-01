@@ -318,6 +318,7 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
         loadWebView()
         //startApiCallTimer()
         // navigationBar.isHidden = true
+        navigationItem.hidesBackButton = true
     }
     
     private func safelyCloseWebViewAndPop() {
@@ -518,23 +519,102 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
         }
     }
     
-    func startApiCallTimer() {
-        timer?.cancel()
-        
-        timer = DispatchSource.makeTimerSource(queue: .main)
-        timer?.schedule(deadline: .now() + 5, repeating: 5)
-        
-        timer?.setEventHandler { [weak self] in
-            self?.ValidatesaveDigiLocker { success in
-                if success {
-                    self?.timer?.cancel()
+//    func startApiCallTimer() {
+//        timer?.cancel()
+//        
+//        timer = DispatchSource.makeTimerSource(queue: .main)
+//        timer?.schedule(deadline: .now() + 30, repeating: 2)
+//        
+//        timer?.setEventHandler { [weak self] in
+//            self?.ValidatesaveDigiLocker { success in
+//                if success {
+//                    self?.timer?.cancel()
+//                }
+//            }
+//        }
+//        timer?.resume()
+//    }
+//    deinit {
+//        timer?.cancel()
+//    }
+    
+//    func startApiCallTimer() {
+//        timer?.cancel()
+//
+//        timer = DispatchSource.makeTimerSource(queue: .main)
+//
+//        // First fire after 30 sec, then every 2 sec
+//        timer?.schedule(deadline: .now() + 30, repeating: 2)
+//
+//        timer?.setEventHandler { [weak self] in
+//            guard let self = self else { return }
+//
+//            // Prevent multiple simultaneous API calls
+//            if self.isApiInProgress { return }
+//
+//            self.isApiInProgress = true
+//
+//            self.ValidatesaveDigiLocker { success in
+//                DispatchQueue.main.async {
+//                    self.isApiInProgress = false
+//
+//                    if success {
+//                        self.timer?.cancel()
+//                        self.timer = nil
+//                    }
+//                }
+//            }
+//        }
+//
+//        timer?.resume()
+//    }
+    
+    private func startApiCallTimer() {
+
+        // Prevent duplicate timers
+        if timer != nil { return }
+
+        let newTimer = DispatchSource.makeTimerSource(queue: .main)
+
+        // Start after 30 sec
+        // Repeat every 2 sec
+        newTimer.schedule(
+            deadline: .now() + 60,
+            repeating: .seconds(2)
+        )
+
+        newTimer.setEventHandler { [weak self] in
+            guard let self = self else { return }
+
+            // Avoid multiple API calls together
+            if self.isApiInProgress {
+                return
+            }
+
+            self.isApiInProgress = true
+
+            print("⏰ Timer Triggered")
+
+            self.ValidatesaveDigiLocker { success in
+
+                DispatchQueue.main.async {
+
+                    self.isApiInProgress = false
+
+                    // Stop timer if API success
+                    if success {
+
+                        print("✅ Process Completed")
+
+                        self.timer?.cancel()
+                        self.timer = nil
+                    }
                 }
             }
         }
+
+        timer = newTimer
         timer?.resume()
-    }
-    deinit {
-        timer?.cancel()
     }
 }
 //import UIKit

@@ -694,6 +694,7 @@ class DigiLocker_a: UIViewController, @MainActor VerticsVCDelegate, @MainActor D
         continueBtn.backgroundColor = .appPrimary
         continueBtn.layer.cornerRadius = 10
         view.backgroundColor = .appBackground
+        navigationItem.hidesBackButton = true
     }
     func didReceiveApiResponse(data: [String: Any], identifier1: String, identifier3: String) {
         // Handle the received data

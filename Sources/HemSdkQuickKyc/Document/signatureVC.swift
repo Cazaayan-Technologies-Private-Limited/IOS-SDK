@@ -288,7 +288,7 @@ class signatureVC: UIViewController {
     
     private func setupSignatureView() {
            navigationView.translatesAutoresizingMaskIntoConstraints = false
-           navigationView.backgroundColor = UIColor(red: 80/255, green: 99/255, blue: 191/255, alpha: 1)
+           navigationView.backgroundColor = UIColor.appPrimary
    
            navigationLbl.translatesAutoresizingMaskIntoConstraints = false
            navigationLbl.text = "DRAW SIGNATURE"
@@ -342,7 +342,7 @@ class signatureVC: UIViewController {
            clearButton.setTitle("Clear", for: .normal)
            clearButton.translatesAutoresizingMaskIntoConstraints = false
            clearButton.addTarget(self, action: #selector(clearSignature), for: .touchUpInside)
-           clearButton.backgroundColor = UIColor(red: 80/255, green: 99/255, blue: 191/255, alpha: 1)
+           clearButton.backgroundColor = UIColor.appPrimary
            clearButton.tintColor = .white
            clearButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
            stackView.addArrangedSubview(clearButton)
@@ -351,7 +351,7 @@ class signatureVC: UIViewController {
            saveButton.setTitle("Upload", for: .normal)
            saveButton.translatesAutoresizingMaskIntoConstraints = false
            saveButton.addTarget(self, action: #selector(saveSignature), for: .touchUpInside)
-           saveButton.backgroundColor = UIColor(red: 80/255, green: 99/255, blue: 191/255, alpha: 1)
+           saveButton.backgroundColor = UIColor.appPrimary
            saveButton.tintColor = .white
            saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold) // 👈 font changed
            stackView.addArrangedSubview(saveButton)

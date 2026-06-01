@@ -46,6 +46,7 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
     var isPennyDropSixth: String?
     var isCAMS: String?
     var allowNavigation = false
+    var isIFSCVerified = false
     
     @IBOutlet weak var SubmitBtn: UIButton!
     @IBOutlet weak var ConfirmAccountNumberTF: UITextField!
@@ -96,7 +97,7 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
         SubmitBtn.layer.cornerRadius = 10
         upiIDBtn.layer.cornerRadius = 10
         SubmitBtn.backgroundColor = .appPrimary
-        upiIDBtn.backgroundColor = .appPrimary
+        upiIDBtn.backgroundColor = .appBackground
         homeBtn.tintColor = .appPrimary
         view.backgroundColor = .appBackground
         
@@ -105,6 +106,8 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
         //connectToCams.isHidden = true
         
         SIXTHAPI(userID: fetchedUserId ?? "")
+        upiIDBtn.backgroundColor = .documentBackground
+        upiIDBtn.isHidden = true
     }
     
     //    override func viewWillAppear(_ animated: Bool) {
@@ -128,6 +131,17 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
                 print("No UserID or SessionID found.")
             }
         }
+    }
+    
+    
+    @IBAction func UpiDetailsBtn(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
+               let vc = storyboard.instantiateViewController(identifier: "UPIVC") as! UPIVC
+        let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                vc.panNo = finalPAN
+                vc.regId = regId
+               self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func connectToCams(_ sender: UIButton) {
@@ -188,7 +202,12 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
                 return
             }
             
-            guard isIFSCValid() else {
+//            guard isIFSCValid() else {
+//                showAlert(message: "Please enter a valid IFSC code.")
+//                return
+//            }
+            
+            guard isIFSCValid(), isIFSCVerified else {
                 showAlert(message: "Please enter a valid IFSC code.")
                 return
             }
@@ -217,8 +236,18 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
     }
     
     @IBAction func BackBtn(_ sender: UIButton) {
-        delegate?.reloadPageData()
-        self.navigationController?.popViewController(animated: true)
+        //delegate?.reloadPageData()
+        let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
+                  let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
+                  let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                  let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                  
+                  let regId = UserDefaults.standard.string(forKey: "RegId")
+                  let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                  
+                  vc.panNo = finalPAN
+                  vc.regId = regIdFinal
+                  self.navigationController?.pushViewController(vc, animated: true)
     }
     
     // MARK: - UITextFieldDelegate
@@ -269,11 +298,122 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
         return true
     }
     
+   // @objc func textFieldDidChange(_ textField: UITextField) {
+        
+        // ✅ Convert IFSC to uppercase automatically
+//        if textField == IFSCTF {
+//            textField.text = textField.text?.uppercased()
+//        }
+//        
+//        // Validate account number and confirm account number
+//        if textField == AccountNumberTF || textField == ConfirmAccountNumberTF {
+//            if let accountNumber = AccountNumberTF.text, let confirmNumber = ConfirmAccountNumberTF.text {
+//                
+//                if confirmNumber == accountNumber, !accountNumber.isEmpty {
+//                    SubmitBtn.isEnabled = true
+//                    IFSCTF.isEnabled = true
+//                } else {
+//                    IFSCTF.isEnabled = false
+//                }
+//            }
+//        }
+//        
+//        // Validate IFSC code
+//        if textField == IFSCTF {
+////            if let ifscCode = IFSCTF.text, ifscCode.count == 11 {
+////                IFSCSearchWithoutBankName(ifscCode: ifscCode)
+////            }
+////        }
+////    }
+//        
+//        if textField == IFSCTF {
+//            textField.text = textField.text?.uppercased()
+//            
+//            // Validate IFSC when it reaches 11 characters
+//            if let ifscCode = IFSCTF.text, ifscCode.count == 11 {
+//                // Clear previous data while validating
+//                self.MICRTF.text = ""
+//                self.micr = nil
+//                self.bankName = nil
+//                self.branch = nil
+//                self.IFSC = nil
+//                self.isIFSCVerified = false
+//                
+//                // Call validation API
+//                IFSCSearchWithoutBankName(ifscCode: ifscCode)
+//            } else if let ifscCode = IFSCTF.text, ifscCode.count < 11 && ifscCode.count > 0 {
+//                // If user deletes characters, clear the MICR field and reset verification flag
+//                self.MICRTF.text = ""
+//                self.micr = nil
+//                self.bankName = nil
+//                self.branch = nil
+//                self.IFSC = nil
+//                self.isIFSCVerified = false
+//            }
+//        }
+//        
+//        // Validate account number and confirm account number
+//        if textField == AccountNumberTF || textField == ConfirmAccountNumberTF {
+//            if let accountNumber = AccountNumberTF.text, let confirmNumber = ConfirmAccountNumberTF.text {
+//                
+//                if confirmNumber == accountNumber, !accountNumber.isEmpty {
+//                    SubmitBtn.isEnabled = true
+//                    IFSCTF.isEnabled = true
+//                } else {
+//                    IFSCTF.isEnabled = false
+//                }
+//            }
+//        }
+//        
+//        // Also validate IFSC on the fly for MICR enabling
+//        if textField == IFSCTF {
+//            if let ifscCode = IFSCTF.text, ifscCode.count == 11 && isIFSCVerified {
+//                MICRTF.isEnabled = true
+//            } else {
+//                MICRTF.isEnabled = false
+//            }
+//        }
+//    }
+    
     @objc func textFieldDidChange(_ textField: UITextField) {
         
         // ✅ Convert IFSC to uppercase automatically
         if textField == IFSCTF {
             textField.text = textField.text?.uppercased()
+           
+            
+            // Validate IFSC when it reaches 11 characters
+            if let ifscCode = IFSCTF.text, ifscCode.count == 11 {
+                // Clear previous data while validating
+                self.MICRTF.text = ""
+                self.micr = nil
+                self.bankName = nil
+                self.branch = nil
+                self.IFSC = nil
+                self.isIFSCVerified = false
+                self.MICRTF.isEnabled = false
+                
+                // Call validation API
+                IFSCSearchWithoutBankName(ifscCode: ifscCode)
+            } else if let ifscCode = IFSCTF.text, ifscCode.count < 11 && ifscCode.count > 0 {
+                // If user deletes characters, clear the MICR field and reset verification flag
+                self.MICRTF.text = ""
+                self.micr = nil
+                self.bankName = nil
+                self.branch = nil
+                self.IFSC = nil
+                self.isIFSCVerified = false
+                self.MICRTF.isEnabled = false
+            } else if IFSCTF.text?.isEmpty == true {
+                // Clear everything if field is empty
+                self.MICRTF.text = ""
+                self.micr = nil
+                self.bankName = nil
+                self.branch = nil
+                self.IFSC = nil
+                self.isIFSCVerified = false
+                self.MICRTF.isEnabled = false
+            }
         }
         
         // Validate account number and confirm account number
@@ -289,14 +429,15 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
             }
         }
         
-        // Validate IFSC code
+        // Also validate IFSC on the fly for MICR enabling
         if textField == IFSCTF {
-            if let ifscCode = IFSCTF.text, ifscCode.count == 11 {
-                IFSCSearchWithoutBankName(ifscCode: ifscCode)
+            if let ifscCode = IFSCTF.text, ifscCode.count == 11 && isIFSCVerified {
+                MICRTF.isEnabled = true
+            } else {
+                MICRTF.isEnabled = false
             }
         }
     }
-    
     
     func isAccountNumberValid() -> Bool {
         guard let accountNumber = AccountNumberTF.text else { return false }
@@ -457,6 +598,196 @@ extension BankVC{
         }
     }
     
+//    func IFSCSearchWithoutBankName(ifscCode: String) {
+//        let parameters: [String: Any?] = [
+//            "BankName": "",
+//            "IFSC": ifscCode,
+//        ]
+//        print(parameters)
+//        let Url = "BankManagement/IFSCSearchWithoutBankName"
+//        
+//        apiCall(url: Url, method: "POST", parameters: parameters as [String: Any], view: self.view) { result in
+//            switch result {
+//            case .success(let jsonResponse):
+//                print("ViewOtherData Response: \(jsonResponse)")
+//                let ErrorMessage = jsonResponse["ErrorMessage"] as? String
+//                if let errorCode = jsonResponse["ErrorCode"] as? String {
+//                    switch errorCode {
+//                        
+//                    case "000000":
+//                        DispatchQueue.main.async {
+//                            if let bankList = jsonResponse["BankList"] as? [[String: Any]], !bankList.isEmpty {
+//                                self.bankList = bankList
+//                                
+//                                
+//                                if let firstBank = bankList.first {
+//                                    // ✅ Safely assign values
+//                                    self.micr = firstBank["MICR"] as? String
+//                                    self.IFSC = firstBank["IFSC"] as? String
+//                                    self.bankName = firstBank["BankName"] as? String
+//                                    self.branch = firstBank["Branch"] as? String
+//                                    
+//                                    // ✅ Update textfields and labels
+//                                    self.MICRTF.text = self.micr ?? ""
+//                                    
+//                                } else {
+//                                    self.micr = nil
+//                                    self.MICRTF.text = ""
+//                                    
+//                                }
+//                                
+//                                self.MICRTF.isEnabled = true
+//                            } else {
+//                                self.bankList = []
+//                                self.MICRTF.text = ""
+//                                
+//                                self.MICRTF.isEnabled = true
+//                            }
+//                            print("API is running")
+//                        }
+//                        
+//                    case "111111":
+//                        DispatchQueue.main.async {
+//
+//                                            self.isIFSCVerified = false
+//                                            self.MICRTF.text = ""
+//                                            self.MICRTF.isEnabled = false
+//
+//                                            // SHOW ERROR IMMEDIATELY
+//                                            self.showAlert(message: "Wrong IFSC Code")
+//                                        }
+////                        self.MICRTF.isEnabled = false
+////                        self.showAlert(message: ErrorMessage ?? "failure")
+////                        print("failure")
+//                        
+//                    default:
+//                        print("Unhandled error code: \(errorCode)")
+//                    }
+//                }
+//            case .failure(let error):
+//                print("Login API call failed: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+//    
+//    func IFSCSearchWithoutBankName(ifscCode: String) {
+//        let parameters: [String: Any?] = [
+//            "BankName": "",
+//            "IFSC": ifscCode,
+//        ]
+//        print(parameters)
+//        let Url = "BankManagement/IFSCSearchWithoutBankName"
+//        
+//        apiCall(url: Url, method: "POST", parameters: parameters as [String: Any], view: self.view) { result in
+//            switch result {
+//            case .success(let jsonResponse):
+//                print("IFSCSearchWithoutBankName Response: \(jsonResponse)")
+//                let errorMessage = jsonResponse["ErrorMessage"] as? String
+//                if let errorCode = jsonResponse["ErrorCode"] as? String {
+//                    switch errorCode {
+//                        
+//                    case "000000":
+//                        DispatchQueue.main.async {
+//                            if let bankList = jsonResponse["BankList"] as? [[String: Any]], !bankList.isEmpty {
+//                                self.bankList = bankList
+//                                
+//                                if let firstBank = bankList.first {
+//                                    // ✅ Safely assign values
+//                                    self.micr = firstBank["MICR"] as? String
+//                                    self.IFSC = firstBank["IFSC"] as? String
+//                                    self.bankName = firstBank["BankName"] as? String
+//                                    self.branch = firstBank["Branch"] as? String
+//                                    
+//                                    // ✅ Update textfields and labels
+//                                    self.MICRTF.text = self.micr ?? ""
+//                                    self.isIFSCVerified = true
+//                                    self.MICRTF.isEnabled = true
+//                                    
+//                                    // Remove any existing error styling
+//                                    self.IFSCTF.layer.borderColor = UIColor.appBorder.cgColor
+//                                    self.IFSCTF.layer.borderWidth = 1
+//                                }
+//                            } else {
+//                                self.bankList = []
+//                                self.MICRTF.text = ""
+//                                self.micr = nil
+//                                self.IFSC = nil
+//                                self.bankName = nil
+//                                self.branch = nil
+//                                self.isIFSCVerified = false
+//                                self.MICRTF.isEnabled = false
+//                            }
+//                            print("API is running")
+//                        }
+//                        
+//                    case "111111":
+//                        DispatchQueue.main.async {
+//                            self.isIFSCVerified = false
+//                            self.MICRTF.text = ""
+//                            self.micr = nil
+//                            self.IFSC = nil
+//                            self.bankName = nil
+//                            self.branch = nil
+//                            self.MICRTF.isEnabled = false
+//                            
+//                            // ✅ SHOW ALERT IMMEDIATELY WHEN WRONG IFSC CODE
+//                            let wrongIFSCAlert = UIAlertController(
+//                                title: "Invalid IFSC Code",
+//                                message: "The IFSC code you entered is invalid. Please check and enter a valid IFSC code.",
+//                                preferredStyle: .alert
+//                            )
+//                            wrongIFSCAlert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+//                                // Optional: Clear the IFSC field or keep it
+//                                // self.IFSCTF.text = ""
+//                            })
+//                            self.present(wrongIFSCAlert, animated: true)
+//                            
+//                            // Add red border to show error visually
+//                            self.IFSCTF.layer.borderColor = UIColor.red.cgColor
+//                            self.IFSCTF.layer.borderWidth = 1
+//                        }
+//                        
+//                    default:
+//                        DispatchQueue.main.async {
+//                            self.isIFSCVerified = false
+//                            self.MICRTF.text = ""
+//                            self.micr = nil
+//                            self.IFSC = nil
+//                            self.bankName = nil
+//                            self.branch = nil
+//                            self.MICRTF.isEnabled = false
+//                            
+//                            // Show alert for other errors
+//                            let errorAlert = UIAlertController(
+//                                title: "Error",
+//                                message: errorMessage ?? "Invalid IFSC code. Please try again.",
+//                                preferredStyle: .alert
+//                            )
+//                            errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+//                            self.present(errorAlert, animated: true)
+//                            
+//                            self.IFSCTF.layer.borderColor = UIColor.red.cgColor
+//                            self.IFSCTF.layer.borderWidth = 1
+//                        }
+//                        print("Unhandled error code: \(errorCode)")
+//                    }
+//                }
+//            case .failure(let error):
+//                DispatchQueue.main.async {
+//                    self.isIFSCVerified = false
+//                    let errorAlert = UIAlertController(
+//                        title: "Network Error",
+//                        message: "Failed to verify IFSC code. Please check your connection and try again.",
+//                        preferredStyle: .alert
+//                    )
+//                    errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+//                    self.present(errorAlert, animated: true)
+//                }
+//                print("API call failed: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+    
     func IFSCSearchWithoutBankName(ifscCode: String) {
         let parameters: [String: Any?] = [
             "BankName": "",
@@ -468,16 +799,18 @@ extension BankVC{
         apiCall(url: Url, method: "POST", parameters: parameters as [String: Any], view: self.view) { result in
             switch result {
             case .success(let jsonResponse):
-                print("ViewOtherData Response: \(jsonResponse)")
-                let ErrorMessage = jsonResponse["ErrorMessage"] as? String
+                print("IFSCSearchWithoutBankName Response: \(jsonResponse)")
+                let errorMessage = jsonResponse["ErrorMessage"] as? String
+                
+                // ✅ IMPORTANT: Check if BankList exists and is not empty
                 if let errorCode = jsonResponse["ErrorCode"] as? String {
                     switch errorCode {
                         
                     case "000000":
                         DispatchQueue.main.async {
+                            // ✅ Check if BankList exists and has data
                             if let bankList = jsonResponse["BankList"] as? [[String: Any]], !bankList.isEmpty {
                                 self.bankList = bankList
-                                
                                 
                                 if let firstBank = bankList.first {
                                     // ✅ Safely assign values
@@ -488,36 +821,77 @@ extension BankVC{
                                     
                                     // ✅ Update textfields and labels
                                     self.MICRTF.text = self.micr ?? ""
+                                    self.isIFSCVerified = true
+                                    self.MICRTF.isEnabled = true
                                     
-                                } else {
-                                    self.micr = nil
-                                    self.MICRTF.text = ""
-                                    
+                                   
                                 }
-                                
-                                self.MICRTF.isEnabled = true
                             } else {
-                                self.bankList = []
-                                self.MICRTF.text = ""
-                                
-                                self.MICRTF.isEnabled = true
+                                // ❌ BankList is empty - This means IFSC is invalid
+                                self.handleInvalidIFSC()
                             }
-                            print("API is running")
                         }
                         
                     case "111111":
-                        self.MICRTF.isEnabled = false
-                        self.showAlert(message: ErrorMessage ?? "failure")
-                        print("failure")
+                        DispatchQueue.main.async {
+                            self.handleInvalidIFSC()
+                        }
                         
                     default:
+                        DispatchQueue.main.async {
+                            self.handleInvalidIFSC(errorMessage: errorMessage ?? "Invalid IFSC code. Please try again.")
+                        }
                         print("Unhandled error code: \(errorCode)")
+                    }
+                } else {
+                    // ❌ No ErrorCode in response
+                    DispatchQueue.main.async {
+                        self.handleInvalidIFSC(errorMessage: "Invalid IFSC code format")
                     }
                 }
             case .failure(let error):
-                print("Login API call failed: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.isIFSCVerified = false
+                    let errorAlert = UIAlertController(
+                        title: "Network Error",
+                        message: "Failed to verify IFSC code. Please check your connection and try again.",
+                        preferredStyle: .alert
+                    )
+                    errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(errorAlert, animated: true)
+                }
+                print("API call failed: \(error.localizedDescription)")
             }
         }
+    }
+
+    // ✅ Helper method to handle invalid IFSC
+    func handleInvalidIFSC(errorMessage: String = "The IFSC code you entered is invalid. Please check and enter a valid IFSC code.") {
+        self.isIFSCVerified = false
+        self.MICRTF.text = ""
+        self.micr = nil
+        self.IFSC = nil
+        self.bankName = nil
+        self.branch = nil
+        self.MICRTF.isEnabled = false
+        
+        // ✅ SHOW ALERT IMMEDIATELY FOR INVALID IFSC
+        let invalidIFSCAlert = UIAlertController(
+            title: "Invalid IFSC Code",
+            message: errorMessage,
+            preferredStyle: .alert
+        )
+        invalidIFSCAlert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            // Keep the IFSC code so user can correct it
+            // Optionally you can clear it: self.IFSCTF.text = ""
+        })
+        self.present(invalidIFSCAlert, animated: true)
+        
+        // Add red border to show error visually
+//        self.IFSCTF.layer.borderColor = UIColor.red.cgColor
+//        self.IFSCTF.layer.borderWidth = 1
+        
+        print("❌ Invalid IFSC detected and handled")
     }
     
     func SIXTHAPI(userID:String){

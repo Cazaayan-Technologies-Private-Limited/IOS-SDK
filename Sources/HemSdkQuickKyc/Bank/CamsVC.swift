@@ -35,6 +35,8 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
             camsWebView.load(request)
         }
         
+        navigationItem.hidesBackButton = true
+        
         timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { [weak self] _ in
             self?.camsCalling()
         })

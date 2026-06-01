@@ -49,6 +49,7 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
     var OTP : String = ""
     var enteredOTP: String?
     var txnId: String?
+    var regId: String?
     
     
     override func viewDidLoad() {
@@ -125,8 +126,10 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
         
         passText1.becomeFirstResponder()
         ResendOTP.tintColor = .appPrimary
-        homeBtn.tintColor = .appPrimary
+        //homeBtn.tintColor = .appPrimary
         view.backgroundColor = .appBackground
+        
+        self.navigationItem.hidesBackButton = true
         
     }
     override func viewDidDisappear(_ animated: Bool) {
@@ -259,7 +262,7 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
     
     
     @IBAction func BackBtn(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     //    @IBAction func homeBtn(_ sender: UIButton) {
@@ -447,111 +450,7 @@ extension MobileOTPVC{
             }
         }
     }
-    //    func OTPGeneratorApi(phoneNumber: String) {
-    //        let apiUrlString = "OTPManagement/SendOTPToMobileClient"
-    //        guard let apiUrl = URL(string: apiUrlString) else {
-    //            showAlert(message: "Invalid API URL")
-    //            return
-    //        }
-    //
-    //        var request = URLRequest(url: apiUrl)
-    //        request.httpMethod = "POST"
-    //        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    //
-    //        let parameters: [String: Any] = [
-    //            "MobileNo": "",
-    //            "DeviceType": "W",
-    //            "RmCode": "",
-    //            "Branch": "",
-    //            "PhoneNumber": phoneNumber,
-    //            "OTP": "",
-    //        ]
-    //        print(parameters)
-    //        apiCall(url: apiUrlString, method: "POST", parameters: parameters, view: self.view,loaderText: "Getting an OTP, please wait...") { result in
-    //            switch result {
-    //            case .success(let jsonResponse):
-    //                print("2ND Response: \(jsonResponse)")
-    //                let ErrorMessage = jsonResponse["ErrorMessage"] as? String
-    //              //  self.errorCodes = (jsonResponse["ErrorCode"] as? String)!
-    //                let errorCode = jsonResponse["ErrorCode"] as? String ?? ""
-    //                self.errorCodes = errorCode
-    //
-    //                var relationsList: [[String: Any]]?
-    //                          if let relationsDict = jsonResponse["Relations"] as? [String: Any],
-    //                             let list = relationsDict["list"] as? [[String: Any]] {
-    //                              relationsList = list
-    //                          }
-    //
-    //                print("errorcodes\(self.errorCodes)")
-    //                if let errorCode = jsonResponse["ErrorCode"] as? String {
-    //                    switch errorCode {
-    //                    case "000000":
-    //                        MainActor.run {
-    //                                            if let relationsList = relationsList {
-    //                                                self.relations = relationsList
-    //                                            } else {
-    //                                                print("Error: Could not parse 'Relations' from response")
-    //                                            }
-    //                                            print("otp generation is called")
-    //                                        }
-    //                        //self.showTemporaryAlert(message: "OTP sent successfully")
-    //                    case "200000":
-    //                        DispatchQueue.main.async {
-    //
-    //                            if let relationsDict = jsonResponse["Relations"] as? [String: Any],
-    //                               let relationsList = relationsDict["list"] as? [[String: Any]] {
-    //                                self.relations = relationsList // Save the relations data
-    //                                //self.setRelationshipButton() // Set button title and selection state
-    //                            } else {
-    //                                print("Error: Could not parse 'Relations' from response")
-    //                            }
-    //                        }
-    //                        print("otp generation is called")
-    //                        //self.showTemporaryAlert(message: "OTP sent successfully")
-    //                    case "400000":
-    //
-    //                        self.showTemporaryAlert(message:ErrorMessage ?? "" )
-    //                        print("Exceeded maximum tries. please try after 15 minutes.,")
-    //                        //self.showTemporaryAlert(message: "OTP sent successfully")
-    //                    default:
-    //                        print("Unhandled error code: \(errorCode)")
-    //                        self.showTemporaryAlert(message:ErrorMessage ?? "" )
-    //                    }
-    //                }
-    //            case .failure(let error):
-    //                print("Login API call failed: \(error.localizedDescription)")
-    //            }
-    //        }
-    //    }
-    
-    //    func setRelationshipButton() {
-    //        // Check for a relation with DefaultSelect = 1
-    //        if let selectedRelation = relations.first(where: { $0["DefaultSelect"] as? Int == 1 }) {
-    //            let relationName = selectedRelation["Relation"] as? String ?? "Select Relationship"
-    //            relation = relationName
-    //            relationshipBtn.setTitle(relationName, for: .normal)
-    //            relationshipBtn.isEnabled = false // Disable if there's a selected relation
-    //        } else {
-    //            // If no DefaultSelect = 1, look for a relation with "Relation = SELF"
-    //            if let selfRelation = relations.first(where: { $0["Relation"] as? String == "SELF" }) {
-    //                let relationName = selfRelation["Relation"] as? String ?? "Select Relationship"
-    //                relation = relationName
-    //                relationshipBtn.setTitle(relationName, for: .normal)
-    //            } else if let firstRelation = relations.first {
-    //                // If "SELF" is not found, select the first relation in the list
-    //                let relationName = firstRelation["Relation"] as? String ?? "Select Relationship"
-    //                relation = relationName
-    //                relationshipBtn.setTitle(relationName, for: .normal)
-    //            } else {
-    //                // If no relations are available, set to default text
-    //                relationshipBtn.setTitle("Select Relationship", for: .normal)
-    //            }
-    //
-    //            // Enable the button for user selection if no default was selected
-    //            relationshipBtn.isEnabled = true
-    //        }
-    //    }
-    
+   
     func callInsertClientRegisterApi(phonenumber : String) {
         
         GetInput()
@@ -787,14 +686,17 @@ extension MobileOTPVC{
                             
                             if finalStatus == "3" && isPdfGenerated == "0" {
                                 DispatchQueue.main.async {
-                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
-                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
-                                    vc.PanNo = PanNo
-                                    vc.RegId = RegId
-                                    self.navigationController?.pushViewController(vc, animated: true)
-                                }
-                                return
+                                    
+                                    self.showAlert(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.")
+//                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
+//                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
+//                                    vc.PanNo = PanNo
+//                                    vc.RegId = RegId
+//                                    self.navigationController?.pushViewController(vc, animated: true)
+                               }
+                               return
                             }
+                                
                             
                             if finalStatus == "4" && isPdfGenerated == "1" && isPDFSign == "0"{
                                 print("✅ Navigating to ApplicationStatusVC - FinalStatus: \(finalStatus), isPdfGenerated: \(isPdfGenerated), isPDFSign: \(isPDFSign)")
@@ -851,6 +753,84 @@ extension MobileOTPVC{
                                 return
                             }
                             
+                            if let tradingStatus = jsonResponse["Trading_Status"] as? String, tradingStatus == "PAGE PENDING" {
+                                DispatchQueue.main.async {
+                                    let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
+                                    let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
+                                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                    
+                                    let regId = UserDefaults.standard.string(forKey: "RegId")
+                                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                    
+                                    vc.panNo = finalPAN
+                                    vc.regId = regIdFinal
+                                    self.navigationController?.pushViewController(vc, animated: true)
+                                }
+                                return
+                            }
+                            
+                            if let bankStatus = jsonResponse["BankDpTradStatus"] as? String, bankStatus == "PAGE PENDING" {
+                                DispatchQueue.main.async {
+                                    let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
+                                    let vc = storyboard.instantiateViewController(identifier: "UPIVC") as! UPIVC
+                                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                    
+                                    let regId = UserDefaults.standard.string(forKey: "RegId")
+                                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                    
+                                    vc.panNo = finalPAN
+                                    vc.regId = regIdFinal
+                                    self.navigationController?.pushViewController(vc, animated: true)
+                                }
+                                return
+                            }
+                            
+                            if let otherStatus = jsonResponse["OtherStatus"] as? String, otherStatus == "PAGE PENDING" {
+                                DispatchQueue.main.async {
+                                    let storyboard = UIStoryboard(name: "OtherDetails", bundle: Bundle.module)
+                                    let vc = storyboard.instantiateViewController(identifier: "OtherDetailsVC") as! OtherDetailsVC
+                                    vc.panNo = self.panNo
+                                    vc.regId = self.regId
+                                    self.navigationController?.pushViewController(vc, animated: true)
+                                }
+                                return
+                            }
+                            
+                            if let nomineeStatus = jsonResponse["NomineeStatus"] as? String, nomineeStatus == "PAGE PENDING" {
+                                DispatchQueue.main.async {
+                                    let storyboard = UIStoryboard(name: "Nominee", bundle: Bundle.module)
+                                    let vc = storyboard.instantiateViewController(identifier: "NomineeVC") as! NomineeVC
+                                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                    
+                                    let regId = UserDefaults.standard.string(forKey: "RegId")
+                                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                    vc.panNo = finalPAN
+                                    vc.RegId = regIdFinal
+                                    self.navigationController?.pushViewController(vc, animated: true)
+                                }
+                                return
+                            }
+                            
+                            if let documentStatus = jsonResponse["DocumentStatus"] as? String, documentStatus == "PAGE PENDING" {
+                                DispatchQueue.main.async {
+                                    let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
+                                    let vc = storyboard.instantiateViewController(identifier: "DocumentVC") as! DocumentVC
+                                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                    
+                                    let regId = UserDefaults.standard.string(forKey: "RegId")
+                                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                    
+                                    vc.PanNo = finalPAN
+                                    vc.RegId = regIdFinal
+                                    self.navigationController?.pushViewController(vc, animated: true)
+                                }
+                                return
+                            }
+                            
                             self.sectionPage()
                         case "000001":
                             self.showAlert(message: ErrorMessage ?? "")
@@ -885,9 +865,17 @@ extension MobileOTPVC{
     func sectionPage(){
         //        let storyboard = UIStoryboard(name: "ApplicationForm", bundle: Bundle.module)
         //        let vc = storyboard.instantiateViewController(identifier: "ApplicationFormVC") as? ApplicationFormVC
-        let vc = ApplicationFormVC()
-        vc.panNo = self.panNo
-        self.navigationController?.pushViewController(vc , animated: true)
+        let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
+        let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
+        let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+        let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+        
+        let regId = UserDefaults.standard.string(forKey: "RegId")
+        let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+        
+        vc.panNo = finalPAN
+        vc.regId = regIdFinal
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
 }

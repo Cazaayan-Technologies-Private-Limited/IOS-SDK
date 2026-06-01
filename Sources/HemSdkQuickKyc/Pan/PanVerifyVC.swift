@@ -62,7 +62,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
             self.panName = panName
             self.panNo = panNo
             self.regId = regId
-        
+            
             let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
             let nextVC = storyboard.instantiateViewController(withIdentifier: "DigiLocker_a") as! DigiLocker_a
             nextVC.EmailId = emailID
@@ -79,7 +79,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
             }
         }
     }
- 
+    
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var NAMETF: UITextField!
     @IBOutlet weak var DOBTF: UITextField!
@@ -92,14 +92,15 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
     @IBOutlet weak var panView: UIView!
     @IBOutlet weak var dobView: UIView!
     @IBOutlet weak var nameView: UIView!
-    
+    @IBOutlet weak var emailLbl: UILabel!
+    @IBOutlet weak var buttonView: UIView!
     //    @IBOutlet weak var backgroundView: UIView!
-//    @IBOutlet weak var holderView: UIView!
-//    @IBOutlet weak var stackview: UIStackView!
-//    @IBOutlet weak var proceedBtn: UIButton!
-//    @IBOutlet weak var cancelBtn: UIButton!
-//    @IBOutlet weak var PANNAME: UILabel!
-//    @IBOutlet weak var holderBottomConstraint: NSLayoutConstraint!
+    //    @IBOutlet weak var holderView: UIView!
+    //    @IBOutlet weak var stackview: UIStackView!
+    //    @IBOutlet weak var proceedBtn: UIButton!
+    //    @IBOutlet weak var cancelBtn: UIButton!
+    //    @IBOutlet weak var PANNAME: UILabel!
+    //    @IBOutlet weak var holderBottomConstraint: NSLayoutConstraint!
     
     
     private let datePicker = UIDatePicker()
@@ -123,10 +124,11 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
     weak var delegate: PanVerifyPopupVCDelegate?
     weak var delegate1: ReloadPageDelegate?
     var identifier: String = ""
+    var phoneNumber: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
             guard let self = self else { return }
             
@@ -144,7 +146,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
         print("Email ID: \(emailID ?? "")")
         emailTF.text = emailID
         emailTF.isEnabled = false
-        verifyBtn.layer.cornerRadius = 10
+        //verifyBtn.layer.cornerRadius = 10
         navigationItem.hidesBackButton = true
         hidePanErrorLabels()
         panView.layer.cornerRadius = 10
@@ -159,6 +161,9 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
         PANTF.delegate = self
         NAMETF.delegate = self
         
+        emailLbl.isHidden = true
+        emailTF.isHidden = true
+        
         CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID,decodeByteArrayString  in
             guard let self = self else { return }
             
@@ -171,17 +176,21 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                 print("No UserID or SessionID found.")
             }
         }
-        homeBtn.tintColor = .appPrimary
-        verifyBtn.backgroundColor = .appPrimary
+        //homeBtn.tintColor = .appPrimary
+        //verifyBtn.backgroundColor = .appPrimary
         view.backgroundColor = .appBackground
+        buttonView.backgroundColor = .appPrimary
+        buttonView.layer.cornerRadius = 20
+        
+        clientPanDetails()
     }
-
+    
     func hidePanErrorLabels() {
         panInvalid.isHidden = true
         panNumberInvalid.isHidden = true
         dobInvalid.isHidden = true
     }
-
+    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == DOBTF {
             // Present the CalendarVC
@@ -193,16 +202,19 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                 vc.modalTransitionStyle = .crossDissolve
                 present(vc, animated: true)
             }
-        
+            
             return false
         }
         return true
     }
     
     @IBAction func BackBtn(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        let storyboard = UIStoryboard(name: "DashboardVC", bundle: Bundle.module)
+        let vc = storyboard.instantiateViewController(identifier: "NewAccountVC") as! NewAccountVC
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
-
+    
     @IBAction func VerifyBtn(_ sender: UIButton) {
         guard let userId = fetchedUserId,
               let panNo = PANTF.text,
@@ -228,9 +240,9 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
         }
     }
     
-  //  @IBAction func cancelBtn(_ sender: UIButton) {
-      //  backgroundView.isHidden = true
-   // }
+    //  @IBAction func cancelBtn(_ sender: UIButton) {
+    //  backgroundView.isHidden = true
+    // }
     
     func callApi() {
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
@@ -303,7 +315,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                             
                         case "000000":
                             DispatchQueue.main.async { [weak self] in
-                                                       guard let self = self else { return }
+                                guard let self = self else { return }
                                 let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
                                 if let nextVC = storyboard.instantiateViewController(withIdentifier: "DigiLocker_a") as? DigiLocker_a {
                                     
@@ -315,7 +327,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                                     self.navigationController?.pushViewController(nextVC, animated: true)
                                 }
                                 print("dismiss")
-                               //  self.dismiss(animated: true, completion: nil)
+                                //  self.dismiss(animated: true, completion: nil)
                             }
                         case "999993":
                             self.showAlert(title: "Alert", message: ErrorMessage ?? "")
@@ -390,6 +402,104 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
         }
     }
     
+    func clientPanDetails(){
+        
+        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
+            guard let tokenId = tokenId else {
+                // Handle the case where no tokens are available
+                CoreDataHelper.generateToken(
+                    decodeByteArrayToString: self
+                        .decodeArray ?? "",
+                    USERID: self.fetchedUserId ?? "",
+                    SessionId: self.fetchedSessionID ?? "",
+                    entityName: "TokenMobile", deviceType: "W",
+                    in: self.view
+                ) { success in
+                    if success {
+                        // Retry SIXTHAPI after token regeneration
+                        self.clientPanDetails()
+                    } else {
+                        print("Token generation failed.")
+                    }
+                }
+                print("No tokens available. Please reload the tokens.")
+                return
+            }
+            let parameters: [String: Any?] = [
+                "RegId": regId,
+                "MobileNo": phoneNumber,
+                "UserId": fetchedUserId,
+                "PanNo": panNo,
+                "TokenId": tokenId
+            ]
+            print(parameters)
+            let Url = "Client/GetClientPANDetailsByMobileNo"
+            
+            apiCall(url: Url, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
+                switch result {
+                case .success(let jsonResponse):
+                    print(" Response: \(jsonResponse)")
+                    if let errorCode = jsonResponse["ErrorCode"] as? String {
+                        switch errorCode {
+                        case "000000":
+                            DispatchQueue.main.async {
+                                
+                                // PAN Number
+                                if let panNo = jsonResponse["PANNo"] as? String,
+                                   !panNo.trimmingCharacters(in: .whitespaces).isEmpty {
+                                    self.PANTF.text = panNo
+                                } else {
+                                    self.PANTF.text = ""
+                                }
+                                
+                                // PAN Name
+                                if let panName = jsonResponse["PANName"] as? String,
+                                   !panName.trimmingCharacters(in: .whitespaces).isEmpty {
+                                    self.NAMETF.text = panName
+                                } else {
+                                    self.NAMETF.text = ""
+                                }
+                                
+                                // DOB
+                                if let dob = jsonResponse["DOB"] as? String,
+                                   !dob.trimmingCharacters(in: .whitespaces).isEmpty {
+                                    if let formattedDOB = self.convertDOBFormat(dob) {
+                                        self.DOBTF.text = formattedDOB
+                                    } else {
+                                        self.DOBTF.text = dob
+                                    }
+                                } else {
+                                    self.DOBTF.text = ""
+                                }
+                                
+                                print("PAN details autofilled successfully")
+                            }
+                        default:
+                            print("Unhandled error code: \(errorCode)")
+                        }
+                    }
+                case .failure(let error):
+                    print("Login API call failed: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    func convertDOBFormat(_ dateString: String) -> String? {
+        
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "dd/MM/yyyy"
+        
+        if let date = inputFormatter.date(from: dateString) {
+            return outputFormatter.string(from: date)
+        }
+        
+        return nil
+    }
+    
     func panValidation(userId: String, panNo: String, name: String, userDOB: String){
         hidePanErrorLabels()
         
@@ -460,31 +570,31 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                             }
                         case "100001":
                             self.panInvalid.text = ErrorMessage.isEmpty
-                                 ? "Invalid ID Number or Combination of Inputs."
-                                 : ErrorMessage
+                            ? "Invalid ID Number or Combination of Inputs."
+                            : ErrorMessage
                             self.panInvalid.isHidden = false
-//                            DispatchQueue.main.async {
-//                                
-//                                self.showAlert(title: "Alert", message: ErrorMessage ?? "")
-//                            }
+                            //                            DispatchQueue.main.async {
+                            //
+                            //                                self.showAlert(title: "Alert", message: ErrorMessage ?? "")
+                            //                            }
                         case "Pan-001":
                             self.panNumberInvalid.text = ErrorMessage.isEmpty
-                                ? "PAN Name is not matched. Please enter the name as per PAN card."
-                                : ErrorMessage
+                            ? "PAN Name is not matched. Please enter the name as per PAN card."
+                            : ErrorMessage
                             self.panNumberInvalid.isHidden = false
-//                            DispatchQueue.main.async {
-//                                
-//                                self.showAlert(title: "Alert", message: ErrorMessage ?? "")
-//                            }
+                            //                            DispatchQueue.main.async {
+                            //
+                            //                                self.showAlert(title: "Alert", message: ErrorMessage ?? "")
+                            //                            }
                         case "PANDOB-001":
                             self.dobInvalid.text = ErrorMessage.isEmpty
-                                 ? "Date of birth is not matched. Please enter the date of birth as per PAN card."
-                                 : ErrorMessage
+                            ? "Date of birth is not matched. Please enter the date of birth as per PAN card."
+                            : ErrorMessage
                             self.dobInvalid.isHidden = false
-//                            DispatchQueue.main.async {
-//                                
-//                                self.showAlert(title: "Alert", message: ErrorMessage ?? "")
-//                            }
+                            //                            DispatchQueue.main.async {
+                            //
+                            //                                self.showAlert(title: "Alert", message: ErrorMessage ?? "")
+                            //                            }
                         case "300001":
                             DispatchQueue.main.async {
                                 
@@ -492,13 +602,13 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                             }
                         case "300006":
                             self.panInvalid.text = ErrorMessage.isEmpty
-                                 ? "Invalid PAN"
-                                 : ErrorMessage
+                            ? "Invalid PAN"
+                            : ErrorMessage
                             self.panInvalid.isHidden = false
-//                            DispatchQueue.main.async {
-//                                
-//                                self.showAlert(title: "Alert", message: ErrorMessage ?? "")
-//                            }
+                            //                            DispatchQueue.main.async {
+                            //
+                            //                                self.showAlert(title: "Alert", message: ErrorMessage ?? "")
+                            //                            }
                         case "111111":
                             DispatchQueue.main.async {
                                 
@@ -557,7 +667,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                 
                 // Closure or delegate to set the button to selected when termsVC is dismissed
                 vc.dismissHandler = { [weak self] in
-                  //  self?.termsCheckBtn.isSelected = true
+                    //  self?.termsCheckBtn.isSelected = true
                 }
                 present(vc, animated: true, completion: nil)
             }
@@ -598,10 +708,10 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
 class NoPasteTextField: UITextField {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(paste(_:)) ||
-           action == #selector(select(_:)) ||
-           action == #selector(selectAll(_:)) ||
-           action == #selector(cut(_:)) ||
-           action == #selector(copy(_:)) {
+            action == #selector(select(_:)) ||
+            action == #selector(selectAll(_:)) ||
+            action == #selector(cut(_:)) ||
+            action == #selector(copy(_:)) {
             return false
         }
         return super.canPerformAction(action, withSender: sender)

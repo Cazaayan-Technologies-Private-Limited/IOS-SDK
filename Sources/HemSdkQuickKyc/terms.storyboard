@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -119,8 +120,185 @@
             </objects>
             <point key="canvasLocation" x="394.6564885496183" y="-44.366197183098592"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="PCD-KO-cN0">
+            <objects>
+                <viewController id="iOx-13-c5E" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ewc-mi-E0N">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZFx-ti-qf7">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="784"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9zc-z6-Dfh">
+                                        <rect key="frame" x="0.0" y="334" width="393" height="450"/>
+                                        <subviews>
+                                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IJY-BQ-NiH">
+                                                <rect key="frame" x="0.0" y="-10" width="393" height="355"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lhI-8P-lTA">
+                                                        <rect key="frame" x="0.0" y="0.0" width="385" height="1000"/>
+                                                        <subviews>
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="term" translatesAutoresizingMaskIntoConstraints="NO" id="rH9-xG-JYt">
+                                                                <rect key="frame" x="20" y="30" width="30" height="30"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="30" id="9rV-p0-FIJ"/>
+                                                                    <constraint firstAttribute="width" constant="30" id="Vts-uT-Btr"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Terms and Conditions" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AIG-6E-RN5">
+                                                                <rect key="frame" x="20" y="80" width="345" height="23"/>
+                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="19"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RjL-di-N9i">
+                                                                <rect key="frame" x="20" y="123" width="345" height="5112.666666666667"/>
+                                                                <string key="text">I hereby provide my express consent to Hem Securities Limited/Hem Finlease Private Limited to undertake the Know Your Customer (KYC) process through online/digital mode for the purpose of opening my Demat and Trading account, in accordance with the applicable regulatory guidelines issued by SEBI and other competent authorities.
+I also agree to share the OTP as and when required to complete the online account opening process.
+I have understood the information requirements of this form (read along with FATCA and CRS instructions) and hereby confirm that the information provided by me/us on this form is true, correct and complete. I also confirm that I have read and understood the FATCA &amp; Terms and conditions and hereby accept the same. Name of your account will be updated as per the income TAX database due to exchange regulations.
+
+Acknowledgment of Terms and Conditions:
+I have read, understood, and agree to abide by the terms and conditions of the broking account as outlined in the account opening form and the Hem Securities Limited/Hem Finlease Private Limited policies.
+
+Consent to Verification:
+I consent to HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED conducting necessary background verifications, contact me even if my number is registered on DND, including validation of my KYC (Know Your Customer) documents, as required under applicable regulations.
+
+I agree and give us Your express consent to fetch Your PAN number from the Credit Bureaus, based on My verified mobile number provided by me for the purpose of providing You with the HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED.
+
+I agree and give my consent to use my mobile number to check for existing Account Aggregator profiles linked to your mobile number, to improve your experience.
+
+I/We also instruct HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED to download information available from KRA/CKYC. 
+
+I am/We are also aware that for Aadhaar OVD based KYC, my KYC request shall be validated against Aadhaar details. I/We hereby consent to sharing my/our masked Aadhaar card with readable QR code or my Aadhaar XML/Digilocker XML file, along with passcode and as applicable, with KRA
+
+I understand and agree that HEM SECURITIES LIMITED / HEM FINLEASE PRIVATE LIMITED reserves the right to reject, suspend, restrict, or terminate my account opening request or related services at its sole discretion in case of regulatory, compliance, risk management, suspicious activity, or incomplete documentation requirements.  I acknowledge that OTPs, passwords, MPINs, and authentication credentials are confidential in nature and shall not be shared with any third party. I understand that HEM SECURITIES LIMITED / HEM FINLEASE PRIVATE LIMITED shall not be liable for any unauthorized access or transactions arising due to my negligence.  I agree that electronic records, digital consents, OTP-based authentication, and electronic communications shall constitute valid and legally binding acceptance under applicable laws, including the Information Technology Act, 2000.  I understand that investments and trading in securities markets are subject to market risks, and HEM SECURITIES LIMITED / HEM FINLEASE PRIVATE LIMITED does not guarantee any returns, profits, or protection against losses.  I understand that certain services may depend upon third-party platforms, exchanges, depositories, banks, payment gateways, telecom operators, or regulatory systems, and HEM SECURITIES LIMITED / HEM FINLEASE PRIVATE LIMITED shall not be liable for delays, failures, or interruptions caused by such third-party systems.  I understand and agree that HEM SECURITIES LIMITED / HEM FINLEASE PRIVATE LIMITED reserves the right to amend, modify, or update its policies, charges, terms, and conditions from time to time in accordance with applicable laws and regulatory requirements.  I agree that all disputes shall be subject to the exclusive jurisdiction of courts and regulatory authorities located in Jaipur, India.  I understand that I may withdraw consent for non-mandatory communications or services in accordance with applicable laws and internal policies.  I authorize HEM SECURITIES LIMITED / HEM FINLEASE PRIVATE LIMITED to share my information with exchanges, depositories, regulators, statutory authorities, or government agencies as required under applicable laws and regulatory requirements.  I understand that inactive or dormant accounts may be temporarily restricted in accordance with applicable regulatory guidelines and internal risk management policies.  I consent to monitoring and recording of calls, emails, chats, and electronic communications for compliance, audit, grievance handling, surveillance, and security purposes.  I consent to the collection and processing of device details, browser information, IP address, and application usage data for security, fraud prevention, analytics, and compliance purposes.  I consent to receive communications, alerts, statements, regulatory updates, promotional messages, and service-related information through SMS, email, calls, WhatsApp, push notifications, or other electronic modes, even if my mobile number is registered under DND/NCPR.
+
+I understand that HEM SECURITIES LIMITED / HEM FINLEASE PRIVATE LIMITED acts as an execution platform and shall not be responsible for my investment decisions unless specifically agreed otherwise.  I understand and agree that HEM SECURITIES LIMITED / HEM FINLEASE PRIVATE LIMITED shall not be liable for any loss, delay, interruption, or inability to perform arising due to force majeure events including system failures, cyber-attacks, natural disasters, regulatory restrictions, network outages, or events beyond reasonable control.
+I/We wish to opt for Electronic delivery Instruction Slip ( E-DIS)/ DDPI  at the time of account opening. However, the physical DIS booklet should be issued to me/us immediately on my/our request at any later date.
+
+HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED will provide the DP statement as per the SEBI requirement.
+
+HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED will share the email ID with the RTA and capture the default mode as electronic for receiving Annual reports.
+
+Dividend/interest will be received directly into the client's bank account through ECS
+
+I hereby acknowledge that I have read, understood, and agreed to the terms outlined in HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED Privacy Policy. I hereby provide my consent for HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED to collect, use, store, and process my personal data in accordance with the provisions set forth in the Privacy Policy.
+
+My sole country of residence is India. I understand that the information provided in this application is required for regulatory and compliance purposes.
+
+I confirm that the bank account(s), Aadhaar, and PAN details provided belong to me and are accurate.
+
+I authorize HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED to access and verify my information for account setup, compliance, and service-related purposes.
+
+I authorize HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED to facilitate transactions and related activities as requested by me through the HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED mobile application.
+
+I understand that enabling trading features is subject to applicable regulations and internal policies of HEM SECURITIES LIMITED/HEM FINLEASE PRIVATE LIMITED.
+
+I acknowledge that I have read, understood, accepted, and agreed to the following documents and 
+policies:
+
+Terms &amp; Conditions  
+Privacy Policy  
+Risk Disclosure Document  
+Tariff / Schedule of Charges  
+Rights &amp; Obligations  
+Policies and Procedures  
+•     Risk Management Policy  
+Risk Disclosure Statement:
+I acknowledge and accept the risks involved in trading and investing in securities and derivatives, as detailed in the Risk Disclosure Document provided to me.
+
+Use of Personal Information:
+I authorize HEM SECURITIESLIMITED/HEM FINLEASE PRIVATE LIMITED to collect, process, and use my personal and financial information in accordance with applicable laws and the firm's privacy policy.
+</string>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                        <constraints>
+                                                            <constraint firstItem="RjL-di-N9i" firstAttribute="leading" secondItem="lhI-8P-lTA" secondAttribute="leading" constant="20" id="5wE-Tw-HkJ"/>
+                                                            <constraint firstAttribute="height" constant="1000" id="6eS-nE-ik9"/>
+                                                            <constraint firstAttribute="trailing" secondItem="RjL-di-N9i" secondAttribute="trailing" constant="20" id="BnW-pz-aCw"/>
+                                                            <constraint firstItem="rH9-xG-JYt" firstAttribute="top" secondItem="lhI-8P-lTA" secondAttribute="top" constant="30" id="ITW-gk-2Eo"/>
+                                                            <constraint firstItem="AIG-6E-RN5" firstAttribute="leading" secondItem="lhI-8P-lTA" secondAttribute="leading" constant="20" id="LjC-44-uSH"/>
+                                                            <constraint firstAttribute="trailing" secondItem="AIG-6E-RN5" secondAttribute="trailing" constant="20" id="Z9i-8z-vjS"/>
+                                                            <constraint firstItem="rH9-xG-JYt" firstAttribute="leading" secondItem="lhI-8P-lTA" secondAttribute="leading" constant="20" id="lyE-gm-mJS"/>
+                                                            <constraint firstItem="AIG-6E-RN5" firstAttribute="top" secondItem="rH9-xG-JYt" secondAttribute="bottom" constant="20" id="u1T-Ng-nnA"/>
+                                                            <constraint firstItem="RjL-di-N9i" firstAttribute="top" secondItem="AIG-6E-RN5" secondAttribute="bottom" constant="20" id="zem-Xx-ptd"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="lhI-8P-lTA" secondAttribute="bottom" id="3Sr-us-4VK"/>
+                                                    <constraint firstItem="lhI-8P-lTA" firstAttribute="width" secondItem="IJY-BQ-NiH" secondAttribute="width" multiplier="0.979644" id="6nz-Df-hWS"/>
+                                                    <constraint firstItem="lhI-8P-lTA" firstAttribute="leading" secondItem="IJY-BQ-NiH" secondAttribute="leading" id="Ngk-1f-0PV"/>
+                                                    <constraint firstItem="lhI-8P-lTA" firstAttribute="top" secondItem="IJY-BQ-NiH" secondAttribute="top" id="Pdq-3z-xWH"/>
+                                                    <constraint firstAttribute="trailing" secondItem="lhI-8P-lTA" secondAttribute="trailing" id="UOM-r7-VD1"/>
+                                                </constraints>
+                                            </scrollView>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BKI-8r-bOc">
+                                                <rect key="frame" x="20" y="352.66666666666663" width="353" height="50"/>
+                                                <color key="backgroundColor" red="0.078431372550000003" green="0.56862745100000001" blue="0.80784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="ccz-1g-tbx"/>
+                                                </constraints>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="I Understand"/>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="BKI-8r-bOc" firstAttribute="top" secondItem="IJY-BQ-NiH" secondAttribute="bottom" constant="10" id="NT8-RU-P9y"/>
+                                            <constraint firstItem="IJY-BQ-NiH" firstAttribute="leading" secondItem="9zc-z6-Dfh" secondAttribute="leading" id="aBr-Dp-4kU"/>
+                                            <constraint firstItem="BKI-8r-bOc" firstAttribute="leading" secondItem="9zc-z6-Dfh" secondAttribute="leading" constant="20" id="cDi-6X-Jkt"/>
+                                            <constraint firstAttribute="trailing" secondItem="IJY-BQ-NiH" secondAttribute="trailing" id="sh2-c3-VBe"/>
+                                            <constraint firstAttribute="trailing" secondItem="BKI-8r-bOc" secondAttribute="trailing" constant="20" id="ufX-LP-f92"/>
+                                            <constraint firstAttribute="height" constant="450" id="v5c-CQ-1Pj"/>
+                                            <constraint firstItem="IJY-BQ-NiH" firstAttribute="top" secondItem="9zc-z6-Dfh" secondAttribute="top" id="zMi-K1-2ir"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="v5c-CQ-1Pj"/>
+                                            </mask>
+                                        </variation>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="9zc-z6-Dfh" secondAttribute="bottom" id="O3S-u4-Qen"/>
+                                    <constraint firstAttribute="trailing" secondItem="9zc-z6-Dfh" secondAttribute="trailing" id="Q88-dH-CN2"/>
+                                    <constraint firstItem="9zc-z6-Dfh" firstAttribute="leading" secondItem="ZFx-ti-qf7" secondAttribute="leading" id="uEx-JP-ygt"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="URM-iW-Yjh"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="URM-iW-Yjh" firstAttribute="trailing" secondItem="ZFx-ti-qf7" secondAttribute="trailing" id="Cfc-Wp-gil"/>
+                            <constraint firstItem="URM-iW-Yjh" firstAttribute="bottom" secondItem="ZFx-ti-qf7" secondAttribute="bottom" id="egQ-ul-zpi"/>
+                            <constraint firstItem="ZFx-ti-qf7" firstAttribute="top" secondItem="ewc-mi-E0N" secondAttribute="top" id="mWd-zh-bIF"/>
+                            <constraint firstItem="ZFx-ti-qf7" firstAttribute="leading" secondItem="URM-iW-Yjh" secondAttribute="leading" id="p13-ni-p7C"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="holderviewMain" destination="9zc-z6-Dfh" id="MaT-7p-2X6"/>
+                        <outlet property="label" destination="AIG-6E-RN5" id="0mb-lF-DZ8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="11Y-ts-38C" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2049.6183206106871" y="-37.323943661971832"/>
+        </scene>
     </scenes>
     <resources>
         <image name="multiply.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="term" width="42" height="42"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

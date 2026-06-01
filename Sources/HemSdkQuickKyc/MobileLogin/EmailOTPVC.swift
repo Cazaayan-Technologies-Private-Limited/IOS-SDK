@@ -63,8 +63,8 @@ class EmailOTPVC: UIViewController, UITextFieldDelegate{
 
         Label1.text = "We have sent a 6 digit code to \(EmailID ?? "")"
         emailVerification(EmailID: EmailID ?? "")
-        ResendOTP.tintColor = .appPrimary
-        homeBtn.tintColor = .appPrimary
+        ResendOTP.tintColor = .appBackground
+       // homeBtn.tintColor = .appPrimary
         
         otpTF1.layer.cornerRadius = 10300
         otpTF1.layer.cornerRadius = 10
@@ -93,6 +93,8 @@ class EmailOTPVC: UIViewController, UITextFieldDelegate{
         view4.layer.borderColor = UIColor.appBorder.cgColor
         view5.layer.borderColor = UIColor.appBorder.cgColor
         view6.layer.borderColor = UIColor.appBorder.cgColor
+        
+        self.navigationItem.hidesBackButton = true
     }
     
     func setupOTPFields() {
@@ -281,6 +283,7 @@ class EmailOTPVC: UIViewController, UITextFieldDelegate{
         if let vc = storyboard?.instantiateViewController(withIdentifier: "PanVerifyVC") as? PanVerifyVC {
             vc.emailID = emailID
             vc.decodedString = decodedString
+            vc.phoneNumber = phoneNumber
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -295,7 +298,6 @@ class EmailOTPVC: UIViewController, UITextFieldDelegate{
             "MobileRelation":mobileRelation,
             "OTP":""
         ]
-        
         
         let emailURL = "OTPManagement/SendOTPToEmailClient"
         
@@ -443,7 +445,7 @@ class EmailOTPVC: UIViewController, UITextFieldDelegate{
     }
     
     @IBAction func BackBtn(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true)
     }
     @IBAction func ChangeBtn(_ sender: UIButton) {
         if let email = EmailID {

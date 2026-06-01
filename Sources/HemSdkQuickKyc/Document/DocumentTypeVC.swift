@@ -25,6 +25,8 @@ class DocumentTypeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         holderView.layer.cornerRadius = 10
+        BankStatementBtn.isHidden = true
+        bankPassbookBtn.isHidden = true
     }
     
     @IBAction func cancelBtn(_ sender: UIButton) {
@@ -46,4 +48,3 @@ class DocumentTypeVC: UIViewController {
         dismiss(animated: true, completion: nil)
     }
 }
-

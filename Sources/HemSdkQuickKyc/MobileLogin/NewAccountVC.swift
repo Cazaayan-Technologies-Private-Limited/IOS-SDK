@@ -192,12 +192,14 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
     func didtapChangeBtn(with phoneNumber: String) {
         NumberTF.text = phoneNumber
     }
-    @IBOutlet weak var termsnconditionBtn: UIButton!
+//    @IBOutlet weak var termsnconditionBtn: UIButton!
     @IBOutlet weak var NumberTF: UITextField!
     @IBOutlet weak var RequestBtn: UIButton!
     @IBOutlet weak var numberView: UIView!
     @IBOutlet weak var homeBtn: UIButton!
-    @IBOutlet weak var termView: UIView!
+   // @IBOutlet weak var termView: UIView!
+    @IBOutlet weak var buttonView: UIView!
+    
 
     var selectedData: [String: Any]?
     var txnId: String?
@@ -205,7 +207,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        termsnconditionBtn.isSelected = true
+//        termsnconditionBtn.isSelected = true
         CoreDataHelper.deleteAllUserIds(entityName: "MobileUser")
         self.RequestBtn.layer.cornerRadius = 10
         NumberTF.delegate = self
@@ -219,13 +221,15 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
         numberView.layer.borderWidth = 0.5
         numberView.layer.borderColor = UIColor.appBorder.cgColor
         
-        termsnconditionBtn.layer.cornerRadius = 20
-        termsnconditionBtn.layer.borderWidth = 0.5
-        termsnconditionBtn.layer.borderColor = UIColor.appBorder.cgColor
-        homeBtn.tintColor = .appPrimary
-        RequestBtn.backgroundColor = .appPrimary
-        view.backgroundColor = .appBackground
-        termView.backgroundColor = .clear
+//        termsnconditionBtn.layer.cornerRadius = 20
+//        termsnconditionBtn.layer.borderWidth = 0.5
+//        termsnconditionBtn.layer.borderColor = UIColor.appBorder.cgColor
+//        homeBtn.tintColor = .appPrimary
+//        //RequestBtn.backgroundColor = .appPrimary
+//        view.backgroundColor = .appBackground
+//        termView.backgroundColor = .clear
+        buttonView.backgroundColor = .appPrimary
+        buttonView.layer.cornerRadius = 20
         
         print("🔥 viewDidLoad called")
         print("selectedData:", selectedData ?? "nil")
@@ -246,19 +250,51 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
                // ✅ CALL API ON LOAD
                initiateLoginAPI(phoneNumber: mobile)
            }
+        self.navigationItem.hidesBackButton = true
+        view.backgroundColor = .appBackground
+        NumberTF.delegate = self
+        setupPhonePrefix()
+    }
+    
+    func setupPhonePrefix() {
+
+        let prefixLabel = UILabel()
+        prefixLabel.text = "  +91  "
+        prefixLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        prefixLabel.textColor = .black
+        prefixLabel.sizeToFit()
+
+        let containerView = UIView(
+            frame: CGRect(
+                x: 0,
+                y: 0,
+                width: prefixLabel.frame.width + 10,
+                height: NumberTF.frame.height
+            )
+        )
+
+        prefixLabel.frame = CGRect(
+            x: 0,
+            y: 0,
+            width: prefixLabel.frame.width,
+            height: NumberTF.frame.height
+        )
+
+        containerView.addSubview(prefixLabel)
+
+        NumberTF.leftView = containerView
+        NumberTF.leftViewMode = .always
+
+        NumberTF.keyboardType = .numberPad
     }
     
     
     @IBAction func backBtn(_ sender: UIButton) {
-        self.navigationController?.popToRootViewController(animated: true)
+        self.dismiss(animated: true)
     }
     
     
     @IBAction func RequestOtpBtn(_ sender: UIButton) {
-        guard termsnconditionBtn.isSelected else {
-            showAlert(message: "Please accept the terms and conditions")
-            return
-        }
         guard let phoneNumber = NumberTF.text, !phoneNumber.isEmpty else {
             // Handle empty phone number case
             showAlert(message: "Please enter a phone number")
@@ -269,7 +305,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             return
         }
         // Check if the phone number is made up of repeated digits
-        if isRepeatedDigitNumber(phoneNumber: phoneNumber) {
+        if isInvalidMobileNumber(phoneNumber) {
             showAlert(message: "Invalid mobile number. Please enter a valid number.")
             return
         }
@@ -490,6 +526,36 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
         return newString.length <= maxLength && isReplacementStringNumeric
     }
     
+    func isInvalidMobileNumber(_ phoneNumber: String) -> Bool {
+
+        // Invalid exact numbers
+        let invalidNumbers = [
+            "1234567890",
+            "0987654321"
+        ]
+
+        if invalidNumbers.contains(phoneNumber) {
+            return true
+        }
+
+        // Repeated digits like 1111111111
+        let firstChar = phoneNumber.first
+
+        let isRepeated = phoneNumber.allSatisfy { $0 == firstChar }
+
+        if isRepeated {
+            return true
+        }
+
+        // Mobile number should start from 6-9
+        if let firstDigit = phoneNumber.first,
+           !"6789".contains(firstDigit) {
+            return true
+        }
+
+        return false
+    }
+    
     func showAlert(message: String) {
         let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -498,25 +564,6 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
     
     @IBAction func homeBtn(_ sender: UIButton) {
         self.navigationController?.popToRootViewController(animated: true)
-    }
-    //
-    @IBAction func TCbtn(_ sender: UIButton) {
-        if sender.isSelected {
-            // If the button is selected and user clicks, deselect it and show terms and conditions page
-            sender.isSelected = false
-            let storyboard = UIStoryboard(name: "terms", bundle: Bundle.module)
-            if let vc = storyboard.instantiateViewController(withIdentifier: "termsVC") as? termsVC {
-                vc.modalPresentationStyle = .overCurrentContext
-                vc.modalTransitionStyle = .crossDissolve
-                
-                // Closure or delegate to set the button to selected when termsVC is dismissed
-                vc.dismissHandler = { [weak self] in
-                    self?.termsnconditionBtn.isSelected = true
-                }
-                
-                present(vc, animated: true, completion: nil)
-            }
-        }
     }
 }
 

@@ -95,9 +95,15 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
         case "DOCUMENT DETAILS":
             let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
             if let vc = storyboard.instantiateViewController(withIdentifier: "DocumentVC") as? DocumentVC {
-                vc.PanNo = panNo
+                
+                let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                                
+                let regId = UserDefaults.standard.string(forKey: "RegId")
+                let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                vc.PanNo = finalPAN
                 vc.rejection = "Rejection"
-                vc.RegId = regId
+                vc.RegId = regIdFinal
                 vc.delegate = delegate
                 vc.isFromRejectionFlow = true
                 self.navigationController?.pushViewController(vc, animated: true)

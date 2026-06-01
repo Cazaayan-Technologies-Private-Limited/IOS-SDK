@@ -14,13 +14,14 @@ let package = Package(
         ),
     ],
     dependencies: [
-            // ✅ Add DGCharts dependency here
-            .package(url: "https://github.com/danielgindi/Charts.git", from: "5.1.0"),
-            .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "6.5.0"),
-            .package(url: "https://github.com/TimOliver/TOCropViewController.git",from: "2.0.0"),
-            .package(url: "https://github.com/alankarmisra/SwiftSignatureView.git", exact: "3.2.1")
-        ],
- 
+        // ✅ Add DGCharts dependency here
+        .package(url: "https://github.com/danielgindi/Charts.git", from: "5.1.0"),
+        .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "6.5.0"),
+        .package(url: "https://github.com/TimOliver/TOCropViewController.git",from: "2.0.0"),
+        .package(url: "https://github.com/alankarmisra/SwiftSignatureView.git", exact: "3.2.1"),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS.git", from: "7.0.0")
+    ],
+    
     targets: [
         .target(
             name: "HemSdkQuickKyc",
@@ -28,8 +29,9 @@ let package = Package(
                 .product(name: "DGCharts", package: "Charts"),// ✅ Import DGCharts
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
                 .product(name: "CropViewController", package: "TOCropViewController"),
-                .product(name: "SwiftSignatureView", package: "SwiftSignatureView")
-                       ],
+                .product(name: "SwiftSignatureView", package: "SwiftSignatureView"),
+                .product(name: "GoogleSignInSwift", package: "GoogleSignIn-iOS")
+            ],
             resources: [
                 .process("DashboardVC.storyboard"),
                 .process("terms.storyboard"),
@@ -57,6 +59,9 @@ let package = Package(
                 .process("Esign.storyboard"),
                 .process("ApplicationStatusVC.storyboard")
             ],
+            swiftSettings: [
+                .define("SWIFT_PACKAGE")
+            ]
         ),
     ]
 )

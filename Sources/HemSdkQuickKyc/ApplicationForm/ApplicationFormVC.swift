@@ -148,7 +148,7 @@ class ApplicationFormVC: UIViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         case "Bank":
             let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
-            let vc = storyboard.instantiateViewController(identifier: "BankVC") as! BankVC
+            let vc = storyboard.instantiateViewController(identifier: "UPIVC") as! UPIVC
             let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
             let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
             vc.panNo = finalPAN

@@ -85,6 +85,7 @@ class DigiLocker_b_VC: UIViewController {
         submitBtn.layer.cornerRadius = 20
         submitBtn.backgroundColor = .appPrimary
         view.backgroundColor = .appBackground
+        navigationItem.hidesBackButton = true
     }
     
     @IBAction func SubmitBtn(_ sender: UIButton) {
