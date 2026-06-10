@@ -275,7 +275,7 @@ class DigiVerticsVC: UIViewController, WKNavigationDelegate {
             timer?.cancel()
             
             timer = DispatchSource.makeTimerSource(queue: .main)
-            timer?.schedule(deadline: .now() + 5, repeating: 5)
+            timer?.schedule(deadline: .now() + 12, repeating: 2)
             
             timer?.setEventHandler { [weak self] in
                 self?.ValidatesaveDigiLocker { success in

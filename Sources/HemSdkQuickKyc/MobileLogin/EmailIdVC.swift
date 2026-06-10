@@ -274,46 +274,102 @@ class EmailIdVC: UIViewController, @MainActor EmailOTPDelegate, UITextFieldDeleg
             let email = user.profile?.email ?? ""
             self.saveEmail(email)
 
-            self.saveEmailToDatabase(email: email)
+            self.UserCreationDetails(EmailID: email,decodedString: decodedString ?? "" )
         }
     }
     
-    func saveEmailToDatabase(email: String) {
-        let parameters: [String: Any] = [
-            "PanNo": "",
-            "EmailAddress": email,
-            "DeviceType": "W",
-            "RmCode": "",
-            "MobileRelation": mobileRelation ?? "",
-            "OTP": ""
+//    func saveEmailToDatabase(email: String) {
+//        let parameters: [String: Any] = [
+//            "PanNo": "",
+//            "EmailAddress": email,
+//            "DeviceType": "W",
+//            "RmCode": "",
+//            "MobileRelation": "SELF",
+//            "OTP": ""
+//        ]
+//        
+//        let emailURL = "OTPManagement/SendOTPToEmailClient"
+//        
+//        apiCall(url: emailURL, method: "POST", parameters: parameters, view: self.view) { result in
+//            switch result {
+//            case .success(let jsonResponse):
+//                print("Email saved successfully: \(jsonResponse)")
+//                
+//                if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000000" {
+//                    DispatchQueue.main.async {
+//                        self.navigateToPanVerifyVC(with: email)
+//                    }
+//                } else {
+//                    DispatchQueue.main.async {
+//                        // Even if API returns error, you might still want to proceed
+//                        // or show an alert
+//                        self.navigateToPanVerifyVC(with: email)
+//                    }
+//                }
+//                
+//            case .failure(let error):
+//                print("Failed to save email: \(error.localizedDescription)")
+//                DispatchQueue.main.async {
+//                    // Optionally show alert but still navigate
+//                    self.showAlert(message: "Email saved locally but failed to sync with server")
+//                    self.navigateToPanVerifyVC(with: email)
+//                }
+//            }
+//        }
+//    }
+    
+    func UserCreationDetails(EmailID: String,decodedString: String){
+        
+        var parameters: [String: Any?] = [
+            "PanNo":"",
+            "EmailAddress":EmailID,
+            "DeviceType":"W",
+            "RmCode":"",
+            "OTP": "111111",
+            "IsDpExternal":"0",
+            "DPBrokerCode":"",
+            "SessionId":"",
+            "IPAddress":"1",
+            "ReferEarnClientId":"",
+            "UserName":"SDSFD",
+            "EmailRelation":"SELF",
+            "MobileRelation":"SELF",
+            "MobileNumber":phoneNumber
         ]
         
-        let emailURL = "OTPManagement/SendOTPToEmailClient"
+        for (key, value) in parameters {
+            if let stringValue = value as? String, stringValue.isEmpty {
+                parameters[key] = nil
+            }
+        }
         
-        apiCall(url: emailURL, method: "POST", parameters: parameters, view: self.view) { result in
+        if let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) {
+            let jsonString = String(data: jsonData, encoding: .utf8) ?? ""
+            print("UserCreationDetails/InsertClientRegister")
+            print("HTTP Method: POST")
+            print("Request Parameters: \(jsonString)")
+        }
+        let emailURL = "UserCreationDetails/InsertClientRegister"
+        
+        apiCall(url: emailURL, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
             switch result {
             case .success(let jsonResponse):
-                print("Email saved successfully: \(jsonResponse)")
-                
-                if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000000" {
-                    DispatchQueue.main.async {
-                        self.navigateToPanVerifyVC(with: email)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        // Even if API returns error, you might still want to proceed
-                        // or show an alert
-                        self.navigateToPanVerifyVC(with: email)
+                print("3rd Response: \(jsonResponse)")
+                let UserID = jsonResponse["UserID"] as? String
+                let EmailAddress = jsonResponse["EmailAddress"] as? String
+                if let errorCode = jsonResponse["ErrorCode"] as? String {
+                    switch errorCode {
+                    case "900006":
+                        DispatchQueue.main.async {
+                            self.navigateToPanVerifyVC(with: EmailID)
+                        }
+                        
+                    default:
+                        print("Unhandled error code: \(errorCode)")
                     }
                 }
-                
             case .failure(let error):
-                print("Failed to save email: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    // Optionally show alert but still navigate
-                    self.showAlert(message: "Email saved locally but failed to sync with server")
-                    self.navigateToPanVerifyVC(with: email)
-                }
+                print("Login API call failed: \(error.localizedDescription)")
             }
         }
     }

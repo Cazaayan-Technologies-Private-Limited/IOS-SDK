@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24127" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="90i-X3-XKx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="90i-X3-XKx">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -8552,7 +8552,7 @@
                                 </variation>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="83C-to-OMR">
-                                <rect key="frame" x="0.0" y="166" width="414" height="452"/>
+                                <rect key="frame" x="0.0" y="166" width="414" height="409.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iqm-fb-xRZ">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="7074.5"/>
@@ -10763,7 +10763,7 @@
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NvB-qx-IW1">
                                         <rect key="frame" x="30" y="38.5" width="354" height="81.5"/>
-                                        <string key="text">Ensure accurate and comprehensive data for optimal AI Performance                                         You are allowed to add 3 nominees along with minor and guardian details</string>
+                                        <string key="text">• Ensure accurate and comprehensive data for optimal Performance.                                             • You are allowed to add 3 nominees along with minor and guardian details.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.42745098039215684" green="0.42745098039215684" blue="0.42745098039215684" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -10775,7 +10775,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="124" height="50"/>
                                                 <color key="tintColor" red="0.53725490200000003" green="0.47058823529999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Skip"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Opt Out"/>
                                                 <connections>
                                                     <action selector="skipBtn:" destination="kwh-dq-sdj" eventType="touchUpInside" id="tzh-UP-kHG"/>
                                                 </connections>
@@ -10811,6 +10811,16 @@
                                     <constraint firstItem="A5c-ep-WvO" firstAttribute="leading" secondItem="aKr-rB-cFE" secondAttribute="leading" constant="30" id="zeb-AN-Hm7"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4uQ-kS-RTn">
+                                <rect key="frame" x="20" y="585.5" width="374" height="34.5"/>
+                                <color key="backgroundColor" red="0.53725490200000003" green="0.47058823529999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Continue"/>
+                                <connections>
+                                    <action selector="continueBtnTapped:" destination="kwh-dq-sdj" eventType="touchUpInside" id="iMb-Ij-BT6"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kEF-yU-Cfc"/>
                         <color key="backgroundColor" red="0.96470588235294119" green="0.96078431372549022" blue="0.99215686274509807" alpha="1" colorSpace="calibratedRGB"/>
@@ -10820,12 +10830,21 @@
                             <constraint firstItem="kEF-yU-Cfc" firstAttribute="trailing" secondItem="aKr-rB-cFE" secondAttribute="trailing" id="2xt-F1-366"/>
                             <constraint firstItem="DlG-c8-zkN" firstAttribute="leading" secondItem="kEF-yU-Cfc" secondAttribute="leading" id="Aag-cW-tAe"/>
                             <constraint firstItem="83C-to-OMR" firstAttribute="leading" secondItem="kEF-yU-Cfc" secondAttribute="leading" id="BJQ-kB-JcS"/>
+                            <constraint firstItem="4uQ-kS-RTn" firstAttribute="leading" secondItem="kEF-yU-Cfc" secondAttribute="leading" constant="20" id="NHt-4d-yNE"/>
                             <constraint firstItem="83C-to-OMR" firstAttribute="trailing" secondItem="kEF-yU-Cfc" secondAttribute="trailing" id="QHo-i4-Jt6"/>
-                            <constraint firstItem="aKr-rB-cFE" firstAttribute="top" secondItem="83C-to-OMR" secondAttribute="bottom" constant="10" id="TJA-Mu-OhX"/>
+                            <constraint firstItem="aKr-rB-cFE" firstAttribute="top" secondItem="4uQ-kS-RTn" secondAttribute="bottom" constant="8" id="Rng-m9-cJc"/>
+                            <constraint firstItem="aKr-rB-cFE" firstAttribute="top" secondItem="83C-to-OMR" secondAttribute="bottom" constant="100" id="TJA-Mu-OhX"/>
+                            <constraint firstItem="4uQ-kS-RTn" firstAttribute="top" secondItem="83C-to-OMR" secondAttribute="bottom" constant="10" id="dpO-wy-G5Q"/>
                             <constraint firstItem="aKr-rB-cFE" firstAttribute="bottom" secondItem="kEF-yU-Cfc" secondAttribute="bottom" id="jBC-3n-G7D"/>
+                            <constraint firstItem="kEF-yU-Cfc" firstAttribute="trailing" secondItem="4uQ-kS-RTn" secondAttribute="trailing" constant="20" id="kOz-nA-tod"/>
                             <constraint firstItem="aKr-rB-cFE" firstAttribute="leading" secondItem="kEF-yU-Cfc" secondAttribute="leading" id="v2w-6p-GLK"/>
                             <constraint firstItem="DlG-c8-zkN" firstAttribute="top" secondItem="kEF-yU-Cfc" secondAttribute="top" constant="10" id="xtx-Nb-RVn"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="TJA-Mu-OhX"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="1Ij-Qw-Be0"/>
                     <connections>
@@ -10857,6 +10876,7 @@
                         <outlet property="cityTxt1" destination="KWZ-C3-gak" id="AR2-UH-q1L"/>
                         <outlet property="cityTxt2" destination="0oA-ih-cp5" id="TBY-N5-69f"/>
                         <outlet property="cityTxt3" destination="l0M-Oz-fjG" id="POw-wC-cJC"/>
+                        <outlet property="continueBtn" destination="4uQ-kS-RTn" id="dMd-SE-xZW"/>
                         <outlet property="dobLabel1" destination="L8r-uJ-TiR" id="qK1-aS-stw"/>
                         <outlet property="dobLabel2" destination="Shb-5f-ATE" id="5Qh-nc-9MC"/>
                         <outlet property="dobLabel3" destination="M03-0l-x8i" id="VSh-ya-Zin"/>
@@ -10942,11 +10962,13 @@
                         <outlet property="guardianPinCodeTxt2" destination="ydi-Dw-mc6" id="5Cu-e2-m6m"/>
                         <outlet property="guardianPinCodeTxt3" destination="zVw-hk-usi" id="7Mw-92-xg8"/>
                         <outlet property="guardianRelationBtn1" destination="MZP-2I-Dtd" id="yKp-dV-Hbh"/>
-                        <outlet property="guardianRelationBtn2" destination="MZP-2I-Dtd" id="Vx3-BK-fTb"/>
                         <outlet property="guardianRelationBtn3" destination="Vut-dI-Opj" id="njN-OK-uJP"/>
                         <outlet property="guardianRelationLbl1" destination="Vje-PZ-Fxg" id="zVV-QJ-a5j"/>
                         <outlet property="guardianRelationLbl2" destination="sFE-If-4Pj" id="SeN-Wq-Jvc"/>
                         <outlet property="guardianRelationLbl3" destination="zlE-HB-ngD" id="GyS-vC-qg8"/>
+                        <outlet property="guardianRelationView1" destination="uTe-8d-DJE" id="Uno-jN-ued"/>
+                        <outlet property="guardianRelationView2" destination="6gM-Vv-Xft" id="ka3-7h-Ruz"/>
+                        <outlet property="guardianRelationView3" destination="Hjf-NA-wPT" id="dGc-Xs-coP"/>
                         <outlet property="guardianStateLbl1" destination="ehL-YI-y1z" id="Zzn-SV-16g"/>
                         <outlet property="guardianStateLbl2" destination="UQT-VM-kV4" id="P71-bh-fab"/>
                         <outlet property="guardianStateLbl3" destination="0Lr-Nc-sQs" id="bZC-Us-Rgb"/>
@@ -10962,6 +10984,7 @@
                         <outlet property="gurdianLbl1" destination="KlH-Qk-bpP" id="O6G-TZ-ymd"/>
                         <outlet property="gurdianLbl2" destination="TeY-T8-DEM" id="eQ7-qM-1hW"/>
                         <outlet property="gurdianLbl3" destination="HwR-lP-Wzs" id="TV4-VR-Ul0"/>
+                        <outlet property="instructionView" destination="aKr-rB-cFE" id="heb-Is-yVx"/>
                         <outlet property="minorNameLbl1" destination="zQ9-QB-uuD" id="Sor-fS-02N"/>
                         <outlet property="minorNameLbl2" destination="H7j-ox-APy" id="FdJ-XK-gaZ"/>
                         <outlet property="minorNameLbl3" destination="cte-1U-xbl" id="hzj-tf-6Jf"/>
@@ -11013,6 +11036,9 @@
                         <outlet property="relationApplicantLbl1" destination="uPY-0F-DWo" id="pma-sQ-jhE"/>
                         <outlet property="relationApplicantLbl2" destination="aok-Ce-hWy" id="nvX-lL-QsX"/>
                         <outlet property="relationApplicantLbl3" destination="2Mo-b0-ZSN" id="7G3-dn-Fvk"/>
+                        <outlet property="relationApplicantView1" destination="qHu-Ta-cSI" id="JFZ-Pk-N4W"/>
+                        <outlet property="relationApplicantView2" destination="k9j-GR-P4b" id="vPi-nZ-8Tf"/>
+                        <outlet property="relationApplicantView3" destination="lh8-vh-1VJ" id="w7b-Hi-KBB"/>
                         <outlet property="relationBtn1" destination="zg7-JX-ERG" id="REg-9N-uop"/>
                         <outlet property="relationBtn2" destination="hOj-Ab-KoV" id="nOt-4p-6Md"/>
                         <outlet property="relationBtn3" destination="ndj-uf-QsK" id="ukZ-RF-5hu"/>
@@ -11040,7 +11066,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aay-et-5Rn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5180" y="-62"/>
+            <point key="canvasLocation" x="5179.7101449275369" y="-62.276785714285708"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="YL0-Fr-d5J">
@@ -13618,28 +13644,28 @@
         <image name="unCheck_1" width="20" height="21"/>
         <image name="upArrow" width="26" height="26"/>
         <systemColor name="secondaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.53333333333333333" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray4Color">
-            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

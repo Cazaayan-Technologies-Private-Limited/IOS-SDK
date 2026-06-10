@@ -450,7 +450,7 @@ extension MobileOTPVC{
             }
         }
     }
-   
+    
     func callInsertClientRegisterApi(phonenumber : String) {
         
         GetInput()
@@ -597,6 +597,7 @@ extension MobileOTPVC{
             vc.sessionID = sessionID
             vc.phoneNumber = phoneNumber
             vc.mobileRelation = relation
+            vc.decodedString = decodeArray
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -673,6 +674,15 @@ extension MobileOTPVC{
                                 }
                             }
                         case "000000":
+                            if let panNo = jsonResponse["PanNo"] as? String {
+                                self.panNo = panNo
+                                UserDefaults.standard.set(panNo, forKey: "PanNo")  // Also save to UserDefaults as backup
+                            }
+                            
+                            if let regId = jsonResponse["RegId"] as? String {
+                                self.regId = regId
+                                UserDefaults.standard.set(regId, forKey: "RegId")
+                            }
                             print("errorcode 000000 called")
                             if let finalStatus = FinalStatusValue, finalStatus == "KYC REJECTED" {
                                 DispatchQueue.main.async {
@@ -688,15 +698,15 @@ extension MobileOTPVC{
                                 DispatchQueue.main.async {
                                     
                                     self.showAlert(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.")
-//                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
-//                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
-//                                    vc.PanNo = PanNo
-//                                    vc.RegId = RegId
-//                                    self.navigationController?.pushViewController(vc, animated: true)
-                               }
-                               return
+                                    //                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
+                                    //                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
+                                    //                                    vc.PanNo = PanNo
+                                    //                                    vc.RegId = RegId
+                                    //                                    self.navigationController?.pushViewController(vc, animated: true)
+                                }
+                                return
                             }
-                                
+                            
                             
                             if finalStatus == "4" && isPdfGenerated == "1" && isPDFSign == "0"{
                                 print("✅ Navigating to ApplicationStatusVC - FinalStatus: \(finalStatus), isPdfGenerated: \(isPdfGenerated), isPDFSign: \(isPDFSign)")
@@ -788,13 +798,29 @@ extension MobileOTPVC{
                             }
                             
                             if let otherStatus = jsonResponse["OtherStatus"] as? String, otherStatus == "PAGE PENDING" {
+                                
                                 DispatchQueue.main.async {
                                     let storyboard = UIStoryboard(name: "OtherDetails", bundle: Bundle.module)
                                     let vc = storyboard.instantiateViewController(identifier: "OtherDetailsVC") as! OtherDetailsVC
-                                    vc.panNo = self.panNo
-                                    vc.regId = self.regId
+                                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                    
+                                    let regId = UserDefaults.standard.string(forKey: "RegId")
+                                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                    
+                                    vc.panNo = finalPAN
+                                    vc.regId = regIdFinal
                                     self.navigationController?.pushViewController(vc, animated: true)
                                 }
+                                
+//                                DispatchQueue.main.async {
+//                                    
+//                                    let storyboard = UIStoryboard(name: "OtherDetails", bundle: Bundle.module)
+//                                    let vc = storyboard.instantiateViewController(identifier: "OtherDetailsVC") as! OtherDetailsVC
+//                                    vc.panNo = self.panNo
+//                                    vc.regId = self.regId
+//                                    self.navigationController?.pushViewController(vc, animated: true)
+//                                }
                                 return
                             }
                             
@@ -818,14 +844,27 @@ extension MobileOTPVC{
                                 DispatchQueue.main.async {
                                     let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
                                     let vc = storyboard.instantiateViewController(identifier: "DocumentVC") as! DocumentVC
-                                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
-                                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                    //                                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                    //                                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                    //
+                                    //                                    let regId = UserDefaults.standard.string(forKey: "RegId")
+                                    //                                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                    //
+                                    //                                    vc.PanNo = finalPAN
+                                    //                                    vc.RegId = regIdFinal
                                     
-                                    let regId = UserDefaults.standard.string(forKey: "RegId")
-                                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                    vc.PanNo = self.panNo  // This now has the value from API
+                                    vc.RegId = self.regId  // This now has the value from API
                                     
-                                    vc.PanNo = finalPAN
-                                    vc.RegId = regIdFinal
+                                    // Backup: if still nil, try UserDefaults
+                                    if vc.PanNo == nil || vc.PanNo?.isEmpty == true {
+                                        vc.PanNo = UserDefaults.standard.string(forKey: "PanNo")
+                                    }
+                                    
+                                    if vc.RegId == nil || vc.RegId?.isEmpty == true {
+                                        vc.RegId = UserDefaults.standard.string(forKey: "RegId")
+                                    }
+                                    
                                     self.navigationController?.pushViewController(vc, animated: true)
                                 }
                                 return

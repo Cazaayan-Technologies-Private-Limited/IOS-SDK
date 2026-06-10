@@ -309,7 +309,7 @@ class TradingChargesVC: UIViewController {
     
     private let rightPrice: UILabel = {
         let label = UILabel()
-        label.text = "₹20"
+        label.text = "₹10"
         label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
         label.textColor = .black
         return label
@@ -324,17 +324,17 @@ class TradingChargesVC: UIViewController {
         return label
     }()
     
-    private let knowMoreButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Know More", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        return button
-    }()
+//    private let knowMoreButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.setTitle("Know More", for: .normal)
+//        button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+//        return button
+//    }()
     
     // MARK: - Agree Button
     private let agreeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("I Agree", for: .normal)
+        button.setTitle("Proceed", for: .normal)
         button.backgroundColor = UIColor.appPrimary
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 12
@@ -463,13 +463,13 @@ class TradingChargesVC: UIViewController {
             footerLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24)
         ])
         
-        containerView.addSubview(knowMoreButton)
-        knowMoreButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            knowMoreButton.topAnchor.constraint(equalTo: footerLabel.bottomAnchor, constant: 4),
-            knowMoreButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
-        ])
+//        containerView.addSubview(knowMoreButton)
+//        knowMoreButton.translatesAutoresizingMaskIntoConstraints = false
+//        
+//        NSLayoutConstraint.activate([
+//            knowMoreButton.topAnchor.constraint(equalTo: footerLabel.bottomAnchor, constant: 4),
+//            knowMoreButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20)
+       // ])
         
         // Agree Button
         containerView.addSubview(agreeButton)

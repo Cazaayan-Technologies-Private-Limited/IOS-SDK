@@ -162,12 +162,11 @@ class TermsConditionsVC: UIViewController {
     // MARK: - Load HTML
     
     private func loadHTMLFile() {
-        
-        let fileURL = URL(fileURLWithPath: "/Users/manasdatta/Downloads/tc.html")
-        
-        webView.loadFileURL(
-            fileURL,
-            allowingReadAccessTo: fileURL.deletingLastPathComponent()
-        )
+        guard let url = URL(string: "https://signup.hemnxt.com/content/TermsAndConditions.html") else {
+            return
+        }
+
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
 }

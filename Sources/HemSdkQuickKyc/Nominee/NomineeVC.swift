@@ -81,45 +81,21 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             break
         }
     }
-    
+
     func updateButtonTitle(_ button: UIButton, title: String) {
         if #available(iOS 15.0, *) {
             var config = button.configuration ?? UIButton.Configuration.plain()
             config.title = title
             button.configuration = config
+            // Make sure the title is set even when disabled
+            button.setTitle(title, for: .normal)
+            button.setTitle(title, for: .disabled)
         } else {
             button.setTitle(title, for: .normal)
+            button.setTitle(title, for: .disabled)
         }
     }
-    
-    
-    //    func didReceiveApiResponse(data: [String : Any], identifier1: String, identifier3: String) {
-    //        DispatchQueue.main.async {
-    //
-    //            print("🔥 identifier1 received:", identifier1)
-    //            print("🔥 API DATA:", data)
-    //            // 1. Auto-fill the correct nominee's fields
-    //            switch identifier1 {
-    //            case "NomineeDocument1":
-    //                self.fillNomineeFields(data: data, index: 1)
-    //            case "NomineeDocument2":
-    //                self.fillNomineeFields(data: data, index: 2)
-    //            case "NomineeDocument3":
-    //                self.fillNomineeFields(data: data, index: 3)
-    //
-    //            case "guardianDocument1":
-    //                self.fillGuardianFields(data: data, index: 1)
-    //
-    //            case "guardianDocument2":
-    //                self.fillGuardianFields(data: data, index: 2)
-    //
-    //            case "guardianDocument3":
-    //                self.fillGuardianFields(data: data, index: 3)
-    //            default:
-    //                print("Unknown identifier: \(identifier1)")
-    //            }
-    //        }
-    //    }
+
     func didReceiveApiResponse(data: [String : Any], identifier1: String, identifier3: String) {
         DispatchQueue.main.async {
             
@@ -137,13 +113,10 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 self.fillNomineeFields(data: data, index: 2)
             case "NomineeDocument3":
                 self.fillNomineeFields(data: data, index: 3)
-                
             case "guardianDocument1":
                 self.fillGuardianFields(data: data, index: 1)
-                
             case "guardianDocument2":
                 self.fillGuardianFields(data: data, index: 2)
-                
             case "guardianDocument3":
                 self.fillGuardianFields(data: data, index: 3)
             default:
@@ -185,82 +158,12 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 if identifier == "guardianDOB1" { self.guardianDobTxt1.text = date }
                 else if identifier == "guardianDOB2" { self.guardianDobTxt2.text = date }
                 else if identifier == "guardianDOB3" { self.guardianDobTxt3.text = date }
-                
-                //            case "guardianDOB1":
-                //                guardianDobTxt1.text = date
-                //                if let age = calculateAge(from: date) {
-                //                    // toggleGuardianHolderViews(show: age < 18)
-                //                    nominee1IsMinor = "Y"
-                //                }
-                //
-                //            case "guardianDOB2":
-                //                guardianDobTxt2.text = date
-                //                if let age = calculateAge(from: date) {
-                //                    // toggleGuardianHolderViews(show: age < 18)
-                //                    nominee2IsMinor = "Y"
-                //                }
-                //
-                //            case "guardianDOB3":
-                //                guardianDobTxt3.text = date
-                //                if let age = calculateAge(from: date) {
-                //                    // toggleGuardianHolderViews(show: age < 18)
-                //                    nominee3IsMinor = "Y"
-                //                }
+
             default:
                 break
             }
         }
     }
-    
-    
-    //    func didSelectDate(_ date: String, identifier: String) {
-    //
-    //        switch identifier {
-    //
-    //        case "nomineeDOB1":
-    //            nomineeDob1.text = date
-    //            if let age = calculateAge(from: date) {
-    //                toggleGuardianFields(for: 1, show: age < 18)
-    //            }
-    //
-    //        case "nomineeDOB2":
-    //            nomineeDob2.text = date
-    //            if let age = calculateAge(from: date) {
-    //                toggleGuardianFields(for: 2, show: age < 18)
-    //            }
-    //
-    //        case "nomineeDOB3":
-    //            nomineeDob3.text = date
-    //            if let age = calculateAge(from: date) {
-    //                toggleGuardianFields(for: 3, show: age < 18)
-    //                nominee3IsMinor = age < 18 ? "Y" : "N"
-    //            }
-    //
-    //        case "guardianDOB1":
-    //            guardianDobTxt1.text = date
-    //            if let age = calculateAge(from: date) {
-    //                // toggleGuardianHolderViews(show: age < 18)
-    //                nominee1IsMinor = "Y"
-    //            }
-    //
-    //        case "guardianDOB2":
-    //            guardianDobTxt2.text = date
-    //            if let age = calculateAge(from: date) {
-    //                // toggleGuardianHolderViews(show: age < 18)
-    //                nominee2IsMinor = "Y"
-    //            }
-    //
-    //        case "guardianDOB3":
-    //            guardianDobTxt3.text = date
-    //            if let age = calculateAge(from: date) {
-    //                // toggleGuardianHolderViews(show: age < 18)
-    //                nominee3IsMinor = "Y"
-    //            }
-    //
-    //        default:
-    //            break
-    //        }
-    //    }
     
     func didDismissDigiLockerVC() {
         self.dismiss(animated: true)
@@ -353,6 +256,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBOutlet weak var stateLbl1: UILabel!
     @IBOutlet weak var stateTxt1: UITextField!
     @IBOutlet weak var relationApplicantLbl1: UILabel!
+    @IBOutlet weak var relationApplicantView1: UIView!
     @IBOutlet weak var relationBtn1: UIButton!
     @IBOutlet weak var shareLbl1: UILabel!
     @IBOutlet weak var shareTxt1: UITextField!
@@ -374,6 +278,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBOutlet weak var guardianEmailLbl1: UILabel!
     @IBOutlet weak var guardianEmailTxt1: UITextField!
     @IBOutlet weak var guardianRelationLbl1: UILabel!
+    @IBOutlet weak var guardianRelationView1: UIView!
     @IBOutlet weak var guardianRelationBtn1: UIButton!
     @IBOutlet weak var nomineeSameAsBtn1: UIButton!
     @IBOutlet weak var guardianAddressLblFirst1: UILabel!
@@ -423,6 +328,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBOutlet weak var stateLbl2: UILabel!
     @IBOutlet weak var stateTxt2: UITextField!
     @IBOutlet weak var relationApplicantLbl2: UILabel!
+    @IBOutlet weak var relationApplicantView2: UIView!
     @IBOutlet weak var relationBtn2: UIButton!
     @IBOutlet weak var shareLbl2: UILabel!
     @IBOutlet weak var shareTxt2: UITextField!
@@ -444,6 +350,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBOutlet weak var guardianEmailLbl2: UILabel!
     @IBOutlet weak var guardianEmailTxt2: UITextField!
     @IBOutlet weak var guardianRelationLbl2: UILabel!
+    @IBOutlet weak var guardianRelationView2: UIView!
     @IBOutlet weak var guardianRelationBtn2: UIButton!
     @IBOutlet weak var nomineeSameAsBtn2: UIButton!
     @IBOutlet weak var guardianAddressLblFirst2: UILabel!
@@ -480,6 +387,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBOutlet weak var nomineeMobile3: UITextField!
     @IBOutlet weak var nomineeEmail3: UITextField!
     @IBOutlet weak var guardianRelationLbl3: UILabel!
+    @IBOutlet weak var guardianRelationView3: UIView!
     @IBOutlet weak var guardianRelationBtn3: UIButton!
     @IBOutlet weak var addressSameAsApplicantBtn3: UIButton!
     @IBOutlet weak var addressLblFirst3: UILabel!
@@ -495,6 +403,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBOutlet weak var stateLbl3: UILabel!
     @IBOutlet weak var stateTxt3: UITextField!
     @IBOutlet weak var relationApplicantLbl3: UILabel!
+    @IBOutlet weak var relationApplicantView3: UIView!
     @IBOutlet weak var relationBtn3: UIButton!
     @IBOutlet weak var shareLbl3: UILabel!
     @IBOutlet weak var shareTxt3: UITextField!
@@ -532,6 +441,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBOutlet weak var relationLbl3: UILabel!
     @IBOutlet weak var guardianLbl3: UILabel!
     @IBOutlet weak var skipBtn: UIButton!
+    @IBOutlet weak var instructionView: UIView!
+    @IBOutlet weak var continueBtn: UIButton!
     
     var nomineeCount = 0
     var nominee1Fields: [UIView] = []
@@ -578,6 +489,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     var nominee1IsMinor: String = "N"
     var nominee2IsMinor: String = "N"
     var nominee3IsMinor: String = "N"
+    var nomineeStatus: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -673,7 +585,33 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         guardianDocumentView3.layer.borderWidth = 1
         guardianDocumentView3.layer.borderColor =  UIColor.appBorder.cgColor
         
+        guardianRelationView1.layer.cornerRadius = 10
+        guardianRelationView1.layer.borderWidth = 1
+        guardianRelationView1.layer.borderColor =  UIColor.appBorder.cgColor
+        
+        guardianRelationView2.layer.cornerRadius = 10
+        guardianRelationView2.layer.borderWidth = 1
+        guardianRelationView2.layer.borderColor =  UIColor.appBorder.cgColor
+        
+        guardianRelationView3.layer.cornerRadius = 10
+        guardianRelationView3.layer.borderWidth = 1
+        guardianRelationView3.layer.borderColor =  UIColor.appBorder.cgColor
+        
+        relationApplicantView1.layer.cornerRadius = 10
+        relationApplicantView1.layer.borderWidth = 1
+        relationApplicantView1.layer.borderColor =  UIColor.appBorder.cgColor
+        
+        relationApplicantView2.layer.cornerRadius = 10
+        relationApplicantView2.layer.borderWidth = 1
+        relationApplicantView2.layer.borderColor =  UIColor.appBorder.cgColor
+        
+        relationApplicantView3.layer.cornerRadius = 10
+        relationApplicantView3.layer.borderWidth = 1
+        relationApplicantView3.layer.borderColor =  UIColor.appBorder.cgColor
+        
         textFieldsCapital()
+        SIXTHAPI(userID: fetchedUserId ?? "")
+        self.continueBtn.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -714,7 +652,52 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         vc.panNo = finalPAN
         vc.regId = regIdFinal
         self.navigationController?.pushViewController(vc, animated: true)
+        
+//        let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+//          let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+//
+//          let regId = UserDefaults.standard.string(forKey: "RegId")
+//          let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+//
+//          if nomineeStatus == "APPROVED" {
+//
+//              let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
+//              let vc = storyboard.instantiateViewController(identifier: "DocumentVC") as! DocumentVC
+//
+//              vc.PanNo = finalPAN
+//              vc.RegId = regIdFinal
+//
+//              self.navigationController?.pushViewController(vc, animated: true)
+//
+//          } else {
+//
+//              let storyboard = UIStoryboard(name: "OtherDetails", bundle: Bundle.module)
+//              let vc = storyboard.instantiateViewController(identifier: "OtherDetailsVC") as! OtherDetailsVC
+//
+//              vc.panNo = finalPAN
+//              vc.regId = regIdFinal
+//
+//              self.navigationController?.pushViewController(vc, animated: true)
+//          }
     }
+    
+    @IBAction func continueBtnTapped(_ sender: UIButton) {
+                let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                  let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+        
+                  let regId = UserDefaults.standard.string(forKey: "RegId")
+                  let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                      let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
+                      let vc = storyboard.instantiateViewController(identifier: "DocumentVC") as! DocumentVC
+        
+                      vc.PanNo = finalPAN
+                      vc.RegId = regIdFinal
+        
+                      self.navigationController?.pushViewController(vc, animated: true)
+        
+                  
+    }
+    
     
     func nomineeFieldsHide() {
         nomineeAddressViews1 = [
@@ -799,7 +782,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     
     @IBAction func addNomineeBtnTApped(_ sender: UIButton) {
         guard nomineeCount < 3 else { return }
-        NomineeType = "Y" 
+        NomineeType = "Y"
         nomineeCount += 1
         
         if nomineeCount == 1 {
@@ -842,6 +825,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     //        }
     //
     //    }
+    
     
     
     @IBAction func Nominee1Btn(_ sender: UIButton) {
@@ -918,6 +902,9 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 cityTxt1.text = city
                 stateTxt1.text = state
                 pinCodeTxt1.text = pincode
+                let docType = nomineedocumentType1 ?? "Aadhaar"
+                documentTypeBtn1.setTitle(docType, for: .normal)
+                documentTypeBtn1.setTitle(docType, for: .disabled)
             }
             
             // Set document type
@@ -926,6 +913,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             
             documentVerifyBtn1.isEnabled = false
             documentVerifyBtn1.alpha = 0.5
+            documentVerifyBtn1.isHidden = true
             
             // Only disable address fields if document type is Aadhaar
             nomineeNameTxt1.isEnabled = false
@@ -958,11 +946,18 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 cityTxt2.text = city
                 stateTxt2.text = state
                 pinCodeTxt2.text = pincode
+                let docType = nomineedocumentType2 ?? "Aadhaar"
+                documentTypeBtn2.setTitle(docType, for: .normal)
+                documentTypeBtn2.setTitle(docType, for: .disabled)
             }
             
             // Set document type
             documentTypeBtn2.setTitle("Aadhaar", for: .normal)
             nomineedocumentType2 = "Aadhaar"
+            
+            documentVerifyBtn2.isEnabled = false
+            documentVerifyBtn2.alpha = 0.5
+            documentVerifyBtn2.isHidden = true
             
             // Only disable address fields if document type is Aadhaar
             nomineeNameTxt2.isEnabled = false
@@ -994,11 +989,18 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 cityTxt3.text = city
                 stateTxt3.text = state
                 pinCodeTxt3.text = pincode
+                let docType = nomineedocumentType3 ?? "Aadhaar"
+                documentTypeBtn3.setTitle(docType, for: .normal)
+                documentTypeBtn3.setTitle(docType, for: .disabled)
             }
             
             // Set document type
             documentTypeBtn3.setTitle("Aadhaar", for: .normal)
             nomineedocumentType3 = "Aadhaar"
+            
+            documentVerifyBtn3.isEnabled = false
+            documentVerifyBtn3.alpha = 0.5
+            documentVerifyBtn3.isHidden = true
             
             // Only disable address fields if document type is Aadhaar
             nomineeNameTxt3.isEnabled = false
@@ -1074,6 +1076,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             guardianCityTxt1?.isHidden = !show
             guardianStateLbl1?.isHidden = !show
             guardianStateTxt1?.isHidden = !show
+            guardianRelationView1?.isHidden = !show
             guardianRelationLbl1?.isHidden = !show
             guardianRelationBtn1?.isHidden = !show
             guardianLbl1?.isHidden = !show
@@ -1109,6 +1112,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             guardianCityTxt2?.isHidden = !show
             guardianStateLbl2?.isHidden = !show
             guardianStateTxt2?.isHidden = !show
+            guardianRelationView2?.isHidden = !show
             guardianRelationLbl2?.isHidden = !show
             guardianRelationBtn2?.isHidden = !show
             guardianLbl2?.isHidden = !show
@@ -1144,6 +1148,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             guardianCityTxt3?.isHidden = !show
             guardianStateLbl3?.isHidden = !show
             guardianStateTxt3?.isHidden = !show
+            guardianRelationView3?.isHidden = !show
             guardianRelationLbl3?.isHidden = !show
             guardianRelationBtn3?.isHidden = !show
             guardianLbl3?.isHidden = !show
@@ -1246,7 +1251,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             guardianIDLbl1, guardianIdTxt1, guardianVerifyBtn1,
             guardianMobileLbl1, guardianMobileTxt1,
             guardianEmailLbl1, guardianEmailTxt1,
-            guardianRelationLbl1, guardianRelationBtn1,guardianLbl1,
+            guardianRelationLbl1, guardianRelationView1, guardianRelationBtn1,guardianLbl1,
             nomineeSameAsBtn1,
             guardianAddressLblFirst1, guardianAddressTxtFirst1,
             guardianAddressLblSecond1, guardianAddressTxtSecond1,
@@ -1268,7 +1273,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             guardianDobLbl2, guardianDobBtn2, guardianDobTxt2,
             guardianIDLbl2, guardianIdTxt2, guardianVerifyBtn2,
             guardianMobileLbl2, guardianMobileTxt2,
-            guardianEmailLbl2, guardianEmailTxt2,
+            guardianEmailLbl2, guardianEmailTxt2, guardianRelationView2,
             guardianRelationLbl2, guardianRelationBtn2,
             nomineeSameAsBtn2,
             guardianAddressLblFirst2, guardianAddressTxtFirst2,
@@ -1291,7 +1296,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             guardianDobLbl3, guardianDobBtn3, guardianDobTxt3,
             guardianIDLbl3, guardianIdTxt3, guardianVerifyBtn3,
             guardianMobileLbl3, guardianMobileTxt3,
-            guardianEmailLbl3, guardianEmailTxt3,
+            guardianEmailLbl3, guardianEmailTxt3, guardianRelationView3,
             guardianRelationLbl3, guardianRelationBtn3,
             nomineeSameAsBtn3,
             guardianAddressLblFirst3, guardianAddressTxtFirst3,
@@ -1514,6 +1519,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                                     //self.optOutBtn.isSelected = true
                                     //self.optInBtn.isSelected = false
                                     //self.addNomineeBtn.isHidden = true
+                                    self.instructionView.isHidden = true
+                                    self.continueBtn.isHidden = false
                                     self.addNomineeBtn.isEnabled = false
                                     self.addNomineeBtn.alpha = 0.5
                                     self.nominee1Stack.isHidden = true
@@ -1527,6 +1534,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                                 } else if IsNominate == "Y" {
                                     //self.optInBtn.isSelected = true
                                     // self.optOutBtn.isSelected = false
+                                    self.instructionView.isHidden = true
+                                    self.continueBtn.isHidden = false
                                     
                                     if let nomineeData = jsonResponse["NomineeDetails"] as? [[String: Any]], !nomineeData.isEmpty {
                                         self.nomineeDetailsArray = nomineeData
@@ -1602,7 +1611,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             }
         }
     }
- 
+    
     func populateNomineeData(_ data: [String: Any], for index: Int) {
         switch index {
         case 1:
@@ -1942,7 +1951,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     let guardianDocType = data["GDocumentType"] as? String ?? ""
                     self.guardianDocumentTypeBtn3.setTitle(guardianDocType, for: .normal)
                     self.guardiandocumentType3 = guardianDocType
-        
+                    
                     if let guardianRelationId = data["GRelationship"] as? Int {
                         self.guardianRelationID3 = String(guardianRelationId)
                         self.guardianLbl3.text = self.getGuardianRelationName(from: guardianRelationId)
@@ -2172,6 +2181,71 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         guardianVerifyBtn2.isEnabled = false
         guardianVerifyBtn3.isEnabled = false
     }
+    
+    func SIXTHAPI(userID:String){
+          CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { tokenId in
+              guard let tokenId = tokenId else {
+                  // Handle the case where no tokens are available
+                  CoreDataHelper.generateToken(
+                      decodeByteArrayToString: self.mobiledecodeArray ?? "",
+                      USERID: self.fetchedUserId ?? "",
+                      SessionId: self.fetchedSessionID ?? "",
+                      entityName: "TokenMobile", deviceType: "M", in: self.view
+                  ) { success in
+                      if success {
+                          // Retry SIXTHAPI after token regeneration
+                          self.SIXTHAPI(userID: userID)
+                      } else {
+                          print("Token generation failed.")
+                      }
+                  }
+                  print("No tokens available. Please reload the tokens.")
+                  return
+              }
+              let parameters: [String: Any] = [
+                  "UserId": self.fetchedUserId ?? "",
+                  "TokenId": tokenId
+              ]
+              print("GetActiveApplicationCL\(parameters)")
+              let sixthUrl = "ActiveApplication/GetActiveApplicationCL"
+              // API call
+              apiCall(url: sixthUrl, method: "POST", parameters: parameters, view: self.view,loaderText: "Kindly wait we are fetching your details...") { result in
+                  switch result {
+                  case .success(let jsonResponse):
+                      
+                      print("GetActiveApplicationCL: \(jsonResponse)")
+                      
+                      if let errorCode = jsonResponse["ErrorCode"] as? String {
+                          switch errorCode {
+                          case "999992":
+                              DispatchQueue.main.async {
+                                  CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+                                  print("All TokenMobile entries deleted due to error code 999992")
+                                  
+                                  // Regenerate tokens
+                                  CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "M",in: self.view) { success in
+                                      if success {
+                                          // Retry SIXTHAPI after token regeneration
+                                          self.SIXTHAPI(userID: userID)
+                                      } else {
+                                          print("Token generation failed.")
+                                      }
+                                  }
+                              }
+                              
+                          case "000000":
+                              self.nomineeStatus = jsonResponse["NomineeStatus"] as? String ?? ""
+                              print("Unhandled error code: \(errorCode)")
+                          default:
+                              print("Unhandled error code: \(errorCode)")
+                          }
+                      }
+                  case .failure(let error):
+                      print("SIXTHAPI API call failed: \(error.localizedDescription)")
+                  }
+              }
+          }
+      }
     
     
     func showAlert(message: String) {
@@ -2418,29 +2492,29 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     
     func textFieldsCapital() {
         let allTextFields: [UITextField] = [
-              nomineeNameTxt1, nomineeNameTxt2, nomineeNameTxt3,
-              documentId1, documentId2, documentId3,
-              nomineeEmail1, nomineeEmail2, nomineeEmail3,
-              addressTxtFirst1, addressTxtFirst2, addressTxtFirst3,
-              addressTxtSecond1, addressTxtSecond2, addressTxtSecond3,
-              addressTxtThird1, addressTxtThird2, addressTxtThird3,
-              cityTxt1, cityTxt2, cityTxt3,
-              stateTxt1, stateTxt2, stateTxt3,
-              minorNameTxt1, minorNameTxt2, minorNameTxt3,
-              guardianIdTxt1, guardianIdTxt2, guardianIdTxt3,
-              guardianEmailTxt1, guardianEmailTxt2, guardianEmailTxt3,
-              guardianAddressTxtFirst1, guardianAddressTxtFirst2, guardianAddressTxtFirst3,
-              guardianAddressTxtSecond1, guardianAddressTxtSecond2, guardianAddressTxtSecond3,
-              guardianAddressTxtThird1, guardianAddressTxtThird2, guardianAddressTxtThird3,
-              guardianCityTxt1, guardianCityTxt2, guardianCityTxt3,
-              guardianStateTxt1, guardianStateTxt2, guardianStateTxt3
-          ]
-          
-          for textField in allTextFields {
-              textField.autocapitalizationType = .allCharacters
-              textField.autocorrectionType = .no
-              textField.delegate = self
-          }
+            nomineeNameTxt1, nomineeNameTxt2, nomineeNameTxt3,
+            documentId1, documentId2, documentId3,
+            nomineeEmail1, nomineeEmail2, nomineeEmail3,
+            addressTxtFirst1, addressTxtFirst2, addressTxtFirst3,
+            addressTxtSecond1, addressTxtSecond2, addressTxtSecond3,
+            addressTxtThird1, addressTxtThird2, addressTxtThird3,
+            cityTxt1, cityTxt2, cityTxt3,
+            stateTxt1, stateTxt2, stateTxt3,
+            minorNameTxt1, minorNameTxt2, minorNameTxt3,
+            guardianIdTxt1, guardianIdTxt2, guardianIdTxt3,
+            guardianEmailTxt1, guardianEmailTxt2, guardianEmailTxt3,
+            guardianAddressTxtFirst1, guardianAddressTxtFirst2, guardianAddressTxtFirst3,
+            guardianAddressTxtSecond1, guardianAddressTxtSecond2, guardianAddressTxtSecond3,
+            guardianAddressTxtThird1, guardianAddressTxtThird2, guardianAddressTxtThird3,
+            guardianCityTxt1, guardianCityTxt2, guardianCityTxt3,
+            guardianStateTxt1, guardianStateTxt2, guardianStateTxt3
+        ]
+        
+        for textField in allTextFields {
+            textField.autocapitalizationType = .allCharacters
+            textField.autocorrectionType = .no
+            textField.delegate = self
+        }
         
         let emailFields: [UITextField] = [
             nomineeEmail1, nomineeEmail2, nomineeEmail3,
@@ -2883,14 +2957,20 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             documentType = nomineedocumentType1
             documentVerifyBtn1.isEnabled = false
             documentVerifyBtn1.alpha = 0.5
+            documentTypeBtn1.isUserInteractionEnabled = false
+            documentTypeBtn1.isEnabled = true
         case 2:
             documentType = nomineedocumentType2
             documentVerifyBtn2.isEnabled = false
             documentVerifyBtn2.alpha = 0.5
+            documentTypeBtn2.isUserInteractionEnabled = false
+            documentTypeBtn2.isEnabled = true
         case 3:
             documentType = nomineedocumentType3
             documentVerifyBtn3.isEnabled = false
             documentVerifyBtn3.alpha = 0.5
+            documentTypeBtn3.isUserInteractionEnabled = false
+            documentTypeBtn3.isEnabled = true
         default:
             break
         }
@@ -3415,7 +3495,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     showAlert(message: "Please enter Address1")
                     return false
                 }
-
+                
                 if pinCodeLbl1.text?.isEmpty ?? true {
                     showAlert(message: "Please enter Pin Code")
                     return false
@@ -3523,7 +3603,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                         showAlert(message: "Please enter guardian address line 1")
                         return false
                     }
-
+                    
                     if guardianPinCodeTxt1.text?.isEmpty ?? true {
                         showAlert(message: "Please enter guardian pin code")
                         return false
@@ -3695,10 +3775,10 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                         return false
                     }
                     
-//                    if guardianAddressTxtSecond2.text?.isEmpty ?? true {
-//                        showAlert(message: "Please enter guardian address line 2")
-//                        return false
-//                    }
+                    //                    if guardianAddressTxtSecond2.text?.isEmpty ?? true {
+                    //                        showAlert(message: "Please enter guardian address line 2")
+                    //                        return false
+                    //                    }
                     
                     if guardianPinCodeTxt2.text?.isEmpty ?? true {
                         showAlert(message: "Please enter guardian pin code")
@@ -3869,10 +3949,10 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                         return false
                     }
                     
-//                    if guardianAddressTxtSecond3.text?.isEmpty ?? true {
-//                        showAlert(message: "Please enter guardian address line 2")
-//                        return false
-//                    }
+                    //                    if guardianAddressTxtSecond3.text?.isEmpty ?? true {
+                    //                        showAlert(message: "Please enter guardian address line 2")
+                    //                        return false
+                    //                    }
                     
                     if guardianPinCodeTxt3.text?.isEmpty ?? true {
                         showAlert(message: "Please enter guardian pin code")
@@ -3904,65 +3984,53 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
 }
 
 extension NomineeVC: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // Handle mobile number fields - only digits, max 10 digits
+        if textField == nomineeMobile1 || textField == nomineeMobile2 || textField == nomineeMobile3 ||
+            textField == guardianMobileTxt1 || textField == guardianMobileTxt2 || textField == guardianMobileTxt3 {
             
-            // Handle mobile number fields - only digits, max 10 digits
-            if textField == nomineeMobile1 || textField == nomineeMobile2 || textField == nomineeMobile3 ||
-                textField == guardianMobileTxt1 || textField == guardianMobileTxt2 || textField == guardianMobileTxt3 {
-                
-                // Allow only digits
-                let allowedCharacters = CharacterSet.decimalDigits
-                let characterSet = CharacterSet(charactersIn: string)
-                let isDigit = allowedCharacters.isSuperset(of: characterSet)
-                
-                if !isDigit && !string.isEmpty {
-                    return false
-                }
-                
-                let currentText = textField.text ?? ""
-                let newLength = currentText.count + string.count - range.length
-                return newLength <= 10
+            // Allow only digits
+            let allowedCharacters = CharacterSet.decimalDigits
+            let characterSet = CharacterSet(charactersIn: string)
+            let isDigit = allowedCharacters.isSuperset(of: characterSet)
+            
+            if !isDigit && !string.isEmpty {
+                return false
             }
             
-            // Handle pincode fields - only digits, max 6 digits
-            if textField == pinCodeTxt1 || textField == pinCodeTxt2 || textField == pinCodeTxt3 ||
-                textField == guardianPinCodeTxt1 || textField == guardianPinCodeTxt2 || textField == guardianPinCodeTxt3 {
-                
-                let allowedCharacters = CharacterSet.decimalDigits
-                let characterSet = CharacterSet(charactersIn: string)
-                let isDigit = allowedCharacters.isSuperset(of: characterSet)
-                
-                if !isDigit && !string.isEmpty {
-                    return false
-                }
-                
-                let currentText = textField.text ?? ""
-                let newLength = currentText.count + string.count - range.length
-                return newLength <= 6
+            let currentText = textField.text ?? ""
+            let newLength = currentText.count + string.count - range.length
+            return newLength <= 10
+        }
+        
+        // Handle pincode fields - only digits, max 6 digits
+        if textField == pinCodeTxt1 || textField == pinCodeTxt2 || textField == pinCodeTxt3 ||
+            textField == guardianPinCodeTxt1 || textField == guardianPinCodeTxt2 || textField == guardianPinCodeTxt3 {
+            
+            let allowedCharacters = CharacterSet.decimalDigits
+            let characterSet = CharacterSet(charactersIn: string)
+            let isDigit = allowedCharacters.isSuperset(of: characterSet)
+            
+            if !isDigit && !string.isEmpty {
+                return false
             }
             
-            // Handle email fields - convert to lowercase
-            if textField == nomineeEmail1 || textField == nomineeEmail2 || textField == nomineeEmail3 ||
-                textField == guardianEmailTxt1 || textField == guardianEmailTxt2 || textField == guardianEmailTxt3 {
-                
-                // Convert email to lowercase
-                let lowercaseString = string.lowercased()
-                
-                if let currentText = textField.text as NSString? {
-                    let newText = currentText.replacingCharacters(in: range, with: lowercaseString)
-                    textField.text = newText
-                    return false
-                }
-                
-                return true
-            }
+            let currentText = textField.text ?? ""
+            let newLength = currentText.count + string.count - range.length
+            return newLength <= 6
+        }
+        
+        // Handle email fields - convert to lowercase
+        if textField == nomineeEmail1 || textField == nomineeEmail2 || textField == nomineeEmail3 ||
+            textField == guardianEmailTxt1 || textField == guardianEmailTxt2 || textField == guardianEmailTxt3 {
             
-            // Handle all other text fields - convert to uppercase
-            let uppercaseString = string.uppercased()
+            // Convert email to lowercase
+            let lowercaseString = string.lowercased()
             
             if let currentText = textField.text as NSString? {
-                let newText = currentText.replacingCharacters(in: range, with: uppercaseString)
+                let newText = currentText.replacingCharacters(in: range, with: lowercaseString)
                 textField.text = newText
                 return false
             }
@@ -3970,6 +4038,18 @@ extension NomineeVC: UITextFieldDelegate {
             return true
         }
         
+        // Handle all other text fields - convert to uppercase
+        let uppercaseString = string.uppercased()
+        
+        if let currentText = textField.text as NSString? {
+            let newText = currentText.replacingCharacters(in: range, with: uppercaseString)
+            textField.text = newText
+            return false
+        }
+        
+        return true
+    }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         // Ensure final text is uppercase for non-email fields
         if textField == nomineeEmail1 || textField == nomineeEmail2 || textField == nomineeEmail3 ||
@@ -3985,20 +4065,20 @@ extension NomineeVC: UITextFieldDelegate {
                     textField == guardianMobileTxt1 || textField == guardianMobileTxt2 || textField == guardianMobileTxt3 {
             // Validate mobile number length
             if let mobile = textField.text, !mobile.isEmpty {
-                       if !isValidMobileNumber(mobile) {
-                           if mobile.count != 10 {
-                               showAlert(message: "Please enter a valid 10-digit mobile number")
-                           } else if isSequentialNumber(mobile) {
-                               showAlert(message: "Sequential numbers like 1234567890 or 0987654321 are not allowed")
-                           } else if isRepeatedDigit(mobile) {
-                               showAlert(message: "Repeated digits like \(mobile) are not allowed")
-                           } else {
-                               showAlert(message: "Please enter a valid mobile number")
-                           }
-                           textField.text = ""
-                       }
-                   }
-               } else {
+                if !isValidMobileNumber(mobile) {
+                    if mobile.count != 10 {
+                        showAlert(message: "Please enter a valid 10-digit mobile number")
+                    } else if isSequentialNumber(mobile) {
+                        showAlert(message: "Sequential numbers like 1234567890 or 0987654321 are not allowed")
+                    } else if isRepeatedDigit(mobile) {
+                        showAlert(message: "Repeated digits like \(mobile) are not allowed")
+                    } else {
+                        showAlert(message: "Please enter a valid mobile number")
+                    }
+                    textField.text = ""
+                }
+            }
+        } else {
             // For all other fields, convert to uppercase
             textField.text = textField.text?.uppercased()
         }
@@ -4053,18 +4133,18 @@ extension NomineeVC: UITextFieldDelegate {
         
         return true
     }
-
+    
     func isSequentialNumber(_ mobile: String) -> Bool {
         let ascending = "1234567890"
         let descending = "0987654321"
         return mobile == ascending || mobile == descending
     }
-
+    
     func isRepeatedDigit(_ mobile: String) -> Bool {
         guard let firstChar = mobile.first else { return false }
         return mobile.allSatisfy { $0 == firstChar }
     }
-
+    
     func areMobileNumbersUnique() -> Bool {
         var mobileNumbers: [String] = []
         
@@ -4094,7 +4174,7 @@ extension NomineeVC: UITextFieldDelegate {
         let uniqueSet = Set(mobileNumbers)
         return mobileNumbers.count == uniqueSet.count
     }
-        
+    
     
     func disableVerifyButtons(for nomineeIndex: Int, isGuardian: Bool = false) {
         DispatchQueue.main.async {

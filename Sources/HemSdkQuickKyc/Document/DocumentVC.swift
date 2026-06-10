@@ -1604,10 +1604,17 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         locationManager.startUpdatingLocation()
         identifier = "ClientPhoto"
         DispatchQueue.main.async { [self] in
-            
-            
-            self.GetUserLocation(Longitude: Longitude ?? "", Latitude: Latitude ?? "")
-            self.SavePhotoAuditLogDetails()
+//            
+//            
+//            self.GetUserLocation(Longitude: Longitude ?? "", Latitude: Latitude ?? "")
+//            self.SavePhotoAuditLogDetails()
+            if let lat = self.Latitude, let long = self.Longitude {
+                     self.GetUserLocation(Longitude: long, Latitude: lat)
+                 }
+                 
+                 // Open camera directly without API call
+                 self.openCamera()
+             
         }
     }
     //            print("photoOutput is nil")
@@ -4092,7 +4099,7 @@ extension DocumentVC {
                         
                     case "801005":
                         print("OCR Error hit, current count = \(self.ocrCount)")
-                        if self.ocrCount == 1 {
+                        if self.ocrCount == 2 {
                             // 1st failure → show alert
                             let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
                             ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -4102,7 +4109,7 @@ extension DocumentVC {
                                 self.showAlert(title: "Error", message: errorMessage)
                             }
                             self.ocrCount += 1
-                        } else if self.ocrCount == 1 {
+                        } else if self.ocrCount == 2 {
                             // 2nd failure → allow user to retry
                             self.ocrCount += 1
                             let errorMessage = (jsonResponse["RejectRemark"] as? String)
@@ -6653,7 +6660,7 @@ extension DocumentVC {
     func SavePhotoAuditLogDetails() {
         
         let parameters: [String: Any?] = [
-            "Flag":"Insert"
+            "Flag":"Insert",
         ]
         print("\(parameters)")
         let Url = "MultiPartImageUpload/SavePhotoAuditLogDetails"

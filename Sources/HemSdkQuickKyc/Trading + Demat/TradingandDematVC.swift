@@ -1322,7 +1322,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             ValidateToken()
             navigationItem.hidesBackButton = true
             SIXTHAPI(userID: userId)
-           
+            currencyBtn.isHidden = true
             
         }
         
@@ -2444,7 +2444,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             if upperSegments.contains("EQUITY CASH") {
                 equity.isSelected = true
             }
-            if upperSegments.contains("FNO") || upperSegments.contains("F&O") {
+            if upperSegments.contains("EQUITY DERIVATIVE"){
                 fando.isSelected = true
             }
             if upperSegments.contains("CURRENCY") {

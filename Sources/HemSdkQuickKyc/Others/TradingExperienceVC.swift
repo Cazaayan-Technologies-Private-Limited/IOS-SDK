@@ -30,7 +30,7 @@ class TradingExperienceVC: UIViewController {
             tableView.register(UINib(nibName: "customTVC", bundle: Bundle.module), forCellReuseIdentifier: "customTVC")
             holderview.layer.cornerRadius = 10
             tableView.reloadData()
-            adjustTableViewHeight()
+            //adjustTableViewHeight()
             
             experienceList = (0...30).map {
                  TradingExperience(
@@ -40,7 +40,7 @@ class TradingExperienceVC: UIViewController {
              }
             
             tableView.reloadData()
-            adjustTableViewHeight()
+           // adjustTableViewHeight()
             
         }
         

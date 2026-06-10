@@ -305,6 +305,7 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
     private var timer: DispatchSourceTimer?
     private var isProcessCompleted = false
     private var isApiInProgress = false
+    private var retryPhase = 0
     
     // MARK: - Lifecycle
     public override func viewDidLoad() {
@@ -316,7 +317,7 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
         setupLoader()
         fetchUserDetails()
         loadWebView()
-        //startApiCallTimer()
+        startApiCallTimer()
         // navigationBar.isHidden = true
         navigationItem.hidesBackButton = true
     }
@@ -570,54 +571,85 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
 //    }
     
     private func startApiCallTimer() {
-
-        // Prevent duplicate timers
-        if timer != nil { return }
-
-        let newTimer = DispatchSource.makeTimerSource(queue: .main)
-
-        // Start after 30 sec
-        // Repeat every 2 sec
-        newTimer.schedule(
-            deadline: .now() + 60,
-            repeating: .seconds(2)
-        )
-
-        newTimer.setEventHandler { [weak self] in
-            guard let self = self else { return }
-
-            // Avoid multiple API calls together
-            if self.isApiInProgress {
-                return
-            }
-
-            self.isApiInProgress = true
-
-            print("⏰ Timer Triggered")
-
-            self.ValidatesaveDigiLocker { success in
-
-                DispatchQueue.main.async {
-
-                    self.isApiInProgress = false
-
-                    // Stop timer if API success
-                    if success {
-
-                        print("✅ Process Completed")
-
-                        self.timer?.cancel()
-                        self.timer = nil
+                timer?.cancel()
+        
+                timer = DispatchSource.makeTimerSource(queue: .main)
+                timer?.schedule(deadline: .now() + 12, repeating: 2)
+        
+                timer?.setEventHandler { [weak self] in
+                    self?.ValidatesaveDigiLocker { success in
+                        if success {
+                            self?.timer?.cancel()
+                        }
                     }
                 }
+                timer?.resume()
             }
-        }
-
-        timer = newTimer
-        timer?.resume()
+            deinit {
+                timer?.cancel()
+            }
     }
-}
-//import UIKit
+    
+//    private func scheduleNextTimer() {
+//        timer?.cancel()
+//        
+//        // Determine interval based on phase
+//        let interval: TimeInterval
+//        switch retryPhase {
+//        case 0:
+//            interval = 60 // First wait: 60 seconds
+//        case 1:
+//            interval = 10 // Second wait: 10 seconds
+//        case 2:
+//            interval = 2  // Third and subsequent waits: 2 seconds
+//        default:
+//            interval = 2
+//        }
+//        
+//        let newTimer = DispatchSource.makeTimerSource(queue: .main)
+//        newTimer.schedule(deadline: .now() + interval)
+//        newTimer.setEventHandler { [weak self] in
+//            guard let self = self else { return }
+//            
+//            // Avoid multiple API calls together
+//            if self.isApiInProgress {
+//                // If API is already in progress, check again after 2 seconds
+//                self.scheduleNextTimer()
+//                return
+//            }
+//            
+//            self.isApiInProgress = true
+//            print("⏰ Timer Triggered - Phase \(self.retryPhase), Interval: \(interval)s")
+//            
+//            self.ValidatesaveDigiLocker { success in
+//                DispatchQueue.main.async {
+//                    self.isApiInProgress = false
+//                    
+//                    if success {
+//                        print("✅ Process Completed")
+//                        self.timer?.cancel()
+//                        self.timer = nil
+//                    } else {
+//                        // Move to next phase if not already in phase 2
+//                        if self.retryPhase < 2 {
+//                            self.retryPhase += 1
+//                        }
+//                        // Schedule next timer
+//                        self.scheduleNextTimer()
+//                    }
+//                }
+//            }
+//        }
+//        
+//        timer = newTimer
+//        timer?.resume()
+//    }
+//    
+//    deinit {
+//        timer?.cancel()
+//    }
+//}
+////import UIKit
 //import WebKit
 //
 //public protocol VerticsVCDelegate: AnyObject {

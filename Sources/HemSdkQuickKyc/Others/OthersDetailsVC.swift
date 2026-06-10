@@ -1254,6 +1254,11 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         //GetRelation()
         ViewOtherData()
         
+        //ddpiYesBtn.isSelected = true
+        ddpi = "Y"
+        ddpiYesBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
+        ddpiNoBtn.setImage(UIImage(systemName: "circle"), for: .normal)
+        
         PEPType = "N"
         AccountStatementRequirement = "Monthly"
         ElectronicTransaction_Cum_Holding = "Y"
@@ -2181,7 +2186,7 @@ extension OtherDetailsVC{
         if ddpi == "Y" {
                   ddpiYesBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
                   ddpiNoBtn.setImage(UIImage(systemName: "circle"), for: .normal)
-              } else if maritalStatus == "N" {
+              } else if ddpi == "N" {
                   ddpiYesBtn.setImage(UIImage(systemName: "circle"), for: .normal)
                   ddpiNoBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
               }
