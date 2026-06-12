@@ -1492,30 +1492,33 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey:
                                                 Any]
     ) {
-        //        if let pickedImage = info[.originalImage] as? UIImage {
-        //            picker.dismiss(animated: true) {
-        //                // Navigate to ImageProcessingViewController with selected image
-        //                let storyboard = UIStoryboard(name: "Document", bundle: nil)
-        //                if let imageProcessingVC = storyboard.instantiateViewController(withIdentifier: "ImageProcessingViewController") as? ImageProcessingViewController {
-        //                    imageProcessingVC.selectedImage = pickedImage
-        //                    imageProcessingVC.identifier = self.identifier
-        //                    imageProcessingVC.delegate = self // Set the delegate to receive processed image
-        //                    self.navigationController?.pushViewController(imageProcessingVC, animated: true)
-        //                }
-        //            }
-        //        }
         
+//        if let capturedImage = info[.originalImage] as? UIImage {
+//            // ✅ Now send this capturedImage to your API
+//            ValidateIsPhotoDone(image: capturedImage)
+//        }
+//        
+//        guard let image = info[.originalImage] as? UIImage else {
+//            return
+//        }
+//        picker.dismiss(animated: true)
+//        
+//        showCrop(image: image)
         if let capturedImage = info[.originalImage] as? UIImage {
-            // ✅ Now send this capturedImage to your API
-            ValidateIsPhotoDone(image: capturedImage)
-        }
-        
-        guard let image = info[.originalImage] as? UIImage else {
-            return
-        }
-        picker.dismiss(animated: true)
-        
-        showCrop(image: image)
+             picker.dismiss(animated: true)
+             
+             // Store the selected image
+             self.selectedClientImage = capturedImage
+             
+             // Compress the image
+             guard let compressedData = capturedImage.jpegData(compressionQuality: 0.5) else {
+                 self.showAlert(title: "Error", message: "Failed to process image")
+                 return
+             }
+             
+             // Directly call CLIENTPHOTOUpload API
+             self.CLIENTPHOTOUpload(imageData: compressedData)
+         }
     }
     
     func showCrop(image: UIImage) {
@@ -1597,26 +1600,26 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         locationManager.stopUpdatingLocation()
     }
     
-    @IBAction func capturePhotoButtonPressed(_ sender: UIButton) {
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-        identifier = "ClientPhoto"
-        DispatchQueue.main.async { [self] in
-//            
-//            
-//            self.GetUserLocation(Longitude: Longitude ?? "", Latitude: Latitude ?? "")
-//            self.SavePhotoAuditLogDetails()
-            if let lat = self.Latitude, let long = self.Longitude {
-                     self.GetUserLocation(Longitude: long, Latitude: lat)
-                 }
-                 
-                 // Open camera directly without API call
-                 self.openCamera()
-             
-        }
-    }
+//    @IBAction func capturePhotoButtonPressed(_ sender: UIButton) {
+//        locationManager = CLLocationManager()
+//        locationManager.delegate = self
+//        locationManager.requestWhenInUseAuthorization()
+//        locationManager.startUpdatingLocation()
+//        identifier = "ClientPhoto"
+//        DispatchQueue.main.async { [self] in
+////            
+////            
+////            self.GetUserLocation(Longitude: Longitude ?? "", Latitude: Latitude ?? "")
+////            self.SavePhotoAuditLogDetails()
+//            if let lat = self.Latitude, let long = self.Longitude {
+//                     self.GetUserLocation(Longitude: long, Latitude: lat)
+//                 }
+//                 
+//                 // Open camera directly without API call
+//                 self.openCamera()
+//             
+//        }
+//    }
     //            print("photoOutput is nil")
     //
     //            return
@@ -1624,6 +1627,63 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     //
     //        let settings = AVCapturePhotoSettings()
     //        photoOutput.capturePhoto(with: settings, delegate: self)
+    
+    @IBAction func capturePhotoButtonPressed(_ sender: UIButton) {
+//        locationManager = CLLocationManager()
+//        locationManager.delegate = self
+//        locationManager.requestWhenInUseAuthorization()
+//        locationManager.startUpdatingLocation()
+//        identifier = "ClientPhoto"
+//        
+//        // Wait a moment for location to be captured
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+//            if let lat = self.Latitude, let long = self.Longitude {
+//                self.GetUserLocation(Longitude: long, Latitude: lat)
+//                
+//                // First save audit log to get TransactionID, then open camera
+//                self.SavePhotoAuditLogDetails { success in
+//                    if success {
+//                        // Open camera only after audit log is saved
+//                        DispatchQueue.main.async {
+//                            self.openCamera()
+//                        }
+//                    } else {
+//                        DispatchQueue.main.async {
+//                            self.showAlert(title: "Error", message: "Failed to initialize photo capture. Please try again.")
+//                        }
+//                    }
+//                }
+//            } else {
+//                // If location not available yet, get it first
+//                locationManager.startUpdatingLocation()
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+//                    self.capturePhotoButtonPressed(sender)
+//                }
+//            }
+//        }
+        locationManager = CLLocationManager()
+           locationManager.delegate = self
+           locationManager.requestWhenInUseAuthorization()
+           locationManager.startUpdatingLocation()
+           identifier = "ClientPhoto"
+           
+           // Wait a moment for location to be captured
+           DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+               if let lat = self.Latitude, let long = self.Longitude {
+                   self.GetUserLocation(Longitude: long, Latitude: lat)
+                   // Open camera directly
+                   self.openCamera()
+               } else {
+                   // If location not available yet, get it first
+                   locationManager.startUpdatingLocation()
+                   DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                       self.capturePhotoButtonPressed(sender)
+                   }
+               }
+           }
+    }
+    
+    
     
     
     @IBAction func IPVlinkBtn(_ sender: UIButton) {
@@ -1682,15 +1742,30 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBAction func BackBtn(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Nominee", bundle: Bundle.module)
-            let vc = storyboard.instantiateViewController(identifier: "NomineeVC") as! NomineeVC
-            let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
-            let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.PanNo
-            let regId = UserDefaults.standard.string(forKey: "RegId")
-        let regIdFinal = (regId?.isEmpty == false) ? regId : self.RegId
-                                           vc.panNo = finalPAN
-                                           vc.RegId = regIdFinal
-                                           self.navigationController?.pushViewController(vc, animated: true)
+//        let storyboard = UIStoryboard(name: "Nominee", bundle: Bundle.module)
+//            let vc = storyboard.instantiateViewController(identifier: "NomineeVC") as! NomineeVC
+//            let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+//            let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.PanNo
+//            let regId = UserDefaults.standard.string(forKey: "RegId")
+//        let regIdFinal = (regId?.isEmpty == false) ? regId : self.RegId
+//                                           vc.panNo = finalPAN
+//                                           vc.RegId = regIdFinal
+//                                           self.navigationController?.pushViewController(vc, animated: true)
+        if isFromRejectionFlow {
+              // Simply pop to previous view controller (which should be RejectionVC)
+              self.navigationController?.popViewController(animated: true)
+          } else {
+              // Normal flow - navigate to NomineeVC
+              let storyboard = UIStoryboard(name: "Nominee", bundle: Bundle.module)
+              let vc = storyboard.instantiateViewController(identifier: "NomineeVC") as! NomineeVC
+              let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+              let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.PanNo
+              let regId = UserDefaults.standard.string(forKey: "RegId")
+              let regIdFinal = (regId?.isEmpty == false) ? regId : self.RegId
+              vc.panNo = finalPAN
+              vc.RegId = regIdFinal
+              self.navigationController?.pushViewController(vc, animated: true)
+          }
     }
     
     @IBAction func TermsAndConditionsBtn(_ sender: UIButton) {
@@ -4098,39 +4173,104 @@ extension DocumentVC {
                         }
                         
                     case "801005":
-                        print("OCR Error hit, current count = \(self.ocrCount)")
-                        if self.ocrCount == 2 {
-                            // 1st failure → show alert
-                            let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-                            ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-                            ?? "OCR failed."
-                            
-                            DispatchQueue.main.async {
-                                self.showAlert(title: "Error", message: errorMessage)
-                            }
-                            self.ocrCount += 1
-                        } else if self.ocrCount == 2 {
-                            // 2nd failure → allow user to retry
-                            self.ocrCount += 1
-                            let errorMessage = (jsonResponse["RejectRemark"] as? String)
-                            ?? (jsonResponse["ErrorMessage"] as? String)
-                            ?? "Second attempt failed. Please try again."
-                            
-                            DispatchQueue.main.async {
-                                self.signatureAttemptLabel.text = errorMessage
-                                print("Retry allowed for OCRCount: \(self.ocrCount)")
-                            }
-                        } else {
-                            // After 2 failures → upload anyway
-                            print("Invalid OCR but forcing upload.")
-                            DispatchQueue.main.async {
-                                if let validImage = self.selectedClientImage {
-                                    self.CPImageView.image = validImage
-                                }
-                                self.showAlert(title: "Notice", message: "OCR failed multiple times, proceeding with upload.")
-                                self.CLIENTPHOTOUpload(imageData: imageData)
-                            }
-                        }
+//                        print("OCR Error hit, current count = \(self.ocrCount)")
+//                        if self.ocrCount == 2 {
+//                            // 1st failure → show alert
+//                            let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+//                            ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+//                            ?? "OCR failed."
+//                            
+//                            DispatchQueue.main.async {
+//                                self.showAlert(title: "Error", message: errorMessage)
+//                            }
+//                            self.ocrCount += 1
+//                        } else if self.ocrCount == 2 {
+//                            // 2nd failure → allow user to retry
+//                            self.ocrCount += 1
+//                            let errorMessage = (jsonResponse["RejectRemark"] as? String)
+//                            ?? (jsonResponse["ErrorMessage"] as? String)
+//                            ?? "Second attempt failed. Please try again."
+//                            
+//                            DispatchQueue.main.async {
+//                                self.signatureAttemptLabel.text = errorMessage
+//                                print("Retry allowed for OCRCount: \(self.ocrCount)")
+//                            }
+//                        } else {
+//                            // After 2 failures → upload anyway
+//                            print("Invalid OCR but forcing upload.")
+//                            DispatchQueue.main.async {
+//                                if let validImage = self.selectedClientImage {
+//                                    self.CPImageView.image = validImage
+//                                }
+//                                //self.showAlert(title: "Notice", message: "OCR failed multiple times, proceeding with upload.")
+//                                self.CLIENTPHOTOUpload(imageData: imageData)
+//                            }
+//                        }
+                        
+                        let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                              ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+                              ?? "No face detected. Please try again."
+                          
+                          DispatchQueue.main.async {
+                              if self.ocrCount < 2 {
+                                  // Allow retry - show error message and let user try again
+                                  self.ocrCount += 1
+                                  self.showAlert(title: "Face Detection Failed", message: "\(errorMessage)\n\nAttempt \(self.ocrCount) of 2. Please try again with a clear photo.")
+                                  
+                                  // Keep camera UI ready for retry
+                                  self.CP_CaptureImgBtn.isHidden = false
+                                  self.CP_IPVLinkBtn.isHidden = true
+                                  
+                                  // Don't update UI with failed image
+                                  print("Retry attempt \(self.ocrCount) for client photo")
+                              } else {
+                                  // After 2 failures, still upload but show warning
+                                  print("Maximum OCR attempts reached (2). Uploading anyway...")
+                                  self.showAlert(title: "Notice", message: "Face detection failed after 2 attempts. Photo will be uploaded for manual verification.")
+                                  
+                                  // Force upload on 3rd attempt
+                                  // Reset OCR count to avoid infinite loop
+                                  let currentOcrCount = self.ocrCount
+                                  self.ocrCount = 3 // Set to max to prevent further retries
+                                  
+                                  // Upload anyway with the current image
+                                  self.CLIENTPHOTOUpload(imageData: imageData)
+                              }
+                          }
+                        
+//                        print("OCR Error hit, current count = \(self.ocrCount)")
+//                                             if self.ocrCount == 1 {
+//                                                 // 1st failure → show alert
+//                                                 let errorMessage = (jsonResponse["RejectRemark"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+//                                                 ?? (jsonResponse["ErrorMessage"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+//                                                 ?? "OCR failed."
+//                                                 
+//                                                 DispatchQueue.main.async {
+//                                                     self.showAlert(title: "Error", message: errorMessage)
+//                                                 }
+//                                                 self.ocrCount += 1
+//                                             } else if self.ocrCount == 1 {
+//                                                 // 2nd failure → allow user to retry
+//                                                 self.ocrCount += 1
+//                                                 let errorMessage = (jsonResponse["RejectRemark"] as? String)
+//                                                 ?? (jsonResponse["ErrorMessage"] as? String)
+//                                                 ?? "Second attempt failed. Please try again."
+//                                                 
+//                                                 DispatchQueue.main.async {
+//                                                     self.signatureAttemptLabel.text = errorMessage
+//                                                     print("Retry allowed for OCRCount: \(self.ocrCount)")
+//                                                 }
+//                                             } else {
+//                                                 // After 2 failures → upload anyway
+//                                                 print("Invalid OCR but forcing upload.")
+//                                                 DispatchQueue.main.async {
+//                                                     if let validImage = self.selectedClientImage {
+//                                                         self.CPImageView.image = validImage
+//                                                     }
+//                                                     self.showAlert(title: "Notice", message: "OCR failed multiple times, proceeding with upload.")
+//                                                     self.CLIENTPHOTOUpload(imageData: imageData)
+//                                                 }
+//                                             }
                     case "111111":
                         // Increment OCR count and retry if less than 3
                         let errorMessage = (jsonResponse["ErrorMessage"] as? String) ?? "Something went wrong."
@@ -5730,19 +5870,26 @@ extension DocumentVC: UICollectionViewDelegate, UICollectionViewDataSource {
 //                cell.deleteButton.isHidden = false  // Default case
 //            }
             
+//            if DerivativeImages_Verify == "1" {
+//                       // Already verified/approved - hide delete button
+//                       cell.deleteButton.isHidden = true
+//                   } else if rejection2 == "Rejection" && DerivativeImages_Verify == "2" {
+//                       // Rejected in rejection flow - show delete button
+//                       cell.deleteButton.isHidden = false
+//                   } else if DerivativeImages_Verify == "0" || DerivativeImages_Verify == nil {
+//                       // Pending verification or just uploaded - show delete button
+//                       cell.deleteButton.isHidden = false
+//                   } else {
+//                       // Any other case - hide delete button
+//                       cell.deleteButton.isHidden = true
+//                   }
             if DerivativeImages_Verify == "1" {
-                       // Already verified/approved - hide delete button
-                       cell.deleteButton.isHidden = true
-                   } else if rejection2 == "Rejection" && DerivativeImages_Verify == "2" {
-                       // Rejected in rejection flow - show delete button
-                       cell.deleteButton.isHidden = false
-                   } else if DerivativeImages_Verify == "0" || DerivativeImages_Verify == nil {
-                       // Pending verification or just uploaded - show delete button
-                       cell.deleteButton.isHidden = false
-                   } else {
-                       // Any other case - hide delete button
-                       cell.deleteButton.isHidden = true
-                   }
+                cell.deleteButton.isHidden = true
+            } else if rejection2 == "Rejection" && DerivativeImages_Verify == "2" {
+                cell.deleteButton.isHidden = false
+            } else {
+                cell.deleteButton.isHidden = true
+            }
             
         } else if collectionView == BpCollectionView {
             imageUrlString = bpImageUrls[indexPath.row]
@@ -6657,7 +6804,7 @@ extension DocumentVC {
         }
     }
     
-    func SavePhotoAuditLogDetails() {
+    func SavePhotoAuditLogDetails(completion: @escaping (Bool) -> Void)  {
         
         let parameters: [String: Any?] = [
             "Flag":"Insert",

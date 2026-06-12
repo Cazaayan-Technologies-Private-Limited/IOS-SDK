@@ -1378,7 +1378,7 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         isElectricChecked &&
         isPoliticallyChecked &&
         isIndianChecked &&
-        isSebiChecked && isddpi1Checked && isddpi2Checked && isddpi3Checked && isddpi4Checked && isunderstanding1Checked && isunderstanding2Checked && isunderstanding3Checked && isunderstanding4Checked && isunderstanding5Checked && isunderstanding6Checked && isunderstanding7Checked && isunderstanding8Checked && isunderstanding9Checked && isunderstanding10Checked
+        isSebiChecked && isunderstanding1Checked && isunderstanding2Checked && isunderstanding3Checked && isunderstanding4Checked && isunderstanding5Checked && isunderstanding6Checked && isunderstanding7Checked && isunderstanding8Checked && isunderstanding9Checked && isunderstanding10Checked
         
         saveNnextBtn.isEnabled = allChecked
         
@@ -1473,12 +1473,64 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
             ddpiYesBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
             ddpiNoBtn.setImage(UIImage(systemName: "circle"), for: .normal)
                 ddpi = "Y"
+            uncheckAllDDPICheckboxesYes()
             } else if sender == ddpiNoBtn {
                 ddpiYesBtn.setImage(UIImage(systemName: "circle"), for: .normal)
                 ddpiNoBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
                 ddpi = "N"
+                uncheckAllDDPICheckboxes()
             }
     }
+    
+    private func uncheckAllDDPICheckboxes() {
+        // Uncheck ddpi1Btn
+        isddpi1Checked = false
+        ddpi1Btn.setImage(UIImage(systemName: "square"), for: .normal)
+        ddpi1Btn.tintColor = .appPrimary
+        
+        // Uncheck ddpi2Btn
+        isddpi2Checked = false
+        ddpi2Btn.setImage(UIImage(systemName: "square"), for: .normal)
+        ddpi2Btn.tintColor = .appPrimary
+        
+        // Uncheck ddpi3Btn
+        isddpi3Checked = false
+        ddpi3Btn.setImage(UIImage(systemName: "square"), for: .normal)
+        ddpi3Btn.tintColor = .appPrimary
+        
+        // Uncheck ddpi4Btn
+        isddpi4Checked = false
+        ddpi4Btn.setImage(UIImage(systemName: "square"), for: .normal)
+        ddpi4Btn.tintColor = .appPrimary
+        
+        // Update submit button state
+        //updateSubmitButtonState()
+    }
+    
+    private func uncheckAllDDPICheckboxesYes() {
+            // Uncheck ddpi1Btn
+            isddpi1Checked = true
+            ddpi1Btn.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+            ddpi1Btn.tintColor = .appPrimary
+            
+            // Uncheck ddpi2Btn
+            isddpi2Checked = true
+            ddpi2Btn.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+            ddpi2Btn.tintColor = .appPrimary
+            
+            // Uncheck ddpi3Btn
+            isddpi3Checked = true
+            ddpi3Btn.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+            ddpi3Btn.tintColor = .appPrimary
+            
+            // Uncheck ddpi4Btn
+            isddpi4Checked = true
+            ddpi4Btn.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+            ddpi4Btn.tintColor = .appPrimary
+            
+            // Update submit button state
+            //updateSubmitButtonState()
+        }
     
     @IBAction func ddpiBtn1(_ sender: UIButton) {
         

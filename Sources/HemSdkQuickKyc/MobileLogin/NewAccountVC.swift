@@ -220,23 +220,16 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
         numberView.layer.cornerRadius = 20
         numberView.layer.borderWidth = 0.5
         numberView.layer.borderColor = UIColor.appBorder.cgColor
-        
-//        termsnconditionBtn.layer.cornerRadius = 20
-//        termsnconditionBtn.layer.borderWidth = 0.5
-//        termsnconditionBtn.layer.borderColor = UIColor.appBorder.cgColor
-//        homeBtn.tintColor = .appPrimary
-//        //RequestBtn.backgroundColor = .appPrimary
-//        view.backgroundColor = .appBackground
-//        termView.backgroundColor = .clear
+
         buttonView.backgroundColor = .appPrimary
         buttonView.layer.cornerRadius = 20
         
         print("🔥 viewDidLoad called")
         print("selectedData:", selectedData ?? "nil")
         
-//        let hardcodedTxnId = "13192c07-6eb0-450d-aa07-f103d2d7db89"
-//        let phoneNumber = "7666188609"
-//        validateTxnIdAPI(txnId: hardcodedTxnId, phoneNumber: phoneNumber)
+        //let hardcodedTxnId = "13192c07-6eb0-450d-aa07-f103d2d7db89"
+        //let phoneNumber = "7666188609"
+        validateTxnIdAPI(txnId: txnId ?? "", phoneNumber: mobileNumber ?? "")
         
         if let data = selectedData,
               let mobile = data["MobileNo"] as? String,

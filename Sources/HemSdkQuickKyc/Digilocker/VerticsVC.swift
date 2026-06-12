@@ -317,7 +317,7 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
         setupLoader()
         fetchUserDetails()
         loadWebView()
-        startApiCallTimer()
+        //startApiCallTimer()
         // navigationBar.isHidden = true
         navigationItem.hidesBackButton = true
     }
@@ -520,6 +520,26 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
         }
     }
     
+    private func startApiCallTimer() {
+                  timer?.cancel()
+          
+                  timer = DispatchSource.makeTimerSource(queue: .main)
+                  timer?.schedule(deadline: .now() + 15, repeating: 3)
+          
+                  timer?.setEventHandler { [weak self] in
+                      self?.ValidatesaveDigiLocker { success in
+                          if success {
+                              self?.timer?.cancel()
+                          }
+                      }
+                  }
+                  timer?.resume()
+              }
+              deinit {
+                  timer?.cancel()
+              }
+      }
+    
 //    func startApiCallTimer() {
 //        timer?.cancel()
 //        
@@ -570,25 +590,7 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
 //        timer?.resume()
 //    }
     
-    private func startApiCallTimer() {
-                timer?.cancel()
-        
-                timer = DispatchSource.makeTimerSource(queue: .main)
-                timer?.schedule(deadline: .now() + 12, repeating: 2)
-        
-                timer?.setEventHandler { [weak self] in
-                    self?.ValidatesaveDigiLocker { success in
-                        if success {
-                            self?.timer?.cancel()
-                        }
-                    }
-                }
-                timer?.resume()
-            }
-            deinit {
-                timer?.cancel()
-            }
-    }
+  
     
 //    private func scheduleNextTimer() {
 //        timer?.cancel()
