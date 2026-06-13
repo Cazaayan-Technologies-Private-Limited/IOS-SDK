@@ -2755,13 +2755,13 @@ to test@test.com</string>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email ID" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Jt-Po-LHQ">
-                                <rect key="frame" x="20" y="250" width="335" height="18"/>
+                                <rect key="frame" x="20" y="260" width="335" height="18"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wxl-dF-IyP">
-                                <rect key="frame" x="20" y="399" width="335" height="50"/>
+                                <rect key="frame" x="20" y="409" width="335" height="50"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your Email ID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qgT-ti-4dx">
                                         <rect key="frame" x="10" y="0.0" width="325" height="50"/>
@@ -2823,7 +2823,7 @@ to test@test.com</string>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5ch-yq-qQp">
-                                <rect key="frame" x="20" y="459" width="335" height="200"/>
+                                <rect key="frame" x="20" y="469" width="335" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select your Email ID" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rAY-HA-OVV">
                                         <rect key="frame" x="10" y="10" width="315" height="44"/>
@@ -2866,7 +2866,7 @@ to test@test.com</string>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FS0-bI-9dH">
-                                <rect key="frame" x="20" y="288" width="335" height="50"/>
+                                <rect key="frame" x="20" y="298" width="335" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="lSg-gU-Ykv"/>
                                 </constraints>
@@ -2878,11 +2878,18 @@ to test@test.com</string>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OR" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kB4-Ye-imB">
-                                <rect key="frame" x="20" y="358" width="335" height="21"/>
+                                <rect key="frame" x="20" y="368" width="335" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo web" translatesAutoresizingMaskIntoConstraints="NO" id="O1G-i4-6qL">
+                                <rect key="frame" x="20" y="180" width="100" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="muc-hy-DFf"/>
+                                    <constraint firstAttribute="width" constant="100" id="wWz-EN-FRN"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0ok-56-6se"/>
                         <color key="backgroundColor" systemColor="systemGray6Color"/>
@@ -2891,8 +2898,9 @@ to test@test.com</string>
                             <constraint firstItem="Ppj-g9-5jV" firstAttribute="top" secondItem="0ok-56-6se" secondAttribute="top" id="2XR-8p-8Tr"/>
                             <constraint firstItem="5ch-yq-qQp" firstAttribute="top" secondItem="Wxl-dF-IyP" secondAttribute="bottom" constant="10" id="4ts-X4-Pjs"/>
                             <constraint firstItem="kB4-Ye-imB" firstAttribute="leading" secondItem="0ok-56-6se" secondAttribute="leading" constant="20" id="71M-99-dwx"/>
-                            <constraint firstItem="7Jt-Po-LHQ" firstAttribute="top" secondItem="Ppj-g9-5jV" secondAttribute="bottom" constant="100" id="7Mn-V5-fso"/>
+                            <constraint firstItem="7Jt-Po-LHQ" firstAttribute="top" secondItem="Ppj-g9-5jV" secondAttribute="bottom" constant="300" id="7Mn-V5-fso"/>
                             <constraint firstItem="QKg-To-2H6" firstAttribute="leading" secondItem="0ok-56-6se" secondAttribute="leading" constant="20" id="7gn-H5-RVG"/>
+                            <constraint firstItem="O1G-i4-6qL" firstAttribute="top" secondItem="Ppj-g9-5jV" secondAttribute="bottom" constant="30" id="Iao-jp-2DD"/>
                             <constraint firstItem="Wxl-dF-IyP" firstAttribute="top" secondItem="kB4-Ye-imB" secondAttribute="bottom" constant="20" id="Ise-sc-ma9"/>
                             <constraint firstItem="FS0-bI-9dH" firstAttribute="leading" secondItem="0ok-56-6se" secondAttribute="leading" constant="20" id="Ix4-rT-Ni8"/>
                             <constraint firstItem="0ok-56-6se" firstAttribute="trailing" secondItem="FS0-bI-9dH" secondAttribute="trailing" constant="20" id="OE1-2d-26j"/>
@@ -2903,13 +2911,20 @@ to test@test.com</string>
                             <constraint firstItem="0ok-56-6se" firstAttribute="trailing" secondItem="Wxl-dF-IyP" secondAttribute="trailing" constant="20" id="esD-vu-3YW"/>
                             <constraint firstItem="5ch-yq-qQp" firstAttribute="leading" secondItem="0ok-56-6se" secondAttribute="leading" constant="20" id="hko-fw-zFe"/>
                             <constraint firstItem="Ppj-g9-5jV" firstAttribute="trailing" secondItem="0ok-56-6se" secondAttribute="trailing" id="hz6-Gw-31r"/>
+                            <constraint firstItem="7Jt-Po-LHQ" firstAttribute="top" secondItem="O1G-i4-6qL" secondAttribute="bottom" constant="40" id="kgY-qN-iVF"/>
                             <constraint firstItem="0ok-56-6se" firstAttribute="trailing" secondItem="kB4-Ye-imB" secondAttribute="trailing" constant="20" id="nIg-5e-SYv"/>
                             <constraint firstItem="0ok-56-6se" firstAttribute="trailing" secondItem="7Jt-Po-LHQ" secondAttribute="trailing" constant="20" id="nMi-9B-eh6"/>
                             <constraint firstItem="Wxl-dF-IyP" firstAttribute="leading" secondItem="0ok-56-6se" secondAttribute="leading" constant="20" id="nw8-uO-v1k"/>
                             <constraint firstItem="kB4-Ye-imB" firstAttribute="centerX" secondItem="qKL-or-wjD" secondAttribute="centerX" id="vJz-bn-cJf"/>
                             <constraint firstAttribute="bottom" secondItem="QKg-To-2H6" secondAttribute="bottom" constant="50" id="wJC-mq-b3W"/>
+                            <constraint firstItem="O1G-i4-6qL" firstAttribute="leading" secondItem="0ok-56-6se" secondAttribute="leading" constant="20" id="wyM-9G-KpG"/>
                             <constraint firstItem="0ok-56-6se" firstAttribute="trailing" secondItem="QKg-To-2H6" secondAttribute="trailing" constant="20" id="xqa-hk-GT9"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="7Mn-V5-fso"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="EmailTF" destination="qgT-ti-4dx" id="pmX-DC-PLb"/>
@@ -3331,6 +3346,7 @@ to test@test.com</string>
     <resources>
         <image name="Confirmed" width="72" height="73"/>
         <image name="Equity" width="27" height="27"/>
+        <image name="Logo web" width="183" height="43"/>
         <image name="Pan" width="860" height="540"/>
         <image name="arrowtriangle.down.fill" catalog="system" width="128" height="120"/>
         <image name="checkmark.square.fill" catalog="system" width="128" height="114"/>

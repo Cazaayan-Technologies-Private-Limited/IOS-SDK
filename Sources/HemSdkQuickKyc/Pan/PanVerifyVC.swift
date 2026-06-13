@@ -474,6 +474,18 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                                 
                                 print("PAN details autofilled successfully")
                             }
+                        case "111111":
+                            DispatchQueue.main.async {
+
+                                self.PANTF.text = ""
+                                self.NAMETF.text = ""
+                                self.DOBTF.text = ""
+
+                                self.showAlert(
+                                    title: "Alert",
+                                    message: "Unable to fetch PAN details automatically. Please enter PAN manually to proceed."
+                                )
+                            }
                         default:
                             print("Unhandled error code: \(errorCode)")
                         }
