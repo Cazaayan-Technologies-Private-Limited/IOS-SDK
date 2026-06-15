@@ -49,15 +49,20 @@
 import UIKit
 
 public class T5Launcher {
-    
+
     private init() { }
+
     
-    @MainActor public static func show(from presenter: UIViewController) {
+    @MainActor public static func show(from presenter: UIViewController, transactionId: String? = nil) {
         let storyboard = UIStoryboard(name: "DashboardVC", bundle: Bundle.module)
         
         // Instantiate the NAVIGATION CONTROLLER (not NewAccountVC)
         guard let navController = storyboard.instantiateViewController(withIdentifier: "NewAccountNavigationController") as? UINavigationController else {
             fatalError("Failed to instantiate Navigation Controller with ID 'NewAccountNavigationController'")
+        }
+        
+        if let newAccountVC = navController.viewControllers.first(where: { $0 is NewAccountVC }) as? NewAccountVC {
+            newAccountVC.txnId = transactionId
         }
         
         navController.modalPresentationStyle = .fullScreen
