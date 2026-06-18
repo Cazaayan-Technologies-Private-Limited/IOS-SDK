@@ -28,6 +28,12 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
     var EmailId: String?
     var CAMSfipid: String?
     
+    enum ComingFrom {
+           case bankVC
+           case upiVC
+       }
+       var comingFrom: ComingFrom = .bankVC
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let urlStr = redirectionUrl, let url = URL(string: urlStr) {
@@ -232,13 +238,10 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                                     self.navigateToNominationVC()
                                 }
                             } else {
-                                let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
-                                if let vc = storyboard.instantiateViewController(identifier: "BankVC") as? BankVC {
-                                    vc.panNo = self.panNo
-                                    vc.regId = self.regId
-                                    
-                                    self.navigationController?.pushViewController(vc, animated: true)
-                                }
+                                DispatchQueue.main.async {
+                                                                 // Navigate back to the appropriate screen based on where we came from
+                                                                 self.navigateBackToPreviousScreen()
+                                                             }
                             }
                             
                         default:
@@ -251,6 +254,43 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
             }
         }
     }
+    
+    private func navigateBackToPreviousScreen() {
+           // First, pop the current CamsVC
+           self.navigationController?.popViewController(animated: false)
+           
+           // Then navigate to the appropriate screen based on where we came from
+           switch comingFrom {
+           case .bankVC:
+               // Navigate to BankVC
+               let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
+               if let vc = storyboard.instantiateViewController(identifier: "BankVC") as? BankVC {
+                   vc.panNo = self.panNo
+                   vc.regId = self.regId
+                   vc.mobiledecodeArray = self.mobiledecodeArray
+                   vc.fetchedUserId = self.fetchedUserId
+                   vc.fetchedSessionID = self.fetchedSessionID
+                   self.navigationController?.pushViewController(vc, animated: true)
+               }
+               
+           case .upiVC:
+               // Navigate to UPIVC
+               let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
+               if let vc = storyboard.instantiateViewController(identifier: "UPIVC") as? UPIVC {
+                   vc.panNo = self.panNo
+                   vc.regId = self.regId
+                   vc.PanNo = self.panNo
+                   vc.RegId = self.regId
+                   vc.mobiledecodeArray = self.mobiledecodeArray
+                   vc.fetchedUserId = self.fetchedUserId
+                   vc.fetchedSessionID = self.fetchedSessionID
+                   vc.CAMSfipid = self.CAMSfipid
+                   vc.PANName = self.PANName
+                   vc.EmailId = self.EmailId
+                   self.navigationController?.pushViewController(vc, animated: true)
+               }
+           }
+       }
     
     private func navigateToNominationVC() {
         let storyboard = UIStoryboard(

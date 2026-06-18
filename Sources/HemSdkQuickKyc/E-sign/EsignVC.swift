@@ -42,6 +42,9 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     @IBOutlet weak var eSignLbl1: UILabel!
     @IBOutlet weak var eSignLbl2: UILabel!
     @IBOutlet weak var eSignLbl3: UILabel!
+    @IBOutlet weak var View1: UIView!
+    @IBOutlet weak var View2: UIView!
+    @IBOutlet weak var View3: UIView!
     
     var fetchedUserId: String?
     var fetchedSessionID: String?
@@ -1004,6 +1007,10 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                         if let pdfList = jsonResponse["PDFForEsignList"] as? [[String: Any]] {
                             self.pdfDataList = pdfList
                             
+                            var hasEKRA = false
+                            var hasAOF = false
+                            var hasDDPI = false
+                            
                             for pdf in pdfList {
                                 if let pdfSegment = pdf["PDFSegment"] as? String,
                                    let isPDFSign = pdf["IsPDFSign"] as? String,
@@ -1011,6 +1018,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                     
                                     switch pdfSegment {
                                     case "EKRA":
+                                        hasEKRA = true
                                         self.ekraSign = isPDFSign
                                         self.ekraID = id
                                         DispatchQueue.main.async {
@@ -1033,6 +1041,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                         }
                                         
                                     case "E":
+                                        hasAOF = true
                                         self.aofSign = isPDFSign
                                         self.aofID = id
                                         
@@ -1057,6 +1066,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                         
                                     case "DDPI":
                                         // ✅ FORCE STATIC
+                                        hasDDPI = true
                                         self.ddpiSign = isPDFSign
                                         self.ddpiID = id
                                         self.ddpiStack.isHidden = (isPDFSign == "1")
@@ -1088,11 +1098,20 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                 }
                             }
                             
-                            // ✅ FINAL CHECK (ONLY HERE)
-                            //                                if self.ddpiSign == "1"{
-                            //                                    print("✅ EKRA & AOF signed → Closing SDK")
-                            //                                    self.closeSDK()
-                            //                                }
+                            DispatchQueue.main.async {
+                                // Hide the entire DDPI view container
+                                self.View3.isHidden = !hasDDPI
+                                
+                                // You might also want to hide related elements
+                                self.ddpiStack.isHidden = !hasDDPI || (self.ddpiSign == "1")
+                                self.ddpiView1.isHidden = !hasDDPI || (self.ddpiSign != "1")
+                                self.eSignLbl3.isHidden = !hasDDPI || (self.ddpiSign != "1")
+                                self.ddpiBtn.isHidden = !hasDDPI
+                                self.ddpiViewBtn.isHidden = !hasDDPI
+                                
+                                // Optionally hide the proceed button if DDPI is required but not present
+                                // self.proceedBtnView.isHidden = !hasDDPI
+                            }
                             
                         }
                     } else {

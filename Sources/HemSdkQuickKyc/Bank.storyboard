@@ -766,14 +766,14 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceLeftToRight" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R9g-PV-ELt">
                                 <rect key="frame" x="20" y="499" width="374" height="50"/>
-                                <color key="backgroundColor" red="0.53725490200000003" green="0.47058823529999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="fS7-rb-f1b"/>
                                 </constraints>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="  Add Bank Manually" image="circle" catalog="system">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="addBankBtn:" destination="G7A-ts-n7k" eventType="touchUpInside" id="3mi-jE-tyw"/>
@@ -834,6 +834,21 @@
                                     <action selector="continueBtnTapped:" destination="G7A-ts-n7k" eventType="touchUpInside" id="e3G-zu-LEV"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceLeftToRight" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KYA-9T-WmX">
+                                <rect key="frame" x="20" y="758" width="374" height="50"/>
+                                <color key="backgroundColor" red="0.53725490200000003" green="0.47058823529999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="RWW-8O-h61"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Proceed">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="camsBtn:" destination="G7A-ts-n7k" eventType="touchUpInside" id="qMg-Ap-5tJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="zv2-7O-PGW"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -844,12 +859,15 @@
                             <constraint firstItem="zv2-7O-PGW" firstAttribute="trailing" secondItem="ghG-rx-Cj3" secondAttribute="trailing" constant="20" id="55H-cz-XNR"/>
                             <constraint firstAttribute="trailing" secondItem="Goe-gE-I73" secondAttribute="trailing" constant="20" id="5lZ-F4-1bL"/>
                             <constraint firstItem="d3Z-cU-fzS" firstAttribute="leading" secondItem="Yog-bE-HEs" secondAttribute="trailing" constant="10" id="6ie-9V-tvo"/>
+                            <constraint firstItem="KYA-9T-WmX" firstAttribute="leading" secondItem="zv2-7O-PGW" secondAttribute="leading" constant="20" id="86M-3i-wNN"/>
                             <constraint firstItem="6sx-2v-BK6" firstAttribute="top" secondItem="sdI-4I-Zg7" secondAttribute="top" constant="193" id="8n7-83-vqr"/>
                             <constraint firstItem="d3Z-cU-fzS" firstAttribute="top" secondItem="Ig0-US-nob" secondAttribute="bottom" constant="59" id="AqN-Kh-rgY"/>
                             <constraint firstItem="w0y-Ko-TeE" firstAttribute="centerX" secondItem="sdI-4I-Zg7" secondAttribute="centerX" id="BAB-kC-MnF"/>
                             <constraint firstItem="z5f-rW-IxN" firstAttribute="leading" secondItem="zv2-7O-PGW" secondAttribute="leading" constant="20" id="FCi-er-qoN"/>
                             <constraint firstItem="Yog-bE-HEs" firstAttribute="top" secondItem="Ig0-US-nob" secondAttribute="bottom" constant="59" id="HkZ-Sh-w0A"/>
+                            <constraint firstItem="zv2-7O-PGW" firstAttribute="bottom" secondItem="KYA-9T-WmX" secondAttribute="bottom" constant="20" id="Imy-0V-3dc"/>
                             <constraint firstItem="6sx-2v-BK6" firstAttribute="top" secondItem="Ig0-US-nob" secondAttribute="bottom" constant="47" id="KY1-Yg-ZC1"/>
+                            <constraint firstItem="zv2-7O-PGW" firstAttribute="trailing" secondItem="KYA-9T-WmX" secondAttribute="trailing" constant="20" id="OJR-m8-5Qa"/>
                             <constraint firstItem="ghG-rx-Cj3" firstAttribute="top" secondItem="Ig0-US-nob" secondAttribute="bottom" constant="200" id="R4I-Yq-XFI"/>
                             <constraint firstItem="Ig0-US-nob" firstAttribute="top" secondItem="zv2-7O-PGW" secondAttribute="top" id="UQz-PY-soY"/>
                             <constraint firstItem="ghG-rx-Cj3" firstAttribute="leading" secondItem="zv2-7O-PGW" secondAttribute="leading" constant="20" id="YD7-aT-rq9"/>
@@ -880,6 +898,7 @@
                     </view>
                     <connections>
                         <outlet property="addBankBtn" destination="R9g-PV-ELt" id="eOn-Lv-ifn"/>
+                        <outlet property="cams" destination="KYA-9T-WmX" id="Ln6-uT-Ecf"/>
                         <outlet property="continueBtn" destination="z5f-rW-IxN" id="M5D-eI-LKB"/>
                         <outlet property="fasterBtn" destination="d3Z-cU-fzS" id="WN6-yG-qar"/>
                         <outlet property="gpayView" destination="ghG-rx-Cj3" id="FdQ-2n-bQg"/>

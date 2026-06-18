@@ -307,18 +307,44 @@ class TradingChargesVC: UIViewController {
         return label
     }()
     
+//    private let rightPrice: UILabel = {
+//        let label = UILabel()
+//        label.text = "₹10Perorder"
+//        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+//      label.textColor = .black
+//        return label
+//    }()
+    
     private let rightPrice: UILabel = {
         let label = UILabel()
-        label.text = "₹10"
-        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        label.textColor = .black
+
+        let fullText = "₹10 Perorder"
+        let attributedText = NSMutableAttributedString(
+            string: "₹10",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 28, weight: .bold),
+                .foregroundColor: UIColor.black
+            ]
+        )
+
+        attributedText.append(
+            NSAttributedString(
+                string: " Perorder",
+                attributes: [
+                    .font: UIFont.systemFont(ofSize: 11, weight: .regular),
+                    .foregroundColor: UIColor.black
+                ]
+            )
+        )
+
+        label.attributedText = attributedText
         return label
     }()
     
     // MARK: - Footer
     private let footerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Min account maintenance charges for the first year"
+        label.text = "No account maintenance charges for the first year"
         label.font = UIFont.systemFont(ofSize: 11)
         label.textColor = .lightGray
         return label

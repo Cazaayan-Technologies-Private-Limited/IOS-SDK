@@ -300,35 +300,183 @@
 //}
 
 
+//
+//import Foundation
+//import UIKit
+//
+//class LoaderView {
+//    @MainActor static let shared = LoaderView()
+//    public var blurView: UIVisualEffectView?
+//    
+//    public init() {}
+//    
+//   @MainActor func startLoader(in view: UIView, withText text: String? = nil) {
+//        guard blurView == nil else {
+//            print("Loader already running")
+//            return
+//        }
+//        
+//        print("Starting loader...")
+//        let blurEffect = UIBlurEffect(style: .light)
+//        let blurView = UIVisualEffectView(effect: blurEffect)
+//        blurView.frame = view.bounds
+//        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        
+//        let activityIndicator = UIActivityIndicatorView(style: .large)
+//        activityIndicator.color = .purple
+//        activityIndicator.startAnimating()
+//        activityIndicator.center = CGPoint(x: blurView.contentView.center.x, y: blurView.contentView.center.y - 20) // Adjusted vertically
+//        blurView.contentView.addSubview(activityIndicator)
+//        
+//        if let text = text {
+//            let label = UILabel()
+//            label.text = text
+//            label.textColor = .black
+//            label.textAlignment = .center
+//            label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+//            label.numberOfLines = 0
+//            label.translatesAutoresizingMaskIntoConstraints = false
+//            
+//            blurView.contentView.addSubview(label)
+//            // Constraints for the label
+//            NSLayoutConstraint.activate([
+//                label.centerXAnchor.constraint(equalTo: blurView.contentView.centerXAnchor),
+//                label.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 10),
+//                label.leadingAnchor.constraint(greaterThanOrEqualTo: blurView.contentView.leadingAnchor, constant: 16),
+//                label.trailingAnchor.constraint(lessThanOrEqualTo: blurView.contentView.trailingAnchor, constant: -16)
+//            ])
+//        }
+//        
+//        view.addSubview(blurView)
+//        
+//        self.blurView = blurView
+//        print("Loader started")
+//    }
+//    
+//    @MainActor func stopLoader() {
+//        DispatchQueue.main.async {
+//            print("Stopping loader...")
+//            self.blurView?.removeFromSuperview()
+//            self.blurView = nil
+//            print("Loader stopped")
+//        }
+//    }
+//}
 
 import Foundation
 import UIKit
 
+// MARK: - Three Dots Loader
+
+class ThreeDotsLoaderView: UIView {
+
+    private let dot1 = UIView()
+    private let dot2 = UIView()
+    private let dot3 = UIView()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupDots()
+        startAnimation()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupDots()
+        startAnimation()
+    }
+
+    private func setupDots() {
+        let dots = [dot1, dot2, dot3]
+
+        let stackView = UIStackView(arrangedSubviews: dots)
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(stackView)
+
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+
+        dots.forEach { dot in
+            dot.backgroundColor = UIColor.appPrimary
+            dot.layer.cornerRadius = 6
+            dot.translatesAutoresizingMaskIntoConstraints = false
+
+            NSLayoutConstraint.activate([
+                dot.widthAnchor.constraint(equalToConstant: 12),
+                dot.heightAnchor.constraint(equalToConstant: 12)
+            ])
+        }
+    }
+
+    private func startAnimation() {
+        animate(dot: dot1, delay: 0.0)
+        animate(dot: dot2, delay: 0.2)
+        animate(dot: dot3, delay: 0.4)
+    }
+
+    private func animate(dot: UIView, delay: TimeInterval) {
+        UIView.animate(
+            withDuration: 0.6,
+            delay: delay,
+            options: [.autoreverse, .repeat],
+            animations: {
+                dot.transform = CGAffineTransform(scaleX: 1.6, y: 1.6)
+                dot.alpha = 0.3
+            }
+        )
+    }
+}
+
+// MARK: - Loader View
+
 class LoaderView {
+    
     @MainActor static let shared = LoaderView()
+    
     public var blurView: UIVisualEffectView?
     
     public init() {}
     
-   @MainActor func startLoader(in view: UIView, withText text: String? = nil) {
+    @MainActor
+    func startLoader(in view: UIView, withText text: String? = nil) {
+        
         guard blurView == nil else {
             print("Loader already running")
             return
         }
         
         print("Starting loader...")
+        
         let blurEffect = UIBlurEffect(style: .light)
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.frame = view.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        let activityIndicator = UIActivityIndicatorView(style: .large)
-        activityIndicator.color = .purple
-        activityIndicator.startAnimating()
-        activityIndicator.center = CGPoint(x: blurView.contentView.center.x, y: blurView.contentView.center.y - 20) // Adjusted vertically
-        blurView.contentView.addSubview(activityIndicator)
+        // MARK: Three Dots Loader
+        
+        let dotsLoader = ThreeDotsLoaderView()
+        dotsLoader.translatesAutoresizingMaskIntoConstraints = false
+        
+        blurView.contentView.addSubview(dotsLoader)
+        
+        NSLayoutConstraint.activate([
+            dotsLoader.centerXAnchor.constraint(equalTo: blurView.contentView.centerXAnchor),
+            dotsLoader.centerYAnchor.constraint(equalTo: blurView.contentView.centerYAnchor, constant: -20),
+            dotsLoader.widthAnchor.constraint(equalToConstant: 40),
+            dotsLoader.heightAnchor.constraint(equalToConstant: 30)
+        ])
+        
+        // MARK: Optional Loader Text
         
         if let text = text {
+            
             let label = UILabel()
             label.text = text
             label.textColor = .black
@@ -338,10 +486,10 @@ class LoaderView {
             label.translatesAutoresizingMaskIntoConstraints = false
             
             blurView.contentView.addSubview(label)
-            // Constraints for the label
+            
             NSLayoutConstraint.activate([
                 label.centerXAnchor.constraint(equalTo: blurView.contentView.centerXAnchor),
-                label.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 10),
+                label.topAnchor.constraint(equalTo: dotsLoader.bottomAnchor, constant: 10),
                 label.leadingAnchor.constraint(greaterThanOrEqualTo: blurView.contentView.leadingAnchor, constant: 16),
                 label.trailingAnchor.constraint(lessThanOrEqualTo: blurView.contentView.trailingAnchor, constant: -16)
             ])
@@ -350,18 +498,20 @@ class LoaderView {
         view.addSubview(blurView)
         
         self.blurView = blurView
+        
         print("Loader started")
     }
-    
-    @MainActor func stopLoader() {
-        DispatchQueue.main.async {
-            print("Stopping loader...")
-            self.blurView?.removeFromSuperview()
-            self.blurView = nil
-            print("Loader stopped")
-        }
-    }
+
+
+@MainActor
+  func stopLoader() {
+      print("Stopping loader...")
+      blurView?.removeFromSuperview()
+      blurView = nil
+      print("Loader stopped")
+  }
 }
+
 
 func apiCall(
     url: String,

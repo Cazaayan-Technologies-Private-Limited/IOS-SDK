@@ -854,6 +854,7 @@ extension BankVC{
                                         vc.PANName = self.PANName
                                         vc.EmailId = self.EmailId
                                         vc.CAMSfipid = self.CAMSfipid
+                                        vc.comingFrom = .bankVC
                                         self.navigationController?.pushViewController(vc, animated: true)
                                     }
                                 }

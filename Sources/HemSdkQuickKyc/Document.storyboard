@@ -2467,99 +2467,6 @@
             </objects>
             <point key="canvasLocation" x="4014" y="190"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="xaZ-7T-Tim">
-            <objects>
-                <viewController id="l0d-02-1ws" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Egm-nD-muN">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GVd-LJ-wag">
-                                <rect key="frame" x="30" y="318" width="354" height="381"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sj7-QK-vrT">
-                                        <rect key="frame" x="319.5" y="15" width="19.5" height="22"/>
-                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal">
-                                            <imageReference key="image" image="multiply" catalog="system" symbolScale="large"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="cancelBtn:" destination="l0d-02-1ws" eventType="touchUpInside" id="I7F-R2-bhq"/>
-                                        </connections>
-                                    </button>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bell" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="nPg-qO-EoB">
-                                        <rect key="frame" x="137" y="25" width="80" height="79.5"/>
-                                        <color key="tintColor" systemColor="systemGreenColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="80" id="7ze-qT-2Os"/>
-                                            <constraint firstAttribute="width" constant="80" id="FY0-7j-hxZ"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Congratulations" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hvn-ed-yfG">
-                                        <rect key="frame" x="10" y="125" width="334" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                        <color key="textColor" red="0.24705882352941178" green="0.24705882352941178" blue="0.71764705882352942" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Application has been submitted successfully" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OtI-6d-6A2">
-                                        <rect key="frame" x="10" y="186" width="334" height="41"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.24705882352941178" green="0.24705882352941178" blue="0.71764705882352942" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qaf-ok-qh8">
-                                        <rect key="frame" x="127" y="273" width="100" height="50"/>
-                                        <color key="backgroundColor" red="0.24705882352941178" green="0.24705882352941178" blue="0.71764705882352942" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="100" id="VyW-uJ-UN7"/>
-                                            <constraint firstAttribute="height" constant="50" id="pBq-eG-pm6"/>
-                                        </constraints>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="OK">
-                                            <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </buttonConfiguration>
-                                        <connections>
-                                            <action selector="okBtn:" destination="l0d-02-1ws" eventType="touchUpInside" id="dqP-Jl-EQ6"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.97433353509999998" green="0.87796837930000005" blue="0.92893198659999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="381" id="7Ky-VD-TaJ"/>
-                                    <constraint firstItem="nPg-qO-EoB" firstAttribute="centerX" secondItem="GVd-LJ-wag" secondAttribute="centerX" id="8JF-fq-mmK"/>
-                                    <constraint firstItem="Sj7-QK-vrT" firstAttribute="top" secondItem="GVd-LJ-wag" secondAttribute="top" constant="15" id="9BB-n5-Ong"/>
-                                    <constraint firstAttribute="trailing" secondItem="Hvn-ed-yfG" secondAttribute="trailing" constant="10" id="HLY-Ab-wug"/>
-                                    <constraint firstItem="OtI-6d-6A2" firstAttribute="leading" secondItem="GVd-LJ-wag" secondAttribute="leading" constant="10" id="Lln-1v-4PW"/>
-                                    <constraint firstItem="Hvn-ed-yfG" firstAttribute="top" secondItem="nPg-qO-EoB" secondAttribute="bottom" constant="20" id="MVV-OG-mpy"/>
-                                    <constraint firstItem="OtI-6d-6A2" firstAttribute="top" secondItem="Hvn-ed-yfG" secondAttribute="bottom" constant="40" id="VCV-i2-z0d"/>
-                                    <constraint firstItem="Hvn-ed-yfG" firstAttribute="leading" secondItem="GVd-LJ-wag" secondAttribute="leading" constant="10" id="Voo-7V-e2p"/>
-                                    <constraint firstItem="qaf-ok-qh8" firstAttribute="centerX" secondItem="GVd-LJ-wag" secondAttribute="centerX" id="YbL-9N-MWM"/>
-                                    <constraint firstAttribute="trailing" secondItem="Sj7-QK-vrT" secondAttribute="trailing" constant="15" id="aX1-Wi-DhW"/>
-                                    <constraint firstAttribute="trailing" secondItem="OtI-6d-6A2" secondAttribute="trailing" constant="10" id="bEQ-aN-pQL"/>
-                                    <constraint firstItem="qaf-ok-qh8" firstAttribute="top" secondItem="OtI-6d-6A2" secondAttribute="bottom" constant="46" id="o0O-4a-Xb7"/>
-                                    <constraint firstItem="nPg-qO-EoB" firstAttribute="top" secondItem="GVd-LJ-wag" secondAttribute="top" constant="25" id="qhy-Ql-wnt"/>
-                                    <constraint firstAttribute="width" constant="354" id="qkD-hX-wxW"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="5TE-7f-RkU"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.49534970238095238" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="GVd-LJ-wag" firstAttribute="centerY" secondItem="Egm-nD-muN" secondAttribute="centerY" constant="60.5" id="iOc-Pp-mTW"/>
-                            <constraint firstItem="GVd-LJ-wag" firstAttribute="centerX" secondItem="Egm-nD-muN" secondAttribute="centerX" id="o3z-Av-pfU"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="holderview" destination="GVd-LJ-wag" id="vsi-3S-Bir"/>
-                        <outlet property="okBtn" destination="qaf-ok-qh8" id="UCO-sY-JxL"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3cr-iN-HML" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4701" y="190"/>
-        </scene>
         <!--YearVC-->
         <scene sceneID="jiB-2V-ucA">
             <objects>
@@ -4867,7 +4774,6 @@
     <resources>
         <image name="DocumentPng" width="261.5" height="165"/>
         <image name="UploadPng" width="20" height="21"/>
-        <image name="bell" catalog="system" width="125" height="128"/>
         <image name="camera.rotate.fill" catalog="system" width="128" height="93"/>
         <image name="checkmark.square.fill" catalog="system" width="128" height="114"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
