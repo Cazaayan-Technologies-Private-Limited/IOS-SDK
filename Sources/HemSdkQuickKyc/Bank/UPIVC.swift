@@ -55,12 +55,13 @@ class UPIVC: UIViewController {
         addBankBtn.layer.borderWidth = 0.5
         addBankBtn.layer.borderColor = UIColor.appBorder.cgColor
         
-        upiBtn.setImage(UIImage(systemName: "circle"), for: .normal)
+        upiBtn.isSelected = true
+        upiBtn.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
         //payButton.backgroundColor = .documentBackground
         payButton.layer.cornerRadius = 10
         //        payButton.isHidden = true
         //        upiLabel.isHidden = true
-        upiBtn.setImage(UIImage(systemName: "circle"), for: .normal)
+        
         addBankBtn.layer.cornerRadius = 20
         fasterBtn.layer.cornerRadius = 10
         
@@ -69,8 +70,8 @@ class UPIVC: UIViewController {
         cams.isHidden = true // Initially hidden
         
         isUpiChecked = false
-        gpayView.isHidden = true
-        upiDetailsHeight.constant = 0
+        //gpayView.isHidden = true
+      //  upiDetailsHeight.constant = 0
         continueBtn.isHidden = true
         
         CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
@@ -94,6 +95,26 @@ class UPIVC: UIViewController {
               name: Notification.Name("UPICallbackReceived"),
               object: nil
           )
+        
+        let text = "We'll debit ₹ 1 from your account to verify the details. We'll refund this once the verification is complited. Please ensure you have UPI apps installed."
+
+        let attributedString = NSMutableAttributedString(
+            string: text,
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 14)
+            ]
+        )
+
+        if let range = text.range(of: "Please ensure you have UPI apps installed.") {
+            let nsRange = NSRange(range, in: text)
+            attributedString.addAttribute(
+                .font,
+                value: UIFont.boldSystemFont(ofSize: 14),
+                range: nsRange
+            )
+        }
+
+        upiLabel.attributedText = attributedString
     }
     
     @objc func handleUPICallback(_ notification: Notification) {
@@ -162,22 +183,22 @@ class UPIVC: UIViewController {
     }
     
     @IBAction func upiBtnTapped(_ sender: UIButton) {
-        isUpiChecked.toggle()
-        
-        if isUpiChecked {
-            gpayView.isHidden = false
-            upiDetailsHeight.constant = 170
-        } else {
-            gpayView.isHidden = true
-            upiDetailsHeight.constant = 0
-        }
-        
-        let imageName = isUpiChecked ? "circle.inset.filled" : "circle"
-        sender.setImage(UIImage(systemName: imageName), for: .normal)
-        
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
+//        isUpiChecked.toggle()
+//        
+//        if isUpiChecked {
+//            gpayView.isHidden = false
+//            upiDetailsHeight.constant = 170
+//        } else {
+//            gpayView.isHidden = true
+//            upiDetailsHeight.constant = 0
+//        }
+//        
+//        let imageName = isUpiChecked ? "circle.inset.filled" : "circle"
+//        sender.setImage(UIImage(systemName: imageName), for: .normal)
+//        
+//        UIView.animate(withDuration: 0.3) {
+//            self.view.layoutIfNeeded()
+//        }
     }
     
     @IBAction func continueBtnTapped(_ sender: UIButton) {
@@ -575,6 +596,7 @@ class UPIVC: UIViewController {
                                     // Case 2: APPROVED
                                     else if bankDpTradStatus.uppercased() == "APPROVED" {
                                         self.addBankBtn.isEnabled = false
+                                        self.payButton.isEnabled = false
                                         self.addBankBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
                                         self.continueBtn.isHidden = false
                                         self.continueBtn.tag = 1
@@ -585,6 +607,7 @@ class UPIVC: UIViewController {
                                             isCAMS.uppercased() == "Y",
                                             self.camsClickCount == "1" {
                                         self.addBankBtn.isEnabled = false
+                                        self.payButton.isEnabled = false
                                         self.addBankBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
                                         self.continueBtn.isHidden = false
                                         self.continueBtn.tag = 2
@@ -595,6 +618,7 @@ class UPIVC: UIViewController {
                                             isCAMS.uppercased() == "Y",
                                             self.camsClickCount == "2" {
                                         self.addBankBtn.isEnabled = false
+                                        self.payButton.isEnabled = false
                                         self.addBankBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
                                         self.continueBtn.isHidden = false
                                         self.continueBtn.tag = 3

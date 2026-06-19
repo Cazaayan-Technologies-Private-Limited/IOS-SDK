@@ -5043,20 +5043,21 @@ extension DocumentVC {
                 case .success(let jsonResponse):
                     print("UpdateFinalStatus Response: \(jsonResponse)")
                     let ErrorMessage = jsonResponse["ErrorMessage"] as? String
-                    if let finalStatus = jsonResponse["FinalStatus"] as? Int {
-                                 if finalStatus == 4 {
-                                     DispatchQueue.main.async {
-                                         let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
-                                         if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {
-                                             vc.PanNo = self.PanNo
-                                             vc.RegId = self.RegId
-                                             self.navigationController?.pushViewController(vc, animated: true)
-                                         }
-                                     }
-                                     return // Exit early after navigation
-                                 }
-                             }
-                    if let errorCode = jsonResponse["ErrorCode"] as? String {
+                    if let finalStatus = jsonResponse["FinalStatus"] as? String {
+                        if finalStatus == "4" {
+                            
+                            DispatchQueue.main.async {
+                                let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
+                                if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {
+                                    vc.PanNo = self.PanNo
+                                    vc.RegId = self.RegId
+                                    self.navigationController?.pushViewController(vc, animated: true)
+                                }
+                            }
+                            return
+                        }
+                    }
+                        if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
                         case "000000":
                             DispatchQueue.main.async {

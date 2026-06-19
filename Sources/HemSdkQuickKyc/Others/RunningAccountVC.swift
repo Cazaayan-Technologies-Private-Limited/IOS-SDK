@@ -31,7 +31,7 @@ class RunningAccountVC: UIViewController {
         
         runningList = [
              RunningAccount(id: "0", name: "Select"),
-             RunningAccount(id: "30", name: "30 Days"),
+             //RunningAccount(id: "30", name: "30 Days"),
              RunningAccount(id: "90", name: "90 Days")
          ]
         
