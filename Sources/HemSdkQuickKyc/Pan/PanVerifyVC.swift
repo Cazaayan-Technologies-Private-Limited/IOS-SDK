@@ -125,6 +125,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
     weak var delegate1: ReloadPageDelegate?
     var identifier: String = ""
     var phoneNumber: String?
+    private var isFirstLoad = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -183,6 +184,15 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
         buttonView.layer.cornerRadius = 20
         
         clientPanDetails()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if isFirstLoad {
+            isFirstLoad = false
+            clientPanDetails()
+        }
     }
     
     func hidePanErrorLabels() {
@@ -403,28 +413,46 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
     }
     
     func clientPanDetails(){
-        
-        CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
-            guard let tokenId = tokenId else {
-                // Handle the case where no tokens are available
-                CoreDataHelper.generateToken(
-                    decodeByteArrayToString: self
-                        .decodeArray ?? "",
-                    USERID: self.fetchedUserId ?? "",
-                    SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "W",
-                    in: self.view
-                ) { success in
-                    if success {
-                        // Retry SIXTHAPI after token regeneration
-                        self.clientPanDetails()
-                    } else {
-                        print("Token generation failed.")
-                    }
-                }
-                print("No tokens available. Please reload the tokens.")
-                return
-            }
+        DispatchQueue.main.async {
+              LoaderView.shared.startLoader(in: self.view, withText: "Fetching PAN details...")
+          }
+          
+          CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [weak self] tokenId in
+              guard let self = self else {
+                  // If self is nil, hide loader
+                  DispatchQueue.main.async {
+                      LoaderView.shared.stopLoader()
+                  }
+                  return
+              }
+              
+              guard let tokenId = tokenId else {
+                  // Handle the case where no tokens are available
+                  CoreDataHelper.generateToken(
+                      decodeByteArrayToString: self.decodeArray ?? "",
+                      USERID: self.fetchedUserId ?? "",
+                      SessionId: self.fetchedSessionID ?? "",
+                      entityName: "TokenMobile", deviceType: "W",
+                      in: self.view
+                  ) { success in
+                      if success {
+                          // Retry clientPanDetails after token regeneration
+                          self.clientPanDetails()
+                      } else {
+                          print("Token generation failed.")
+                          // ✅ Stop loader on failure
+                          DispatchQueue.main.async {
+                              LoaderView.shared.stopLoader()
+                          }
+                      }
+                  }
+                  print("No tokens available. Please reload the tokens.")
+                  // ✅ Stop loader if no token
+                  DispatchQueue.main.async {
+                      LoaderView.shared.stopLoader()
+                  }
+                  return
+              }
             let parameters: [String: Any?] = [
                 "RegId": regId,
                 "MobileNo": phoneNumber,
@@ -435,7 +463,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
             print(parameters)
             let Url = "Client/GetClientPANDetailsByMobileNo"
             
-            apiCall(url: Url, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
+            apiCall(url: Url, method: "POST", parameters: parameters as [String : Any], view: self.view, loaderText: "Fetching PAN details...") { result in
                 switch result {
                 case .success(let jsonResponse):
                     print(" Response: \(jsonResponse)")
