@@ -612,6 +612,20 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         textFieldsCapital()
         SIXTHAPI(userID: fetchedUserId ?? "")
         self.continueBtn.isHidden = true
+        
+        shareTxt1.delegate = self
+        shareTxt1.returnKeyType = .done
+        
+        shareTxt2.delegate = self
+        shareTxt2.returnKeyType = .done
+        
+        shareTxt3.delegate = self
+        shareTxt3.returnKeyType = .done
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     override func viewWillAppear(_ animated: Bool) {

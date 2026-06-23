@@ -1487,38 +1487,53 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     }
     
     // UIImagePickerController delegate function to handle selected image
+//    func imagePickerController(
+//        _ picker: UIImagePickerController,
+//        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey:
+//                                                Any]
+//    ) {
+//        
+////        if let capturedImage = info[.originalImage] as? UIImage {
+////            // ✅ Now send this capturedImage to your API
+////            ValidateIsPhotoDone(image: capturedImage)
+////        }
+////        
+////        guard let image = info[.originalImage] as? UIImage else {
+////            return
+////        }
+////        picker.dismiss(animated: true)
+////        
+////        showCrop(image: image)
+//        if let capturedImage = info[.originalImage] as? UIImage {
+//             picker.dismiss(animated: true)
+//             
+//             // Store the selected image
+//             self.selectedClientImage = capturedImage
+//             
+//             // Compress the image
+//             guard let compressedData = capturedImage.jpegData(compressionQuality: 0.5) else {
+//                 self.showAlert(title: "Error", message: "Failed to process image")
+//                 return
+//             }
+//             
+//             // Directly call CLIENTPHOTOUpload API
+//             self.CLIENTPHOTOUpload(imageData: compressedData)
+//         }
+//    }
+    
     func imagePickerController(
         _ picker: UIImagePickerController,
-        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey:
-                                                Any]
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
-        
-//        if let capturedImage = info[.originalImage] as? UIImage {
-//            // ✅ Now send this capturedImage to your API
-//            ValidateIsPhotoDone(image: capturedImage)
-//        }
-//        
-//        guard let image = info[.originalImage] as? UIImage else {
-//            return
-//        }
-//        picker.dismiss(animated: true)
-//        
-//        showCrop(image: image)
-        if let capturedImage = info[.originalImage] as? UIImage {
-             picker.dismiss(animated: true)
-             
-             // Store the selected image
-             self.selectedClientImage = capturedImage
-             
-             // Compress the image
-             guard let compressedData = capturedImage.jpegData(compressionQuality: 0.5) else {
-                 self.showAlert(title: "Error", message: "Failed to process image")
-                 return
-             }
-             
-             // Directly call CLIENTPHOTOUpload API
-             self.CLIENTPHOTOUpload(imageData: compressedData)
-         }
+
+        guard let image = info[.originalImage] as? UIImage else {
+            picker.dismiss(animated: true)
+            return
+        }
+
+        picker.dismiss(animated: true)
+
+        showCrop(image: image)
     }
     
     func showCrop(image: UIImage) {

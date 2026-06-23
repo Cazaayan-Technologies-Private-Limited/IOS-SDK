@@ -293,18 +293,17 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
        }
     
     private func navigateToNominationVC() {
-        let storyboard = UIStoryboard(
-            name: "OtherDetails",
-            bundle: Bundle.module)
-        let vc =
-        storyboard.instantiateViewController(
-            identifier: "OtherDetailsVC")
-        as! OtherDetailsVC
-        vc.panNo = panNo
-        vc.regId = regId
-        vc.delegate = self
-        self.navigationController?
-            .pushViewController(vc, animated: true)
+        let storyboard = UIStoryboard(name: "OtherDetails", bundle: Bundle.module)
+                       let vc = storyboard.instantiateViewController(identifier: "OtherDetailsVC") as! OtherDetailsVC
+                       let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                       let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                       
+                       let regId = UserDefaults.standard.string(forKey: "RegId")
+                       let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                       
+                       vc.panNo = finalPAN
+                       vc.regId = regIdFinal
+                       self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func showAlert(message: String, completion: (() -> Void)? = nil) {

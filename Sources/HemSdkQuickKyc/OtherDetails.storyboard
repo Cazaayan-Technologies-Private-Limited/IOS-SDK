@@ -2080,8 +2080,8 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dqA-OX-tWp">
                                                         <rect key="frame" x="8" y="1176.5" width="380" height="50"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nhB-Cw-s0J">
-                                                                <rect key="frame" x="0.0" y="6" width="295" height="38"/>
+                                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nhB-Cw-s0J">
+                                                                <rect key="frame" x="0.0" y="6" width="375" height="38"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="38" id="yeG-76-WId"/>
                                                                 </constraints>

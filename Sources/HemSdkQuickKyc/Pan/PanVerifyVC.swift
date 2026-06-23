@@ -80,7 +80,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
         }
     }
     
-    @IBOutlet weak var emailTF: UITextField!
+    @IBOutlet weak var emailTF: UILabel!
     @IBOutlet weak var NAMETF: UITextField!
     @IBOutlet weak var DOBTF: UITextField!
     @IBOutlet weak var verifyBtn: UIButton!
