@@ -90,11 +90,11 @@ class UPIVC: UIViewController {
         continueBtn.layer.cornerRadius = 10
         
         NotificationCenter.default.addObserver(
-              self,
-              selector: #selector(handleUPICallback(_:)),
-              name: Notification.Name("UPICallbackReceived"),
-              object: nil
-          )
+             self,
+             selector: #selector(appBecameActive),
+             name: UIApplication.didBecomeActiveNotification,
+             object: nil
+         )
         
         let text = "We'll debit ₹ 1 from your account to verify the details. We'll refund this once the verification is complited. Please ensure you have UPI apps installed."
 
@@ -117,35 +117,26 @@ class UPIVC: UIViewController {
         upiLabel.attributedText = attributedString
     }
     
-    @objc func handleUPICallback(_ notification: Notification) {
-
-        guard let url = notification.object as? URL else {
-            return
-        }
-
-        print("UPI Callback URL: \(url)")
-
-        let components = URLComponents(
-            url: url,
-            resolvingAgainstBaseURL: false
-        )
-
-        let status = components?.queryItems?
-            .first(where: { $0.name.lowercased() == "status" })?
-            .value
-
-        print("Status: \(status ?? "")")
-
-        if status?.uppercased() == "SUCCESS" {
-
+    @objc func appBecameActive() {
+        print("🔄 App became active - User returned from UPI app")
+        print("📊 reversePennyDropTxnId: \(reversePennyDropTxnId ?? "nil")")
+        print("📊 reversePennyDropId: \(reversePennyDropId ?? "nil")")
+        print("📊 upiLink: \(upiLink ?? "nil")")
+        
+        // Check if we have a pending payment to verify
+        if let upiLink = upiLink, !upiLink.isEmpty {
+            print("✅ Pending payment detected, validating...")
+            // Directly call startUpi to validate payment
             startUpi()
-
         } else {
-
-            print("Payment Failed")
+            print("❌ No pending payment detected")
         }
     }
-    
+    // Don't forget to remove observer when view is deallocated
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     
     @IBAction func camsBtn(_ sender: UIButton) {
         redirectCams()
@@ -263,28 +254,24 @@ class UPIVC: UIViewController {
     }
     
     func getUpiDetails(){
-        
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
             guard let tokenId = tokenId else {
-                // Handle the case where no tokens are available
                 CoreDataHelper.generateToken(
-                    decodeByteArrayToString: self
-                        .mobiledecodeArray ?? "",
+                    decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
                     entityName: "TokenMobile", deviceType: "W",
                     in: self.view
                 ) { success in
                     if success {
-                        // Retry SIXTHAPI after token regeneration
                         self.getUpiDetails()
                     } else {
                         print("Token generation failed.")
                     }
                 }
-                print("No tokens available. Please reload the tokens.")
                 return
             }
+            
             let parameters: [String: Any?] = [
                 "PANNo": panNo,
                 "RegId": regId,
@@ -292,68 +279,47 @@ class UPIVC: UIViewController {
                 "SessionId": fetchedSessionID,
                 "Token": tokenId
             ]
-            print(parameters)
+            print("📤 RequestToReversePennyDrop Parameters: \(parameters)")
+            
             let Url = "PennyDrop/RequestToReversePennyDrop"
             
             apiCall(url: Url, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
                 switch result {
                 case .success(let jsonResponse):
-                    print("RequestToReversePennyDrop Response: \(jsonResponse)")
+                    print("✅ RequestToReversePennyDrop Response: \(jsonResponse)")
                     if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
                         case "000000":
+                            // Store the values
+                            self.reversePennyDropTxnId = jsonResponse["transactionid"] as? String
+                            self.reversePennyDropId = jsonResponse["Id"] as? String
                             
-                            self.reversePennyDropTxnId =
-                            jsonResponse["transactionid"] as? String
-                            self.reversePennyDropId =
-                            jsonResponse["Id"] as? String
+                            print("✅ Stored TxnId: \(self.reversePennyDropTxnId ?? "nil")")
+                            print("✅ Stored Id: \(self.reversePennyDropId ?? "nil")")
                             
                             DispatchQueue.main.async {
                                 if let upiLink = jsonResponse["UpiLink"] as? String {
-                                    
                                     print("UPI LINK = \(upiLink)")
                                     
+                                    // Store the UPI link for verification when user returns
+                                    self.upiLink = upiLink
+                                    
                                     if upiLink.lowercased().hasPrefix("upi://") {
-                                        
                                         self.openUPIApps(upiLink: upiLink)
-                                        
                                     } else {
-                                        
                                         self.showAlert(
                                             title: "Invalid UPI Link",
                                             message: "Received invalid UPI URL from server."
                                         )
                                     }
                                 }
-                                
-                                //                                if let upiLink = jsonResponse["UpiLink"] as? String,
-                                //                                   let url = URL(string: upiLink) {
-                                //
-                                //                                    // Check if device can open UPI app
-                                //                                    if UIApplication.shared.canOpenURL(url) {
-                                //
-                                //                                        UIApplication.shared.open(url, options: [:]) { success in
-                                //                                            print("UPI App Opened: \(success)")
-                                //                                        }
-                                //
-                                //                                    } else {
-                                //
-                                //                                        self.showAlert(
-                                //                                            title: "UPI App Not Found",
-                                //                                            message: "Please install any UPI app like Google Pay, PhonePe or Paytm."
-                                //                                        )
-                                //                                    }
-                                //
-                                //                                } else {
-                                //                                    print("Invalid UPI Link")
-                                //                                }
                             }
                         default:
                             print("Unhandled error code: \(errorCode)")
                         }
                     }
                 case .failure(let error):
-                    print("Login API call failed: \(error.localizedDescription)")
+                    print("❌ API call failed: \(error.localizedDescription)")
                 }
             }
         }
@@ -760,28 +726,47 @@ class UPIVC: UIViewController {
         )
         
         // Google Pay
-        if let gpayURL = URL(
-            string: upiLink.replacingOccurrences(
-                of: "upi://",
-                with: "tez://"
-            )
-        ),
-           UIApplication.shared.canOpenURL(gpayURL) {
-            
-            let gpayAction = UIAlertAction(
-                title: "Google Pay",
-                style: .default
-            ) { _ in
-                UIApplication.shared.open(gpayURL)
+
+//        if let gpayURL = URL(
+//                    string: upiLink.replacingOccurrences(
+//                        of: "upi://",
+//                        with: "upi://"
+//                    )
+//                ),
+//                   UIApplication.shared.canOpenURL(gpayURL) {
+//        
+//                    alert.addAction(
+//                        UIAlertAction(title: "Google Pay", style: .default) { _ in
+//                            UIApplication.shared.open(gpayURL)
+//                        }
+//                    )
+//                }
+        
+        let upiParams = upiLink
+            .replacingOccurrences(of: "upi://pay?", with: "")
+            .replacingOccurrences(of: "upi://", with: "")
+
+        // Google Pay - Try multiple formats
+        let gpayFormats = [
+            "tez://upi/pay?\(upiParams)",
+            "gpay://upi/pay?\(upiParams)",
+            "tez://pay?\(upiParams)",
+            "gpay://pay?\(upiParams)"
+        ]
+
+        for format in gpayFormats {
+            if let gpayURL = URL(string: format),
+               UIApplication.shared.canOpenURL(gpayURL) {
+                print("✅ Working Google Pay URL:", gpayURL)
+                alert.addAction(
+                    UIAlertAction(title: "Google Pay", style: .default) { _ in
+                        UIApplication.shared.open(gpayURL)
+                    }
+                )
+                break
             }
-            
-            gpayAction.setValue(
-                UIImage(named: "gpay")?.withRenderingMode(.alwaysOriginal),
-                forKey: "image"
-            )
-            
-            alert.addAction(gpayAction)
         }
+
         
         // PhonePe
         if let phonepeURL = URL(
@@ -937,7 +922,7 @@ class UPIVC: UIViewController {
 //  HemSdkQuickKyc
 //
 //  Created by Manas Datta on 14/05/26.
-//
+//f
 
 //import UIKit
 //
