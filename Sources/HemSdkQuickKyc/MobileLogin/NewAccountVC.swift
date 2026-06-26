@@ -192,12 +192,11 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
     func didtapChangeBtn(with phoneNumber: String) {
         NumberTF.text = phoneNumber
     }
-//    @IBOutlet weak var termsnconditionBtn: UIButton!
+
     @IBOutlet weak var NumberTF: UITextField!
     @IBOutlet weak var RequestBtn: UIButton!
     @IBOutlet weak var numberView: UIView!
     @IBOutlet weak var homeBtn: UIButton!
-   // @IBOutlet weak var termView: UIView!
     @IBOutlet weak var buttonView: UIView!
     
 

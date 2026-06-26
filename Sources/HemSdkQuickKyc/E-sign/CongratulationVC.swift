@@ -20,4 +20,9 @@ class CongratulationVC: UIViewController {
             self?.onOkTapped?()
         }
     }
+    
+    
+    @IBAction func closeBtn(_ sender: UIButton) {
+        self.dismiss(animated: true)
+    }
 }

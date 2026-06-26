@@ -1238,7 +1238,7 @@
 //        }
 //    }
 //}
-///esign without AADHAARSTACK
+///esign without AADHAARSTACK and close sdk with ddpi directly
 import UIKit
 
 class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
@@ -1360,9 +1360,9 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         eSignLbl2.isHidden = true
         eSignLbl3.isHidden = true
 
-        ekraView1.backgroundColor =  .appPrimary
-        aofView1.backgroundColor = .appPrimary
-        ddpiView1.backgroundColor = .appPrimary
+        ekraView1.tintColor =  .appPrimary
+        aofView1.tintColor = .appPrimary
+        ddpiView1.tintColor = .appPrimary
 
         eKraBtn.backgroundColor =  .appPrimary
         aOfBtn.backgroundColor = .appPrimary
@@ -2194,6 +2194,83 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
             }
         }
     }
+    
+    func checkAndHandleDDPISigned() {
+        // Check if DDPI exists in the PDF list
+        let hasDDPI = pdfDataList.contains { pdf in
+            return pdf["PDFSegment"] as? String == "DDPI"
+        }
+        
+        // If DDPI doesn't exist, show congratulation screen and close SDK
+        if !hasDDPI {
+            showCongratulationAndCloseSDK()
+            return
+        }
+        
+        // If DDPI exists but is not signed, show congratulation screen and close SDK
+        if hasDDPI && ddpiSign == "0" {
+            showCongratulationAndCloseSDK()
+            return
+        }
+        
+        // If DDPI exists and is signed, you might want to handle differently
+        // For example, show a different message or proceed normally
+        print("DDPI is signed and available")
+    }
+
+    func showCongratulationAndCloseSDK() {
+        DispatchQueue.main.async {
+            // Show CongratulationVC
+            let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
+            let congratVC = storyboard.instantiateViewController(withIdentifier: "CongratulationVC") as! CongratulationVC
+            
+            // Set the onOkTapped closure
+            congratVC.onOkTapped = { [weak self] in
+                // Close the SDK when OK is tapped
+                self?.closeSDK()
+            }
+            
+            // Present the congratulation view controller
+            congratVC.modalPresentationStyle = .overCurrentContext
+            self.present(congratVC, animated: true)
+        }
+    }
+    
+    func checkAndShowCongratulationIfNeeded() {
+        // Check which segments exist in the PDF list
+        let hasEKRA = pdfDataList.contains { $0["PDFSegment"] as? String == "EKRA" }
+        let hasAOF = pdfDataList.contains { $0["PDFSegment"] as? String == "E" }
+        let hasDDPI = pdfDataList.contains { $0["PDFSegment"] as? String == "DDPI" }
+        
+        var shouldShowCongratulation = false
+        
+        if hasDDPI {
+            // If DDPI exists, show congratulation only when DDPI is signed
+            shouldShowCongratulation = (ddpiSign == "1")
+        } else if hasAOF && hasEKRA {
+            // If only E and EKRA exist (no DDPI), show congratulation when E (AOF) is signed
+            // AND EKRA is also signed
+            shouldShowCongratulation = (aofSign == "1" && ekraSign == "1")
+        } else {
+            // Fallback: show when all available segments are signed
+            let allSegmentsSigned = pdfDataList.allSatisfy { pdf in
+                guard let segment = pdf["PDFSegment"] as? String else { return false }
+                switch segment {
+                case "EKRA": return ekraSign == "1"
+                case "E": return aofSign == "1"
+                case "DDPI": return ddpiSign == "1"
+                default: return false
+                }
+            }
+            shouldShowCongratulation = allSegmentsSigned && !pdfDataList.isEmpty
+        }
+        
+        if shouldShowCongratulation {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.showCongratulationAndCloseSDK()
+            }
+        }
+    }
 
     func  ViewAllMultiPDF(){
    
@@ -2317,7 +2394,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
    
                                                    self.ddpiStack.isHidden = false
                                                }
-                                           }
+        67                                   }
    
    
                                        default:
@@ -2339,6 +2416,9 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
    
                                    // Optionally hide the proceed button if DDPI is required but not present
                                    // self.proceedBtnView.isHidden = !hasDDPI
+                                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                                                  self.checkAndShowCongratulationIfNeeded()
+                                                              }
                                }
    
                            }

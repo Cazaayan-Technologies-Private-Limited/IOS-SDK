@@ -1475,6 +1475,7 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
                 ddpi = "Y"
             uncheckAllDDPICheckboxesYes()
             } else if sender == ddpiNoBtn {
+                showAlert(message: "With DDPI you can Sell stocks instantly without repeated TPIN (EDIS) authorization.")
                 ddpiYesBtn.setImage(UIImage(systemName: "circle"), for: .normal)
                 ddpiNoBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
                 ddpi = "N"

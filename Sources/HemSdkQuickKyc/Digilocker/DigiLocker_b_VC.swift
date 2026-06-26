@@ -128,6 +128,7 @@ class DigiLocker_b_VC: UIViewController {
             
             vc.panNo = finalPAN
             vc.regId = regIdFinal
+            
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
