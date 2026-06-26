@@ -1315,17 +1315,24 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             print("✅ UserID: \(userId), SessionID: \(sessionID)")
             
             // ✅ NOW SAFE TO CALL APIs
-            self.DPSchemeName()
-            ViewDPScheme()
-            brokeragePlan()
-            viewTradingDetails()
-            ValidateToken()
-            navigationItem.hidesBackButton = true
+//            self.DPSchemeName()
+//            ViewDPScheme()
+//            brokeragePlan()
+//            viewTradingDetails()
+//            ValidateToken()
+        
             SIXTHAPI(userID: userId)
-            currencyBtn.isHidden = true
+//            if let userId = fetchedUserId {
+//                      SIXTHAPI(userID: userId)
+//                  } else {
+//                      print("User ID is not fetched yet.")
+//                  }
             
         }
         
+    
+        navigationItem.hidesBackButton = true
+        currencyBtn.isHidden = true
         // Initialize button images
         dematYesBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
         dematNoBtn.setImage(UIImage(systemName: "circle"), for: .normal)
@@ -1618,12 +1625,12 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
         }
         
         let isDiscountBroking = UserDefaults.standard.string(forKey: "IsDiscountBroking") ?? "N"
-        
-        if isDiscountBroking == "Y" {
-            discountBrokerage()
-        } else {
-            paymentRequest()
-        }
+                                        
+                if isDiscountBroking == "Y" {
+                                            self.discountBrokerage()
+                                        } else {
+                                            self.paymentRequest()
+                                        }
         
         insertWeb()
         
@@ -1753,18 +1760,18 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                 return
             }
             
-            guard let panNumber = self.panNo, !panNumber.isEmpty else {
-                print("❌ PAN Number is missing from UserDefaults")
-                self.showAlert(message: "PAN number not found. Please login again.")
-                return
-            }
+            let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+            let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                       
+            let regId = UserDefaults.standard.string(forKey: "RegId")
+            let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
             
             let parameters: [String: Any?] = [
                 "IsPaymentGetwayAllow": 0,
                 "TxnId": nil,
-                "RegId": regId,
+                "RegId": regIdFinal,
                 "UserId": fetchedUserId,
-                "PanNo": panNumber,
+                "PanNo": finalPAN,
                 "TokenId": tokenId,
                 "Type": nil,
                 "IsEquitySelect": "1",
@@ -2206,7 +2213,7 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                     if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
                         case "000000", "621002":
-                            print("print")
+                          print("print")
                         case "999992":
                             DispatchQueue.main.async {
                                 CoreDataHelper.deleteAllTokens(
@@ -2337,12 +2344,21 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                 print("No tokens available. Please reload the tokens.")
                 return
             }
+            
+            guard let panNumber = self.panNo, !panNumber.isEmpty else {
+                          print("❌ PAN Number is missing from UserDefaults")
+                          self.showAlert(message: "PAN number not found. Please login again.")
+                          return
+                      }
+            
+            let savedRegId = UserDefaults.standard.string(forKey: "RegId") ?? regId ?? ""
+            
             let parameters: [String: Any?] = [
                 "IsPaymentGetwayAllow": 0,
                 "TxnId": nil,
-                "RegId": regId,
+                "RegId": savedRegId,
                 "UserId": fetchedUserId,
-                "PanNo": panNo,
+                "PanNo": panNumber,
                 "TokenId": tokenId,
                 "Type": "string",
                 "IsEquitySelect": "1",
@@ -2608,6 +2624,8 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                             
                             let isDiscountBroking = jsonResponse["IsDiscountBroking"] as? String ?? "N"
                             
+                            UserDefaults.standard.set(isDiscountBroking, forKey: "IsDiscountBroking")
+                            
                             DispatchQueue.main.async {
                                 
                                 // Hide stack if Discount Broking = Y
@@ -2615,6 +2633,11 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                                 self.openAccountStack.isHidden = (isDiscountBroking == "Y")
                                 
                                 print("IsDiscountBroking:", isDiscountBroking)
+                                
+                                self.DPSchemeName()
+                                self.ViewDPScheme()
+                                self.brokeragePlan()
+                                self.viewTradingDetails()
                             }
                         default:
                             print("Unhandled error code: \(errorCode)")
@@ -2627,3 +2650,4 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
         }
     }
 }
+
