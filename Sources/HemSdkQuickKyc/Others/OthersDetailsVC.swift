@@ -1354,6 +1354,14 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         understandingBtn8.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
         understandingBtn9.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
         understandingBtn10.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+        
+        fatherNameTF.delegate = self
+        fatherNameTF.returnKeyType = .done
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     private func fetchUserId() {
