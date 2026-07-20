@@ -1171,7 +1171,7 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
     @IBOutlet weak var understandingBtn7: UIButton!
     @IBOutlet weak var understandingBtn8: UIButton!
     @IBOutlet weak var understandingBtn9: UIButton!
-    @IBOutlet weak var understandingBtn10: UIButton!
+   // @IBOutlet weak var understandingBtn10: UIButton!
     @IBOutlet weak var receiveView: UIView!
     
     var RTA : String?
@@ -1272,7 +1272,7 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         
         RTA = "Y"
         
-        All_thePledgeInstructions = "N"
+        All_thePledgeInstructions = "Y"
         
         SIXTHAPI(userID: fetchedUserId ?? "")
         navigationItem.hidesBackButton = true
@@ -1353,7 +1353,7 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         understandingBtn7.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
         understandingBtn8.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
         understandingBtn9.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
-        understandingBtn10.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+       // understandingBtn10.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
         
         fatherNameTF.delegate = self
         fatherNameTF.returnKeyType = .done
@@ -1783,23 +1783,23 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         updateSubmitButtonState()
        }
     
-    @IBAction func understandingBtn10(_ sender: UIButton) {
-        isunderstanding10Checked.toggle()
-        
-        if isunderstanding10Checked {
-                                 showToast(message: "You need to tick the checkbox to proceed further.")
-                                 //return // Don't allow unchecking
-                             }
-        isunderstanding10Checked.toggle()
-                             let imageName = isunderstanding10Checked
-                             ? "checkmark.square.fill"
-                             : "square"
-                             
-                             sender.setImage(UIImage(systemName: imageName), for: .normal)
-                             sender.tintColor = .appPrimary
-        
-        updateSubmitButtonState()
-       }
+//    @IBAction func understandingBtn10(_ sender: UIButton) {
+//        isunderstanding10Checked.toggle()
+//        
+//        if isunderstanding10Checked {
+//                                 showToast(message: "You need to tick the checkbox to proceed further.")
+//                                 //return // Don't allow unchecking
+//                             }
+//        isunderstanding10Checked.toggle()
+//                             let imageName = isunderstanding10Checked
+//                             ? "checkmark.square.fill"
+//                             : "square"
+//                             
+//                             sender.setImage(UIImage(systemName: imageName), for: .normal)
+//                             sender.tintColor = .appPrimary
+//        
+//        updateSubmitButtonState()
+//       }
     
     func showToast(message: String) {
         let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 150,

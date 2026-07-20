@@ -1687,7 +1687,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo web" translatesAutoresizingMaskIntoConstraints="NO" id="O1G-i4-6qL">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hemlogo" translatesAutoresizingMaskIntoConstraints="NO" id="O1G-i4-6qL">
                                 <rect key="frame" x="20" y="180" width="100" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="muc-hy-DFf"/>
@@ -2160,7 +2160,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ULb-AD-7qU">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="1000"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo web" translatesAutoresizingMaskIntoConstraints="NO" id="gdh-dk-pMk">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hemlogo" translatesAutoresizingMaskIntoConstraints="NO" id="gdh-dk-pMk">
                                                 <rect key="frame" x="20" y="30" width="100" height="40"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="D6s-dZ-3pq"/>
@@ -2895,9 +2895,9 @@
     <resources>
         <image name="Confirmed" width="72" height="73"/>
         <image name="Equity" width="27" height="27"/>
-        <image name="Logo web" width="183" height="43"/>
         <image name="Pan" width="860" height="540"/>
         <image name="google" width="20" height="20"/>
+        <image name="hemlogo" width="1280" height="391"/>
         <image name="leftArrow" width="24" height="24"/>
         <image name="multiply" catalog="system" width="128" height="111"/>
         <image name="pencil" catalog="system" width="128" height="113"/>

@@ -14,6 +14,8 @@ protocol SelectionDelegate: AnyObject {
 class documentTypeVC: UIViewController {
     
     @IBOutlet weak var holderview: UIView!
+    @IBOutlet weak var panBtn: UIButton!
+    @IBOutlet weak var adhaarBtn: UIButton!
     
     weak var delegate: SelectionDelegate?
     var identifier: String = ""
@@ -21,6 +23,7 @@ class documentTypeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         holderview.layer.cornerRadius = 10
+        adhaarBtn.isHidden = true
     }
     
     @IBAction func cancelBtn(_ sender: UIButton) {

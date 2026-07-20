@@ -635,36 +635,36 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         PANCopy.layer.borderWidth = 0.5
         PANCopy.layer.borderColor = UIColor.appBorder.cgColor
         
-        incomeProofuploadBtn.backgroundColor = .documentBackground
+        //incomeProofuploadBtn.backgroundColor = .documentBackground
         
         incomeProofYesBtn.tintColor = .appPrimary
         incomeProofNoBtn.tintColor = .appPrimary
-        incomeProofVerifyBtn.backgroundColor = .documentBackground
+        //incomeProofVerifyBtn.backgroundColor = .documentBackground
         
         panCopyBtn.tintColor = .appPrimary
-        panCopyBtn.backgroundColor = .documentBackground
+        //panCopyBtn.backgroundColor = .documentBackground
         
         BankProofYesBtn.tintColor = .appPrimary
         BankProofNoBtn.tintColor = .appPrimary
-        BANKPROOFBTN.backgroundColor = .documentBackground
-        bankProofVerifyBtn.backgroundColor = .documentBackground
-        CurrentSignBtn.backgroundColor = .documentBackground
-        drawBtn.backgroundColor = .documentBackground
-        CP_CaptureImgBtn.backgroundColor = .documentBackground
-        CP_IPVLinkBtn.backgroundColor = .documentBackground
+        //BANKPROOFBTN.backgroundColor = .documentBackground
+        //bankProofVerifyBtn.backgroundColor = .documentBackground
+        //CurrentSignBtn.backgroundColor = .documentBackground
+        //drawBtn.backgroundColor = .documentBackground
+        //CP_CaptureImgBtn.backgroundColor = .documentBackground
+        //CP_IPVLinkBtn.backgroundColor = .documentBackground
         doneBtn.backgroundColor = .appPrimary
         SubmitBtn.backgroundColor = .appPrimary
         view.backgroundColor = .appBackground
         
         BankProofYesBtn.tintColor = .appPrimary
         BankProofNoBtn.tintColor = .appPrimary
-        BANKPROOFBTN.backgroundColor = .documentBackground
+        //BANKPROOFBTN.backgroundColor = .documentBackground
         
         dematNoBtn.tintColor = .appPrimary
         dematYesBtn.tintColor = .appPrimary
         
-        DematImgBtn.backgroundColor = .documentBackground
-        DematImageVerifyBtn.backgroundColor = .documentBackground
+        //DematImgBtn.backgroundColor = .documentBackground
+        //DematImageVerifyBtn.backgroundColor = .documentBackground
         //DematImage.backgroundColor = .documentBackground
         //DematImage.isHidden = true
         

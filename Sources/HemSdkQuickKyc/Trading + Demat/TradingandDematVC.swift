@@ -1315,18 +1315,18 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
             print("✅ UserID: \(userId), SessionID: \(sessionID)")
             
             // ✅ NOW SAFE TO CALL APIs
-//            self.DPSchemeName()
-//            ViewDPScheme()
-//            brokeragePlan()
-//            viewTradingDetails()
-//            ValidateToken()
+            self.DPSchemeName()
+            ViewDPScheme()
+            brokeragePlan()
+            viewTradingDetails()
+            ValidateToken()
         
-            SIXTHAPI(userID: userId)
-//            if let userId = fetchedUserId {
-//                      SIXTHAPI(userID: userId)
-//                  } else {
-//                      print("User ID is not fetched yet.")
-//                  }
+           // SIXTHAPI(userID: userId)
+            if let userId = fetchedUserId {
+                      SIXTHAPI(userID: userId)
+                  } else {
+                      print("User ID is not fetched yet.")
+                  }
             
         }
         
@@ -2634,10 +2634,10 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
                                 
                                 print("IsDiscountBroking:", isDiscountBroking)
                                 
-                                self.DPSchemeName()
-                                self.ViewDPScheme()
-                                self.brokeragePlan()
-                                self.viewTradingDetails()
+//                                self.DPSchemeName()
+//                                self.ViewDPScheme()
+//                                self.brokeragePlan()
+//                                self.viewTradingDetails()
                             }
                         default:
                             print("Unhandled error code: \(errorCode)")
