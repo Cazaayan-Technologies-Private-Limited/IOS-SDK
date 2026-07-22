@@ -1279,9 +1279,6 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     @IBOutlet weak var dDpiBtn: UIButton!
     @IBOutlet weak var proceedBtnView: UIView!
     @IBOutlet weak var proceedBtn: UIButton!
-    @IBOutlet weak var eSignLbl1: UILabel!
-    @IBOutlet weak var eSignLbl2: UILabel!
-    @IBOutlet weak var eSignLbl3: UILabel!
     @IBOutlet weak var View1: UIView!
     @IBOutlet weak var View2: UIView!
     @IBOutlet weak var View3: UIView!
@@ -1317,7 +1314,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     var esignType: String?
     var currentEsignSegment: String?
     public var onStartEsign: (() -> Void)?
-    public var onSDKClose: (() -> Void)?
+    public var onSDKClose: (([String: String]) -> Void)?
     var documentId: String?
     var pollingTimer: Timer?
     var pollingAttempts = 0
@@ -1355,10 +1352,6 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         ekraView1.isHidden = true
         aofView1.isHidden = true
         ddpiView1.isHidden = true
-
-        eSignLbl1.isHidden = true
-        eSignLbl2.isHidden = true
-        eSignLbl3.isHidden = true
 
         ekraView1.tintColor =  .appPrimary
         aofView1.tintColor = .appPrimary
@@ -2332,14 +2325,14 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                                if isPDFSign == "1" {
    
                                                    self.ekraView1.isHidden = false
-                                                   self.eSignLbl1.isHidden = false
+                                                  
    
                                                    self.ekraStack.isHidden = true
    
                                                } else {
    
                                                    self.ekraView1.isHidden = true
-                                                   self.eSignLbl1.isHidden = true
+                                                  
    
                                                    self.ekraStack.isHidden = false
                                                }
@@ -2356,14 +2349,14 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                                if isPDFSign == "1" {
    
                                                    self.aofView1.isHidden = false
-                                                   self.eSignLbl2.isHidden = false
+                                                 
    
                                                    self.aofStack.isHidden = true
    
                                                } else {
    
                                                    self.aofView1.isHidden = true
-                                                   self.eSignLbl2.isHidden = true
+                                                 
    
                                                    self.aofStack.isHidden = false
                                                }
@@ -2375,7 +2368,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                            self.ddpiSign = isPDFSign
                                            self.ddpiID = id
                                            self.ddpiStack.isHidden = (isPDFSign == "1")
-                                           self.eSignLbl3.isHidden = (isPDFSign == "1")
+                                          
    
                                            DispatchQueue.main.async {
    
@@ -2383,14 +2376,14 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                                if isPDFSign == "1" {
    
                                                    self.ddpiView1.isHidden = false
-                                                   self.eSignLbl3.isHidden = false
+                                                  
    
                                                    self.ddpiStack.isHidden = true
    
                                                } else {
    
                                                    self.ddpiView1.isHidden = true
-                                                   self.eSignLbl3.isHidden = true
+                                                  
    
                                                    self.ddpiStack.isHidden = false
                                                }
@@ -2410,7 +2403,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                    // You might also want to hide related elements
                                    self.ddpiStack.isHidden = !hasDDPI || (self.ddpiSign == "1")
                                    self.ddpiView1.isHidden = !hasDDPI || (self.ddpiSign != "1")
-                                   self.eSignLbl3.isHidden = !hasDDPI || (self.ddpiSign != "1")
+                                  
                                    self.ddpiBtn.isHidden = !hasDDPI
                                    self.ddpiViewBtn.isHidden = !hasDDPI
    
@@ -2437,8 +2430,8 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         DispatchQueue.main.async {
 
             // ✅ Notify host app first
-            self.onSDKClose?()
-
+            self.onSDKClose?(["DDPI_DONE": "DONE"])
+52
             // ✅ Close full SDK (important)
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let window = windowScene.windows.first {

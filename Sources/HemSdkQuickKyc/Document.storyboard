@@ -3240,7 +3240,7 @@
                                                                             <constraint firstItem="b8u-XO-nIv" firstAttribute="leading" secondItem="YU9-18-qON" secondAttribute="leading" id="wSK-dX-RYM"/>
                                                                         </constraints>
                                                                     </view>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Draw Signature on white blank paper." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MnC-r9-dZh">
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Draw Signature" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MnC-r9-dZh">
                                                                         <rect key="frame" x="0.0" y="60" width="382" height="42"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="42" id="z6f-aa-fqD"/>

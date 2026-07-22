@@ -241,22 +241,16 @@
                                             <constraint firstAttribute="height" constant="40" id="i6q-lK-mDF"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ekra PDF" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QCN-Bm-HGf">
-                                        <rect key="frame" x="70" y="14.999999999999998" width="69.666666666666686" height="20.333333333333329"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="KRA eSign 1/3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QCN-Bm-HGf">
+                                        <rect key="frame" x="70" y="14.999999999999998" width="106.66666666666669" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(E-Signed)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xu7-C9-8b8">
-                                        <rect key="frame" x="149.66666666666666" y="15" width="74.333333333333343" height="18"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" systemColor="systemGreenColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aggreement to start trading in stocks." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t9a-Ye-urn">
-                                        <rect key="frame" x="68" y="40.333333333333314" width="183" height="12"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Identify Verification to activate trading." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t9a-Ye-urn">
+                                        <rect key="frame" x="68.000000000000014" y="40.333333333333314" width="188.33333333333337" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="textColor" white="0.67000000000000004" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l9r-Nq-0CP">
@@ -326,10 +320,8 @@
                                     <constraint firstItem="uJu-9Q-bLA" firstAttribute="centerY" secondItem="ric-ZB-Tug" secondAttribute="centerY" id="ggR-42-vzQ"/>
                                     <constraint firstItem="uCY-0j-XwL" firstAttribute="top" secondItem="t9a-Ye-urn" secondAttribute="bottom" constant="5" id="hSh-5k-5af"/>
                                     <constraint firstAttribute="height" constant="120" id="iJ4-SL-Kch"/>
-                                    <constraint firstItem="Xu7-C9-8b8" firstAttribute="top" secondItem="ric-ZB-Tug" secondAttribute="top" constant="15" id="k0k-qF-IhC"/>
                                     <constraint firstAttribute="bottom" secondItem="uCY-0j-XwL" secondAttribute="bottom" constant="10" id="mq6-SZ-uCT"/>
                                     <constraint firstItem="uJu-9Q-bLA" firstAttribute="top" secondItem="ric-ZB-Tug" secondAttribute="top" constant="20" id="qn9-2a-FhB"/>
-                                    <constraint firstItem="Xu7-C9-8b8" firstAttribute="leading" secondItem="QCN-Bm-HGf" secondAttribute="trailing" constant="10" id="qqB-UE-bz5"/>
                                     <constraint firstItem="uJu-9Q-bLA" firstAttribute="leading" secondItem="ric-ZB-Tug" secondAttribute="leading" constant="20" id="sYp-3K-UAE"/>
                                     <constraint firstItem="QCN-Bm-HGf" firstAttribute="top" secondItem="ric-ZB-Tug" secondAttribute="top" constant="15" id="tzA-U1-dZh"/>
                                     <constraint firstAttribute="trailing" secondItem="l9r-Nq-0CP" secondAttribute="trailing" constant="10" id="uUT-Ch-BDd"/>
@@ -354,22 +346,16 @@
                                             <constraint firstAttribute="height" constant="40" id="njj-8J-Ogj"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aof PDF" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpt-KJ-6v8">
-                                        <rect key="frame" x="70" y="14.999999999999998" width="62" height="20.333333333333329"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Equity eSign 2/3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpt-KJ-6v8">
+                                        <rect key="frame" x="70" y="14.999999999999998" width="124" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(E-Signed)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="drG-KM-5gf">
-                                        <rect key="frame" x="142" y="15" width="74.333333333333314" height="18"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" systemColor="systemGreenColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aggreement to start trading in stocks." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2T-5W-SGR">
-                                        <rect key="frame" x="68" y="40.333333333333314" width="183" height="12"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Identify Verification to activate trading." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2T-5W-SGR">
+                                        <rect key="frame" x="68.000000000000014" y="40.333333333333314" width="188.33333333333337" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="textColor" white="0.67000000000000004" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Inh-aa-sjA">
@@ -444,9 +430,7 @@
                                     <constraint firstItem="O2T-5W-SGR" firstAttribute="leading" secondItem="bYc-Uz-CE8" secondAttribute="trailing" constant="8" id="RbU-Ba-IhO"/>
                                     <constraint firstAttribute="trailing" secondItem="Qe9-gC-hkL" secondAttribute="trailing" constant="10" id="UID-XF-5Vf"/>
                                     <constraint firstAttribute="bottom" secondItem="Qe9-gC-hkL" secondAttribute="bottom" constant="10" id="V4P-cj-faa"/>
-                                    <constraint firstItem="drG-KM-5gf" firstAttribute="leading" secondItem="dpt-KJ-6v8" secondAttribute="trailing" constant="10" id="YVy-cV-JLX"/>
                                     <constraint firstItem="Qe9-gC-hkL" firstAttribute="top" secondItem="O2T-5W-SGR" secondAttribute="bottom" constant="5" id="ahq-gR-Nda"/>
-                                    <constraint firstItem="drG-KM-5gf" firstAttribute="top" secondItem="7eW-uX-bhV" secondAttribute="top" constant="15" id="cq9-TE-M0x"/>
                                     <constraint firstAttribute="trailing" secondItem="Inh-aa-sjA" secondAttribute="trailing" constant="10" id="eK6-lH-95m"/>
                                     <constraint firstItem="Inh-aa-sjA" firstAttribute="top" secondItem="7eW-uX-bhV" secondAttribute="top" constant="20" id="fed-78-7Fx"/>
                                     <constraint firstItem="bYc-Uz-CE8" firstAttribute="leading" secondItem="7eW-uX-bhV" secondAttribute="leading" constant="20" id="p5G-yw-6fL"/>
@@ -473,22 +457,16 @@
                                             <constraint firstAttribute="height" constant="40" id="xBW-MN-W0p"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DDPI PDF" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2a-3G-neh">
-                                        <rect key="frame" x="70" y="14.999999999999998" width="74.333333333333314" height="20.333333333333329"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DDPI eSign 3/3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2a-3G-neh">
+                                        <rect key="frame" x="70" y="14.999999999999998" width="115.33333333333331" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(E-Signed)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gqk-75-9fe">
-                                        <rect key="frame" x="154.33333333333334" y="15" width="74.333333333333343" height="18"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" systemColor="systemGreenColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Permission to debit shares when you pledge." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ts0-Bx-526">
-                                        <rect key="frame" x="68" y="40.333333333333371" width="216" height="12"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Identify Verification to activate trading." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ts0-Bx-526">
+                                        <rect key="frame" x="68.000000000000014" y="40.333333333333371" width="188.33333333333337" height="12"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                        <color key="textColor" white="0.67000000000000004" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JqK-Gt-VKh">
@@ -562,7 +540,6 @@
                                     <constraint firstAttribute="trailing" secondItem="X6C-Ok-a38" secondAttribute="trailing" constant="10" id="IvZ-07-GYQ"/>
                                     <constraint firstItem="X6C-Ok-a38" firstAttribute="leading" secondItem="B5h-SI-apm" secondAttribute="leading" constant="160" id="Ju5-Nq-SNZ"/>
                                     <constraint firstItem="X6C-Ok-a38" firstAttribute="top" secondItem="Ts0-Bx-526" secondAttribute="bottom" constant="5" id="Knq-rh-G3b"/>
-                                    <constraint firstItem="Gqk-75-9fe" firstAttribute="top" secondItem="B5h-SI-apm" secondAttribute="top" constant="15" id="L2o-Tm-hz7"/>
                                     <constraint firstItem="Lje-R4-BhC" firstAttribute="top" secondItem="B5h-SI-apm" secondAttribute="top" constant="20" id="TvT-a9-vH1"/>
                                     <constraint firstItem="Lje-R4-BhC" firstAttribute="top" secondItem="B5h-SI-apm" secondAttribute="top" constant="10" id="YLt-lc-6Ea"/>
                                     <constraint firstItem="Ts0-Bx-526" firstAttribute="top" secondItem="K2a-3G-neh" secondAttribute="bottom" constant="5" id="cxW-5d-vW5"/>
@@ -571,7 +548,6 @@
                                     <constraint firstAttribute="bottom" secondItem="Lje-R4-BhC" secondAttribute="bottom" constant="20" id="fbY-tp-dg4"/>
                                     <constraint firstAttribute="height" constant="120" id="jmE-lO-rXU"/>
                                     <constraint firstItem="K2a-3G-neh" firstAttribute="leading" secondItem="Lje-R4-BhC" secondAttribute="trailing" constant="10" id="lWx-86-hnu"/>
-                                    <constraint firstItem="Gqk-75-9fe" firstAttribute="leading" secondItem="K2a-3G-neh" secondAttribute="trailing" constant="10" id="n0Z-Oa-CUn"/>
                                     <constraint firstItem="Lje-R4-BhC" firstAttribute="centerY" secondItem="B5h-SI-apm" secondAttribute="centerY" id="nSX-B3-tjl"/>
                                 </constraints>
                                 <variation key="default">
@@ -663,9 +639,6 @@
                         <outlet property="ddpiView1" destination="JqK-Gt-VKh" id="1qV-r6-oQ6"/>
                         <outlet property="ddpiViewBtn" destination="6Vd-mk-DHO" id="I4y-Jq-lXB"/>
                         <outlet property="eKraBtn" destination="k1N-Uq-Cxf" id="zJn-wy-SE0"/>
-                        <outlet property="eSignLbl1" destination="Xu7-C9-8b8" id="x9o-0c-M3T"/>
-                        <outlet property="eSignLbl2" destination="drG-KM-5gf" id="VxG-QL-bW1"/>
-                        <outlet property="eSignLbl3" destination="Gqk-75-9fe" id="lCf-5H-QYs"/>
                         <outlet property="ekraStack" destination="uCY-0j-XwL" id="PJy-r3-Oa1"/>
                         <outlet property="ekraView1" destination="l9r-Nq-0CP" id="Kz2-tg-XPn"/>
                         <outlet property="ekraViewBtn" destination="Aiw-r3-s8t" id="kAG-Zt-55g"/>
