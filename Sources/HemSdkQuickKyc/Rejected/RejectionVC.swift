@@ -28,7 +28,7 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        rejectionCollectionView.register(UINib(nibName: "RejectionCVC", bundle: Bundle.module), forCellWithReuseIdentifier: "RejectionCVC")
+        //        rejectionCollectionView.register(UINib(nibName: "RejectionCVC", bundle: Bundle.module), forCellWithReuseIdentifier: "RejectionCVC")
         self.submitBtn.layer.cornerRadius = 10
         CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
             guard let self = self else { return }
@@ -66,19 +66,20 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
     
     @IBAction func submitVerificationBtn(_ sender: UIButton) {
         guard !rejectionList.isEmpty else {
-                print("No rejection items found")
-                return
-            }
-
-        for item in rejectionList {
-               guard let documentName = item["DocumentName"] as? String else { continue }
-
-               if handleNavigation(documentName: documentName) {
-                   return
-               }
-            }
-
-            print("All items already rectified")
+            print("No rejection items found")
+            return
+        }
+        handleNavigation()
+        
+//        for item in rejectionList {
+//            guard let documentName = item["DocumentName"] as? String else { continue }
+//            
+//            if handleNavigation() {
+//                return
+//            }
+//        }
+//        
+//        print("All items already rectified")
     }
     
     func showAlert(message: String) {
@@ -89,37 +90,55 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
         }
     }
     
-    func handleNavigation(documentName: String) -> Bool {
-        switch documentName {
-
-        case "DOCUMENT DETAILS":
-            let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
-            if let vc = storyboard.instantiateViewController(withIdentifier: "DocumentVC") as? DocumentVC {
-                
-                let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
-                let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
-                                                
-                let regId = UserDefaults.standard.string(forKey: "RegId")
-                let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
-                vc.PanNo = finalPAN
-                vc.rejection = "Rejection"
-                vc.RegId = regIdFinal
-                vc.delegate = delegate
-                vc.isFromRejectionFlow = true
-                self.navigationController?.pushViewController(vc, animated: true)
-                return true
-            }
-        case "BANK DETAILS":
-            // navigate bank
-            return false
-
-        default:
-            print("Unknown document: \(documentName)")
+    func handleNavigation() {
+        let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
+        if let vc = storyboard.instantiateViewController(withIdentifier: "DocumentVC") as? DocumentVC {
+            
+            let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+            let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+            
+            let regId = UserDefaults.standard.string(forKey: "RegId")
+            let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+            vc.PanNo = finalPAN
+            vc.rejection = "Rejection"
+            vc.RegId = regIdFinal
+            vc.delegate = delegate
+            vc.isFromRejectionFlow = true
+            self.navigationController?.pushViewController(vc, animated: true)
         }
-
-        return false
     }
 }
+    
+//        switch documentName {
+//
+//        case "DOCUMENT DETAILS":
+//            let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
+//            if let vc = storyboard.instantiateViewController(withIdentifier: "DocumentVC") as? DocumentVC {
+//                
+//                let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+//                let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+//                                                
+//                let regId = UserDefaults.standard.string(forKey: "RegId")
+//                let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+//                vc.PanNo = finalPAN
+//                vc.rejection = "Rejection"
+//                vc.RegId = regIdFinal
+//                vc.delegate = delegate
+//                vc.isFromRejectionFlow = true
+//                self.navigationController?.pushViewController(vc, animated: true)
+//                return true
+//            }
+//        case "BANK DETAILS":
+//            // navigate bank
+//            return false
+//
+//        default:
+//            print("Unknown document: \(documentName)")
+//        }
+//
+//        return false
+//    }
+//}
 
 //extension RejectionVC:UICollectionViewDelegate,UICollectionViewDataSource{
 //    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
