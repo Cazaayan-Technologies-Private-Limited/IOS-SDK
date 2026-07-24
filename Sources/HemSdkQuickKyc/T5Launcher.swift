@@ -51,9 +51,13 @@ import UIKit
 public class T5Launcher {
 
     private init() { }
+    @MainActor public static var onSDKClose: (([String: String]) -> Void)?
 
     
-    @MainActor public static func show(from presenter: UIViewController, transactionId: String? = nil) {
+    @MainActor public static func show(from presenter: UIViewController, transactionId: String? = nil,  onSDKClose: (([String: String]) -> Void)? = nil) {
+        
+        self.onSDKClose = onSDKClose
+        
         let storyboard = UIStoryboard(name: "DashboardVC", bundle: Bundle.module)
         
         // Instantiate the NAVIGATION CONTROLLER (not NewAccountVC)
@@ -63,6 +67,7 @@ public class T5Launcher {
         
         if let newAccountVC = navController.viewControllers.first(where: { $0 is NewAccountVC }) as? NewAccountVC {
             newAccountVC.txnId = transactionId
+            
         }
         
         navController.modalPresentationStyle = .fullScreen

@@ -2430,8 +2430,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         DispatchQueue.main.async {
 
             // ✅ Notify host app first
-            self.onSDKClose?(["DDPI_DONE": "DONE"])
-52
+            T5Launcher.onSDKClose?(["DDPI_DONE": "DONE"])
             // ✅ Close full SDK (important)
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let window = windowScene.windows.first {
