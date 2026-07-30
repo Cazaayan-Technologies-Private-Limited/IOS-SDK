@@ -410,7 +410,7 @@ static func fetchUserId(entityName: String, completion: @escaping (String?, Stri
         let tokenParameters: [String: Any] = [
             "UserId": USERID,
             "Password": decodeByteArrayToString,
-            "DeviceType": deviceType,
+            "DeviceType": "W",
             "SessionId": SessionId
         ]
         print(tokenParameters)
