@@ -1907,10 +1907,7 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
             return
         }
         
-        guard let tradingExperience = tradingExperience, !tradingExperience.isEmpty else {
-            showAlert(message: "Please enter Trading Experience.")
-            return
-        }
+        
         
         // ✅ Education
         //        guard let education = education, !education.isEmpty, education != "0" else {
@@ -1929,12 +1926,17 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
             showAlert(message: "Please select Annual Income.")
             return
         }
-      
         
-        guard let runningAccountAuthorization = runningAccountAuthorization, !runningAccountAuthorization.isEmpty else {
+        guard let tradingExperience = tradingExperience, !tradingExperience.isEmpty else {
+            showAlert(message: "Please enter Trading Experience.")
+            return
+        }
+                
+        guard let runningAccountAuthorization = runningAccountAuthorization, !runningAccountAuthorization.isEmpty, runningAccountAuthorization != "0" else {
             showAlert(message: "Please select Running Account Authorization.")
             return
         }
+        
         
         guard let ddpi = ddpi, !ddpi.isEmpty else {
                  showAlert(message: "Please select Ddpi.")

@@ -519,10 +519,12 @@ func apiCall(
     parameters: [String: Any],
     view: UIView,
     loaderText: String? = nil,
+    isLoader: Bool = true,
     completion: @MainActor @Sendable @escaping (Result<[String: Any], Error>) -> Void
 ) {
     let prefixURL = "https://signup.hemnxt.com:84/V4.0.0/api/"
     let completeURLString = prefixURL + url
+    print("\(completeURLString)")
     guard let url = URL(string: completeURLString) else {
         print("Invalid URL")
         return
@@ -542,11 +544,15 @@ func apiCall(
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     // Start loader on the main thread
     Task { @MainActor in
-        LoaderView.shared.startLoader(in: view, withText: loaderText)
+        if(isLoader){
+            LoaderView.shared.startLoader(in: view, withText: loaderText)
+        }
     }
     URLSession.shared.dataTask(with: request) { data, response, error in
         Task { @MainActor in
-            LoaderView.shared.stopLoader()
+            if(isLoader){
+                LoaderView.shared.stopLoader()
+            }
             if let error = error {
                 completion(.failure(error))
                 return

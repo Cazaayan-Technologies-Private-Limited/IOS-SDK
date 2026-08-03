@@ -1058,7 +1058,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -1122,7 +1122,10 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
             showAlert(title: "Alert", message: "upload your PAN Image")
             return
         }
-        self.ViewDocumentDetails()
+        self.ViewDocumentDetails(isSubmit: true)
+    }
+    
+    func submitForVerification(){
         
         DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) {
             [weak self] in
@@ -1463,15 +1466,55 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     }
     
     // Open Camera
+//    func openCamera() {
+//        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+//            let imagePicker = UIImagePickerController()
+//            imagePicker.delegate = self
+//            imagePicker.sourceType = .camera
+//            present(imagePicker, animated: true, completion: nil)
+//        } else {
+//            showAlert(title: "Error", message: "Camera not available.")
+//        }
+//    }
+    
+//    func openCamera() {
+//        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+//            showAlert(title: "Error", message: "Camera not available.")
+//            return
+//        }
+//
+//        let imagePicker = UIImagePickerController()
+//        imagePicker.delegate = self
+//        imagePicker.sourceType = .camera
+//
+//        if UIImagePickerController.isCameraDeviceAvailable(.front) {
+//            imagePicker.cameraDevice = .front
+//        }
+//
+//        present(imagePicker, animated: true)
+//    }
+    
     func openCamera() {
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = .camera
-            present(imagePicker, animated: true, completion: nil)
-        } else {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+
+        #if targetEnvironment(simulator)
+        // Simulator doesn't have a camera
+        imagePicker.sourceType = .photoLibrary
+        #else
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             showAlert(title: "Error", message: "Camera not available.")
+            return
         }
+
+        imagePicker.sourceType = .camera
+
+        if UIImagePickerController.isCameraDeviceAvailable(.front) {
+            imagePicker.cameraDevice = .front
+        }
+        #endif
+
+        present(imagePicker, animated: true)
     }
     
     // Open Gallery
@@ -1904,7 +1947,7 @@ extension DocumentVC {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -1950,7 +1993,7 @@ extension DocumentVC {
                                         .mobiledecodeArray ?? "",
                                     USERID: self.fetchedUserId ?? "",
                                     SessionId: self.fetchedSessionID ?? "",
-                                    entityName: "TokenMobile", deviceType: "M",
+                                    entityName: "TokenMobile", deviceType: "W",
                                     in: self.view
                                 ) { success in
                                     if success {
@@ -1998,7 +2041,7 @@ extension DocumentVC {
         }
     }
     
-    func ViewDocumentDetails() {
+    func ViewDocumentDetails(isSubmit: Bool = false) {
         
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
             [self] tokenId in
@@ -2007,7 +2050,7 @@ extension DocumentVC {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -2078,6 +2121,9 @@ extension DocumentVC {
                                 } else {
                                     self.updateUI(with: jsonResponse) // Normal UI update
                                 }
+                                if(isSubmit){
+                                    self.submitForVerification()
+                                }
                             }
                         case "999992":
                             DispatchQueue.main.async {
@@ -2093,7 +2139,7 @@ extension DocumentVC {
                                         .mobiledecodeArray ?? "",
                                     USERID: self.fetchedUserId ?? "",
                                     SessionId: self.fetchedSessionID ?? "",
-                                    entityName: "TokenMobile", deviceType: "M",
+                                    entityName: "TokenMobile", deviceType: "W",
                                     in: self.view
                                 ) { success in
                                     if success {
@@ -3115,7 +3161,7 @@ extension DocumentVC {
             decodeByteArrayToString: self.mobiledecodeArray ?? "",
             USERID: self.fetchedUserId ?? "",
             SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile",
-            deviceType: "M", in: self.view
+            deviceType: "W", in: self.view
         ) { success in
             if success {
                 // Retry SIXTHAPI after token regeneration
@@ -3136,7 +3182,7 @@ extension DocumentVC {
                         USERID: self.fetchedUserId ?? "",
                         SessionId: self.fetchedSessionID ?? "",
                         entityName: "TokenMobile",
-                        deviceType: "M",
+                        deviceType: "W",
                         in: self.view
                     ) { success in
                         if success {
@@ -3845,7 +3891,7 @@ extension DocumentVC {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -5044,7 +5090,7 @@ extension DocumentVC {
                 "isCommodityCategoriDone": "0",
                 "CommodityCategoriValue": "",
                 "CommodityCategoriKey": "",
-                "DeviceType": "M",
+                "DeviceType": "W",
             ]
             print(parameters)
             let Url = "ClientSLFinalStatus/UpdateFinalStatus"
@@ -5058,32 +5104,33 @@ extension DocumentVC {
                 case .success(let jsonResponse):
                     print("UpdateFinalStatus Response: \(jsonResponse)")
                     let ErrorMessage = jsonResponse["ErrorMessage"] as? String
-                    if let finalStatus = jsonResponse["FinalStatus"] as? String {
-                        if finalStatus == "4" {
-                            
-                            DispatchQueue.main.async {
-                                let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
-                                if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {
-                                    vc.PanNo = self.PanNo
-                                    vc.RegId = self.RegId
-                                    self.navigationController?.pushViewController(vc, animated: true)
-                                }
-                            }
-                            return
-                        }
-                    }
+//                    if let finalStatus = jsonResponse["FinalStatus"] as? String {
+//                        if finalStatus == "4" {
+//                            
+//                            DispatchQueue.main.async {
+//                                let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
+//                                if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {
+//                                    vc.PanNo = self.PanNo
+//                                    vc.RegId = self.RegId
+//                                    self.navigationController?.pushViewController(vc, animated: true)
+//                                }
+//                            }
+//                            return
+//                        }
+//                    }
                         if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
                         case "000000":
                             DispatchQueue.main.async {
-                                let vc =
-                                self.storyboard?.instantiateViewController(
-                                    withIdentifier: "applicationDoneVC")
-                                as! applicationDoneVC
-                                vc.modalPresentationStyle = .overCurrentContext
-                                vc.modalTransitionStyle = .crossDissolve
-                                vc.delegate = self
-                                self.present(vc, animated: true)
+                                self.SIXTHAPI(userID: self.fetchedUserId ?? "")
+//                                let vc =
+//                                self.storyboard?.instantiateViewController(
+//                                    withIdentifier: "applicationDoneVC")
+//                                as! applicationDoneVC
+//                                vc.modalPresentationStyle = .overCurrentContext
+//                                vc.modalTransitionStyle = .crossDissolve
+//                                vc.delegate = self
+//                                self.present(vc, animated: true)
                             }
                         case "000001":
                             DispatchQueue.main.async {
@@ -5109,6 +5156,90 @@ extension DocumentVC {
             }
         }
     }
+    
+    func SIXTHAPI(userID:String){
+            CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { tokenId in
+                guard let tokenId = tokenId else {
+                    // Handle the case where no tokens are available
+                    CoreDataHelper.generateToken(
+                        decodeByteArrayToString: self.mobiledecodeArray ?? "",
+                        USERID: self.fetchedUserId ?? "",
+                        SessionId: self.fetchedSessionID ?? "",
+                        entityName: "TokenMobile", deviceType: "W", in: self.view
+                    ) { success in
+                        if success {
+                            // Retry SIXTHAPI after token regeneration
+                            self.SIXTHAPI(userID: userID)
+                        } else {
+                            print("Token generation failed.")
+                        }
+                    }
+                    print("No tokens available. Please reload the tokens.")
+                    return
+                }
+                let parameters: [String: Any] = [
+                    "UserId": self.fetchedUserId as Any,
+                    "TokenId": tokenId
+                ]
+                print("6th api params\(parameters)")
+                let sixthUrl = "ActiveApplication/GetActiveApplicationCL"
+                // API call
+                apiCall(url: sixthUrl, method: "POST", parameters: parameters, view: self.view,loaderText: "Kindly wait we are fetching your details...") { result in
+                    switch result {
+                    case .success(let jsonResponse):
+                        print("GetActiveApplicationCL: \(jsonResponse)")
+//                        self.panNo = jsonResponse["PanNo"] as? String
+//                        self.regId = jsonResponse["RegId"] as? String
+//                        self.PANName = jsonResponse["PANName"] as? String
+//                        self.EmailId = jsonResponse["EmailId"] as? String
+                        if let isPdfGenerated = jsonResponse["IsPdfGenerated"] as? String {
+                            self.isPdfGenerated = isPdfGenerated
+                            print("IsPdfGenerated value: \(self.isPdfGenerated ?? "")")
+                        } else {
+                            print("IsPdfGenerated key not found in response.")
+                        }
+                        if let errorCode = jsonResponse["ErrorCode"] as? String {
+                            switch errorCode {
+                            case "999992":
+                                DispatchQueue.main.async {
+                                    CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+                                    print("All TokenMobile entries deleted due to error code 999992")
+                                    
+                                    // Regenerate tokens
+                                    CoreDataHelper.generateToken(decodeByteArrayToString: self.decodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+                                        if success {
+                                            // Retry SIXTHAPI after token regeneration
+                                            self.SIXTHAPI(userID: userID)
+                                        } else {
+                                            print("Token generation failed.")
+                                        }
+                                    }
+                                }
+                                
+                            case "000000":
+                                print("errorcode 000000 called")
+                                DispatchQueue.main.async{
+                                    
+                                    //self.doneapplication(ispdfgenerated: self.isPdfGenerated ?? "")
+//                                    self.delegate?.doneapplication(ispdfgenerated: self.isPdfGenerated ?? "")
+//                                    self.dismiss(animated: true)
+                                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "applicationDoneVC") as! applicationDoneVC
+                                    vc.modalPresentationStyle = .overCurrentContext
+                                    vc.modalTransitionStyle = .crossDissolve
+                                    vc.isPdfGenerated = self.isPdfGenerated
+                                    vc.delegate = self
+                                    self.present(vc, animated: true)
+                                }
+                            default:
+                                print("Unhandled error code: \(errorCode)")
+                            }
+                        }
+                    case .failure(let error):
+                        print("SIXTHAPI API call failed: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
     
 }
 

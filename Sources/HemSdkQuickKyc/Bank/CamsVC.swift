@@ -72,7 +72,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         self.ValidateToken()
@@ -122,7 +122,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                         .mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M",
+                    entityName: "TokenMobile", deviceType: "W",
                     in: self.view
                 ) { success in
                     if success {
@@ -155,7 +155,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
             print(parameters)
             let Url = "MultiPartImageUpload/ValidateIsCAMSDone"
             
-            apiCall(url: Url, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
+            apiCall(url: Url, method: "POST", parameters: parameters as [String : Any], view: self.view, isLoader: false) { result in
                 switch result {
                 case .success(let jsonResponse):
                     print("callingCams Response: \(jsonResponse)")
@@ -184,7 +184,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -218,7 +218,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                                 CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
                                 print("All TokenMobile entries deleted due to error code 999992")
                                 
-                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "M",in: self.view) { success in
+                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                                     if success {
                                         self.SIXTHAPI(userID: userID)
                                     } else {

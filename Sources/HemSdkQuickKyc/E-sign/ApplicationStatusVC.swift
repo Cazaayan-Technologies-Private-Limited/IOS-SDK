@@ -1282,6 +1282,9 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     @IBOutlet weak var View1: UIView!
     @IBOutlet weak var View2: UIView!
     @IBOutlet weak var View3: UIView!
+    @IBOutlet weak var ekraStatusLbl: UILabel!
+    @IBOutlet weak var aofStatusLbl: UILabel!
+    @IBOutlet weak var dDpiStatusLbl: UILabel!
 
     var fetchedUserId: String?
     var fetchedSessionID: String?
@@ -1352,6 +1355,10 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         ekraView1.isHidden = true
         aofView1.isHidden = true
         ddpiView1.isHidden = true
+        
+        ekraStatusLbl.isHidden = true
+        aofStatusLbl.isHidden = true
+        dDpiStatusLbl.isHidden = true
 
         ekraView1.tintColor =  .appPrimary
         aofView1.tintColor = .appPrimary
@@ -1376,7 +1383,11 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         proceedBtn.isEnabled = false
         proceedBtnView.isHidden = true
 
-
+        ekraViewBtn.addTarget(self, action: #selector(ekraViewBtnTapped), for: .touchUpInside)
+        
+        aofViewBtn.addTarget(self, action: #selector(aOfViewBtnTapped), for: .touchUpInside)
+        
+        ddpiViewBtn.addTarget(self, action: #selector(dDpiViewBtnTapped), for: .touchUpInside)
 
     }
 
@@ -1389,6 +1400,21 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
 
         // Then start polling (but with longer interval, e.g. 8-10 sec to be gentler)
         startEsignDonePolling(documentId: docId)
+    }
+    
+    @objc func ekraViewBtnTapped() {
+        print("Ekra View Button Tapped")
+        openPDF(segmentName: "EKRA")
+    }
+    
+    @objc func aOfViewBtnTapped() {
+        print("AOF View Button Tapped")
+        openPDF(segmentName: "E")
+    }
+    
+    @objc func dDpiViewBtnTapped() {
+        print("DDPI View Button Tapped")
+        openPDF(segmentName: "DDPI")
     }
 
     @IBAction func ekraBtnTapped(_ sender: UIButton) {
@@ -1673,25 +1699,25 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
 
     func openPDF(segmentName: String) {
 
-        // ✅ Check if PDF is signed before opening
-        var isSigned = false
-
-        switch segmentName {
-        case "EKRA":
-            isSigned = (ekraSign == "1")
-        case "E":
-            isSigned = (aofSign == "1")
-        case "DDPI":
-            isSigned = (ddpiSign == "1")
-        default:
-            break
-        }
-
-        // ❌ If not signed → don't open PDF
-        if !isSigned {
-            showAlert(message: "Please complete eSign first to view the PDF.")
-            return
-        }
+//        // ✅ Check if PDF is signed before opening
+//        var isSigned = false
+//
+//        switch segmentName {
+//        case "EKRA":
+//            isSigned = (ekraSign == "1")
+//        case "E":
+//            isSigned = (aofSign == "1")
+//        case "DDPI":
+//            isSigned = (ddpiSign == "1")
+//        default:
+//            break
+//        }
+//
+//        // ❌ If not signed → don't open PDF
+//        if !isSigned {
+//            showAlert(message: "Please complete eSign first to view the PDF.")
+//            return
+//        }
 
         // ✅ Continue only if signed
         guard let regId = RegId,
@@ -2140,7 +2166,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                     decodeByteArrayToString: self.decodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -2211,21 +2237,54 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         print("DDPI is signed and available")
     }
 
+//    func showCongratulationAndCloseSDK() {
+//        print("showCongratulationAndCloseSDK::called")
+//        DispatchQueue.main.async {
+//            // Show CongratulationVC
+//            let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
+//            let congratVC = storyboard.instantiateViewController(withIdentifier: "CongratulationVC") as! CongratulationVC
+//            
+//            // Set the onOkTapped closure
+//            congratVC.onOkTapped = { [weak self] in
+//                // Close the SDK when OK is tapped
+//                self?.closeSDK()
+//            }
+//            
+//            // Present the congratulation view controller
+//            congratVC.modalPresentationStyle = .overCurrentContext
+//            self.present(congratVC, animated: true)
+//        }
+//    }
+    
     func showCongratulationAndCloseSDK() {
+        print("showCongratulationAndCloseSDK::called")
+
         DispatchQueue.main.async {
-            // Show CongratulationVC
-            let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
-            let congratVC = storyboard.instantiateViewController(withIdentifier: "CongratulationVC") as! CongratulationVC
             
-            // Set the onOkTapped closure
-            congratVC.onOkTapped = { [weak self] in
-                // Close the SDK when OK is tapped
-                self?.closeSDK()
+            let presentCongratulationVC = {
+                let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
+                let congratVC = storyboard.instantiateViewController(withIdentifier: "CongratulationVC") as! CongratulationVC
+
+                congratVC.onOkTapped = { [weak self] in
+                    self?.closeSDK()
+                }
+
+                congratVC.modalPresentationStyle = .overCurrentContext
+                self.present(congratVC, animated: true)
             }
-            
-            // Present the congratulation view controller
-            congratVC.modalPresentationStyle = .overCurrentContext
-            self.present(congratVC, animated: true)
+
+            // First dismiss any presented alert/modal
+            if let presentedVC = self.presentedViewController {
+                presentedVC.dismiss(animated: false) {
+                    presentCongratulationVC()
+                }
+            } else if let navPresentedVC = self.navigationController?.presentedViewController {
+                navPresentedVC.dismiss(animated: false) {
+                    presentCongratulationVC()
+                }
+            } else {
+                presentCongratulationVC()
+            }
         }
     }
     
@@ -2236,12 +2295,14 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         let hasDDPI = pdfDataList.contains { $0["PDFSegment"] as? String == "DDPI" }
         
         var shouldShowCongratulation = false
+        print("shouldShowCongratulation11:: \(shouldShowCongratulation)")
         
         if hasDDPI {
             // If DDPI exists, show congratulation only when DDPI is signed
             shouldShowCongratulation = (ddpiSign == "1")
         } else if hasAOF && hasEKRA {
             // If only E and EKRA exist (no DDPI), show congratulation when E (AOF) is signed
+            print("aofSign:: \(aofSign) == ekraSign:: \(ekraSign)")
             // AND EKRA is also signed
             shouldShowCongratulation = (aofSign == "1" && ekraSign == "1")
         } else {
@@ -2257,9 +2318,10 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
             }
             shouldShowCongratulation = allSegmentsSigned && !pdfDataList.isEmpty
         }
-        
+        print("shouldShowCongratulation22:: \(shouldShowCongratulation)")
         if shouldShowCongratulation {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                print("showCongratulationAndCloseSDK::call")
                 self.showCongratulationAndCloseSDK()
             }
         }
@@ -2274,7 +2336,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                        decodeByteArrayToString: self.decodeArray ?? "",
                        USERID: self.fetchedUserId ?? "",
                        SessionId: self.fetchedSessionID ?? "",
-                       entityName: "TokenMobile", deviceType: "M", in: self.view
+                       entityName: "TokenMobile", deviceType: "W", in: self.view
                    ) { success in
                        if success {
                            // Retry SIXTHAPI after token regeneration
@@ -2325,14 +2387,14 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                                if isPDFSign == "1" {
    
                                                    self.ekraView1.isHidden = false
-                                                  
+                                                   self.ekraStatusLbl.isHidden = false
    
                                                    self.ekraStack.isHidden = true
    
                                                } else {
    
                                                    self.ekraView1.isHidden = true
-                                                  
+                                                   self.ekraStatusLbl.isHidden = true
    
                                                    self.ekraStack.isHidden = false
                                                }
@@ -2349,14 +2411,14 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                                if isPDFSign == "1" {
    
                                                    self.aofView1.isHidden = false
-                                                 
+                                                   self.aofStatusLbl.isHidden = false
    
                                                    self.aofStack.isHidden = true
    
                                                } else {
    
                                                    self.aofView1.isHidden = true
-                                                 
+                                                   self.aofStatusLbl.isHidden = true
    
                                                    self.aofStack.isHidden = false
                                                }
@@ -2376,14 +2438,14 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                                if isPDFSign == "1" {
    
                                                    self.ddpiView1.isHidden = false
-                                                  
+                                                   self.dDpiStatusLbl.isHidden = false
    
                                                    self.ddpiStack.isHidden = true
    
                                                } else {
    
                                                    self.ddpiView1.isHidden = true
-                                                  
+                                                   self.dDpiStatusLbl.isHidden = true
    
                                                    self.ddpiStack.isHidden = false
                                                }
@@ -2395,7 +2457,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                        }
                                    }
                                }
-   
+                            print("call doc")
                                DispatchQueue.main.async {
                                    // Hide the entire DDPI view container
                                    self.View3.isHidden = !hasDDPI

@@ -2204,7 +2204,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                       decodeByteArrayToString: self.mobiledecodeArray ?? "",
                       USERID: self.fetchedUserId ?? "",
                       SessionId: self.fetchedSessionID ?? "",
-                      entityName: "TokenMobile", deviceType: "M", in: self.view
+                      entityName: "TokenMobile", deviceType: "W", in: self.view
                   ) { success in
                       if success {
                           // Retry SIXTHAPI after token regeneration
@@ -2237,7 +2237,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                                   print("All TokenMobile entries deleted due to error code 999992")
                                   
                                   // Regenerate tokens
-                                  CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "M",in: self.view) { success in
+                                  CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                                       if success {
                                           // Retry SIXTHAPI after token regeneration
                                           self.SIXTHAPI(userID: userID)

@@ -394,7 +394,7 @@ class UPIVC: UIViewController {
                         decodeByteArrayToString: self.mobiledecodeArray ?? "",
                         USERID: self.fetchedUserId ?? "",
                         SessionId: self.fetchedSessionID ?? "",
-                        entityName: "TokenMobile", deviceType: "M", in: self.view
+                        entityName: "TokenMobile", deviceType: "W", in: self.view
                     ) { success in
                         if success {
                             self.SIXTHAPI(userID: userID)
@@ -434,7 +434,7 @@ class UPIVC: UIViewController {
                                 DispatchQueue.main.async {
                                     CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
                                     print("All TokenMobile entries deleted due to error code 999992")
-                                    CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "M",in: self.view) { success in
+                                    CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                                         if success {
                                             self.SIXTHAPI(userID: userID)
                                         } else {
@@ -548,7 +548,7 @@ class UPIVC: UIViewController {
                             .mobiledecodeArray ?? "",
                         USERID: self.fetchedUserId ?? "",
                         SessionId: self.fetchedSessionID ?? "",
-                        entityName: "TokenMobile", deviceType: "M",
+                        entityName: "TokenMobile", deviceType: "W",
                         in: self.view
                     ) { success in
                         if success {
@@ -610,7 +610,7 @@ class UPIVC: UIViewController {
                                     }
                                 }
                             case "999992":
-                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "M",in: self.view) { success in
+                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                                     if success {
                                         self.redirectCams()
                                         

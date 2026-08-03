@@ -414,7 +414,7 @@ extension BankVC{
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -458,7 +458,7 @@ extension BankVC{
                             DispatchQueue.main.async {
                                 CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
                                 print("All TokenMobile entries deleted due to error code 999992")
-                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "M",in: self.view) { success in
+                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                                     if success {
                                         self.SaveTradingBankDPClientData(accountnumber: accountnumber)
                                     } else {
@@ -636,7 +636,7 @@ extension BankVC{
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -669,7 +669,7 @@ extension BankVC{
                                 print("All TokenMobile entries deleted due to error code 999992")
                                 
                                 // Regenerate tokens
-                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "M",in: self.view) { success in
+                                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                                     if success {
                                         // Retry SIXTHAPI after token regeneration
                                         self.SIXTHAPI(userID: userID)
@@ -747,7 +747,7 @@ extension BankVC{
                     decodeByteArrayToString: self.mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M", in: self.view
+                    entityName: "TokenMobile", deviceType: "W", in: self.view
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
@@ -798,7 +798,7 @@ extension BankVC{
                         .mobiledecodeArray ?? "",
                     USERID: self.fetchedUserId ?? "",
                     SessionId: self.fetchedSessionID ?? "",
-                    entityName: "TokenMobile", deviceType: "M",
+                    entityName: "TokenMobile", deviceType: "W",
                     in: self.view
                 ) { success in
                     if success {
@@ -860,7 +860,7 @@ extension BankVC{
                                 }
                             }
                         case "999992":
-                            CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "M",in: self.view) { success in
+                            CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                                 if success {
                                     self.redirectCams()
                                     
@@ -885,7 +885,7 @@ extension BankVC{
         
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
             guard let tokenId = tokenId else {
-                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "M",in: self.view) { success in
+                CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                     if success {
                         // Call SIXTHAPI after tokenMobile API call is successful
                         self.ViewTradingBankDPClientData()

@@ -636,7 +636,7 @@ extension MobileOTPVC{
                 "TokenId": tokenId,
                 "UserIDSL": userID,
                 "MobileNo": self.phoneNumber,
-                "Flag": "An"
+                "Flag": "" //An"
             ]
             
             print("6th api params\(parameters)")
@@ -646,7 +646,7 @@ extension MobileOTPVC{
             apiCall(url: sixthUrl, method: "POST", parameters: parameters, view: self.view) { result in
                 switch result {
                 case .success(let jsonResponse):
-                    print("SIXTHAPI Response: \(jsonResponse)")
+                    print("SIXTHAPI Response::: \(jsonResponse)")
                     let EmailId = jsonResponse["EmailId"] as? String
                     let PanNo = jsonResponse["PanNo"] as? String
                     let PANName = jsonResponse["PANName"] as? String
@@ -725,7 +725,7 @@ extension MobileOTPVC{
                             }
                             
                             if finalStatus == "7" && isPdfGenerated == "0" && isPDFSign == "0"{
-                                print("✅ Navigating to ApplicationStatusVC - FinalStatus: \(finalStatus), isPdfGenerated: \(isPdfGenerated), isPDFSign: \(isPDFSign)")
+                                print("✅ Navigating to ApplicationStatusVC - FinalStatus: \(finalStatus), isPdfGenerated: \(isPdfGenerated), isPDFSign: \(isPDFSign) PanNo: ")
                                 DispatchQueue.main.async {
                                     let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
                                     if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {

@@ -487,7 +487,8 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
                 url: "AadhaarData/ValidateIsDigiLockerDone",
                 method: "POST",
                 parameters: parameters,
-                view: self.view
+                view: self.view,
+                isLoader: false,
             ) { result in
                 
                 DispatchQueue.main.async {

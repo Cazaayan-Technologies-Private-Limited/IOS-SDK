@@ -50,11 +50,14 @@ class applicationDoneVC: UIViewController {
     
     @IBAction func okBtn(_ sender: UIButton) {
         //delegate?.doneapplication(ispdfgenerated: "")
-        if let userId = fetchedUserId {
-            SIXTHAPI(userID: userId)
-        } else {
-            print("User ID is not fetched yet.")
-        }
+        self.delegate?.doneapplication(ispdfgenerated: self.isPdfGenerated ?? "")
+        dismiss(animated: true)
+//        print("fetchedUserId \(fetchedUserId)")
+//        if let userId = fetchedUserId {
+//            SIXTHAPI(userID: userId)
+//        } else {
+//            print("User ID is not fetched yet.")
+//        }
     }
     
     func SIXTHAPI(userID:String){
