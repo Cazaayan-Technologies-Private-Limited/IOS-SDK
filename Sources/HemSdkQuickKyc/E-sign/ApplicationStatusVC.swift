@@ -1947,7 +1947,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     }
 
     func esignDone(segmentName: String, transactionID: String, completion: @escaping @Sendable (Bool) -> Void) {
-
+        print("pdfDataList:: \(pdfDataList) \(pdfDataList.count)")
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [weak self] tokenId in
             guard let self = self else { return }
 
@@ -1980,7 +1980,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                 print("api is running")
                                 completion(true)
 
-                                self.showAlert(message: "E-sign completed successfully!")
+//                                self.showAlert(message: "E-sign completed successfully!")
 
                                 self.ViewAllMultiPDF()
                             }
@@ -2197,7 +2197,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                         case "000000":
                             DispatchQueue.main.async {
                                 print("api is running")
-                                self.showAlert(message: "Esign page:successfully submitted")
+//                                self.showAlert(message: "Esign page:successfully submitted")
                                 self.ViewAllMultiPDF()
                             }
                         default:
@@ -2422,6 +2422,11 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
    
                                                    self.aofStack.isHidden = false
                                                }
+                                               
+                                               if(pdfList.count == 2 && self.aofSign == "1"){
+                                                   self.showCongratulationAndCloseSDK()
+                                               }
+                                               
                                            }
    
                                        case "DDPI":
@@ -2449,6 +2454,9 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
    
                                                    self.ddpiStack.isHidden = false
                                                }
+                                               if(pdfList.count == 3 && self.ddpiSign == "1"){
+                                                   self.showCongratulationAndCloseSDK()
+                                               }
         67                                   }
    
    
@@ -2471,9 +2479,9 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
    
                                    // Optionally hide the proceed button if DDPI is required but not present
                                    // self.proceedBtnView.isHidden = !hasDDPI
-                                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                                                  self.checkAndShowCongratulationIfNeeded()
-                                                              }
+//                                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                                                                  self.checkAndShowCongratulationIfNeeded()
+//                                                              }
                                }
    
                            }

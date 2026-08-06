@@ -14,12 +14,12 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
     //  @IBOutlet weak var relationshipBtn: UIButton!
     //   @IBOutlet weak var mainView: UIView!
     
-    @IBOutlet weak var passText1: UITextField!
-    @IBOutlet weak var passText2: UITextField!
-    @IBOutlet weak var passText3: UITextField!
-    @IBOutlet weak var passText4: UITextField!
-    @IBOutlet weak var passText5: UITextField!
-    @IBOutlet weak var passText6: UITextField!
+    @IBOutlet weak var passText1: OTPTextField!
+    @IBOutlet weak var passText2: OTPTextField!
+    @IBOutlet weak var passText3: OTPTextField!
+    @IBOutlet weak var passText4: OTPTextField!
+    @IBOutlet weak var passText5: OTPTextField!
+    @IBOutlet weak var passText6: OTPTextField!
     
     @IBOutlet weak var view1: UIView!
     @IBOutlet weak var view2: UIView!
@@ -122,6 +122,12 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
             tf?.textAlignment = .center
             tf?.tag = index
             tf?.addTarget(self, action: #selector(textDidChange(_:)), for: .editingChanged)
+            tf?.onDeleteBackward = { [weak self] in
+                guard index > 0 else { return }
+
+                textFields[index - 1]?.text = ""
+                textFields[index - 1]?.becomeFirstResponder()
+            }
         }
         
         passText1.becomeFirstResponder()
@@ -171,8 +177,27 @@ class MobileOTPVC: UIViewController , UITextFieldDelegate{
             return false
         }
         
-        // Allow backspace
+//        // Allow backspace
+//        if string.isEmpty {
+//            return true
+//        }
+        
+        // Handle backspace
         if string.isEmpty {
+
+            // If current field is already empty, move to previous field
+            if textField.text?.isEmpty == true,
+               textField.tag > 0 {
+
+                let textFields = [passText1, passText2, passText3, passText4, passText5, passText6]
+
+                let previousField = textFields[textField.tag - 1]
+                previousField?.text = ""
+                previousField?.becomeFirstResponder()
+
+                return false
+            }
+
             return true
         }
         

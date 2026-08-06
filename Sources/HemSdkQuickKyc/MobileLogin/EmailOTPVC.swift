@@ -24,12 +24,12 @@ class EmailOTPVC: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var Label1: UILabel!
     @IBOutlet weak var TimerLabel: UILabel!
     @IBOutlet weak var ResendOTP: UIButton!
-    @IBOutlet weak var otpTF1: UITextField!
-    @IBOutlet weak var otpTF2: UITextField!
-    @IBOutlet weak var otpTF3: UITextField!
-    @IBOutlet weak var otpTF4: UITextField!
-    @IBOutlet weak var otpTF5: UITextField!
-    @IBOutlet weak var otpTF6: UITextField!
+    @IBOutlet weak var otpTF1: OTPTextField!
+    @IBOutlet weak var otpTF2: OTPTextField!
+    @IBOutlet weak var otpTF3: OTPTextField!
+    @IBOutlet weak var otpTF4: OTPTextField!
+    @IBOutlet weak var otpTF5: OTPTextField!
+    @IBOutlet weak var otpTF6: OTPTextField!
 
     @IBOutlet weak var view1: UIView!
     @IBOutlet weak var view2: UIView!
@@ -51,7 +51,7 @@ class EmailOTPVC: UIViewController, UITextFieldDelegate{
     var MD5ByteArray = [UInt8]()
     var OTP = String()
     weak var delegate: EmailOTPDelegate?
-    var otpTextFields: [UITextField] = []
+    var otpTextFields: [OTPTextField] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,12 +98,19 @@ class EmailOTPVC: UIViewController, UITextFieldDelegate{
     }
     
     func setupOTPFields() {
-        for (index, tf) in otpTextFields.enumerated() {
-            tf.delegate = self
-            tf.keyboardType = .numberPad
-            tf.textAlignment = .center
-            tf.tag = index
-            tf.addTarget(self, action: #selector(otpTextChanged(_:)), for: .editingChanged)
+        let textFields = [otpTF1, otpTF2, otpTF3, otpTF4, otpTF5, otpTF6]
+        for (index, tf) in textFields.enumerated() {
+            tf?.delegate = self
+            tf?.keyboardType = .numberPad
+            tf?.textAlignment = .center
+            tf?.tag = index
+            tf?.addTarget(self, action: #selector(otpTextChanged(_:)), for: .editingChanged)
+            tf?.onDeleteBackward = { [weak self] in
+                guard index > 0 else { return }
+
+                textFields[index - 1]?.text = ""
+                textFields[index - 1]?.becomeFirstResponder()
+            }
         }
         otpTF1.becomeFirstResponder()
     }

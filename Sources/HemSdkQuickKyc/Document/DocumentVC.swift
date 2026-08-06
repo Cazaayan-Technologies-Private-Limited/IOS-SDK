@@ -48,16 +48,26 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func doneapplication(ispdfgenerated: String) {
-        self.navigationController?.popToRootViewController(animated: true)
+        print("ispdfgenerated:-\(ispdfgenerated)")
         if ispdfgenerated == "1" {
             // Navigate to esignVC
-            let storyboard = UIStoryboard(name: "Esign", bundle: .main)
-            let vc =
-            storyboard.instantiateViewController(identifier: "ApplicationStatusVC")
-            as! ApplicationStatusVC
-            vc.PanNo = PanNo
-            vc.RegId = RegId
-            self.navigationController?.pushViewController(vc, animated: true)
+//            let storyboard = UIStoryboard(name: "Esign", bundle: .main)
+//            let vc =
+//            storyboard.instantiateViewController(identifier: "ApplicationStatusVC")
+//            as! ApplicationStatusVC
+//            vc.PanNo = PanNo
+//            vc.RegId = RegId
+//            self.navigationController?.pushViewController(vc, animated: true)
+            
+            let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {
+                vc.PanNo = self.PanNo
+                vc.RegId = self.RegId
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            
+            
+            
         } else {
             // Pop to root view controller
             self.navigationController?.popToRootViewController(animated: true)
@@ -5223,12 +5233,20 @@ extension DocumentVC {
                                     //self.doneapplication(ispdfgenerated: self.isPdfGenerated ?? "")
 //                                    self.delegate?.doneapplication(ispdfgenerated: self.isPdfGenerated ?? "")
 //                                    self.dismiss(animated: true)
-                                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "applicationDoneVC") as! applicationDoneVC
-                                    vc.modalPresentationStyle = .overCurrentContext
-                                    vc.modalTransitionStyle = .crossDissolve
-                                    vc.isPdfGenerated = self.isPdfGenerated
-                                    vc.delegate = self
-                                    self.present(vc, animated: true)
+                                    
+                                    if(self.isPdfGenerated == "1"){
+                                        self.doneapplication(ispdfgenerated: self.isPdfGenerated ?? "")
+                                    }else{
+                                        let vc = self.storyboard?.instantiateViewController(withIdentifier: "applicationDoneVC") as! applicationDoneVC
+                                            vc.modalPresentationStyle = .overCurrentContext
+                                            vc.modalTransitionStyle = .crossDissolve
+                                            vc.isPdfGenerated = self.isPdfGenerated
+                                            vc.delegate = self
+                                            self.present(vc, animated: true)
+                                    }
+                                    
+                                    
+                                    
                                 }
                             default:
                                 print("Unhandled error code: \(errorCode)")
