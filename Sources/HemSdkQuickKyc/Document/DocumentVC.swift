@@ -2113,8 +2113,12 @@ extension DocumentVC {
                                 }
                                 
                                 // Income proof fetched (if available)
+                                let derivativeStatus = jsonResponse["DerivativeStatus"] as? String
                                 let incomeproofSource = jsonResponse["IncomeproofSource"] as? String
                                      if incomeproofSource == "Y" {
+                                         self.incomeProofmsg.text = "Income proof fetched successfully."
+                                         self.IncomeProof.isHidden = true
+                                     } else if incomeproofSource == "CAMS" && derivativeStatus == "APPROVED" {    //by sayantan
                                          self.incomeProofmsg.text = "Income proof fetched successfully."
                                          self.IncomeProof.isHidden = true
                                      } else {
@@ -2184,12 +2188,17 @@ extension DocumentVC {
         }
         
         let incomeproofSource = jsonResponse["IncomeproofSource"] as? String
+        let derivativeStatus = jsonResponse["DerivativeStatus"] as? String
         
         if incomeproofSource == nil || incomeproofSource == "N" {
             // Show Income Proof section (user needs to upload)
             IncomeProof.isHidden = false
             visibleSections["IncomeProof"] = true
         } else if incomeproofSource == "Y" {
+            // Hide Income Proof section (already fetched from CAMS/Digilocker)
+            IncomeProof.isHidden = true
+            visibleSections["IncomeProof"] = false
+        } else if incomeproofSource == "CAMS" && derivativeStatus == "APPROVED" {     //by sayantan
             // Hide Income Proof section (already fetched from CAMS/Digilocker)
             IncomeProof.isHidden = true
             visibleSections["IncomeProof"] = false
@@ -2212,6 +2221,7 @@ extension DocumentVC {
                 IncomeProof.isHidden = true
                 visibleSections["IncomeProof"] = false
             }
+            
         }
         
         // Check for "DerivativeImages_Verify" field
@@ -2796,6 +2806,7 @@ extension DocumentVC {
         }
         
         let incomeproofSource = response["IncomeproofSource"] as? String
+        let derivativeStatus = jsonResponse["DerivativeStatus"] as? String
             
             if incomeproofSource == nil || incomeproofSource == "N" {
                 // Show Income Proof upload section
@@ -2812,6 +2823,12 @@ extension DocumentVC {
                     self.incomeProofmsg.text = ""
                 }
             } else if incomeproofSource == "Y" {
+                // Income proof already fetched
+                DispatchQueue.main.async {
+                    self.IncomeProof.isHidden = true
+                    self.incomeProofmsg.text = "Income proof fetched successfully."
+                }
+            } else if incomeproofSource == "CAMS" && derivativeStatus == "APPROVED" { //by sayantan
                 // Income proof already fetched
                 DispatchQueue.main.async {
                     self.IncomeProof.isHidden = true
@@ -5994,6 +6011,8 @@ extension DocumentVC {
                             print(
                                 "Updated image for identifier: \(imageViewIdentifier)"
                             )
+                            print("imageUrls.isEmpty:: \(self.imageUrls.isEmpty)")
+                            self.IncomeProof(shouldShow: true) //by sayantan for cams doc image dispaly
                         } else {
                             print(
                                 "Mismatch in identifiers or nil identifier for image view."

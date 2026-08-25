@@ -159,15 +159,40 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                 switch result {
                 case .success(let jsonResponse):
                     print("callingCams Response: \(jsonResponse)")
-                    if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000001" {
-                        if let status = jsonResponse["IsConsentSubmitted"] as? String, status.uppercased() == "Y" {
-                            DispatchQueue.main.async {
-                                self.timer?.invalidate()
-                                self.timer = nil
-                                self.navigateToNominationVC()
-                            }
+                    
+                    if let errorCode = jsonResponse["ErrorCode"] as? String {
+                        switch errorCode {
+                        case "000000":
+                            if let status = jsonResponse["IsConsentSubmitted"] as? String, status.uppercased() == "Y" {
+                                    DispatchQueue.main.async {
+                                        self.timer?.invalidate()
+                                        self.timer = nil
+                                        self.navigateToNominationVC()
+                                    }
+                                }
+                        case "000001":
+                            if let status = jsonResponse["IsConsentSubmitted"] as? String, status.uppercased() == "Y" {
+                                    DispatchQueue.main.async {
+                                        self.timer?.invalidate()
+                                        self.timer = nil
+                                        self.navigateToNominationVC()
+                                    }
+                                }
+                        default:
+                            break
                         }
-                    }
+                        
+                    }                   //by sayantan
+                    
+//                    if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000001" {
+//                        if let status = jsonResponse["IsConsentSubmitted"] as? String, status.uppercased() == "Y" {
+//                            DispatchQueue.main.async {
+//                                self.timer?.invalidate()
+//                                self.timer = nil
+//                                self.navigateToNominationVC()
+//                            }
+//                        }
+//                    }
                     
                 case .failure(let error):
                     print("camsCalling failed: \(error.localizedDescription)")
