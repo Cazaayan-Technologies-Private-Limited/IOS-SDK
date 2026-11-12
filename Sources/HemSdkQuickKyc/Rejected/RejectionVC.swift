@@ -10,12 +10,24 @@ import UIKit
 class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor doneapplicationprotocol{
     func reloadPageData() {
         print("Reloading data in RejectionVC")
+        // Called by BankVC / DocumentVC only after a successful save
+        if let item = itemBeingRectified {
+            locallyRectified.insert(item)
+            itemBeingRectified = nil
+        }
         self.SIXTHAPI()
         //rejectionCollectionView.reloadData()
     }
     
     @IBOutlet weak var submitBtn: UIButton!
     @IBOutlet weak var rejectionCollectionView: UICollectionView!
+    @IBOutlet weak var messageLabel: UILabel!
+    
+    // List of rejected items (one row per item, like Android)
+    private let listScrollView = UIScrollView()
+    private let listStack = UIStackView()
+    private var itemBeingRectified: String?          // item whose screen is open now
+    private var locallyRectified = Set<String>()     // saved in this session, even if API is not updated yet
     
     var panNo: String?
     var uccCode: String?
@@ -44,6 +56,160 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
             }
         }
         view.backgroundColor = .appBackground
+        setupRejectionList()
+        submitBtn.isHidden = true   // shown only when every item is rectified
+    }
+    
+    // MARK: - Rejection list UI
+    
+    private func setupRejectionList() {
+        messageLabel?.isHidden = true   // old static message – replaced by the list
+        
+        listScrollView.translatesAutoresizingMaskIntoConstraints = false
+        listScrollView.showsVerticalScrollIndicator = false
+        view.addSubview(listScrollView)
+        
+        listStack.axis = .vertical
+        listStack.spacing = 24
+        listStack.translatesAutoresizingMaskIntoConstraints = false
+        listScrollView.addSubview(listStack)
+        
+        let topAnchor = messageLabel?.topAnchor ?? view.safeAreaLayoutGuide.topAnchor
+        NSLayoutConstraint.activate([
+            listScrollView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            listScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            listScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            listScrollView.bottomAnchor.constraint(equalTo: submitBtn.topAnchor, constant: -10),
+            
+            listStack.topAnchor.constraint(equalTo: listScrollView.contentLayoutGuide.topAnchor),
+            listStack.leadingAnchor.constraint(equalTo: listScrollView.contentLayoutGuide.leadingAnchor),
+            listStack.trailingAnchor.constraint(equalTo: listScrollView.contentLayoutGuide.trailingAnchor),
+            listStack.bottomAnchor.constraint(equalTo: listScrollView.contentLayoutGuide.bottomAnchor),
+            listStack.widthAnchor.constraint(equalTo: listScrollView.frameLayoutGuide.widthAnchor)
+        ])
+    }
+    
+    /// Builds one row per rejected item: [RECTIFY]  DOCUMENT NAME / remark
+    private func renderRejectionList() {
+        listStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        for (index, item) in rejectionList.enumerated() {
+            let name = (item["DocumentName"] as? String) ?? (item["Document"] as? String) ?? ""
+            let remark = (item["RejectRemark"] as? String) ?? ""
+            let isRectified = isItemRectified(item)
+            
+            // Button
+            let button = UIButton(type: .system)
+            button.tag = index
+            button.setTitle(isRectified ? "RECTIFIED" : "RECTIFY", for: .normal)
+            button.setTitleColor(.white, for: .normal)
+            button.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
+            button.backgroundColor = isRectified ? .systemGreen : .appPrimary
+            button.layer.cornerRadius = 12
+            button.isEnabled = !isRectified
+            // Documents stay locked (dimmed) until Bank Details is rectified
+            if !isRectified && isLockedUntilBankRectified(item) {
+                button.alpha = 0.5
+            }
+            button.addTarget(self, action: #selector(rectifyTapped(_:)), for: .touchUpInside)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                button.widthAnchor.constraint(equalToConstant: 120),
+                button.heightAnchor.constraint(equalToConstant: 44)
+            ])
+            
+            // Name + remark
+            let nameLabel = UILabel()
+            nameLabel.text = name
+            nameLabel.font = .systemFont(ofSize: 13, weight: .medium)
+            nameLabel.textColor = .appPrimary
+            nameLabel.numberOfLines = 0
+            
+            let remarkLabel = UILabel()
+            remarkLabel.text = remark
+            remarkLabel.font = .systemFont(ofSize: 14)
+            remarkLabel.textColor = .darkGray
+            remarkLabel.numberOfLines = 0
+            remarkLabel.isHidden = remark.isEmpty
+            
+            let textStack = UIStackView(arrangedSubviews: [nameLabel, remarkLabel])
+            textStack.axis = .vertical
+            textStack.spacing = 4
+            
+            let row = UIStackView(arrangedSubviews: [button, textStack])
+            row.axis = .horizontal
+            row.spacing = 12
+            row.alignment = .center
+            listStack.addArrangedSubview(row)
+        }
+        
+        // All items rectified → let the user submit for verification
+        let allRectified = !rejectionList.isEmpty && rejectionList.allSatisfy { isItemRectified($0) }
+        submitBtn.isHidden = !allRectified
+        submitBtn.setTitle("Submit for Verification", for: .normal)
+    }
+    
+    private func itemName(_ item: [String: Any]) -> String {
+        ((item["DocumentName"] as? String) ?? (item["Document"] as? String) ?? "").uppercased()
+    }
+    
+    private func isItemRectified(_ item: [String: Any]) -> Bool {
+        (item["ModificationStatus"] as? String) == "Y" || locallyRectified.contains(itemName(item))
+    }
+    
+    /// Bank Details must be rectified before Document Details can be opened
+    private func isBankDetailsPending() -> Bool {
+        rejectionList.contains { itemName($0) == "BANK DETAILS" && !isItemRectified($0) }
+    }
+    
+    private func isLockedUntilBankRectified(_ item: [String: Any]) -> Bool {
+        itemName(item) == "DOCUMENT DETAILS" && isBankDetailsPending()
+    }
+    
+    /// True when some item other than `name` still needs rectifying
+    private func hasOtherPendingItems(than name: String) -> Bool {
+        rejectionList.contains { itemName($0) != name && !isItemRectified($0) }
+    }
+    
+    @objc private func rectifyTapped(_ sender: UIButton) {
+        guard sender.tag < rejectionList.count else { return }
+        let name = itemName(rejectionList[sender.tag])
+        itemBeingRectified = name
+        
+        switch name {
+        case "BANK DETAILS":
+            openBankDetails()
+        case "DOCUMENT DETAILS":
+            if isBankDetailsPending() {
+                itemBeingRectified = nil
+                showAlert(message: "Please rectify Bank Details first.")
+                return
+            }
+            handleNavigation()
+        default:
+            print("No screen mapped for rejected item: \(name)")
+            showAlert(message: "Please contact support to rectify \(name.capitalized).")
+        }
+    }
+    
+    /// Same as Android: "Bank Account Details" screen (Verify with UPI / Add Bank Manually)
+    private func openBankDetails() {
+        let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "UPIVC") as? UPIVC else {
+            print("❌ UPIVC not found in Bank.storyboard")
+            return
+        }
+        let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+        let savedRegId = UserDefaults.standard.string(forKey: "RegId")
+        let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : panNo
+        let finalRegId = (savedRegId?.isEmpty == false) ? savedRegId : regId
+        vc.panNo = finalPAN
+        vc.PanNo = finalPAN
+        vc.regId = finalRegId
+        vc.RegId = finalRegId
+        vc.rejection = "Rejection"     // back → this screen; success → this screen
+        vc.delegate = self             // reloadPageData() → list refreshes
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func doneapplication(ispdfgenerated:String) {
@@ -69,7 +235,8 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
             print("No rejection items found")
             return
         }
-        handleNavigation()
+        // Button is only visible once every item is rectified
+        UpdateFinalStatus()
         
 //        for item in rejectionList {
 //            guard let documentName = item["DocumentName"] as? String else { continue }
@@ -102,8 +269,11 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
             vc.PanNo = finalPAN
             vc.rejection = "Rejection"
             vc.RegId = regIdFinal
-            vc.delegate = delegate
+            vc.delegate = self              // reloadPageData() refreshes this list
             vc.isFromRejectionFlow = true
+            // If Bank Details is still pending, only save the documents and come back here.
+            // If documents are the last item, DocumentVC submits for verification as before.
+            vc.returnToRejectionList = hasOtherPendingItems(than: "DOCUMENT DETAILS")
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -285,6 +455,9 @@ extension RejectionVC{
             print("Rejection list received: \(rejectionList)")
             
             self.rejectionList = rejectionList
+            DispatchQueue.main.async {
+                self.renderRejectionList()
+            }
           
 //            DispatchQueue.main.async {
 //                self.rejectionCollectionView.reloadData()

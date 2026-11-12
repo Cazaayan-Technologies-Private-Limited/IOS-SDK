@@ -265,7 +265,7 @@ class signatureVC: UIViewController {
     var RegId: String?
     var ocrCount: Int = 1
     var fetchedUserId: String?
-    var prefixUrl = "https://signup.hemnxt.com:84/V4.0.0/api/"
+    var prefixUrl = T5Launcher.baseURL //"http://uatkyc.hemsecurities.com:98/V4.0.0/api/" //"https://signup.hemnxt.com:84/V4.0.0/api/"
     var mobiledecodeArray: String?
     var fetchedSessionID: String?
     let signatureView = SwiftSignatureView()

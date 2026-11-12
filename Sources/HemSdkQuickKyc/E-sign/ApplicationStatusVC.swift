@@ -1285,6 +1285,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     @IBOutlet weak var ekraStatusLbl: UILabel!
     @IBOutlet weak var aofStatusLbl: UILabel!
     @IBOutlet weak var dDpiStatusLbl: UILabel!
+    @IBOutlet weak var lblHeading: UILabel!
 
     var fetchedUserId: String?
     var fetchedSessionID: String?
@@ -1324,6 +1325,19 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     let maxPollingAttempts = 20
     var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 
+    /// True after the first appearance, so we only refresh when coming BACK to this screen
+    private var hasAppearedOnce = false
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Back from the eSign web page (auto-close or "Close" button):
+        // reload the list so "(E-Signed)" shows without reopening the screen.
+        if hasAppearedOnce, fetchedUserId != nil {
+            ViewAllMultiPDF()
+        }
+        hasAppearedOnce = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.systemGroupedBackground
@@ -1404,7 +1418,8 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     
     @objc func ekraViewBtnTapped() {
         print("Ekra View Button Tapped")
-        openPDF(segmentName: "EKRA")
+//        openPDF(segmentName: "EKRA")
+        openPDF(segmentName: "EKRAKYC")
     }
     
     @objc func aOfViewBtnTapped() {
@@ -1418,7 +1433,8 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     }
 
     @IBAction func ekraBtnTapped(_ sender: UIButton) {
-        handleSegmentBasedOnSignValue(segmentName: "EKRA", signKey: "ekraSign")
+//        handleSegmentBasedOnSignValue(segmentName: "EKRA", signKey: "ekraSign")
+        handleSegmentBasedOnSignValue(segmentName: "EKRAKYC", signKey: "ekraSign")
     }
 
     private func handleSegmentTap(segmentName: String, signKey: String) {
@@ -1426,7 +1442,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
 
         if signValue == "1" {
             // Construct URL
-            let baseUrl = "https://signup.hemnxt.com:84/V4.0.0/api/MultiPartImageUpload/PDFDownload"
+            let baseUrl = T5Launcher.baseURL + "MultiPartImageUpload/PDFDownload" //"https://signup.hemnxt.com:84/V4.0.0/api/MultiPartImageUpload/PDFDownload"
             guard let regId = RegId, let userId = fetchedUserId, let panNo = PanNo else {
                 print("Missing parameters for URL construction")
                 return
@@ -1533,7 +1549,8 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
 
     private func getDynamicID(forSegment segmentName: String) -> String? {
         switch segmentName {
-        case "EKRA": return ekraID
+//        case "EKRA": return ekraID
+        case "EKRAKYC": return ekraID
         case "E": return aofID
         case "DDPI": return ddpiID
         default: return nil
@@ -1563,13 +1580,16 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         }
     }
     @IBAction func ddpiBtn(_ sender: UIButton) {
-        if ekraSign == "0" && aofSign == "0" {
-            showAlert(message: "You need to sign EKRA & AOF segments.")
-        } else if ekraSign == "0" {
+//        if ekraSign == "0" && aofSign == "0" {
+//            showAlert(message: "You need to sign EKRA segments.")
+//        } else
+        if ekraSign == "0" {
             showAlert(message: "You need to sign the EKRA segment first.")
-        } else if aofSign == "0" {
-            showAlert(message: "You need to sign the AOF segment first.")
-        } else {
+        }
+//        else if aofSign == "0" {
+//            showAlert(message: "You need to sign the AOF segment first.")
+//        }
+        else {
             handleSegmentBasedOnSignValue(segmentName: "DDPI", signKey: "ddpiSign")
         }
         //        if let docId = documentId {
@@ -1686,7 +1706,8 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
 
 
     @IBAction func ekraView(_ sender: UIButton) {
-        openPDF(segmentName: "EKRA")
+//        openPDF(segmentName: "EKRA")
+        openPDF(segmentName: "EKRAKYC")
     }
 
     @IBAction func aofView(_ sender: UIButton) {
@@ -1747,7 +1768,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                 return
             }
 
-            let baseUrl = "https://signup.hemnxt.com:84/V4.0.0/api/MultiPartImageUpload/PDFDownload"
+            let baseUrl = T5Launcher.baseURL +  "MultiPartImageUpload/PDFDownload" //"https://signup.hemnxt.com:84/V4.0.0/api/MultiPartImageUpload/PDFDownload"
             let urlString = "\(baseUrl)?id=\(dynamicID)&RegId=\(regId)&UserId=\(userId)&PanNo=\(panNo)&PDFSegment=\(segmentName)&TokenId=\(tokenId)"
 
             self.openURLInSystemBrowser(urlString: urlString)
@@ -1831,7 +1852,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                 "RegId": RegId,
                 "AuthMode": "1",
                 "SegmentName": segmentName,
-                "IsMobOrWeb": "1",
+                "IsMobOrWeb": "2",
                 "DeviceType": "IOS"
             ]
 
@@ -1978,11 +1999,17 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                         case "000000":
                             DispatchQueue.main.async {
                                 print("api is running")
-                                completion(true)
+                                completion(true)   // closes the web page → viewWillAppear reloads the list
 
 //                                self.showAlert(message: "E-sign completed successfully!")
 
-                                self.ViewAllMultiPDF()
+                                // Reload once more a little later, in case the server
+                                // sets IsPDFSign = 1 a few seconds after confirming eSign.
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+                                    guard let self = self,
+                                          self.navigationController?.topViewController === self else { return }
+                                    self.ViewAllMultiPDF()
+                                }
                             }
 
                         case "000002":
@@ -2102,7 +2129,7 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
             let url = "NSDLEsign/ValidateIsDDPIEsignDone"
             print("📤 Calling API: \(url) with params: \(parameters)")
 
-            apiCall(url: url, method: "POST", parameters: parameters, view: self.view) { result in
+            apiCall(url: url, method: "POST", parameters: parameters, view: self.view, isLoader: false) { result in
                 switch result {
                 case .success(let jsonResponse):
                     print("📩 DDPI Status Response at \(Date()): \(jsonResponse)")
@@ -2260,6 +2287,13 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
         print("showCongratulationAndCloseSDK::called")
 
         DispatchQueue.main.async {
+            // The list can now be reloaded more than once (on return + retry).
+            // Don't show the congratulation popup again if it is already on screen.
+            if self.presentedViewController is CongratulationVC ||
+               self.navigationController?.presentedViewController is CongratulationVC {
+                print("CongratulationVC already shown – skipping")
+                return
+            }
             
             let presentCongratulationVC = {
                 let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
@@ -2290,7 +2324,8 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
     
     func checkAndShowCongratulationIfNeeded() {
         // Check which segments exist in the PDF list
-        let hasEKRA = pdfDataList.contains { $0["PDFSegment"] as? String == "EKRA" }
+//        let hasEKRA = pdfDataList.contains { $0["PDFSegment"] as? String == "EKRA" }
+        let hasEKRA = pdfDataList.contains { $0["PDFSegment"] as? String == "EKRAKYC" }
         let hasAOF = pdfDataList.contains { $0["PDFSegment"] as? String == "E" }
         let hasDDPI = pdfDataList.contains { $0["PDFSegment"] as? String == "DDPI" }
         
@@ -2310,7 +2345,8 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
             let allSegmentsSigned = pdfDataList.allSatisfy { pdf in
                 guard let segment = pdf["PDFSegment"] as? String else { return false }
                 switch segment {
-                case "EKRA": return ekraSign == "1"
+//                case "EKRA": return ekraSign == "1"
+                case "EKRAKYC": return ekraSign == "1"
                 case "E": return aofSign == "1"
                 case "DDPI": return ddpiSign == "1"
                 default: return false
@@ -2377,7 +2413,35 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                       let id = pdf["Id"] as? String {
    
                                        switch pdfSegment {
-                                       case "EKRA":
+                                           
+                                        // new changes done in 22/10/26 (off EKRA on EKRAKYC)
+//                                       case "EKRA":
+//                                           hasEKRA = true
+//                                           self.ekraSign = isPDFSign
+//                                           self.ekraID = id
+//                                           DispatchQueue.main.async {
+//   
+//                                               // signed
+//                                               if isPDFSign == "1" {
+//   
+//                                                   self.ekraView1.isHidden = false
+//                                                   self.ekraStatusLbl.isHidden = false
+//   
+//                                                   self.ekraStack.isHidden = true
+//   
+//                                               } else {
+//   
+//                                                   self.ekraView1.isHidden = true
+//                                                   self.ekraStatusLbl.isHidden = true
+//   
+//                                                   self.ekraStack.isHidden = false
+//                                               }
+//                                               if(pdfList.count == 3 && self.ekraSign == "1"){
+//                                                  self.showCongratulationAndCloseSDK()
+//                                               }
+//                                           }
+                                           
+                                       case "EKRAKYC":
                                            hasEKRA = true
                                            self.ekraSign = isPDFSign
                                            self.ekraID = id
@@ -2397,6 +2461,9 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                                    self.ekraStatusLbl.isHidden = true
    
                                                    self.ekraStack.isHidden = false
+                                               }
+                                               if(pdfList.count == 1 && self.ekraSign == "1"){
+                                                  self.showCongratulationAndCloseSDK()
                                                }
                                            }
    
@@ -2423,9 +2490,9 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                                    self.aofStack.isHidden = false
                                                }
                                                
-                                               if(pdfList.count == 2 && self.aofSign == "1"){
-                                                   self.showCongratulationAndCloseSDK()
-                                               }
+//                                               if(pdfList.count == 2 && self.aofSign == "1"){
+//                                                   self.showCongratulationAndCloseSDK()
+//                                               }
                                                
                                            }
    
@@ -2454,10 +2521,10 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
    
                                                    self.ddpiStack.isHidden = false
                                                }
-                                               if(pdfList.count == 3 && self.ddpiSign == "1"){
+                                               if(pdfList.count == 2 && self.ddpiSign == "1"){
                                                    self.showCongratulationAndCloseSDK()
                                                }
-        67                                   }
+                                           }
    
    
                                        default:
@@ -2469,6 +2536,11 @@ class ApplicationStatusVC: UIViewController, @MainActor AadhaarStackDelegate {
                                DispatchQueue.main.async {
                                    // Hide the entire DDPI view container
                                    self.View3.isHidden = !hasDDPI
+                                   if hasDDPI {
+                                       self.lblHeading.text = "Please complete the following eSign (e.g. KRA eSign 1/2, DDPI eSign 2/2)"
+                                   }else{
+                                       self.lblHeading.text = "Please complete the following eSign (e.g. KRA eSign 1/1)"
+                                   }
    
                                    // You might also want to hide related elements
                                    self.ddpiStack.isHidden = !hasDDPI || (self.ddpiSign == "1")

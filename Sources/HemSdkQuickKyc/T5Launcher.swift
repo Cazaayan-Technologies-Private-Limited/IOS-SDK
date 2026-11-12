@@ -51,10 +51,29 @@ import UIKit
 public class T5Launcher {
 
     private init() { }
+    
+    // MARK: - Environment
+    
+    // Change this before building the SDK.
+    // UAT:
+    private static let environment: SDKEnvironment = .uat
+
+    // For LIVE SDK, change to:
+//     private static let environment: SDKEnvironment = .live
+
+    static let baseURL: String = environment.baseURL
+
+    // MARK: - SDK Close Callback
+    
     @MainActor public static var onSDKClose: (([String: String]) -> Void)?
 
     
-    @MainActor public static func show(from presenter: UIViewController, transactionId: String? = nil,  onSDKClose: (([String: String]) -> Void)? = nil) {
+    @MainActor public static func show(
+        from presenter: UIViewController,
+        transactionId: String? = nil,
+        mobileNumber: String? = nil,
+        onSDKClose: (([String: String]) -> Void)? = nil
+    ) {
         
         self.onSDKClose = onSDKClose
         
@@ -67,7 +86,7 @@ public class T5Launcher {
         
         if let newAccountVC = navController.viewControllers.first(where: { $0 is NewAccountVC }) as? NewAccountVC {
             newAccountVC.txnId = transactionId
-            
+            newAccountVC.mobileNumber = mobileNumber
         }
         
         navController.modalPresentationStyle = .fullScreen

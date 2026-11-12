@@ -203,6 +203,24 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
     var selectedData: [String: Any]?
     var txnId: String?
     var mobileNumber: String?
+    
+    var decodeArray: String?
+    var fetchedUserId: String?
+    var LoginUserId: String?
+    var fetchedSessionID: String?
+    var relation:String?
+    var userID = String()
+    var sessionID = String()
+    var errorCodes : String = ""
+    
+    var panNo: String?
+//        var phoneNumber : String?
+//        var timer: Timer?
+//        var remainingSeconds = 60
+//        var MD5ByteArray = [UInt8]()
+//        var OTP : String = ""
+//        var enteredOTP: String?
+        var regId: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -225,6 +243,8 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
         
         print("🔥 viewDidLoad called")
         print("selectedData:", selectedData ?? "nil")
+        print("Transaction ID:", txnId ?? "")
+        print("Mobile Number:", mobileNumber ?? "")
         
         //let hardcodedTxnId = "13192c07-6eb0-450d-aa07-f103d2d7db89"
         //let phoneNumber = "7666188609"
@@ -362,7 +382,8 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
 
     func initiateLoginAPI(phoneNumber: String) {
         
-        let url = URL(string: "https://signup.hemnxt.com:84/V4.0.0/api/OTPManagement/InitiateLogin")!
+        let url = URL(string: T5Launcher.baseURL + "OTPManagement/InitiateLogin")!
+        //let url = URL(string: "https://signup.hemnxt.com:84/V4.0.0/api/OTPManagement/InitiateLogin")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -422,7 +443,8 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
     
     func validateTxnIdAPI(txnId: String, phoneNumber: String) {
         
-        let url = URL(string: "https://signup.hemnxt.com:84/V4.0.0/api/OTPManagement/ValidateTxnId")!
+        let url = URL(string: T5Launcher.baseURL+"OTPManagement/ValidateTxnId")!
+        //let url = URL(string: "https://signup.hemnxt.com:84/V4.0.0/api/OTPManagement/ValidateTxnId")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -464,7 +486,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
                     DispatchQueue.main.async {
                         
                         print("Txn Validated ✅")
-                        
+                        self.checkMobilenoExsistAPI()
                         // ✅ Get MobileNo from response
                         if let mobile = json["MobileNo"] as? String {
                             
@@ -486,6 +508,605 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             }
             
         }.resume()
+    }
+    
+    func checkMobilenoExsistAPI() {
+        
+        let url = URL(string: T5Launcher.baseURL+"OTPManagement/CheckMobileNumberExists")!
+        //let url = URL(string: "https://signup.hemnxt.com:84/V4.0.0/api/OTPManagement/CheckMobileNumberExists")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("cz_live_rdf5QYYl8z1lPEXLuw3y0e22gq05uUuU", forHTTPHeaderField: "api-key")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: Any] = [
+            "MobileNumber": self.mobileNumber ?? ""
+        ]
+        
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            
+            print("-------- Check MobileNumber Exists API --------")
+            
+            if let error = error {
+                print("Error:", error.localizedDescription)
+                return
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                print("Status Code:", response.statusCode)
+            }
+            
+            guard let data = data else {
+                print("No Data Received")
+                return
+            }
+            
+            // ✅ PRINT RAW RESPONSE
+            print("Raw Response:", String(data: data, encoding: .utf8) ?? "")
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    
+                    print("CheckMobileNumberExists Parsed JSON:", json)
+                    
+                    if let errorCode = json["ErrorCode"] as? String {
+                        switch errorCode {
+                            case "000000":
+                                Task { @MainActor in
+                                    self.FifthApi()
+                                }
+                        case "000002":
+                            Task { @MainActor in
+                                self.callInsertClientRegisterApi(phonenumber: self.mobileNumber ?? "")
+                            }
+                            default:
+                                print("error")
+                            }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        
+                        //print("Txn Validated ✅")
+                        
+                        // ✅ Get MobileNo from response
+//                        if let mobile = json["MobileNo"] as? String {
+//                            
+//                            print("Mobile from API:", mobile)
+//                            
+//                            self.mobileNumber = mobile
+//                            self.txnId = txnId
+//                            
+//                            // ✅ Set in textfield
+//                            self.NumberTF.text = mobile
+//                            
+//                            // ✅ Disable editing
+//                            self.NumberTF.isEnabled = false
+//                        }
+                    }
+                }
+            } catch {
+                print("JSON Parsing Error:", error)
+            }
+            
+        }.resume()
+    }
+    
+    func FifthApi(){
+        let decodeByteArrayToString = "96e79218965eb72c92a549dd5a330112" //111111
+        var parameters: [String: Any] = [
+            "MobileNo": self.mobileNumber ?? "",
+            "OTP": decodeByteArrayToString,
+            "SessionId": "",
+            "DeviceType": "W",
+            "IPAddress": "1",
+            "MobileRelation": "SELF"
+        ]
+        
+        
+        // URL for the login endpoint
+        let fifthUrl = "Login/validateClientLogin"
+        for (key, value) in parameters {
+            if let stringValue = value as? String, stringValue.isEmpty {
+                parameters[key] = nil
+            }
+        }
+        print(parameters)
+        apiCall(url: fifthUrl, method: "POST", parameters: parameters, view: self.view) { result in
+            switch result {
+            case .success(let jsonResponse):
+                print("5th api Response: \(jsonResponse)")
+                let ErrorMessage = jsonResponse["ErrorMessage"] as? String
+                if let errorCode = jsonResponse["ErrorCode"] as? String {
+                    switch errorCode {
+                    case "900000":
+                        if let userID = jsonResponse["UserID"] as? String,
+                           let sessionId = jsonResponse["SessionId"] as? String
+                        {
+                            // Save UserID and SessionId to Core Data
+                            DispatchQueue.main.async {
+                                CoreDataHelper.saveUserId(userID, sessionID: sessionId, decodeByteArrayString: decodeByteArrayToString, entityName: "MobileUser")
+                            }
+                            DispatchQueue.main.async {
+                                // Check if TokenMobile is empty
+                                if !CoreDataHelper.areTokensAvailable(entityName: "TokenMobile") {
+                                    print("token generation")
+                                    CoreDataHelper.generateToken(decodeByteArrayToString: decodeByteArrayToString, USERID: userID, SessionId: sessionId, entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+                                        if success {
+                                            // Call SIXTHAPI after tokenMobile API call is successful
+                                            self.SIXTHAPI(userID: userID)
+                                        } else {
+                                            print("Token generation failed.")
+                                        }
+                                    }
+                                } else {
+                                    // Directly call SIXTHAPI if tokens are already available
+                                    self.SIXTHAPI(userID: userID)
+                                }
+                            }
+                        } else {
+                            print("Invalid response: missing UserID or SessionId")
+                        }
+                        
+                    case "400001":
+                        DispatchQueue.main.async {
+                            self.showTemporaryAlert(message: ErrorMessage ?? "")
+                        }
+                    default:
+                        self.showAlert(message: ErrorMessage ?? "")
+                        print("Unhandled error code: \(errorCode)")
+                    }
+                }
+            case .failure(let error):
+                print("Login API call failed: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func showTemporaryAlert(message: String) {
+        let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
+        self.present(alert, animated: true, completion: nil)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            alert.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    func SIXTHAPI(userID:String){
+            
+            CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
+                guard let self = self else { return }
+                
+                if let userId = userId, let sessionID = sessionID {
+                    self.fetchedUserId = userId
+                    self.fetchedSessionID = sessionID
+                    self.decodeArray = decodeByteArrayString
+                    print("UserID: \(userId), SessionID: \(sessionID)")
+                } else {
+                    print("No UserID or SessionID found.")
+                }
+            }
+            
+            CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { tokenId in
+                guard let tokenId = tokenId else {
+                    CoreDataHelper.generateToken(decodeByteArrayToString: self.decodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+                        if success {
+                            // Call SIXTHAPI after tokenMobile API call is successful
+                            self.SIXTHAPI(userID: userID)
+                        } else {
+                            print("Token generation failed.")
+                        }
+                    }// Handle the case where no tokens are available
+                    print("No tokens available. Please reload the tokens.")
+                    return
+                }
+                
+                let parameters: [String: Any] = [
+                    "UserId": userID,
+                    "TokenId": tokenId,
+                    "UserIDSL": userID,
+                    "MobileNo": self.mobileNumber ?? "",
+                    "Flag": "" //An"
+                ]
+                
+                print("6th api params\(parameters)")
+                let sixthUrl = "ActiveApplication/GetActiveApplicationCL"
+                
+                // API call
+                apiCall(url: sixthUrl, method: "POST", parameters: parameters, view: self.view) { result in
+                    switch result {
+                    case .success(let jsonResponse):
+                        print("SIXTHAPI Response::: \(jsonResponse)")
+                        let EmailId = jsonResponse["EmailId"] as? String
+                        let PanNo = jsonResponse["PanNo"] as? String
+                        let PANName = jsonResponse["PANName"] as? String
+                        let RegId = jsonResponse["RegId"] as? String
+                        let FinalStatusValue = jsonResponse["FinalStatusValue"] as? String
+                        let isPdfGenerated = jsonResponse["IsPdfGenerated"] as? String ?? "0"
+                        let ErrorMessage = jsonResponse["ErrorMessage"] as? String
+                        let finalStatus = jsonResponse["FinalStatus"] as? String ?? "0"
+                        let isPDFSign = jsonResponse["IsPDFSign"] as? String ?? "0"
+                        if let errorCode = jsonResponse["ErrorCode"] as? String {
+                            switch errorCode {
+                            case "999992":
+                                DispatchQueue.main.async {
+                                    CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+                                    print("All TokenMobile entries deleted due to error code 999992")
+                                    
+                                    // Regenerate tokens
+                                    CoreDataHelper.generateToken(decodeByteArrayToString: self.decodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
+                                        if success {
+                                            // Retry SIXTHAPI after token regeneration
+                                            self.SIXTHAPI(userID: userID)
+                                        } else {
+                                            print("Token generation failed.")
+                                        }
+                                    }
+                                }
+                            case "000000":
+                                if let panNo = jsonResponse["PanNo"] as? String {
+                                    self.panNo = panNo
+                                    UserDefaults.standard.set(panNo, forKey: "PanNo")  // Also save to UserDefaults as backup
+                                }
+                                
+                                if let regId = jsonResponse["RegId"] as? String {
+                                    self.regId = regId
+                                    UserDefaults.standard.set(regId, forKey: "RegId")
+                                }
+                                print("errorcode 000000 called")
+//                                if let finalStatus = FinalStatusValue, finalStatus == "KYC REJECTED" {
+//                                    DispatchQueue.main.async {
+//                                        let storyboard = UIStoryboard(name: "Rejection", bundle: Bundle.module)
+//                                        let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
+//                                        self.navigationController?.pushViewController(vc, animated: true)
+//                                    }
+//                                    return
+//                                }
+                                
+                                if finalStatus == "5" && isPdfGenerated == "0" && FinalStatusValue == "KYC REJECTED" {
+                                    DispatchQueue.main.async {
+                                        let storyboard = UIStoryboard(name: "Rejection", bundle: Bundle.module)
+                                        let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    }
+                                    return
+                                }
+                                
+                                
+                                if finalStatus == "3" && isPdfGenerated == "0" {
+                                    DispatchQueue.main.async {
+                                        
+                                        self.showAlert(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.")
+                                        //                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
+                                        //                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
+                                        //                                    vc.PanNo = PanNo
+                                        //                                    vc.RegId = RegId
+                                        //                                    self.navigationController?.pushViewController(vc, animated: true)
+                                    }
+                                    return
+                                }
+                                
+                                if finalStatus == "4" && isPdfGenerated == "0" {
+                                    DispatchQueue.main.async {
+                                        
+                                        self.showAlert(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.")
+                                        //                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
+                                        //                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
+                                        //                                    vc.PanNo = PanNo
+                                        //                                    vc.RegId = RegId
+                                        //                                    self.navigationController?.pushViewController(vc, animated: true)
+                                    }
+                                    return
+                                }
+                                
+                                if finalStatus == "4" && isPdfGenerated == "1" && isPDFSign == "0"{
+                                    print("✅ Navigating to ApplicationStatusVC - FinalStatus: \(finalStatus), isPdfGenerated: \(isPdfGenerated), isPDFSign: \(isPDFSign)")
+                                    DispatchQueue.main.async {
+                                        let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
+                                        if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {
+                                            vc.PanNo = PanNo
+                                            vc.RegId = RegId
+                                            self.navigationController?.pushViewController(vc, animated: true)
+                                        } else {
+                                            print("❌ Could not instantiate ApplicationStatusVC")
+                                            self.sectionPage() // Fallback
+                                        }
+                                    }
+                                    return
+                                }
+                                
+                                if finalStatus == "7" && isPdfGenerated == "0" && isPDFSign == "0"{
+                                    print("✅ Navigating to ApplicationStatusVC - FinalStatus: \(finalStatus), isPdfGenerated: \(isPdfGenerated), isPDFSign: \(isPDFSign) PanNo: ")
+                                    DispatchQueue.main.async {
+//                                        let storyboard = UIStoryboard(name: "Esign", bundle: Bundle.module)
+//                                        if let vc = storyboard.instantiateViewController(withIdentifier: "ApplicationStatusVC") as? ApplicationStatusVC {
+//                                            vc.PanNo = PanNo
+//                                            vc.RegId = RegId
+//                                            self.navigationController?.pushViewController(vc, animated: true)
+//                                        }
+                                        self.showAlert(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.")
+                                    }
+                                    return
+                                }
+                                
+                                let EmailId = jsonResponse["EmailId"] as? String
+                                
+                                if EmailId?.isEmpty == true {
+                                    self.navigateToEmailIdVC(
+                                        userId: userID,
+                                        sessionID: self.sessionID,
+                                        phoneNumber: self.mobileNumber ?? ""
+                                    )
+                                    return
+                                }
+                                
+                                if let panStatus = jsonResponse["PANStatus"] as? String, panStatus == "0" {
+                                    self.PanPage(userId: userID, EmailId: EmailId ?? "")
+                                    return
+                                }
+                                
+                                if let aadharStatus = jsonResponse["AadhaarStatus"] as? String, aadharStatus == "0" {
+                                    self.AadhaarPage(
+                                        PanNo: jsonResponse["PanNo"] as? String ?? "",
+                                        PANName: jsonResponse["PANName"] as? String ?? "",
+                                        RegId: jsonResponse["RegId"] as? String ?? "",
+                                        EmailId: EmailId ?? ""
+                                    )
+                                    return
+                                }
+                                
+                                if let tradingStatus = jsonResponse["Trading_Status"] as? String, tradingStatus == "PAGE PENDING" {
+                                    DispatchQueue.main.async {
+                                        let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
+                                        let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
+                                        let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                        let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                        
+                                        let regId = UserDefaults.standard.string(forKey: "RegId")
+                                        let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                        
+                                        vc.panNo = finalPAN
+                                        vc.regId = regIdFinal
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    }
+                                    return
+                                }
+                                
+                                if let bankStatus = jsonResponse["BankDpTradStatus"] as? String, bankStatus == "PAGE PENDING" {
+                                    DispatchQueue.main.async {
+                                        let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
+                                        let vc = storyboard.instantiateViewController(identifier: "UPIVC") as! UPIVC
+                                        let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                        let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                        
+                                        let regId = UserDefaults.standard.string(forKey: "RegId")
+                                        let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                        
+                                        vc.panNo = finalPAN
+                                        vc.regId = regIdFinal
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    }
+                                    return
+                                }
+                                
+                                if let otherStatus = jsonResponse["OtherStatus"] as? String, otherStatus == "PAGE PENDING" {
+                                    
+                                    DispatchQueue.main.async {
+                                        let storyboard = UIStoryboard(name: "OtherDetails", bundle: Bundle.module)
+                                        let vc = storyboard.instantiateViewController(identifier: "OtherDetailsVC") as! OtherDetailsVC
+                                        let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                        let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                        
+                                        let regId = UserDefaults.standard.string(forKey: "RegId")
+                                        let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                        
+                                        vc.panNo = finalPAN
+                                        vc.regId = regIdFinal
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    }
+                                    
+    //                                DispatchQueue.main.async {
+    //
+    //                                    let storyboard = UIStoryboard(name: "OtherDetails", bundle: Bundle.module)
+    //                                    let vc = storyboard.instantiateViewController(identifier: "OtherDetailsVC") as! OtherDetailsVC
+    //                                    vc.panNo = self.panNo
+    //                                    vc.regId = self.regId
+    //                                    self.navigationController?.pushViewController(vc, animated: true)
+    //                                }
+                                    return
+                                }
+                                
+                                if let nomineeStatus = jsonResponse["NomineeStatus"] as? String, nomineeStatus == "PAGE PENDING" {
+                                    DispatchQueue.main.async {
+                                        let storyboard = UIStoryboard(name: "Nominee", bundle: Bundle.module)
+                                        let vc = storyboard.instantiateViewController(identifier: "NomineeVC") as! NomineeVC
+                                        let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                        let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                        
+                                        let regId = UserDefaults.standard.string(forKey: "RegId")
+                                        let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                        vc.panNo = finalPAN
+                                        vc.RegId = regIdFinal
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    }
+                                    return
+                                }
+                                
+                                if let documentStatus = jsonResponse["DocumentStatus"] as? String, documentStatus == "PAGE PENDING" {
+                                    DispatchQueue.main.async {
+                                        let storyboard = UIStoryboard(name: "Document", bundle: Bundle.module)
+                                        let vc = storyboard.instantiateViewController(identifier: "DocumentVC") as! DocumentVC
+                                        //                                    let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+                                        //                                    let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+                                        //
+                                        //                                    let regId = UserDefaults.standard.string(forKey: "RegId")
+                                        //                                    let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+                                        //
+                                        //                                    vc.PanNo = finalPAN
+                                        //                                    vc.RegId = regIdFinal
+                                        
+                                        vc.PanNo = self.panNo  // This now has the value from API
+                                        vc.RegId = self.regId  // This now has the value from API
+                                        
+                                        // Backup: if still nil, try UserDefaults
+                                        if vc.PanNo == nil || vc.PanNo?.isEmpty == true {
+                                            vc.PanNo = UserDefaults.standard.string(forKey: "PanNo")
+                                        }
+                                        
+                                        if vc.RegId == nil || vc.RegId?.isEmpty == true {
+                                            vc.RegId = UserDefaults.standard.string(forKey: "RegId")
+                                        }
+                                        
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    }
+                                    return
+                                }
+                                
+                                self.sectionPage()
+                            case "000001":
+                                self.showAlert(message: ErrorMessage ?? "")
+                            default:
+                                print("Unhandled error code: \(errorCode)")
+                            }
+                        }
+                    case .failure(let error):
+                        print("SIXTHAPI API call failed: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+    
+    func callInsertClientRegisterApi(phonenumber : String) {
+        
+        let decodeByteArrayToString = "96e79218965eb72c92a549dd5a330112"    //111111
+        // Save the decoded byte array string to the OTP variable
+        print("DECODE:-\(decodeByteArrayToString)")
+        // Convert string to data
+        let stringToData = Data(decodeByteArrayToString.utf8)
+        // Convert data to UTF-8 Encoding String
+        _ = String(data: stringToData, encoding: String.Encoding.utf8)!
+        
+        
+        let apiUrlString = "UserCreationDetails/InsertClientRegister"
+        
+        
+        var parameters: [String: Any?] = [
+            "DeviceType": "W",
+            "UserName": "SDSFD",
+            "OTP": decodeByteArrayToString,
+            "MobileNumber": phonenumber,
+            "EmailAddress": "",
+            "IsDpExternal": "0",
+            "RmCode": "",
+            "MobileRelation": "SELF",
+            "DPBrokerCode": "",
+            "ReferEarnClientId": "",
+            "IPAddress": "1",
+            "SessionId": "",
+            "IsMobileOTPBypass": "Y"
+        ]
+        
+        // Iterate through the dictionary and replace empty strings with nil
+        for (key, value) in parameters {
+            if let stringValue = value as? String, stringValue.isEmpty {
+                parameters[key] = nil
+            }
+        }
+        
+        print(parameters)
+        
+        apiCall(url: apiUrlString, method: "POST", parameters: parameters as [String : Any], view: self.view) { [self] result in
+            switch result {
+            case .success(let jsonResponse):
+                print("4TH Response: \(jsonResponse)")
+                let errorCode = jsonResponse["ErrorCode"] as? String ?? ""
+                let errorMessage = (jsonResponse["ErrorMessage"] as? String)
+                    ?? "Something went wrong. Please try again."
+                
+                // CRASH FIX: UserID / SessionId come back as null on errors (e.g. 900004),
+                // and the old force-unwrap "(... as? String)!" crashed the app.
+                let newUserID = jsonResponse["UserID"] as? String ?? ""
+                let newSessionID = jsonResponse["SessionId"] as? String ?? ""
+                
+                // Save the user only when the server actually created one
+                if !newUserID.isEmpty, !newSessionID.isEmpty {
+                    userID = newUserID
+                    sessionID = newSessionID
+                    DispatchQueue.main.async { [self] in
+                        CoreDataHelper.saveUserId(self.userID, sessionID: self.sessionID, decodeByteArrayString: decodeByteArrayToString , entityName: "MobileUser") // Save userId to Core Data
+                    }
+                }
+                
+                switch errorCode {
+                case "400003":
+                    DispatchQueue.main.async {
+                        
+                    }
+                case "900006":
+                    DispatchQueue.main.async {
+                        guard !self.userID.isEmpty else {
+                            self.showAlert(message: errorMessage)
+                            return
+                        }
+                        self.navigateToEmailIdVC(userId: self.userID , sessionID: self.sessionID, phoneNumber: self.mobileNumber ?? phonenumber)
+                    }
+                default:
+                    // e.g. 900004 "Mobile Number already exists in Backoffice."
+                    print("Unhandled error code: \(errorCode)")
+                    DispatchQueue.main.async {
+                        self.showAlert(message: errorMessage)
+                    }
+                }
+            case .failure(let error):
+                print("Login API call failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func sectionPage(){
+        //        let storyboard = UIStoryboard(name: "ApplicationForm", bundle: Bundle.module)
+        //        let vc = storyboard.instantiateViewController(identifier: "ApplicationFormVC") as? ApplicationFormVC
+        let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
+        let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
+        let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
+        let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
+        
+        let regId = UserDefaults.standard.string(forKey: "RegId")
+        let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
+        
+        vc.panNo = finalPAN
+        vc.regId = regIdFinal
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func navigateToEmailIdVC(userId:String,sessionID:String,phoneNumber:String) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "EmailIdVC") as? EmailIdVC {
+            vc.userId = userId
+            vc.sessionID = sessionID
+            vc.phoneNumber = phoneNumber
+            vc.mobileRelation = relation
+            vc.decodedString = decodeArray
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    func PanPage(userId:String,EmailId:String){
+        let vc = storyboard?.instantiateViewController(identifier: "PanVerifyVC") as! PanVerifyVC
+        vc.MobileUserID = userId
+        vc.emailID = EmailId
+        self.navigationController?.pushViewController(vc , animated: true)
+    }
+        
+    func AadhaarPage(PanNo:String,PANName:String,RegId:String,EmailId:String){
+        let storyboard = UIStoryboard(name: "DigiLocker", bundle: Bundle.module)
+        let vc = storyboard.instantiateViewController(identifier: "DigiLocker_a") as? DigiLocker_a
+        vc?.EmailId = EmailId
+        vc?.PANName = PANName
+        vc?.panNo = PanNo
+        vc?.RegId = RegId
+        self.navigationController?.pushViewController(vc! , animated: true)
     }
     
     func isRepeatedDigitNumber(phoneNumber: String) -> Bool {

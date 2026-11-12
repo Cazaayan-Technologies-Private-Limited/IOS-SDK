@@ -247,7 +247,7 @@ class DigiVerticsVC: UIViewController, WKNavigationDelegate {
                         
                         switch result {
                         case .success(let json):
-                            print("✅ DigiLocker Response:", json)
+                            print("✅ DigiLocker Response::::", json)
                             
                             let errorCode = json["ErrorCode"] as? String ?? ""
                             

@@ -519,25 +519,42 @@ extension MobileOTPVC{
             switch result {
             case .success(let jsonResponse):
                 print("4TH Response: \(jsonResponse)")
-                userID = (jsonResponse["UserID"] as? String)!
-                sessionID = (jsonResponse["SessionId"] as? String)!
-                DispatchQueue.main.async { [self] in
-                    CoreDataHelper.saveUserId(self.userID, sessionID: sessionID, decodeByteArrayString: decodeByteArrayToString , entityName: "MobileUser") // Save userId to Core Data
+                let errorCode = jsonResponse["ErrorCode"] as? String ?? ""
+                let errorMessage = (jsonResponse["ErrorMessage"] as? String)
+                    ?? "Something went wrong. Please try again."
+                
+                // CRASH FIX: UserID / SessionId come back as null on errors (e.g. 900004),
+                // and the old force-unwrap "(... as? String)!" crashed the app.
+                let newUserID = jsonResponse["UserID"] as? String ?? ""
+                let newSessionID = jsonResponse["SessionId"] as? String ?? ""
+                
+                // Save the user only when the server actually created one
+                if !newUserID.isEmpty, !newSessionID.isEmpty {
+                    userID = newUserID
+                    sessionID = newSessionID
+                    DispatchQueue.main.async { [self] in
+                        CoreDataHelper.saveUserId(self.userID, sessionID: self.sessionID, decodeByteArrayString: decodeByteArrayToString , entityName: "MobileUser") // Save userId to Core Data
+                    }
                 }
-                //phoneNumber = (jsonResponse["MobileNumber"] as? String)!
-                if let errorCode = jsonResponse["ErrorCode"] as? String {
-                    
-                    switch errorCode {
-                    case "400003":
-                        DispatchQueue.main.async {
-                            
+                
+                switch errorCode {
+                case "400003":
+                    DispatchQueue.main.async {
+                        
+                    }
+                case "900006":
+                    DispatchQueue.main.async {
+                        guard !self.userID.isEmpty else {
+                            self.showAlert(message: errorMessage)
+                            return
                         }
-                    case "900006":
-                        DispatchQueue.main.async {
-                            self.navigateToEmailIdVC(userId: self.userID , sessionID: self.sessionID, phoneNumber: self.phoneNumber! )
-                        }
-                    default:
-                        print("Unhandled error code: \(errorCode)")
+                        self.navigateToEmailIdVC(userId: self.userID , sessionID: self.sessionID, phoneNumber: self.phoneNumber ?? "")
+                    }
+                default:
+                    // e.g. 900004 "Mobile Number already exists in Backoffice."
+                    print("Unhandled error code: \(errorCode)")
+                    DispatchQueue.main.async {
+                        self.showAlert(message: errorMessage)
                     }
                 }
             case .failure(let error):

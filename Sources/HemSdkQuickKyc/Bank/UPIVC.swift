@@ -42,6 +42,11 @@ class UPIVC: UIViewController {
     var EmailId: String?
     var clienttrnxid: String?
     
+    /// Set to "Rejection" when opened from RejectionVC (Bank Details → RECTIFY)
+    var rejection: String?
+    weak var delegate: ReloadPageDelegate?
+    private var isRejectionFlow: Bool { rejection == "Rejection" }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,7 +57,7 @@ class UPIVC: UIViewController {
         navigationItem.hidesBackButton = true
         view.backgroundColor = .appBackground
         addBankBtn.layer.cornerRadius = 10
-        addBankBtn.layer.borderWidth = 0.5
+        addBankBtn.layer.borderWidth = 0.0
         addBankBtn.layer.borderColor = UIColor.appBorder.cgColor
         
         upiBtn.isSelected = true
@@ -146,15 +151,25 @@ class UPIVC: UIViewController {
         let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
         let vc = storyboard.instantiateViewController(identifier: "BankVC") as! BankVC
         let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
-        let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.PanNo
+        let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : (self.PanNo ?? self.panNo)
         let regId = UserDefaults.standard.string(forKey: "RegId")
-        let regIdFinal = (regId?.isEmpty == false) ? regId : self.RegId
+        let regIdFinal = (regId?.isEmpty == false) ? regId : (self.RegId ?? self.regId)
         vc.panNo = finalPAN
         vc.regId = regIdFinal
+        if isRejectionFlow {
+            // Manual bank entry in rejection mode → BankVC saves and returns to RejectionVC
+            vc.rejection = "Rejection"
+            vc.delegate = delegate
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func backBtn(_ sender: UIButton) {
+        if isRejectionFlow {
+            // Opened from the Rejection screen → go back there
+            popToRejectionScreen()
+            return
+        }
         let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
         let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
         let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
@@ -372,6 +387,13 @@ class UPIVC: UIViewController {
                         case "000000":
                             print("Unhandled error code: \(errorCode)")
                             DispatchQueue.main.async {
+                                   if self.isRejectionFlow {
+                                       // UPI verification done → back to Rejection list (it refreshes)
+                                       self.upiLink = nil
+                                       self.delegate?.reloadPageData()
+                                       self.popToRejectionScreen()
+                                       return
+                                   }
 
                                    // Refresh latest status from API
                                    self.SIXTHAPI(userID: self.fetchedUserId ?? "")
@@ -449,6 +471,10 @@ class UPIVC: UIViewController {
                                     self.updateCAMSButtonVisibility()
                                     
                                     self.continueBtn.isHidden = true
+                                    
+                                    // Rejection flow: bank status is REJECTED on purpose –
+                                    // keep UPI and "Add Bank Manually" enabled so the user can rectify.
+                                    if self.isRejectionFlow { return }
                                     
                                     // Case 1: PAGE PENDING
                                     if bankDpTradStatus.uppercased() == "PAGE PENDING" {
@@ -926,6 +952,21 @@ class UPIVC: UIViewController {
 
 //import UIKit
 //
+
+// MARK: - Rejection flow helper
+extension UIViewController {
+    /// Goes back to RejectionVC if it is in the navigation stack, otherwise one step back.
+    func popToRejectionScreen(animated: Bool = true) {
+        if let nav = navigationController,
+           let rejectionVC = nav.viewControllers.last(where: { $0 is RejectionVC }) {
+            nav.popToViewController(rejectionVC, animated: animated)
+        } else {
+            navigationController?.popViewController(animated: animated)
+        }
+    }
+}
+
+
 //class UPIVC: UIViewController {
 //    
 //    @IBOutlet weak var gpayView: UIView!

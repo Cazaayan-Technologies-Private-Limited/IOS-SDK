@@ -677,6 +677,15 @@ class TradingChargesVC: UIViewController {
         return label
     }()
     
+    // MARK: - View More Button
+    private let viewMoreButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("View More", for: .normal)
+        button.setTitleColor(UIColor.appPrimary, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        return button
+    }()
+    
     // MARK: - Agree Button
     private let agreeButton: UIButton = {
         let button = UIButton(type: .system)
@@ -699,6 +708,7 @@ class TradingChargesVC: UIViewController {
         setupViews()
         animateSheet()
         agreeButton.addTarget(self, action: #selector(agreeButtonTapped), for: .touchUpInside)
+        viewMoreButton.addTarget(self, action: #selector(viewMoreTapped), for: .touchUpInside)
     }
     
     private func setupViews() {
@@ -718,13 +728,13 @@ class TradingChargesVC: UIViewController {
         view.addSubview(containerView)
         containerView.translatesAutoresizingMaskIntoConstraints = false
         
-        bottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 400)
+        bottomConstraint = containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 600)   // start off-screen
         
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomConstraint,
-            containerView.heightAnchor.constraint(equalToConstant: 400)
+            bottomConstraint
+            // no fixed height – the sheet sizes itself to its content
         ])
         
         // Grabber
@@ -814,6 +824,16 @@ class TradingChargesVC: UIViewController {
             footerLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 24)
         ])
         
+        // View More (between footer and Proceed)
+        containerView.addSubview(viewMoreButton)
+        viewMoreButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            viewMoreButton.topAnchor.constraint(equalTo: footerLabel.bottomAnchor, constant: 12),
+            viewMoreButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            viewMoreButton.heightAnchor.constraint(equalToConstant: 36)
+        ])
+        
         // Agree Button
         containerView.addSubview(agreeButton)
         agreeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -821,6 +841,7 @@ class TradingChargesVC: UIViewController {
         NSLayoutConstraint.activate([
             agreeButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             agreeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            agreeButton.topAnchor.constraint(equalTo: viewMoreButton.bottomAnchor, constant: 12),
             agreeButton.bottomAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             agreeButton.heightAnchor.constraint(equalToConstant: 52)
         ])
@@ -828,6 +849,18 @@ class TradingChargesVC: UIViewController {
     
     @objc private func agreeButtonTapped() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    // Opens the full pricing web page on top of this sheet
+    @objc private func viewMoreTapped() {
+        let vc = PricingWebVC()
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        vc.onProceed = { [weak self] in
+            // Proceed on the pricing page closes this charges sheet as well
+            self?.dismiss(animated: true)
+        }
+        present(vc, animated: true)
     }
     
     private func animateSheet() {

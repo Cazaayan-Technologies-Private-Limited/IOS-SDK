@@ -1430,12 +1430,21 @@ class TradingandDematVC: UIViewController, @MainActor DepositorySelectionDelegat
     }
     
     @IBAction func viewBtn(_ sender: UIButton) {
-        let vc = TradingChargesVC()
+//        let vc = TradingChargesVC()
+//        
+//        vc.modalPresentationStyle = .overFullScreen
+//        vc.modalTransitionStyle = .crossDissolve
+//        
+//        present(vc, animated: true)
         
+        let vc = PricingWebVC()
         vc.modalPresentationStyle = .overFullScreen
         vc.modalTransitionStyle = .crossDissolve
-        
+        vc.onProceed = { [weak self] in
+            // whatever Proceed did before, e.g. move to the next screen
+        }
         present(vc, animated: true)
+        
     }
     
     @objc func openDepository() {

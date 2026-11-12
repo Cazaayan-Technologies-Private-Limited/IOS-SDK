@@ -174,7 +174,7 @@
 //        navigationItem.hidesBackButton = true
 //
 //        //fatherNameTF.layer.cornerRadius = 10
-//        //fatherNameTF.layer.borderWidth = 1
+//        //fatherNameTF.layer.borderWidth = 1.5
 //        //fatherNameTF.layer.borderColor = UIColor.gray.cgColor
 //
 //        fatherView.layer.cornerRadius = 10
@@ -1165,6 +1165,8 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
     @IBOutlet weak var understandingBtn1: UIButton!
     @IBOutlet weak var understandingBtn2: UIButton!
     @IBOutlet weak var understandingBtn3: UIButton!
+    @IBOutlet weak var nomineeNameBtn: UIButton!
+    @IBOutlet weak var nominationBtn: UIButton!
     @IBOutlet weak var understandingBtn4: UIButton!
     @IBOutlet weak var understandingBtn5: UIButton!
     @IBOutlet weak var understandingBtn6: UIButton!
@@ -1230,6 +1232,9 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
     var isunderstanding8Checked = true
     var isunderstanding9Checked = true
     var isunderstanding10Checked = true
+
+    var isNomineeNameChecked = true     // "Name of Nominee" – checked by default
+    var isNominationChecked = false     // "Nomination - Yes/No" – always unchecked
     
     
     // @IBOutlet weak var SaveBtn: UIButton!
@@ -1278,7 +1283,7 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         navigationItem.hidesBackButton = true
         
         fatherView.layer.cornerRadius = 10
-        fatherView.layer.borderWidth = 1
+        fatherView.layer.borderWidth = 1.5
         fatherView.layer.borderColor = UIColor.appBorder.cgColor
         
         //educationView.layer.cornerRadius = 10
@@ -1286,19 +1291,19 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         //educationView.layer.borderColor = UIColor.appBorder.cgColor
         
         occupationView.layer.cornerRadius = 10
-        occupationView.layer.borderWidth = 1
+        occupationView.layer.borderWidth = 1.5
         occupationView.layer.borderColor = UIColor.appBorder.cgColor
         
         annualIncomeView.layer.cornerRadius = 10
-        annualIncomeView.layer.borderWidth = 1
+        annualIncomeView.layer.borderWidth = 1.5
         annualIncomeView.layer.borderColor = UIColor.appBorder.cgColor
         
         runningAccountView.layer.cornerRadius = 10
-        runningAccountView.layer.borderWidth = 1
+        runningAccountView.layer.borderWidth = 1.5
         runningAccountView.layer.borderColor = UIColor.appBorder.cgColor
         
         tradingView.layer.cornerRadius = 10
-        tradingView.layer.borderWidth = 1
+        tradingView.layer.borderWidth = 1.5
         tradingView.layer.borderColor = UIColor.appBorder.cgColor
         
         nameNominee = "NM"
@@ -1319,19 +1324,19 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         undertakingArrow.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         
         understandView.layer.cornerRadius = 10
-        understandView.layer.borderWidth = 1
+        understandView.layer.borderWidth = 1.5
         understandView.layer.borderColor = UIColor.appBorder.cgColor
         
     receiveView.layer.cornerRadius = 10
-    receiveView.layer.borderWidth = 1
+    receiveView.layer.borderWidth = 1.5
     receiveView.layer.borderColor = UIColor.appBorder.cgColor
         
         understandBtnView.layer.cornerRadius = 10
-        understandBtnView.layer.borderWidth = 1
+        understandBtnView.layer.borderWidth = 1.5
         understandBtnView.layer.borderColor = UIColor.appBorder.cgColor
         
         undertakingStack.layer.cornerRadius = 10
-        undertakingStack.layer.borderWidth = 1
+        undertakingStack.layer.borderWidth = 1.5
         undertakingStack.layer.borderColor = UIColor.appBorder.cgColor
         
         education = "High school"
@@ -1353,6 +1358,11 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         understandingBtn7.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
         understandingBtn8.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
         understandingBtn9.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+        nomineeNameBtn.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+        nomineeNameBtn.tintColor = .appPrimary
+        nominationBtn.setImage(UIImage(systemName: "square"), for: .normal)
+        nominationBtn.tintColor = .appPrimary
+        nominationBtn.isUserInteractionEnabled = false   // always blank – user cannot tick it
        // understandingBtn10.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
         
         fatherNameTF.delegate = self
@@ -1483,7 +1493,7 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
                 ddpi = "Y"
             uncheckAllDDPICheckboxesYes()
             } else if sender == ddpiNoBtn {
-                showAlert(message: "With DDPI you can Sell stocks instantly without repeated TPIN (EDIS) authorization.")
+                showAlert(message: "With DDPI you can Sell stocks instantly without repeated TPIN (EDIS) authorization.", titleAlert: "Alert")
                 ddpiYesBtn.setImage(UIImage(systemName: "circle"), for: .normal)
                 ddpiNoBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
                 ddpi = "N"
@@ -1654,6 +1664,19 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         
         updateSubmitButtonState()
        }
+    
+    @IBAction func nomineeNameBtn(_ sender: UIButton) {
+        isNomineeNameChecked.toggle()
+        let imageName = isNomineeNameChecked ? "checkmark.square.fill" : "square"
+        sender.setImage(UIImage(systemName: imageName), for: .normal)
+        sender.tintColor = .appPrimary
+    }
+
+    @IBAction func nominationBtn(_ sender: UIButton) {
+        // "Nomination - Yes/No" must always stay blank, so tapping does nothing
+        isNominationChecked = false
+        sender.setImage(UIImage(systemName: "square"), for: .normal)
+    }
     
     @IBAction func understandingBtn3(_ sender: UIButton) {
       
@@ -1952,8 +1975,8 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         SaveOtherData()
     }
     
-    func showAlert(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+    func showAlert(message: String, titleAlert: String = "Error") {
+        let alert = UIAlertController(title: titleAlert, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }

@@ -46,9 +46,22 @@ class relationVC: UIViewController {
         GetRelation()
     }
     
+//    func adjustTableViewHeight() {
+//        DispatchQueue.main.async {
+//            self.tableviewHeight.constant = (self.tableView.contentSize.height-40)
+//            self.view.layoutIfNeeded()
+//        }
+//    }
+    
     func adjustTableViewHeight() {
         DispatchQueue.main.async {
-            self.tableviewHeight.constant = (self.tableView.contentSize.height-40)
+            self.tableView.layoutIfNeeded()
+
+            let contentHeight = self.tableView.contentSize.height - 40
+            let maxHeight: CGFloat = 350
+
+            self.tableviewHeight.constant = min(max(contentHeight, 0), maxHeight)
+
             self.view.layoutIfNeeded()
         }
     }

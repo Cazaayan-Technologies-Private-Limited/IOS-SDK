@@ -281,7 +281,7 @@ public protocol VerticsVCDelegate: AnyObject {
     func didReceiveApiResponse(data: [String: Any], identifier1: String, identifier3: String)
 }
 
-public class VerticsVC: UIViewController, WKNavigationDelegate {
+public class VerticsVC: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
     // MARK: - UI
     private var webView: WKWebView!
@@ -372,6 +372,7 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
     private func setupWebView() {
         webView = WKWebView()
         webView.navigationDelegate = self
+        webView.uiDelegate = self          // lets us know when the page tries to close itself
         webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
         
@@ -443,11 +444,34 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
     // MARK: - WKNavigationDelegate
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         activityIndicator.stopAnimating()
-        print("✅ WebView Loaded Successfully")
-        startApiCallTimer()
+        print("✅ WebView Loaded:", webView.url?.absoluteString ?? "")
+        
+        // Check right away on every page load (e.g. the "Success" page),
+        // instead of restarting a 15-second wait each time.
+        checkNow()
+        
+        // Start background polling only once
+        if timer == nil {
+            startApiCallTimer()
+        }
+    }
+    
+    // Called when the DigiLocker success page runs window.close() (its "close automatically" countdown)
+    public func webViewDidClose(_ webView: WKWebView) {
+        print("🔚 Page requested close – checking DigiLocker status now")
+        checkNow()
+    }
+    
+    /// Runs one status check immediately, unless one is already running or we're done.
+    private func checkNow() {
+        ValidatesaveDigiLocker { _ in }
     }
     
     func ValidatesaveDigiLocker(completion: @escaping @Sendable (Bool) -> Void) {
+        // Avoid overlapping calls and calls after success
+        guard !isProcessCompleted, !isApiInProgress else { return }
+        isApiInProgress = true
+        
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [weak self] tokenId in
             guard let self = self else { return }
             // 🔁 Token missing → generate & retry
@@ -496,11 +520,13 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
                     
                     switch result {
                     case .success(let json):
-                        print("✅ DigiLocker Response:", json)
+                        print("✅ DigiLocker Response::", json)
                         
                         let errorCode = json["ErrorCode"] as? String ?? ""
                         
                         if errorCode == "000000" || errorCode == "000023" {
+                            guard !self.isProcessCompleted else { return }
+                            self.isProcessCompleted = true
                             self.timer?.cancel()
                             self.delegate?.didReceiveApiResponse(
                                 data: json,
@@ -525,7 +551,8 @@ public class VerticsVC: UIViewController, WKNavigationDelegate {
                   timer?.cancel()
           
                   timer = DispatchSource.makeTimerSource(queue: .main)
-                  timer?.schedule(deadline: .now() + 15, repeating: 3)
+                  // Poll every 3 seconds (page-load checks above handle the fast path)
+                  timer?.schedule(deadline: .now() + 3, repeating: 3)
           
                   timer?.setEventHandler { [weak self] in
                       self?.ValidatesaveDigiLocker { success in

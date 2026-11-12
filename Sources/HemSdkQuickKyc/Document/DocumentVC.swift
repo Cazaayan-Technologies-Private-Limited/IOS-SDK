@@ -135,7 +135,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     var rejection1: String?
     var rejection2: String?
     var rejection3: String?
-    var prefixUrl = "https://signup.hemnxt.com:84/V4.0.0/api/"
+    var prefixUrl = T5Launcher.baseURL //"http://uatkyc.hemsecurities.com:98/V4.0.0/api/" //"https://signup.hemnxt.com:84/V4.0.0/api/"
     var bpverify: String?
     var diVerify: String?
     var DP_IMAGEID_Verify: Int?
@@ -191,6 +191,11 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     //incomeProof
     var isIncomeProofVerified = false
     var isFromRejectionFlow: Bool = false
+    /// Set by Done: run the verification check when ViewDocumentDetails finishes
+    private var pendingDoneCheck = false
+    /// Set by RejectionVC when other rejected items (e.g. Bank Details) are still pending:
+    /// after saving, go back to the rejection list instead of submitting the application.
+    var returnToRejectionList: Bool = false
     var PANName: String?
     var EmailId: String?
     var decodeArray:String?
@@ -785,12 +790,15 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
             return
         }
         
-        // Then check server verification status
+        // Then check server verification status.
+        // The check runs as soon as ViewDocumentDetails returns (no fixed 2-second wait).
+        pendingDoneCheck = true
         self.ViewDocumentDetails()
-        
-        DispatchQueue.global().asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            guard let self = self else { return }
-            
+    }
+    
+    /// Runs after ViewDocumentDetails has loaded fresh data (main thread)
+    private func runDoneVerification() {
+        do {
             var unverifiedSections: [String] = []
             
             // Check visible sections dynamically
@@ -837,8 +845,8 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                 }
             }
             
-            // Check Signature (check local image)
-            if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+            // Check Signature (uploaded on server OR shown on screen)
+            if !self.hasSignatureDocument {
                 unverifiedSections.append("Signature (No image uploaded)")
             } else if let status = jsonResponse["SignatureImage_Verify"] as? String,
                       status != "1" && status != "2" {
@@ -859,8 +867,8 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
             //                   unverifiedSections.append("PAN Copy")
             //               }
             
-            // Check Client Photo (check local image)
-            if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+            // Check Client Photo (uploaded on server OR shown on screen)
+            if !self.hasClientPhotoDocument {
                 unverifiedSections.append("Client Photo (No image uploaded)")
             } else if let status = jsonResponse["ClientPhotoImageID_Verify"] as? String,
                       status != "1" && status != "2" {
@@ -912,6 +920,27 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         }
     }
     
+    // MARK: - Document presence helpers
+    
+    /// True when the image view shows a real picture (not empty / not a placeholder icon)
+    private func isRealImageShown(in imageView: UIImageView) -> Bool {
+        guard let image = imageView.image else { return false }
+        return image != UIImage(systemName: "person.crop.circle.badge.xmark") &&
+               image != UIImage(systemName: "person.crop.circle")
+    }
+    
+    /// Signature exists if the server returned it (signatureUrl is set from SignatureImageID
+    /// and cleared on delete) or the user just captured/drew one on this screen.
+    private var hasSignatureDocument: Bool {
+        (signatureUrl?.isEmpty == false) || isRealImageShown(in: signatureImageview)
+    }
+    
+    /// Client photo exists if the server returned it (clientPhotoUrl is set from
+    /// ClientPhotoImageID and cleared on delete) or the user just captured one.
+    private var hasClientPhotoDocument: Bool {
+        (clientPhotoUrl?.isEmpty == false) || isRealImageShown(in: CPImageView)
+    }
+    
     // Add this helper method to validate local documents
     func validateLocalDocuments() -> Bool {
         var missingDocuments: [String] = []
@@ -937,8 +966,10 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
             }
         }
         
-        // Check Signature
-        if signatureImageview.image == nil || signatureImageview.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+        // Check Signature – uploaded on server OR shown on screen.
+        // (Before, only the thumbnail on screen was checked, so a slow/failed
+        //  thumbnail download showed "Missing" even when it was already uploaded.)
+        if !hasSignatureDocument {
             missingDocuments.append("Signature")
         }
         
@@ -947,8 +978,8 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
         //               missingDocuments.append("PAN Copy")
         //           }
         
-        // Check Client Photo
-        if CPImageView.image == nil || CPImageView.image == UIImage(systemName: "person.crop.circle.badge.xmark") {
+        // Check Client Photo – uploaded on server OR shown on screen
+        if !hasClientPhotoDocument {
             missingDocuments.append("Client Photo")
         }
         
@@ -1102,6 +1133,12 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
                             print("errorcode 000000 called")
                             DispatchQueue.main.async{
                                 print("done")
+                                if self.returnToRejectionList {
+                                    // Other items still pending → back to RejectionVC
+                                    self.delegate?.reloadPageData()
+                                    self.navigationController?.popViewController(animated: true)
+                                    return
+                                }
                                 self.UpdateFinalStatus()
                                 //                                let storyboard = UIStoryboard(name: "Rejection", bundle: Bundle.module)
                                 //                                let vc = storyboard.instantiateViewController(identifier: "RejectionVC") as! RejectionVC
@@ -2138,6 +2175,11 @@ extension DocumentVC {
                                 if(isSubmit){
                                     self.submitForVerification()
                                 }
+                                // Done was tapped → check right away with the fresh data
+                                if self.pendingDoneCheck {
+                                    self.pendingDoneCheck = false
+                                    self.runDoneVerification()
+                                }
                             }
                         case "999992":
                             DispatchQueue.main.async {
@@ -2166,13 +2208,24 @@ extension DocumentVC {
                             }
                         default:
                             print("Unhandled error code: \(errorCode)")
+                            self.cancelPendingDoneCheck()
                         }
                     }
                 case .failure(let error):
                     print(
                         "Login API call failed: \(error.localizedDescription)")
+                    self.cancelPendingDoneCheck()
                 }
             }
+        }
+    }
+    
+    /// ViewDocumentDetails failed while Done was waiting → tell the user instead of doing nothing
+    private func cancelPendingDoneCheck() {
+        DispatchQueue.main.async {
+            guard self.pendingDoneCheck else { return }
+            self.pendingDoneCheck = false
+            self.showAlert(title: "Alert", message: "Unable to verify your documents right now. Please try again.")
         }
     }
     func updateViewVisibility(with jsonResponse: [String: Any]) {
@@ -2973,6 +3026,9 @@ extension DocumentVC {
             // Reload the collection view to show updated images
             DispatchQueue.main.async {
                 self.BpCollectionView.reloadData()
+                // Show the uploaded Bank Proof document on first page load
+                // (same as Income Proof) – earlier it only appeared after tapping the section
+                self.BankProof(shouldShow: true)
             }
         }
         
@@ -3363,7 +3419,19 @@ extension DocumentVC {
                             self.IPDocumentView.isHidden = false
                             self.updateCollectionViewWithUploadedImage(
                                 from: jsonResponse, identifier: "IncomeProof")
-                            
+                            //by sayantan
+                            let statusValue: String
+                            if let intValue = jsonResponse["DocumentImages_Verify"] as? Int {
+                                statusValue = String(intValue)
+                            } else if let stringValue = jsonResponse["DocumentImages_Verify"] as? String {
+                                statusValue = stringValue
+                            } else {
+                                statusValue = ""
+                            }
+                            if(statusValue == "2"){
+                                self.showAlert(title: "Alert", message: "Income proof could not be verified. After submission, the application will be sent for verifier review.")
+                            }
+                            //by sayantan
                         }
                     case "801005":
                         // Increment OCR count and retry if less than 3
@@ -3659,6 +3727,19 @@ extension DocumentVC {
                             self.BPDocumentView.isHidden = false
                             self.updateCollectionViewWithUploadedImage(
                                 from: jsonResponse, identifier: "Bank")
+                            //by sayantan
+                            let statusValue: String
+                            if let intValue = jsonResponse["DocumentImages_Verify"] as? Int {
+                                statusValue = String(intValue)
+                            } else if let stringValue = jsonResponse["DocumentImages_Verify"] as? String {
+                                statusValue = stringValue
+                            } else {
+                                statusValue = ""
+                            }
+                            if(statusValue == "2"){
+                                self.showAlert(title: "Alert", message: "Bank Proof could not be verified. Application will be sent for verifier review after submission.")
+                            }
+                            //by sayantan
                         }
                     case "801005":
                         // Increment OCR count and retry if less than 3
@@ -4258,6 +4339,19 @@ extension DocumentVC {
                             }
                             self.CP_CaptureImgBtn.isHidden = true
                             self.CP_IPVLinkBtn.isHidden = true
+                            //by sayantan
+                            let statusValue: String
+                            if let intValue = jsonResponse["DocumentImages_Verify"] as? Int {
+                                statusValue = String(intValue)
+                            } else if let stringValue = jsonResponse["DocumentImages_Verify"] as? String {
+                                statusValue = stringValue
+                            } else {
+                                statusValue = ""
+                            }
+                            if(statusValue == "2"){
+                                self.showAlert(title: "Alert", message: "Photo could not be verified. Application will be sent for verifier review after submission.")
+                            }
+                            //by sayantan
                         }
                         
                     case "801005":
@@ -5932,8 +6026,9 @@ extension DocumentVC {
     
     func loadImage(
         from urlString: String, into imageView: UIImageView,
-        with identifier: String?
+        with identifier: String?, attempt: Int = 0
     ) {
+
         // Check the cache for the image first
         if let cachedImage = imageCache.object(forKey: urlString as NSString) {
             DispatchQueue.main.async {
@@ -5986,6 +6081,11 @@ extension DocumentVC {
                     print(
                         "Failed to download image: \(error.localizedDescription)"
                     )
+                    if attempt < 1 {   // retry a failed thumbnail download once (new token)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            self.loadImage(from: urlString, into: imageView, with: identifier, attempt: attempt + 1)
+                        }
+                    }
                     return
                 }
                 
@@ -5993,6 +6093,11 @@ extension DocumentVC {
                    !(200...299).contains(httpResponse.statusCode)
                 {
                     print("Invalid status code: \(httpResponse.statusCode)")
+                    if attempt < 1 {   // retry a failed thumbnail download once (new token)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            self.loadImage(from: urlString, into: imageView, with: identifier, attempt: attempt + 1)
+                        }
+                    }
                     return
                 }
                 
@@ -6021,6 +6126,11 @@ extension DocumentVC {
                     }
                 } else {
                     print("Failed to create image from data.")
+                    if attempt < 1 {   // retry a failed thumbnail download once (new token)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            self.loadImage(from: urlString, into: imageView, with: identifier, attempt: attempt + 1)
+                        }
+                    }
                 }
             }
             task.resume()

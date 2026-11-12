@@ -1650,7 +1650,7 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="97.5" height="40"/>
                                                                 <color key="tintColor" red="0.2470588235" green="0.2470588235" blue="0.71764705880000002" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <state key="normal" title="Married" image="circle" catalog="system">
-                                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="titleColor" systemColor="labelColor"/>
                                                                 </state>
                                                                 <state key="selected" image="circle.circle.fill" catalog="system"/>
                                                                 <connections>
@@ -1661,7 +1661,7 @@
                                                                 <rect key="frame" x="102.5" y="0.0" width="97.5" height="40"/>
                                                                 <color key="tintColor" red="0.2470588235" green="0.2470588235" blue="0.71764705880000002" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <state key="normal" title="Single" image="circle" catalog="system">
-                                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="titleColor" systemColor="labelColor"/>
                                                                 </state>
                                                                 <state key="selected" image="circle.circle.fill" catalog="system"/>
                                                                 <connections>
@@ -1696,7 +1696,7 @@
                                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </state>
                                                                 <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" imagePlacement="trailing" title="SELECT">
-                                                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="baseForegroundColor" systemColor="labelColor"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
                                                                     <action selector="OccupationBtn:" destination="uAz-im-R0E" eventType="touchUpInside" id="NqH-XO-oyn"/>
@@ -1731,7 +1731,7 @@
                                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </state>
                                                                 <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" imagePlacement="trailing" title="SELECT">
-                                                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="baseForegroundColor" systemColor="labelColor"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
                                                                     <action selector="annualIncomebtn:" destination="uAz-im-R0E" eventType="touchUpInside" id="xIM-bw-syO"/>
@@ -1767,7 +1767,7 @@
                                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </state>
                                                                 <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" imagePlacement="trailing" title="SELECT">
-                                                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="baseForegroundColor" systemColor="labelColor"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
                                                                     <action selector="tradingExperiencebtn:" destination="uAz-im-R0E" eventType="touchUpInside" id="d7c-Jh-JDy"/>
@@ -1815,7 +1815,7 @@
                                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </state>
                                                                 <buttonConfiguration key="configuration" style="plain" image="chevron.down" catalog="system" imagePlacement="trailing" title="90 days">
-                                                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="baseForegroundColor" systemColor="labelColor"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
                                                                     <action selector="runningAccountBtn:" destination="uAz-im-R0E" eventType="touchUpInside" id="PWJ-hQ-0aw"/>
@@ -2008,7 +2008,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="186.5" height="40"/>
                                                                         <color key="tintColor" red="0.53725490200000003" green="0.47058823529999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <state key="normal" title="Yes" image="circle" catalog="system">
-                                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <color key="titleColor" systemColor="labelColor"/>
                                                                         </state>
                                                                         <state key="selected" image="circle.circle.fill" catalog="system"/>
                                                                         <connections>
@@ -2019,7 +2019,7 @@
                                                                         <rect key="frame" x="191.5" y="0.0" width="186.5" height="40"/>
                                                                         <color key="tintColor" red="0.53725490200000003" green="0.47058823529999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <state key="normal" title="No" image="circle" catalog="system">
-                                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <color key="titleColor" systemColor="labelColor"/>
                                                                         </state>
                                                                         <state key="selected" image="circle.circle.fill" catalog="system"/>
                                                                         <connections>
@@ -2093,7 +2093,7 @@
                                                                 </state>
                                                                 <buttonConfiguration key="configuration" style="plain" image="checkmark" title="  Undertaking / Standing Instruction ">
                                                                     <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
-                                                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="baseForegroundColor" systemColor="labelColor"/>
                                                                 </buttonConfiguration>
                                                                 <connections>
                                                                     <action selector="undertakingBtn:" destination="uAz-im-R0E" eventType="touchUpInside" id="243-PN-IGS"/>
@@ -2138,13 +2138,13 @@
                                                         </variation>
                                                     </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="p6Y-OC-Zu3">
-                                                        <rect key="frame" x="10" y="1236.5" width="378" height="890"/>
+                                                        <rect key="frame" x="10" y="1236.5" width="378" height="1080"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="S0p-B1-Y9u">
-                                                                <rect key="frame" x="0.0" y="0.0" width="378" height="700"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="378" height="890"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2lb-Ht-YbP">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="378" height="700"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="378" height="890"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I / We instruct you to receive each &amp; every credits in my / our account" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pc9-po-1Wg">
                                                                                 <rect key="frame" x="30" y="5" width="348" height="41"/>
@@ -2192,14 +2192,8 @@
                                                                                     <action selector="understandingBtn3:" destination="uAz-im-R0E" eventType="touchUpInside" id="y7T-fc-hOG"/>
                                                                                 </connections>
                                                                             </button>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I/We want the details of my/our nominee to be printed in the Statement of Holding provided to me/us by the AMC/DP as follows" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bmR-ck-KEM">
-                                                                                <rect key="frame" x="30" y="142.5" width="348" height="61"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iJo-xj-GyS">
-                                                                                <rect key="frame" x="0.0" y="142.5" width="30" height="30"/>
+                                                                                <rect key="frame" x="0.0" y="137.5" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="height" constant="30" id="Dfh-ZR-8K5"/>
                                                                                     <constraint firstAttribute="width" constant="30" id="KEA-jD-IeF"/>
@@ -2214,14 +2208,60 @@
                                                                                     <action selector="understandingBtn4:" destination="uAz-im-R0E" eventType="touchUpInside" id="c9j-Wx-ZwZ"/>
                                                                                 </connections>
                                                                             </button>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I / We request you to send Account Statement Requirement (As per SEBI Regulation) " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nii-BU-9hn">
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJb-9p-U0u">
                                                                                 <rect key="frame" x="30" y="208.5" width="348" height="41"/>
+                                                                                <string key="text">Name of Nominee</string>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <nil key="textColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qcU-1F-RGq">
+                                                                                <rect key="frame" x="0.0" y="208.5" width="30" height="30"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="30" id="fen-yJ-98V"/>
+                                                                                    <constraint firstAttribute="width" constant="30" id="ndv-mY-2Ar"/>
+                                                                                </constraints>
+                                                                                <color key="tintColor" red="0.53725490200000003" green="0.47058823529999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                                <state key="normal" image="checkmark">
+                                                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                </state>
+                                                                                <buttonConfiguration key="configuration" style="plain" image="checkmark"/>
+                                                                                <connections>
+                                                                                    <action selector="nomineeNameBtn:" destination="uAz-im-R0E" eventType="touchUpInside" id="0aO-fE-GnT"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYN-Lb-001">
+                                                                                <rect key="frame" x="30" y="244" width="348" height="20.5"/>
+                                                                                <string key="text">Nomination - Yes/No</string>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <nil key="textColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nYN-Bt-002">
+                                                                                <rect key="frame" x="0.0" y="239.25" width="30" height="30"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="height" constant="30" id="nYN-H-003"/>
+                                                                                    <constraint firstAttribute="width" constant="30" id="nYN-W-004"/>
+                                                                                </constraints>
+                                                                                <color key="tintColor" red="0.53725490200000003" green="0.47058823529999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                                <state key="normal" image="checkmark">
+                                                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                </state>
+                                                                                <buttonConfiguration key="configuration" style="plain" image="checkmark"/>
+                                                                                <connections>
+                                                                                    <action selector="nominationBtn:" destination="uAz-im-R0E" eventType="touchUpInside" id="nYN-Ac-005"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I / We request you to send Account Statement Requirement (As per SEBI Regulation) " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nii-BU-9hn">
+                                                                                <rect key="frame" x="30" y="259.5" width="348" height="41"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4wh-JE-LnU">
-                                                                                <rect key="frame" x="0.0" y="208.5" width="30" height="30"/>
+                                                                                <rect key="frame" x="0.0" y="254.5" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" constant="30" id="W1L-g9-WTk"/>
                                                                                     <constraint firstAttribute="height" constant="30" id="fX3-Ew-Gvz"/>
@@ -2234,13 +2274,13 @@
                                                                                 <buttonConfiguration key="configuration" style="plain" image="checkmark"/>
                                                                             </button>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I / We request you to send electronic transaction-cum-holding statement at the e-mail lD. " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ei-rn-vqR">
-                                                                                <rect key="frame" x="30" y="259.5" width="348" height="61"/>
+                                                                                <rect key="frame" x="30" y="310.5" width="348" height="61"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2xS-1P-vET">
-                                                                                <rect key="frame" x="0.0" y="254.5" width="30" height="30"/>
+                                                                                <rect key="frame" x="0.0" y="305.5" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="height" constant="30" id="PUl-jA-p4g"/>
                                                                                     <constraint firstAttribute="width" constant="30" id="pxa-wt-IaW"/>
@@ -2256,13 +2296,13 @@
                                                                                 </connections>
                                                                             </button>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="l/ We would like to share the email lD with the RTA" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lzs-9b-A4k">
-                                                                                <rect key="frame" x="30" y="330.5" width="348" height="41"/>
+                                                                                <rect key="frame" x="30" y="381.5" width="348" height="41"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzQ-jy-WlT">
-                                                                                <rect key="frame" x="0.0" y="325.5" width="30" height="30"/>
+                                                                                <rect key="frame" x="0.0" y="376.5" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" constant="30" id="i7J-yb-uuJ"/>
                                                                                     <constraint firstAttribute="height" constant="30" id="oEE-oy-wBa"/>
@@ -2278,13 +2318,13 @@
                                                                                 </connections>
                                                                             </button>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I / We would like to receive the Annual Report electronic" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YGf-s8-h2S">
-                                                                                <rect key="frame" x="30" y="381.5" width="348" height="41"/>
+                                                                                <rect key="frame" x="30" y="432.5" width="348" height="41"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vOa-Ls-0a0">
-                                                                                <rect key="frame" x="0.0" y="376.5" width="30" height="30"/>
+                                                                                <rect key="frame" x="0.0" y="427.5" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="height" constant="30" id="V3y-s6-DeC"/>
                                                                                     <constraint firstAttribute="width" constant="30" id="ZTB-ra-PRC"/>
@@ -2300,13 +2340,13 @@
                                                                                 </connections>
                                                                             </button>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="l/ We wish to receive dividend / interest directly into my bank account as given below through ECS. " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SQt-m4-Igf">
-                                                                                <rect key="frame" x="30" y="432.5" width="348" height="61"/>
+                                                                                <rect key="frame" x="30" y="483.5" width="348" height="61"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H46-Nj-NOA">
-                                                                                <rect key="frame" x="0.0" y="427.5" width="30" height="30"/>
+                                                                                <rect key="frame" x="0.0" y="478.5" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="height" constant="30" id="SVV-lI-Dtt"/>
                                                                                     <constraint firstAttribute="width" constant="30" id="kdC-2b-Mh7"/>
@@ -2322,14 +2362,14 @@
                                                                                 </connections>
                                                                             </button>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LSq-46-95S">
-                                                                                <rect key="frame" x="30" y="503.5" width="348" height="122"/>
+                                                                                <rect key="frame" x="30" y="554.5" width="348" height="122"/>
                                                                                 <string key="text"> I/We wish to opt for Electronic delivery Instruction Slip ( E-DIS)/ DDPI  at the time of account opening. However, the physical DIS booklet should be issued to me/us immediately on my/our request at any later date</string>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3aa-3e-Trb">
-                                                                                <rect key="frame" x="0.0" y="498.5" width="30" height="30"/>
+                                                                                <rect key="frame" x="0.0" y="549.5" width="30" height="30"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" constant="30" id="u59-3I-f9B"/>
                                                                                     <constraint firstAttribute="height" constant="30" id="yjR-rU-GBb"/>
@@ -2344,57 +2384,101 @@
                                                                                     <action selector="understandingBtn9:" destination="uAz-im-R0E" eventType="touchUpInside" id="vbO-dG-HZ0"/>
                                                                                 </connections>
                                                                             </button>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ha7-qy-e0X">
+                                                                                <rect key="frame" x="30" y="686.5" width="348" height="122"/>
+                                                                                <string key="text">I hereby give my consent to open a Demat and trading account with Hem Securities Limited/Hem Finlease Private Limited., and to fetch my KYC and CKYC details from KRA/CKYC records, and to update/modify my KYC and CKYC details in KRA/CKYC records.</string>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <nil key="textColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N4d-Bx-BG2">
+                                                                                <rect key="frame" x="0.0" y="681.5" width="30" height="30"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" constant="30" id="CQy-Ff-adQ"/>
+                                                                                    <constraint firstAttribute="height" constant="30" id="bYp-se-k1n"/>
+                                                                                </constraints>
+                                                                                <color key="tintColor" red="0.53725490200000003" green="0.47058823529999999" blue="0.92941176469999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                                <state key="normal" image="checkmark">
+                                                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                </state>
+                                                                                <buttonConfiguration key="configuration" style="plain" image="checkmark"/>
+                                                                                <connections>
+                                                                                    <action selector="understandingBtn9:" destination="uAz-im-R0E" eventType="touchUpInside" id="9am-1A-nbk"/>
+                                                                                </connections>
+                                                                            </button>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I/We want the details of my/our nominee to be printed in the Statement of Holding provided to me/us by the AMC/DP as follows" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bmR-ck-KEM">
+                                                                                <rect key="frame" x="30" y="137.5" width="348" height="61"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <nil key="textColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
                                                                         </subviews>
                                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="trailing" secondItem="SQt-m4-Igf" secondAttribute="trailing" id="36q-bt-tUB"/>
                                                                             <constraint firstItem="5v7-8f-HCi" firstAttribute="top" secondItem="Pc9-po-1Wg" secondAttribute="bottom" id="38S-KQ-D7H"/>
                                                                             <constraint firstItem="lzs-9b-A4k" firstAttribute="leading" secondItem="nzQ-jy-WlT" secondAttribute="trailing" id="3KN-2d-QI1"/>
-                                                                            <constraint firstItem="4wh-JE-LnU" firstAttribute="top" secondItem="bmR-ck-KEM" secondAttribute="bottom" constant="5" id="3z2-TR-1WC"/>
+                                                                            <constraint firstItem="4wh-JE-LnU" firstAttribute="top" secondItem="nYN-Lb-001" secondAttribute="bottom" constant="10" id="3z2-TR-1WC"/>
                                                                             <constraint firstItem="LAE-Qy-mOX" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="46K-C1-MgE"/>
                                                                             <constraint firstItem="YGf-s8-h2S" firstAttribute="top" secondItem="lzs-9b-A4k" secondAttribute="bottom" constant="10" id="50C-J1-I3e"/>
                                                                             <constraint firstItem="iJo-xj-GyS" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="53O-2Q-yok"/>
                                                                             <constraint firstItem="nzQ-jy-WlT" firstAttribute="top" secondItem="2ei-rn-vqR" secondAttribute="bottom" constant="5" id="55Y-Kv-9OF"/>
+                                                                            <constraint firstItem="nii-BU-9hn" firstAttribute="leading" secondItem="4wh-JE-LnU" secondAttribute="trailing" id="6Ex-Yc-xth"/>
                                                                             <constraint firstItem="2xS-1P-vET" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="6i8-VW-MLF"/>
                                                                             <constraint firstAttribute="trailing" secondItem="lzs-9b-A4k" secondAttribute="trailing" id="78q-Rb-iAh"/>
                                                                             <constraint firstAttribute="trailing" secondItem="nii-BU-9hn" secondAttribute="trailing" id="7IW-yx-bOj"/>
                                                                             <constraint firstItem="vOa-Ls-0a0" firstAttribute="top" secondItem="lzs-9b-A4k" secondAttribute="bottom" constant="5" id="7wh-fI-qvp"/>
+                                                                            <constraint firstItem="qcU-1F-RGq" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="88A-bM-6hb"/>
                                                                             <constraint firstItem="4wh-JE-LnU" firstAttribute="top" secondItem="5v7-8f-HCi" secondAttribute="bottom" constant="70" id="8HG-y9-LMT"/>
-                                                                            <constraint firstItem="nii-BU-9hn" firstAttribute="leading" secondItem="iJo-xj-GyS" secondAttribute="trailing" id="98C-JU-xx1"/>
                                                                             <constraint firstAttribute="trailing" secondItem="2ei-rn-vqR" secondAttribute="trailing" id="C6h-ig-fK2"/>
                                                                             <constraint firstItem="Pc9-po-1Wg" firstAttribute="leading" secondItem="LAE-Qy-mOX" secondAttribute="trailing" id="Cah-p3-kJf"/>
+                                                                            <constraint firstItem="qJb-9p-U0u" firstAttribute="top" secondItem="bmR-ck-KEM" secondAttribute="bottom" constant="10" id="Czs-JO-mXp"/>
+                                                                            <constraint firstItem="nii-BU-9hn" firstAttribute="top" secondItem="nYN-Lb-001" secondAttribute="bottom" constant="15" id="Dmj-ws-YGY"/>
                                                                             <constraint firstItem="lzs-9b-A4k" firstAttribute="top" secondItem="2ei-rn-vqR" secondAttribute="bottom" constant="10" id="Huh-H0-I9B"/>
                                                                             <constraint firstItem="3aa-3e-Trb" firstAttribute="top" secondItem="SQt-m4-Igf" secondAttribute="bottom" constant="5" id="J8D-C4-qFA"/>
                                                                             <constraint firstItem="3aa-3e-Trb" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="JEA-Fq-hR0"/>
                                                                             <constraint firstItem="YGf-s8-h2S" firstAttribute="leading" secondItem="vOa-Ls-0a0" secondAttribute="trailing" id="NDD-kK-7Dy"/>
                                                                             <constraint firstItem="nzQ-jy-WlT" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="NQW-0J-qZg"/>
+                                                                            <constraint firstItem="qcU-1F-RGq" firstAttribute="centerY" secondItem="qJb-9p-U0u" secondAttribute="centerY" id="Nm1-tP-qcU"/>
+                                                                            <constraint firstItem="nYN-Lb-001" firstAttribute="top" secondItem="qJb-9p-U0u" secondAttribute="bottom" constant="15" id="nYN-C1-006"/>
+                                                                            <constraint firstItem="nYN-Lb-001" firstAttribute="leading" secondItem="nYN-Bt-002" secondAttribute="trailing" id="nYN-C2-007"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="nYN-Lb-001" secondAttribute="trailing" id="nYN-C3-008"/>
+                                                                            <constraint firstItem="nYN-Bt-002" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="nYN-C4-009"/>
+                                                                            <constraint firstItem="nYN-Bt-002" firstAttribute="centerY" secondItem="nYN-Lb-001" secondAttribute="centerY" id="nYN-C5-010"/>
                                                                             <constraint firstItem="5v7-8f-HCi" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="OXT-E1-rnE"/>
                                                                             <constraint firstItem="iJo-xj-GyS" firstAttribute="top" secondItem="bmR-ck-KEM" secondAttribute="top" id="Ow6-dX-53x"/>
-                                                                            <constraint firstAttribute="height" constant="700" id="Por-JN-FSB"/>
+                                                                            <constraint firstAttribute="height" constant="935" id="Por-JN-FSB"/>
                                                                             <constraint firstItem="H46-Nj-NOA" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="REs-0D-Kfe"/>
                                                                             <constraint firstAttribute="trailing" secondItem="LSq-46-95S" secondAttribute="trailing" id="SvF-Da-uW9"/>
-                                                                            <constraint firstItem="bmR-ck-KEM" firstAttribute="leading" secondItem="4wh-JE-LnU" secondAttribute="trailing" id="U0e-rF-aDx"/>
-                                                                            <constraint firstItem="bmR-ck-KEM" firstAttribute="top" secondItem="9l0-hR-dQi" secondAttribute="bottom" constant="10" id="b5S-rP-EgP"/>
+                                                                            <constraint firstItem="bmR-ck-KEM" firstAttribute="leading" secondItem="iJo-xj-GyS" secondAttribute="trailing" id="U0e-rF-aDx"/>
+                                                                            <constraint firstItem="bmR-ck-KEM" firstAttribute="top" secondItem="9l0-hR-dQi" secondAttribute="bottom" constant="5" id="b5S-rP-EgP"/>
                                                                             <constraint firstItem="iJo-xj-GyS" firstAttribute="top" secondItem="bmR-ck-KEM" secondAttribute="bottom" id="bYx-Le-iqN"/>
                                                                             <constraint firstAttribute="trailing" secondItem="9l0-hR-dQi" secondAttribute="trailing" id="bls-uO-X0j"/>
                                                                             <constraint firstItem="SQt-m4-Igf" firstAttribute="leading" secondItem="H46-Nj-NOA" secondAttribute="trailing" id="bn2-No-yOr"/>
-                                                                            <constraint firstItem="nii-BU-9hn" firstAttribute="top" secondItem="bmR-ck-KEM" secondAttribute="bottom" constant="5" id="cIp-Bk-9KO"/>
                                                                             <constraint firstItem="4wh-JE-LnU" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="dKz-e5-yVt"/>
                                                                             <constraint firstAttribute="trailing" secondItem="Pc9-po-1Wg" secondAttribute="trailing" id="eHP-qt-rc0"/>
                                                                             <constraint firstItem="2ei-rn-vqR" firstAttribute="top" secondItem="nii-BU-9hn" secondAttribute="bottom" constant="10" id="fS2-0H-c2Y"/>
                                                                             <constraint firstItem="LAE-Qy-mOX" firstAttribute="top" secondItem="2lb-Ht-YbP" secondAttribute="top" id="fhv-kS-SP3"/>
+                                                                            <constraint firstItem="qJb-9p-U0u" firstAttribute="leading" secondItem="qcU-1F-RGq" secondAttribute="trailing" id="g6Z-y6-iXd"/>
                                                                             <constraint firstItem="2ei-rn-vqR" firstAttribute="leading" secondItem="2xS-1P-vET" secondAttribute="trailing" id="hWL-9y-C72"/>
                                                                             <constraint firstItem="2xS-1P-vET" firstAttribute="top" secondItem="nii-BU-9hn" secondAttribute="bottom" constant="5" id="htl-eg-6o2"/>
                                                                             <constraint firstItem="LSq-46-95S" firstAttribute="top" secondItem="SQt-m4-Igf" secondAttribute="bottom" constant="10" id="irp-hu-PQC"/>
                                                                             <constraint firstItem="9l0-hR-dQi" firstAttribute="top" secondItem="Pc9-po-1Wg" secondAttribute="bottom" constant="5" id="kiN-YA-n23"/>
+                                                                            <constraint firstItem="ha7-qy-e0X" firstAttribute="leading" secondItem="N4d-Bx-BG2" secondAttribute="trailing" id="lJ7-bv-8dp"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="qJb-9p-U0u" secondAttribute="trailing" id="mZo-c1-eRx"/>
                                                                             <constraint firstItem="H46-Nj-NOA" firstAttribute="top" secondItem="YGf-s8-h2S" secondAttribute="bottom" constant="5" id="mfO-rM-an4"/>
+                                                                            <constraint firstItem="ha7-qy-e0X" firstAttribute="top" secondItem="LSq-46-95S" secondAttribute="bottom" constant="10" id="ne7-k8-Lk2"/>
+                                                                            <constraint firstAttribute="trailing" secondItem="ha7-qy-e0X" secondAttribute="trailing" id="peh-vT-Qig"/>
                                                                             <constraint firstItem="9l0-hR-dQi" firstAttribute="leading" secondItem="5v7-8f-HCi" secondAttribute="trailing" constant="5" id="pmN-O1-pAS"/>
                                                                             <constraint firstAttribute="trailing" secondItem="YGf-s8-h2S" secondAttribute="trailing" id="pyD-dU-saB"/>
                                                                             <constraint firstItem="4wh-JE-LnU" firstAttribute="top" secondItem="5v7-8f-HCi" secondAttribute="bottom" constant="74" id="q2L-Pg-Qlo"/>
+                                                                            <constraint firstItem="N4d-Bx-BG2" firstAttribute="top" secondItem="LSq-46-95S" secondAttribute="bottom" constant="5" id="qfX-Rc-jZM"/>
                                                                             <constraint firstItem="SQt-m4-Igf" firstAttribute="top" secondItem="YGf-s8-h2S" secondAttribute="bottom" constant="10" id="qzO-XK-otN"/>
                                                                             <constraint firstItem="vOa-Ls-0a0" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="rkZ-Qc-G3h"/>
                                                                             <constraint firstItem="LSq-46-95S" firstAttribute="leading" secondItem="3aa-3e-Trb" secondAttribute="trailing" id="thg-fI-uDA"/>
                                                                             <constraint firstItem="Pc9-po-1Wg" firstAttribute="top" secondItem="2lb-Ht-YbP" secondAttribute="top" constant="5" id="uXk-d2-etc"/>
+                                                                            <constraint firstItem="N4d-Bx-BG2" firstAttribute="leading" secondItem="2lb-Ht-YbP" secondAttribute="leading" id="vUf-vO-6tA"/>
                                                                             <constraint firstAttribute="trailing" secondItem="bmR-ck-KEM" secondAttribute="trailing" id="wo3-yO-DBQ"/>
                                                                         </constraints>
                                                                         <variation key="default">
@@ -2407,11 +2491,11 @@
                                                                     </view>
                                                                 </subviews>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" constant="700" id="wva-Sc-XVl"/>
+                                                                    <constraint firstAttribute="height" constant="935" id="wva-Sc-XVl"/>
                                                                 </constraints>
                                                             </stackView>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4jm-1j-x7I">
-                                                                <rect key="frame" x="0.0" y="720" width="378" height="170"/>
+                                                                <rect key="frame" x="0.0" y="910" width="378" height="170"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Mh-CB-dte">
                                                                         <rect key="frame" x="10" y="10" width="30" height="30"/>
@@ -2511,7 +2595,7 @@
                                                                 </variation>
                                                             </label>
                                                         </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="170" id="C7c-fR-hK5"/>
                                                             <constraint firstAttribute="trailing" secondItem="7zd-hW-X1t" secondAttribute="trailing" constant="10" id="IWs-Ss-Dz0"/>
@@ -2611,7 +2695,7 @@
                                             <constraint firstItem="rbg-pk-lG1" firstAttribute="top" secondItem="L6L-9s-xWw" secondAttribute="top" constant="8" id="3AF-tg-hDH"/>
                                             <constraint firstAttribute="trailing" secondItem="rbg-pk-lG1" secondAttribute="trailing" constant="8" id="42H-R5-1go"/>
                                             <constraint firstItem="rbg-pk-lG1" firstAttribute="leading" secondItem="L6L-9s-xWw" secondAttribute="leading" constant="8" id="F8b-FP-xwm"/>
-                                            <constraint firstAttribute="height" constant="1900" id="Ii2-Nu-QVN"/>
+                                            <constraint firstAttribute="height" constant="1945" id="Ii2-Nu-QVN"/>
                                             <constraint firstAttribute="bottom" secondItem="rbg-pk-lG1" secondAttribute="bottom" constant="8" id="scn-zc-CoY"/>
                                         </constraints>
                                     </view>
@@ -2658,6 +2742,8 @@
                         <outlet property="fatherNameTF" destination="UKr-qn-vs8" id="RyM-z4-Cn8"/>
                         <outlet property="fatherView" destination="Vh8-O7-3Ic" id="x4g-C4-nS0"/>
                         <outlet property="marriedBtn" destination="sMO-0t-s3A" id="uiU-aQ-CST"/>
+                        <outlet property="nomineeNameBtn" destination="qcU-1F-RGq" id="Nm2-oU-qcU"/>
+                        <outlet property="nominationBtn" destination="nYN-Bt-002" id="nYN-Ou-011"/>
                         <outlet property="occupationView" destination="mrO-4z-cKs" id="H1G-d2-PlA"/>
                         <outlet property="receiveView" destination="cCV-Va-wyL" id="g9q-gu-4r7"/>
                         <outlet property="runningAccountBtn" destination="nuC-77-u49" id="I6u-BI-1qu"/>
@@ -3606,6 +3692,9 @@
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="leftArrow" width="24" height="24"/>
         <image name="multiply" catalog="system" width="128" height="111"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

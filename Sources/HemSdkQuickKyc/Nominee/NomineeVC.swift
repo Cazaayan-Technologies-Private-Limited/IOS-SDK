@@ -9,7 +9,7 @@
 import UIKit
 
 class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor VerticsVC1Delegate, @MainActor CalenderVCDelegate, @MainActor DigiLocker_b_VCDelegate1, @MainActor ReloadPageDelegate, @MainActor RelationshipScheme {
-    func didSelectDepository(type: String, identifier: String) {
+    func didSelectDepository(type: String, identifier: String, isView: Bool = false) {
         print("🔵 [didSelectDepository] Called → Type: \(type) | Identifier: \(identifier)")
         
         switch identifier {
@@ -21,8 +21,41 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 self.updateButtonTitle(self.documentTypeBtn1, title: type)
                 self.nomineedocumentType1 = type
                 if type == "Aadhaar" {
-                    self.saveDigiLocker(identifier1: "NomineeDocument1")
+                    //self.saveDigiLocker(identifier1: "NomineeDocument1")
+                    self.aadharInfoLbl1.isHidden = false
+                    self.documentId1.keyboardType = .numberPad
+                    self.documentId1.delegate = self
+                    if(!isView){
+                        self.documentId1.text = ""
+                    }
+                    self.documentId1.placeholder = "XXXX XXXX XXXX"
+                }else{
+                    self.aadharInfoLbl1.isHidden = true
+                    self.documentId1.keyboardType = .default
+                    self.documentId1.delegate = self
+                    if(!isView){
+                        self.documentId1.text = ""
+                    }
+                    self.documentId1.placeholder = "Enter Document ID"
                 }
+                if type == "Driving Licence" || type == "Passport" {
+                    self.licenceLbl1.isHidden = false
+                    self.licenceStackView1.isHidden = false
+                    self.licenceDatefield1.isHidden = false
+                    self.licenceDatefieldBtn1.isHidden = false
+                }else{
+                    self.licenceLbl1.isHidden = true
+                    self.licenceStackView1.isHidden = true
+                    self.licenceDatefield1.isHidden = true
+                    self.licenceDatefieldBtn1.isHidden = true
+                }
+                
+                // Update saved visibility
+                self.nominee1Visibility[self.aadharInfoLbl1] = self.aadharInfoLbl1.isHidden
+                self.nominee1Visibility[self.licenceLbl1] = self.licenceLbl1.isHidden
+                self.nominee1Visibility[self.licenceStackView1] = self.licenceStackView1.isHidden
+                self.nominee1Visibility[self.licenceDatefield1] = self.licenceDatefield1.isHidden
+                self.nominee1Visibility[self.licenceDatefieldBtn1] = self.licenceDatefieldBtn1.isHidden
             }
             
         case "NomineeDocument2":
@@ -31,8 +64,37 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 self.updateButtonTitle(self.documentTypeBtn2, title: type)
                 self.nomineedocumentType2 = type
                 if type == "Aadhaar" {
-                    self.saveDigiLocker(identifier1: "NomineeDocument2")
+                    //self.saveDigiLocker(identifier1: "NomineeDocument2")
+                    self.aadharInfoLbl2.isHidden = false
+                    self.documentId2.keyboardType = .numberPad
+                    self.documentId2.delegate = self
+                    self.documentId2.text = ""
+                    self.documentId2.placeholder = "XXXX XXXX XXXX"
+                }else{
+                    self.aadharInfoLbl2.isHidden = true
+                    self.documentId2.keyboardType = .default
+                    self.documentId2.delegate = self
+                    self.documentId2.text = ""
+                    self.documentId2.placeholder = "Enter Document ID"
                 }
+                if type == "Driving Licence" || type == "Passport" {
+                    self.licenceLbl2.isHidden = false
+                    self.licenceStackView2.isHidden = false
+                    self.licenceDatefield2.isHidden = false
+                    self.licenceDatefieldBtn2.isHidden = false
+                }else{
+                    self.licenceLbl2.isHidden = true
+                    self.licenceStackView2.isHidden = true
+                    self.licenceDatefield2.isHidden = true
+                    self.licenceDatefieldBtn2.isHidden = true
+                }
+                
+                // Update saved visibility
+                self.nominee2Visibility[self.aadharInfoLbl2] = self.aadharInfoLbl2.isHidden
+                self.nominee2Visibility[self.licenceLbl2] = self.licenceLbl2.isHidden
+                self.nominee2Visibility[self.licenceStackView2] = self.licenceStackView2.isHidden
+                self.nominee2Visibility[self.licenceDatefield2] = self.licenceDatefield2.isHidden
+                self.nominee2Visibility[self.licenceDatefieldBtn2] = self.licenceDatefieldBtn2.isHidden
             }
             
         case "NomineeDocument3":
@@ -41,8 +103,38 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 self.updateButtonTitle(self.documentTypeBtn3, title: type)
                 self.nomineedocumentType3 = type
                 if type == "Aadhaar" {
-                    self.saveDigiLocker(identifier1: "NomineeDocument3")
+                    //self.saveDigiLocker(identifier1: "NomineeDocument3")
+                    self.aadharInfoLbl3.isHidden = false
+                    self.documentId3.keyboardType = .numberPad
+                    self.documentId3.delegate = self
+                    self.documentId3.text = ""
+                    self.documentId3.placeholder = "XXXX XXXX XXXX"
+                }else{
+                    self.aadharInfoLbl3.isHidden = true
+                    self.documentId2.keyboardType = .default
+                    self.documentId3.delegate = self
+                    self.documentId3.text = ""
+                    self.documentId3.placeholder = "Enter Document ID"
                 }
+                if type == "Driving Licence" || type == "Passport" {
+                    self.licenceLbl3.isHidden = false
+                    self.licenceStackView3.isHidden = false
+                    self.licenceDatefield3.isHidden = false
+                    self.licenceDatefieldBtn3.isHidden = false
+                }else{
+                    self.licenceLbl3.isHidden = true
+                    self.licenceStackView3.isHidden = true
+                    self.licenceDatefield3.isHidden = true
+                    self.licenceDatefieldBtn3.isHidden = true
+                }
+                
+                // Update saved visibility
+                self.nominee3Visibility[self.aadharInfoLbl3] = self.aadharInfoLbl3.isHidden
+                self.nominee3Visibility[self.licenceLbl3] = self.licenceLbl3.isHidden
+                self.nominee3Visibility[self.licenceStackView3] = self.licenceStackView3.isHidden
+                self.nominee3Visibility[self.licenceDatefield3] = self.licenceDatefield3.isHidden
+                self.nominee3Visibility[self.licenceDatefieldBtn3] = self.licenceDatefieldBtn3.isHidden
+                
             }
             
             // MARK: - Guardian Documents (Fixed wrong button names)
@@ -52,8 +144,38 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 self.updateButtonTitle(self.guardianDocumentTypeBtn1, title: type)
                 self.guardiandocumentType1 = type
                 if type == "Aadhaar" {
-                    self.saveDigiLocker(identifier1: "guardianDocument1")
+                    //self.saveDigiLocker(identifier1: "guardianDocument1")
+                    self.guardianaadharInfoLbl1.isHidden = false
+                    self.guardianIdTxt1.keyboardType = .numberPad
+                    self.guardianIdTxt1.delegate = self
+                    self.guardianIdTxt1.text = ""
+                    self.guardianIdTxt1.placeholder = "XXXX XXXX XXXX"
+                }else{
+                    self.guardianaadharInfoLbl1.isHidden = true
+                    self.guardianIdTxt1.keyboardType = .default
+                    self.guardianIdTxt1.delegate = self
+                    self.guardianIdTxt1.text = ""
+                    self.guardianIdTxt1.placeholder = "Enter Document ID"
                 }
+                if type == "Driving Licence" || type == "Passport" {
+                    self.guardianlicenceLbl1.isHidden = false
+                    self.guardianlicenceStackView1.isHidden = false
+                    self.guardianlicenceDatefield1.isHidden = false
+                    self.guardianlicenceDatefieldBtn1.isHidden = false
+                }else{
+                    self.guardianlicenceLbl1.isHidden = true
+                    self.guardianlicenceStackView1.isHidden = true
+                    self.guardianlicenceDatefield1.isHidden = true
+                    self.guardianlicenceDatefieldBtn1.isHidden = true
+                }
+                
+                // Update saved visibility
+                self.nominee1Visibility[self.guardianaadharInfoLbl1] = self.guardianaadharInfoLbl1.isHidden
+                self.nominee1Visibility[self.guardianlicenceLbl1] = self.guardianlicenceLbl1.isHidden
+                self.nominee1Visibility[self.guardianlicenceLbl1] = self.guardianlicenceLbl1.isHidden
+                self.nominee1Visibility[self.guardianlicenceDatefield1] = self.guardianlicenceDatefield1.isHidden
+                self.nominee1Visibility[self.guardianlicenceDatefieldBtn1] = self.guardianlicenceDatefieldBtn1.isHidden
+                
             }
             
         case "guardianDocument2":
@@ -62,8 +184,37 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 self.updateButtonTitle(self.guardianDocumentTypeBtn2, title: type)
                 self.guardiandocumentType2 = type
                 if type == "Aadhaar" {
-                    self.saveDigiLocker(identifier1: "guardianDocument2")
+                    //self.saveDigiLocker(identifier1: "guardianDocument2")
+                    self.guardianaadharInfoLbl2.isHidden = false
+                    self.guardianIdTxt2.keyboardType = .numberPad
+                    self.guardianIdTxt2.delegate = self
+                    self.guardianIdTxt2.text = ""
+                    self.guardianIdTxt2.placeholder = "XXXX XXXX XXXX"
+                }else{
+                    self.guardianaadharInfoLbl2.isHidden = true
+                    self.guardianIdTxt2.keyboardType = .default
+                    self.guardianIdTxt2.delegate = self
+                    self.guardianIdTxt2.text = ""
+                    self.guardianIdTxt2.placeholder = "Enter Document ID"
                 }
+                if type == "Driving Licence" || type == "Passport" {
+                    self.guardianlicenceLbl2.isHidden = false
+                    self.guardianlicenceStackView2.isHidden = false
+                    self.guardianlicenceDatefield2.isHidden = false
+                    self.guardianlicenceDatefieldBtn2.isHidden = false
+                }else{
+                    self.guardianlicenceLbl2.isHidden = true
+                    self.guardianlicenceStackView2.isHidden = true
+                    self.guardianlicenceDatefield2.isHidden = true
+                    self.guardianlicenceDatefieldBtn2.isHidden = true
+                }
+                
+                // Update saved visibility
+                self.nominee2Visibility[self.guardianaadharInfoLbl2] = self.guardianaadharInfoLbl2.isHidden
+                self.nominee2Visibility[self.guardianlicenceLbl2] = self.guardianlicenceLbl2.isHidden
+                self.nominee2Visibility[self.guardianlicenceLbl2] = self.guardianlicenceLbl2.isHidden
+                self.nominee2Visibility[self.guardianlicenceDatefield2] = self.guardianlicenceDatefield2.isHidden
+                self.nominee2Visibility[self.guardianlicenceDatefieldBtn2] = self.guardianlicenceDatefieldBtn2.isHidden
             }
             
         case "guardianDocument3":
@@ -72,8 +223,38 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 self.updateButtonTitle(self.guardianDocumentTypeBtn3, title: type)
                 self.guardiandocumentType3 = type
                 if type == "Aadhaar" {
-                    self.saveDigiLocker(identifier1: "guardianDocument3")
+                    //self.saveDigiLocker(identifier1: "guardianDocument3")
+                    self.guardianaadharInfoLbl3.isHidden = false
+                    self.guardianIdTxt3.keyboardType = .numberPad
+                    self.guardianIdTxt3.delegate = self
+                    self.guardianIdTxt3.text = ""
+                    self.guardianIdTxt3.placeholder = "XXXX XXXX XXXX"
+                }else{
+                    self.guardianaadharInfoLbl3.isHidden = true
+                    self.guardianIdTxt3.keyboardType = .default
+                    self.guardianIdTxt3.delegate = self
+                    self.guardianIdTxt3.text = ""
+                    self.guardianIdTxt3.placeholder = "Enter Document ID"
                 }
+                if type == "Driving Licence" || type == "Passport" {
+                    self.guardianlicenceLbl3.isHidden = false
+                    self.guardianlicenceStackView3.isHidden = false
+                    self.guardianlicenceDatefield3.isHidden = false
+                    self.guardianlicenceDatefieldBtn3.isHidden = false
+                }else{
+                    self.guardianlicenceLbl3.isHidden = true
+                    self.guardianlicenceStackView3.isHidden = true
+                    self.guardianlicenceDatefield3.isHidden = true
+                    self.guardianlicenceDatefieldBtn3.isHidden = true
+                }
+                
+                // Update saved visibility
+                self.nominee3Visibility[self.guardianaadharInfoLbl3] = self.guardianaadharInfoLbl3.isHidden
+                self.nominee3Visibility[self.guardianlicenceLbl3] = self.guardianlicenceLbl3.isHidden
+                self.nominee3Visibility[self.guardianlicenceLbl3] = self.guardianlicenceLbl3.isHidden
+                self.nominee3Visibility[self.guardianlicenceDatefield3] = self.guardianlicenceDatefield3.isHidden
+                self.nominee3Visibility[self.guardianlicenceDatefieldBtn3] = self.guardianlicenceDatefieldBtn3.isHidden
+                
             }
             
         default:
@@ -125,39 +306,132 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         }
     }
     
+//    func didSelectDate(_ date: String, identifier: String) {
+//        DispatchQueue.main.async {
+//            switch identifier {
+//                
+//            case "nomineeDOB1":
+//                self.nomineeDob1.text = date
+//                if let age = self.calculateAge(from: date) {
+//                    let isMinor = age < 18
+//                    self.nominee1IsMinor = isMinor ? "Y" : "N"
+//                    self.toggleGuardianFields(for: 1, show: isMinor)
+//                }
+//                
+//            case "nomineeDOB2":
+//                self.nomineeDob2.text = date  // ✅ Fixed: was nomineeDob3
+//                if let age = self.calculateAge(from: date) {
+//                    let isMinor = age < 18
+//                    self.nominee2IsMinor = isMinor ? "Y" : "N"  // ✅ Fixed: was nominee3IsMinor
+//                    self.toggleGuardianFields(for: 2, show: isMinor)
+//                }
+//                
+//            case "nomineeDOB3":
+//                self.nomineeDob3.text = date
+//                if let age = self.calculateAge(from: date) {
+//                    let isMinor = age < 18
+//                    self.nominee3IsMinor = isMinor ? "Y" : "N"
+//                    self.toggleGuardianFields(for: 3, show: isMinor)
+//                }
+//                
+//            case "nomineeLIDATE1":
+//                self.licenceDatefield1.text = date
+//                
+//            case "nomineeLIDATE2":
+//                self.licenceDatefield2.text = date
+//                
+//            case "nomineeLIDATE3":
+//                self.licenceDatefield3.text = date
+//                
+//            case "guardianDOB1", "guardianDOB2", "guardianDOB3", "guardianLIDOB1", "guardianLIDOB2", "guardianLIDOB3":
+//                // Just set the text, no minor logic needed
+//                if identifier == "guardianDOB1" { self.guardianDobTxt1.text = date }
+//                else if identifier == "guardianDOB2" { self.guardianDobTxt2.text = date }
+//                else if identifier == "guardianDOB3" { self.guardianDobTxt3.text = date }
+//                else if identifier == "guardianLIDOB1" { self.guardianlicenceDatefield1.text = date }
+//                else if identifier == "guardianLIDOB2" { self.guardianlicenceDatefield2.text = date }
+//                else if identifier == "guardianLIDOB3" { self.guardianlicenceDatefield3.text = date }
+//
+//            default:
+//                break
+//            }
+//        }
+//    }
+    
+    func updateNomineeMinorStatus(for identifier: String, date: String) {
+        guard let age = calculateAge(from: date) else { return }
+
+        let isMinor = age < 18
+
+        switch identifier {
+        case "nomineeDOB1":
+            nominee1IsMinor = isMinor ? "Y" : "N"
+            toggleGuardianFields(for: 1, show: isMinor)
+
+        case "nomineeDOB2":
+            nominee2IsMinor = isMinor ? "Y" : "N"
+            toggleGuardianFields(for: 2, show: isMinor)
+
+        case "nomineeDOB3":
+            nominee3IsMinor = isMinor ? "Y" : "N"
+            toggleGuardianFields(for: 3, show: isMinor)
+
+        default:
+            break
+        }
+    }
+    
     func didSelectDate(_ date: String, identifier: String) {
         DispatchQueue.main.async {
             switch identifier {
-                
+
             case "nomineeDOB1":
                 self.nomineeDob1.text = date
-                if let age = self.calculateAge(from: date) {
-                    let isMinor = age < 18
-                    self.nominee1IsMinor = isMinor ? "Y" : "N"
-                    self.toggleGuardianFields(for: 1, show: isMinor)
-                }
-                
+                self.updateNomineeMinorStatus(
+                    for: identifier,
+                    date: date
+                )
+
             case "nomineeDOB2":
-                self.nomineeDob2.text = date  // ✅ Fixed: was nomineeDob3
-                if let age = self.calculateAge(from: date) {
-                    let isMinor = age < 18
-                    self.nominee2IsMinor = isMinor ? "Y" : "N"  // ✅ Fixed: was nominee3IsMinor
-                    self.toggleGuardianFields(for: 2, show: isMinor)
-                }
-                
+                self.nomineeDob2.text = date
+                self.updateNomineeMinorStatus(
+                    for: identifier,
+                    date: date
+                )
+
             case "nomineeDOB3":
                 self.nomineeDob3.text = date
-                if let age = self.calculateAge(from: date) {
-                    let isMinor = age < 18
-                    self.nominee3IsMinor = isMinor ? "Y" : "N"
-                    self.toggleGuardianFields(for: 3, show: isMinor)
-                }
-                
-            case "guardianDOB1", "guardianDOB2", "guardianDOB3":
-                // Just set the text, no minor logic needed
-                if identifier == "guardianDOB1" { self.guardianDobTxt1.text = date }
-                else if identifier == "guardianDOB2" { self.guardianDobTxt2.text = date }
-                else if identifier == "guardianDOB3" { self.guardianDobTxt3.text = date }
+                self.updateNomineeMinorStatus(
+                    for: identifier,
+                    date: date
+                )
+
+            case "nomineeLIDATE1":
+                self.licenceDatefield1.text = date
+
+            case "nomineeLIDATE2":
+                self.licenceDatefield2.text = date
+
+            case "nomineeLIDATE3":
+                self.licenceDatefield3.text = date
+
+            case "guardianDOB1":
+                self.guardianDobTxt1.text = date
+
+            case "guardianDOB2":
+                self.guardianDobTxt2.text = date
+
+            case "guardianDOB3":
+                self.guardianDobTxt3.text = date
+
+            case "guardianLIDOB1":
+                self.guardianlicenceDatefield1.text = date
+
+            case "guardianLIDOB2":
+                self.guardianlicenceDatefield2.text = date
+
+            case "guardianLIDOB3":
+                self.guardianlicenceDatefield3.text = date
 
             default:
                 break
@@ -236,6 +510,25 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBOutlet weak var documentTypeBtn1: UIButton!
     @IBOutlet weak var documentId1: UITextField!
     @IBOutlet weak var documentVerifyBtn1: UIButton!
+    
+    @IBOutlet weak var aadharInfoLbl1: UILabel!
+    @IBOutlet weak var licenceLbl1: UILabel!
+    @IBOutlet weak var licenceStackView1: UIStackView!
+    @IBOutlet weak var licenceDatefield1: UITextField!
+    @IBOutlet weak var licenceDatefieldBtn1: UIButton!
+    
+    @IBOutlet weak var aadharInfoLbl2: UILabel!
+    @IBOutlet weak var licenceLbl2: UILabel!
+    @IBOutlet weak var licenceStackView2: UIStackView!
+    @IBOutlet weak var licenceDatefield2: UITextField!
+    @IBOutlet weak var licenceDatefieldBtn2: UIButton!
+    
+    @IBOutlet weak var aadharInfoLbl3: UILabel!
+    @IBOutlet weak var licenceLbl3: UILabel!
+    @IBOutlet weak var licenceStackView3: UIStackView!
+    @IBOutlet weak var licenceDatefield3: UITextField!
+    @IBOutlet weak var licenceDatefieldBtn3: UIButton!
+    
     @IBOutlet weak var nomineeName1: UITextField!
     @IBOutlet weak var nomineeNameTxt1: UITextField!
     @IBOutlet weak var nomineeDob1: UITextField!
@@ -263,6 +556,25 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBOutlet weak var gurdianLbl1: UILabel!
     @IBOutlet weak var guardianTypeLbl1: UILabel!
     @IBOutlet weak var guardianDocumentTypeBtn1: UIButton!
+    
+    @IBOutlet weak var guardianaadharInfoLbl1: UILabel!
+    @IBOutlet weak var guardianlicenceLbl1: UILabel!
+    @IBOutlet weak var guardianlicenceStackView1: UIStackView!
+    @IBOutlet weak var guardianlicenceDatefield1: UITextField!
+    @IBOutlet weak var guardianlicenceDatefieldBtn1: UIButton!
+    
+    @IBOutlet weak var guardianaadharInfoLbl2: UILabel!
+    @IBOutlet weak var guardianlicenceLbl2: UILabel!
+    @IBOutlet weak var guardianlicenceStackView2: UIStackView!
+    @IBOutlet weak var guardianlicenceDatefield2: UITextField!
+    @IBOutlet weak var guardianlicenceDatefieldBtn2: UIButton!
+    
+    @IBOutlet weak var guardianaadharInfoLbl3: UILabel!
+    @IBOutlet weak var guardianlicenceLbl3: UILabel!
+    @IBOutlet weak var guardianlicenceStackView3: UIStackView!
+    @IBOutlet weak var guardianlicenceDatefield3: UITextField!
+    @IBOutlet weak var guardianlicenceDatefieldBtn3: UIButton!
+    
     @IBOutlet weak var guardianDocumentView1: UIView!
     @IBOutlet weak var minorNameLbl1: UILabel!
     @IBOutlet weak var minorNameTxt1: UITextField!
@@ -496,6 +808,49 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         navigationItem.hidesBackButton = true
         //addNomineeBtn.isHidden = true
         
+        nomineeDob1.delegate = self
+        nomineeDob2.delegate = self
+        nomineeDob3.delegate = self
+        guardianDobTxt1.delegate = self
+        guardianDobTxt2.delegate = self
+        guardianDobTxt3.delegate = self
+        
+        aadharInfoLbl1.isHidden = true
+        licenceLbl1.isHidden = true
+        licenceStackView1.isHidden = true
+        licenceDatefield1.isHidden = true
+        licenceDatefieldBtn1.isHidden = true
+        
+        aadharInfoLbl2.isHidden = true
+        licenceLbl2.isHidden = true
+        licenceStackView2.isHidden = true
+        licenceDatefield2.isHidden = true
+        licenceDatefieldBtn2.isHidden = true
+        
+        aadharInfoLbl3.isHidden = true
+        licenceLbl3.isHidden = true
+        licenceStackView3.isHidden = true
+        licenceDatefield3.isHidden = true
+        licenceDatefieldBtn3.isHidden = true
+        
+        guardianaadharInfoLbl1.isHidden = true
+        self.guardianlicenceLbl1.isHidden = true
+        self.guardianlicenceStackView1.isHidden = true
+        self.guardianlicenceDatefield1.isHidden = true
+        self.guardianlicenceDatefieldBtn1.isHidden = true
+        
+        guardianaadharInfoLbl2.isHidden = true
+        self.guardianlicenceLbl2.isHidden = true
+        self.guardianlicenceStackView2.isHidden = true
+        self.guardianlicenceDatefield2.isHidden = true
+        self.guardianlicenceDatefieldBtn2.isHidden = true
+        
+        guardianaadharInfoLbl3.isHidden = true
+        self.guardianlicenceLbl3.isHidden = true
+        self.guardianlicenceStackView3.isHidden = true
+        self.guardianlicenceDatefield3.isHidden = true
+        self.guardianlicenceDatefieldBtn3.isHidden = true
+        
         nominee1Stack.isHidden = true
         nominee2Stack.isHidden = true
         nominee3Stack.isHidden = true
@@ -532,6 +887,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         toggleGuardianFields(for: 3, show: false)
         
         submitBtn.backgroundColor = .appPrimary
+        markMandatoryLabels()
+        setProceedVisible(false)   // Proceed shows only after a nominee is added
         //optInBtn.tintColor = .appPrimary
         //optOutBtn.tintColor = .appPrimary
         addNomineeBtn.tintColor = .appPrimary
@@ -646,7 +1003,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     
     func formatDateForAPI(_ dateString: String) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-MM-yyyy"
+        dateFormatter.dateFormat = "dd/MM/yyyy"
         
         if let date = dateFormatter.date(from: dateString) {
             return dateFormatter.string(from: date) // same format
@@ -798,7 +1155,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         guard nomineeCount < 3 else { return }
         NomineeType = "Y"
         nomineeCount += 1
-        
+        setProceedVisible(true)
+
         if nomineeCount == 1 {
             nominee1Stack.isHidden = false
         } else if nomineeCount == 2 {
@@ -840,20 +1198,78 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     //
     //    }
     
-    
+    private var nominee1Visibility: [UIView: Bool] = [:]
+    private var nominee2Visibility: [UIView: Bool] = [:]
+    private var nominee3Visibility: [UIView: Bool] = [:]
     
     @IBAction func Nominee1Btn(_ sender: UIButton) {
-        isNominee1Expanded.toggle()
+//        isNominee1Expanded.toggle()
+//        
+//        let imageName = isNominee1Expanded ? "chevron.up" : "chevron.down"
+//        sender.setImage(UIImage(systemName: imageName), for: .normal)
+//        
+//        // Hide/show all arranged subviews except the first one (the header button)
+//        for (index, view) in nominee1Stack.arrangedSubviews.enumerated() {
+//            if index != 0 { // Skip the header button
+////                print("index::  \(index), isNominee1Expanded:: \(isNominee1Expanded), view:: \(view)")
+//                if(view == aadharInfoLbl1){
+//                    if(self.nomineedocumentType1 == "Aadhaar"){
+//                        view.isHidden = isNominee1Expanded ? false : true
+//                    }else{
+//                        view.isHidden = true
+//                    }
+//                }else if(view == licenceLbl1){
+//                    if(self.nomineedocumentType1 == "Driving Licence" || self.nomineedocumentType1 == "Passport"){
+//                        view.isHidden = isNominee1Expanded ? false : true
+//                    }
+//                    else{
+//                        view.isHidden = true
+//                    }
+//                }else if(view == guardianaadharInfoLbl1){
+//                    if(self.guardiandocumentType1 == "Aadhaar"){
+//                        view.isHidden = isNominee1Expanded ? false : true
+//                    }else{
+//                        view.isHidden = true
+//                    }
+//                }else if(view == guardianlicenceLbl1){
+//                    if(self.guardiandocumentType1 == "Driving Licence" || self.guardiandocumentType1 == "Passport"){
+//                        view.isHidden = isNominee1Expanded ? false : true
+//                    }
+//                    else{
+//                        view.isHidden = true
+//                    }
+//                }else{
+//                    view.isHidden = !isNominee1Expanded
+//                }
+//            }
+//        }
+//
         
+        isNominee1Expanded.toggle()
+
         let imageName = isNominee1Expanded ? "chevron.up" : "chevron.down"
         sender.setImage(UIImage(systemName: imageName), for: .normal)
-        
-        // Hide/show all arranged subviews except the first one (the header button)
-        for (index, view) in nominee1Stack.arrangedSubviews.enumerated() {
-            if index != 0 { // Skip the header button
-                view.isHidden = !isNominee1Expanded
+
+        // Save original visibility before the first collapse
+        if nominee1Visibility.isEmpty {
+            for (index, view) in nominee1Stack.arrangedSubviews.enumerated() {
+                if index != 0 {
+                    nominee1Visibility[view] = view.isHidden
+                }
             }
         }
+
+        // Collapse or restore original visibility
+        for (index, view) in nominee1Stack.arrangedSubviews.enumerated() {
+            guard index != 0 else { continue }
+
+            if isNominee1Expanded {
+                view.isHidden = nominee1Visibility[view] ?? false
+            } else {
+                view.isHidden = true
+            }
+        }
+        
     }
     
     @IBAction func Nominee2Btn(_ sender: UIButton) {
@@ -861,11 +1277,32 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         let imageName = isNominee2Expanded ? "chevron.up" : "chevron.down"
         sender.setImage(UIImage(systemName: imageName), for: .normal)
         // Hide/show all arranged subviews except the first one (the header button)
-        for (index, view) in nominee2Stack.arrangedSubviews.enumerated() {
-            if index != 0 { // Skip the header button
-                view.isHidden = !isNominee2Expanded
+//        for (index, view) in nominee2Stack.arrangedSubviews.enumerated() {
+//            if index != 0 { // Skip the header button
+//                view.isHidden = !isNominee2Expanded
+//            }
+//        }
+        
+        // Save original visibility before the first collapse
+        if nominee2Visibility.isEmpty {
+            for (index, view) in nominee2Stack.arrangedSubviews.enumerated() {
+                if index != 0 {
+                    nominee2Visibility[view] = view.isHidden
+                }
             }
         }
+
+        // Collapse or restore original visibility
+        for (index, view) in nominee2Stack.arrangedSubviews.enumerated() {
+            guard index != 0 else { continue }
+
+            if isNominee2Expanded {
+                view.isHidden = nominee2Visibility[view] ?? false
+            } else {
+                view.isHidden = true
+            }
+        }
+        
     }
     
     @IBAction func Nominee3Btn(_ sender: UIButton) {
@@ -873,11 +1310,32 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         let imageName = isNominee3Expanded ? "chevron.up" : "chevron.down"
         sender.setImage(UIImage(systemName: imageName), for: .normal)
         // Hide/show all arranged subviews except the first one (the header button)
-        for (index, view) in nominee3Stack.arrangedSubviews.enumerated() {
-            if index != 0 { // Skip the header button
-                view.isHidden = !isNominee3Expanded
+//        for (index, view) in nominee3Stack.arrangedSubviews.enumerated() {
+//            if index != 0 { // Skip the header button
+//                view.isHidden = !isNominee3Expanded
+//            }
+//        }
+        
+        // Save original visibility before the first collapse
+        if nominee3Visibility.isEmpty {
+            for (index, view) in nominee3Stack.arrangedSubviews.enumerated() {
+                if index != 0 {
+                    nominee3Visibility[view] = view.isHidden
+                }
             }
         }
+
+        // Collapse or restore original visibility
+        for (index, view) in nominee3Stack.arrangedSubviews.enumerated() {
+            guard index != 0 else { continue }
+
+            if isNominee3Expanded {
+                view.isHidden = nominee3Visibility[view] ?? false
+            } else {
+                view.isHidden = true
+            }
+        }
+        
     }
     
     private func fillNomineeFields(data: [String: Any], index: Int) {
@@ -943,6 +1401,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 cityTxt1.isEnabled = false
                 stateTxt1.isEnabled = false
             }
+            
             
         case 2:
             // Nominee fields
@@ -1046,9 +1505,80 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         print("✅ Successfully auto-filled Nominee \(index)")
     }
     
+    /// Checks a DOB string is a real date in dd/MM/yyyy format.
+    /// Returns an error message, or nil when the date is valid.
+    func dobValidationError(_ dob: String) -> String? {
+        let text = dob.trimmingCharacters(in: .whitespaces)
+
+        // Exact pattern: 2 digits / 2 digits / 4 digits
+        guard text.range(of: #"^\d{2}/\d{2}/\d{4}$"#, options: .regularExpression) != nil else {
+            return "Please enter date of birth in DD/MM/YYYY format"
+        }
+
+        // Must be a real calendar date (rejects 31/02/2000, 00/13/1990 etc.)
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.dateFormat = "dd/MM/yyyy"
+        formatter.isLenient = false
+        guard let date = formatter.date(from: text), formatter.string(from: date) == text else {
+            return "Please enter a valid date of birth"
+        }
+
+        // Not in the future, not unrealistically old
+        if date > Date() {
+            return "Date of birth cannot be a future date"
+        }
+        if let age = calculateAge(from: text), age > 120 {
+            return "Please enter a valid date of birth"
+        }
+        return nil
+    }
+
+    // MARK: - Mandatory "*" on labels
+
+    /// Adds a red " *" after the label text (safe to call more than once).
+    func markMandatory(_ label: UILabel?) {
+        guard let label = label, let text = label.text, !text.isEmpty, !text.hasSuffix(" *") else { return }
+        let attributed = NSMutableAttributedString(
+            string: text,
+            attributes: [.font: label.font as Any, .foregroundColor: label.textColor ?? UIColor.label]
+        )
+        attributed.append(NSAttributedString(
+            string: " *",
+            attributes: [.font: label.font as Any, .foregroundColor: UIColor.systemRed]
+        ))
+        label.attributedText = attributed
+    }
+
+    /// Finds labels by their text anywhere in the screen (used where there is no outlet).
+    private func markMandatoryLabels(withText text: String, in root: UIView) {
+        for sub in root.subviews {
+            if let label = sub as? UILabel, label.text == text {
+                markMandatory(label)
+            }
+            markMandatoryLabels(withText: text, in: sub)
+        }
+    }
+
+    func markMandatoryLabels() {
+        // Nominee fields (same rules as validateNomineeData / validateNomineeAllocation)
+        markMandatoryLabels(withText: "Nominee Name", in: view)   // no outlet for nominee 1 & 2
+        [dobLabel1, dobLabel2, dobLabel3,
+         relationApplicantLbl1, relationApplicantLbl2, relationApplicantLbl3,
+         shareLbl1, shareLbl2, shareLbl3,
+         licenceLbl1, licenceLbl2, licenceLbl3                       // shown only for Driving Licence / Passport
+        ].forEach { markMandatory($0) }
+
+        // Guardian fields (shown only when the nominee is a minor) – Name and DOB only
+        [minorNameLbl1, minorNameLbl2, minorNameLbl3,
+         guardianDobLbl1, guardianDobLbl2, guardianDobLbl3
+        ].forEach { markMandatory($0) }
+    }
+
     func calculateAge(from dob: String) -> Int? {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-MM-yyyy"
+        dateFormatter.dateFormat = "dd/MM/yyyy"
         guard let dateOfBirth = dateFormatter.date(from: dob) else {
             return nil
         }
@@ -1072,7 +1602,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             guardianDobTxt1?.isHidden = !show
             guardianIDLbl1?.isHidden = !show
             guardianIdTxt1?.isHidden = !show
-            guardianVerifyBtn1?.isHidden = !show
+//            guardianVerifyBtn1?.isHidden = !show
             guardianMobileLbl1?.isHidden = !show
             guardianMobileTxt1?.isHidden = !show
             guardianEmailLbl1?.isHidden = !show
@@ -1108,7 +1638,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             guardianDobTxt2?.isHidden = !show
             guardianIDLbl2?.isHidden = !show
             guardianIdTxt2?.isHidden = !show
-            guardianVerifyBtn2?.isHidden = !show
+//            guardianVerifyBtn2?.isHidden = !show
             guardianMobileLbl2?.isHidden = !show
             guardianMobileTxt2?.isHidden = !show
             guardianEmailLbl2?.isHidden = !show
@@ -1144,7 +1674,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             guardianDobTxt3?.isHidden = !show
             guardianIDLbl3?.isHidden = !show
             guardianIdTxt3?.isHidden = !show
-            guardianVerifyBtn3?.isHidden = !show
+//            guardianVerifyBtn3?.isHidden = !show
             guardianMobileLbl3?.isHidden = !show
             guardianMobileTxt3?.isHidden = !show
             guardianEmailLbl3?.isHidden = !show
@@ -1614,7 +2144,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         }
         
         addNomineeBtn.isHidden = (nomineeCount >= 3)
-        
+        setProceedVisible(nomineeCount > 0)   // saved nominees exist -> show Proceed
+
         // Expand the first nominee if there are saved details
         if nomineeCount >= 1 && !nominee1Stack.isHidden {
             isNominee1Expanded = true
@@ -1636,7 +2167,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             let dobString = data["DOB"] as? String ?? ""
             let formattedDOB = dobString.replacingOccurrences(of: "/", with: "-")
             nomineeDob1.text = formattedDOB
-            
+        
             documentId1.text = data["DocumentNumber"] as? String ?? ""
             nomineeMobile1.text = data["MobileNo"] as? String ?? ""
             nomineeEmail1.text = data["EmailId"] as? String ?? ""
@@ -1670,6 +2201,16 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             let docType = data["DocumentType"] as? String ?? ""
             documentTypeBtn1.setTitle(docType, for: .normal)
             nomineedocumentType1 = docType
+            
+            print("nomineedocumentType1:: \(nomineedocumentType1)")
+            didSelectDepository(type: nomineedocumentType1 ?? "", identifier: "NomineeDocument1", isView: true)
+            
+            if nomineedocumentType1 == "Driving Licence" || nomineedocumentType1 == "Passport" {
+                // Fix date format
+                let dobStringDocumentExpiryDate = data["DocumentExpiryDate"] as? String ?? ""
+                let formattedDocumentExpiryDate = dobStringDocumentExpiryDate.replacingOccurrences(of: "/", with: "-")
+                licenceDatefield1.text = formattedDocumentExpiryDate
+            }
             
             // Address fields
             if let sameAsApplicant = data["SameAsPermanent"] as? Int, sameAsApplicant == 1 {
@@ -1716,6 +2257,16 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     self.guardianDocumentTypeBtn1.setTitle(guardianDocType, for: .normal)
                     self.guardiandocumentType1 = guardianDocType
                     
+                    print("guardiandocumentType1:: \(self.guardiandocumentType1)")
+                    self.didSelectDepository(type: self.guardiandocumentType1 ?? "", identifier: "guardianDocument1", isView: true)
+                                
+                    if self.guardiandocumentType1 == "Driving Licence" || self.guardiandocumentType1 == "Passport" {
+                        // Fix date format
+                        let dobStringDocumentExpiryDate = data["GDocumentExpiryDate"] as? String ?? ""
+                        let formattedDocumentExpiryDate = dobStringDocumentExpiryDate.replacingOccurrences(of: "/", with: "-")
+                        self.guardianlicenceDatefield1.text = formattedDocumentExpiryDate
+                    }
+                    
                     if let guardianRelationId = data["GRelationship"] as? Int {
                         self.guardianRelationID1 = String(guardianRelationId)
                         self.guardianLbl1.text = self.getGuardianRelationName(from: guardianRelationId)
@@ -1745,6 +2296,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 } else {
                     print("✅ Hiding guardian fields for Nominee 1 (Adult)")
                     self.toggleGuardianFields(for: 1, show: false)
+                    self.didSelectDepository(type: "", identifier: "guardianDocument1", isView: true)
                 }
             }
             
@@ -1811,6 +2363,16 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             documentTypeBtn2.setTitle(docType, for: .normal)
             nomineedocumentType2 = docType
             
+            print("nomineedocumentType2:: \(nomineedocumentType2)")
+            didSelectDepository(type: nomineedocumentType2 ?? "", identifier: "NomineeDocument2", isView: true)
+            
+            if nomineedocumentType2 == "Driving Licence" || nomineedocumentType2 == "Passport" {
+                // Fix date format
+                let dobStringDocumentExpiryDate = data["DocumentExpiryDate"] as? String ?? ""
+                let formattedDocumentExpiryDate = dobStringDocumentExpiryDate.replacingOccurrences(of: "/", with: "-")
+                licenceDatefield2.text = formattedDocumentExpiryDate
+            }
+            
             if let sameAsApplicant = data["SameAsPermanent"] as? Int, sameAsApplicant == 1 {
                 addressSameAsApplicantBtn2.isSelected = true
                 hideNomineeAddress2(true)
@@ -1849,6 +2411,16 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     self.guardianDocumentTypeBtn2.setTitle(guardianDocType, for: .normal)
                     self.guardiandocumentType2 = guardianDocType
                     
+                    print("guardiandocumentType2:: \(self.guardiandocumentType2)")
+                    self.didSelectDepository(type: self.guardiandocumentType2 ?? "", identifier: "guardianDocument2", isView: true)
+                                                    
+                    if self.guardiandocumentType2 == "Driving Licence" || self.guardiandocumentType2 == "Passport" {
+                        // Fix date format
+                        let dobStringDocumentExpiryDate = data["GDocumentExpiryDate"] as? String ?? ""
+                        let formattedDocumentExpiryDate = dobStringDocumentExpiryDate.replacingOccurrences(of: "/", with: "-")
+                        self.guardianlicenceDatefield2.text = formattedDocumentExpiryDate
+                    }
+                    
                     if let guardianRelationId = data["GRelationship"] as? Int {
                         self.guardianRelationID2 = String(guardianRelationId)
                         self.guardianLbl2.text = self.getGuardianRelationName(from: guardianRelationId)
@@ -1877,7 +2449,9 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     }
                 } else {
                     self.toggleGuardianFields(for: 2, show: false)
+                    self.didSelectDepository(type: "", identifier: "guardianDocument2", isView: true)
                 }
+                
             }
             
             let isVerified2 = (data["DocumentNumber_Verify"] as? Int == 1)
@@ -1928,6 +2502,16 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             documentTypeBtn3.setTitle(docType, for: .normal)
             nomineedocumentType3 = docType
             
+            print("nomineedocumentType3:: \(nomineedocumentType3)")
+            didSelectDepository(type: nomineedocumentType3 ?? "", identifier: "NomineeDocument3", isView: true)
+            
+            if nomineedocumentType3 == "Driving Licence" || nomineedocumentType3 == "Passport" {
+                // Fix date format
+                let dobStringDocumentExpiryDate = data["DocumentExpiryDate"] as? String ?? ""
+                let formattedDocumentExpiryDate = dobStringDocumentExpiryDate.replacingOccurrences(of: "/", with: "-")
+                licenceDatefield3.text = formattedDocumentExpiryDate
+            }
+            
             if let sameAsApplicant = data["SameAsPermanent"] as? Int, sameAsApplicant == 1 {
                 addressSameAsApplicantBtn3.isSelected = true
                 hideNomineeAddress3(true)
@@ -1966,6 +2550,16 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     self.guardianDocumentTypeBtn3.setTitle(guardianDocType, for: .normal)
                     self.guardiandocumentType3 = guardianDocType
                     
+                    print("guardiandocumentType3:: \(self.guardiandocumentType3)")
+                    self.didSelectDepository(type: self.guardiandocumentType3 ?? "", identifier: "guardianDocument3", isView: true)
+                                                    
+                    if self.guardiandocumentType3 == "Driving Licence" || self.guardiandocumentType3 == "Passport" {
+                        // Fix date format
+                        let dobStringDocumentExpiryDate = data["GDocumentExpiryDate"] as? String ?? ""
+                        let formattedDocumentExpiryDate = dobStringDocumentExpiryDate.replacingOccurrences(of: "/", with: "-")
+                        self.guardianlicenceDatefield3.text = formattedDocumentExpiryDate
+                    }
+                    
                     if let guardianRelationId = data["GRelationship"] as? Int {
                         self.guardianRelationID3 = String(guardianRelationId)
                         self.guardianLbl3.text = self.getGuardianRelationName(from: guardianRelationId)
@@ -1994,6 +2588,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     }
                 } else {
                     self.toggleGuardianFields(for: 3, show: false)
+                    self.didSelectDepository(type: "", identifier: "guardianDocument3", isView: true)
                 }
             }
             
@@ -2336,6 +2931,33 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         present(vc, animated: true)
     }
     
+    @IBAction func liddateBtnTapped1(_ sender: UIButton) {
+        let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.identifier = "nomineeLIDATE1"
+        vc.delegate = self
+        vc.modalTransitionStyle = .crossDissolve
+        present(vc, animated: true)
+    }
+    
+    @IBAction func liddateBtnTapped2(_ sender: UIButton) {
+            let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+            vc.modalPresentationStyle = .overCurrentContext
+            vc.identifier = "nomineeLIDATE2"
+            vc.delegate = self
+            vc.modalTransitionStyle = .crossDissolve
+            present(vc, animated: true)
+        }
+    
+    @IBAction func liddateBtnTapped3(_ sender: UIButton) {
+            let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+            vc.modalPresentationStyle = .overCurrentContext
+            vc.identifier = "nomineeLIDATE3"
+            vc.delegate = self
+            vc.modalTransitionStyle = .crossDissolve
+            present(vc, animated: true)
+        }
+    
     @IBAction func nomineeVerifyBtn1(_ sender: UIButton) {
         verifyNominee(index: 1)
     }
@@ -2413,6 +3035,33 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         vc.modalTransitionStyle = .crossDissolve
         present(vc, animated: true)
     }
+    
+    @IBAction func guardianLicenceDateBtn1(_ sender: UIButton) {
+            let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+            vc.modalPresentationStyle = .overCurrentContext
+            vc.identifier = "guardianLIDOB1"
+            vc.delegate = self
+            vc.modalTransitionStyle = .crossDissolve
+            present(vc, animated: true)
+        }
+    
+    @IBAction func guardianLicenceDateBtn2(_ sender: UIButton) {
+                let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+                vc.modalPresentationStyle = .overCurrentContext
+                vc.identifier = "guardianLIDOB2"
+                vc.delegate = self
+                vc.modalTransitionStyle = .crossDissolve
+                present(vc, animated: true)
+            }
+    
+    @IBAction func guardianLicenceDateBtn3(_ sender: UIButton) {
+                let vc = storyboard?.instantiateViewController(identifier: "calenderVC") as! calenderVC
+                vc.modalPresentationStyle = .overCurrentContext
+                vc.identifier = "guardianLIDOB3"
+                vc.delegate = self
+                vc.modalTransitionStyle = .crossDissolve
+                present(vc, animated: true)
+            }
     
     
     @IBAction func nomineeAdressSameBtn1(_ sender: UIButton) {
@@ -2623,6 +3272,10 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             showAlert(message: "Please enter all nominee details.")
             return
         }
+        if let dobError = dobValidationError(dob) {
+            showAlert(message: "Guardian: \(dobError)")
+            return
+        }
         self.identifier = "Nominee\(index)"
         panValidation(panNo: panNo, name: name, userDOB: dob, isGuardian: true)
     }
@@ -2638,6 +3291,22 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         return NSPredicate(format: "SELF MATCHES %@", mobileRegex).evaluate(with: mobile)
     }
     
+    /// Shows/hides Proceed and shrinks the bottom instruction area so no blank gap is left.
+    func setProceedVisible(_ show: Bool) {
+        let proceedArea: CGFloat = 50   // height of the Proceed row
+        let fullHeight: CGFloat = 200   // instruction view height in the storyboard
+
+        submitBtn.isHidden = !show
+        submitBtn.superview?.isHidden = !show   // the stack view holding Proceed
+
+        if let heightConstraint = instructionView.constraints.first(where: {
+            $0.firstAttribute == .height && $0.secondItem == nil
+        }) {
+            heightConstraint.constant = show ? fullHeight : fullHeight - proceedArea
+        }
+        view.layoutIfNeeded()
+    }
+
     func isValidPinCode(_ pincode: String) -> Bool {
         let pinRegex = "^[0-9]{6}$"
         return NSPredicate(format: "SELF MATCHES %@", pinRegex).evaluate(with: pincode)
@@ -2743,10 +3412,31 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     @IBAction func skipBtn(_ sender: UIButton) {
         // Opt-Out selected - submit directly
         print("User opted out, submitting without nominee validation")
-        NomineeType = "N"
-        insertUpdateNomineeDetailsWebWithMinimalParams()
+//        NomineeType = "N"
+//        insertUpdateNomineeDetailsWebWithMinimalParams()
+        showOptAlert()
     }
     
+    func showOptAlert(){
+        let alertVC = CustomAlertViewController()
+
+        alertVC.modalPresentationStyle = .overFullScreen
+        alertVC.modalTransitionStyle = .crossDissolve
+
+        alertVC.onCancel = {
+            print("Cancel clicked")
+        }
+
+        alertVC.onProceed = {
+            print("Proceed clicked")
+
+            // Your proceed logic here
+            self.NomineeType = "N"
+            self.insertUpdateNomineeDetailsWebWithMinimalParams()
+        }
+
+        present(alertVC, animated: true)
+    }
     
     func panValidation(panNo: String, name: String, userDOB: String,isGuardian: Bool){
         
@@ -3164,17 +3854,19 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 // Validate required fields for Nominee 1
                 guard let nomineeName = nomineeNameTxt1.text, !nomineeName.isEmpty,
                       let nomineeDOB = nomineeDob1.text, !nomineeDOB.isEmpty,
-                      let documentId = documentId1.text, !documentId.isEmpty,
                       let sharePercentage = shareTxt1.text, !sharePercentage.isEmpty,
                       let relationId = relationID1, !relationId.isEmpty else {  // ✅ Use relationID instead of relation name
                     showAlert(message: "Please fill all required nominee details and select a valid relation")
                     return
                 }
+                let documentId = (nomineedocumentType1 == "Aadhaar") ? documentId1.text?
+                    .components(separatedBy: " ")
+                    .last ?? "" : documentId1.text
                 
                 // Add Nominee 1 basic details
                 parameters["NOMINEE_1Prefix"] = "Mr." // or get from a prefix field if you have
                 parameters["NOMINEE_1DocumentType"] = nomineedocumentType1 ?? ""
-                parameters["NOMINEE_1DocumentExpiryDate"] = "" // Add if you have expiry date field
+                parameters["NOMINEE_1DocumentExpiryDate"] = formatDateForAPI(licenceDatefield1.text ?? "") // Add if you have expiry date field
                 parameters["NOMINEE_1NomineePanNoAadhar"] = documentId
                 parameters["NOMINEE_1Name"] = nomineeName
                 parameters["NOMINEE_1MobileNo"] = nomineeMobile1.text ?? ""
@@ -3209,7 +3901,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     parameters["NOMINEE_1GuardianPrefix"] = "Mr."
                     parameters["NOMINEE_1GuardianName"] = minorNameTxt1.text ?? ""
                     parameters["NOMINEE_1GuardianDocumentType"] = guardiandocumentType1 ?? ""
-                    parameters["NOMINEE_1GuardianDocumentExpiryDate"] = ""
+                    parameters["NOMINEE_1GuardianDocumentExpiryDate"] = formatDateForAPI(guardianlicenceDatefield1.text ?? "")
                     parameters["NOMINEE_1GDocumentIDNumberADhar"] = guardianIdTxt1.text ?? ""
                     parameters["NOMINEE_1GMobileNo"] = guardianMobileTxt1.text ?? ""
                     parameters["NOMINEE_1GEmail"] = guardianEmailTxt1.text ?? ""
@@ -3244,17 +3936,21 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 // Validate required fields for Nominee 1
                 guard let nomineeName = nomineeNameTxt2.text, !nomineeName.isEmpty,
                       let nomineeDOB = nomineeDob2.text, !nomineeDOB.isEmpty,
-                      let documentId = documentId2.text, !documentId.isEmpty,
+//                      let documentId = documentId2.text, !documentId.isEmpty,
                       let sharePercentage = shareTxt2.text, !sharePercentage.isEmpty,
                       let relationId = relationID2, !relationId.isEmpty else {  // ✅ Use relationID instead of relation name
                     showAlert(message: "Please fill all required nominee details and select a valid relation")
                     return
                 }
                 
+                let documentId = (nomineedocumentType2 == "Aadhaar") ? documentId2.text?
+                                    .components(separatedBy: " ")
+                                    .last ?? "" : documentId2.text
+                
                 // Add Nominee 1 basic details
                 parameters["NOMINEE_2Prefix"] = "Mr." // or get from a prefix field if you have
                 parameters["NOMINEE_2DocumentType"] = nomineedocumentType2 ?? ""
-                parameters["NOMINEE_2DocumentExpiryDate"] = "" // Add if you have expiry date field
+                parameters["NOMINEE_2DocumentExpiryDate"] = formatDateForAPI(licenceDatefield2.text ?? "") // Add if you have expiry date field
                 parameters["NOMINEE_2NomineePanNoAadhar"] = documentId
                 parameters["NOMINEE_2Name"] = nomineeName
                 parameters["NOMINEE_2MobileNo"] = nomineeMobile2.text ?? ""
@@ -3289,7 +3985,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     parameters["NOMINEE_2GuardianPrefix"] = "Mr."
                     parameters["NOMINEE_2GuardianName"] = minorNameTxt2.text ?? ""
                     parameters["NOMINEE_2GuardianDocumentType"] = guardiandocumentType2 ?? ""
-                    parameters["NOMINEE_2GuardianDocumentExpiryDate"] = ""
+                    parameters["NOMINEE_2GuardianDocumentExpiryDate"] = formatDateForAPI(guardianlicenceDatefield2.text ?? "")
                     parameters["NOMINEE_2GDocumentIDNumberADhar"] = guardianIdTxt2.text ?? ""
                     parameters["NOMINEE_2GMobileNo"] = guardianMobileTxt2.text ?? ""
                     parameters["NOMINEE_2GEmail"] = guardianEmailTxt2.text ?? ""
@@ -3323,17 +4019,21 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 // Validate required fields for Nominee 1
                 guard let nomineeName = nomineeNameTxt3.text, !nomineeName.isEmpty,
                       let nomineeDOB = nomineeDob3.text, !nomineeDOB.isEmpty,
-                      let documentId = documentId3.text, !documentId.isEmpty,
+//                      let documentId = documentId3.text, !documentId.isEmpty,
                       let sharePercentage = shareTxt3.text, !sharePercentage.isEmpty,
                       let relationId = relationID3, !relationId.isEmpty else {  // ✅ Use relationID instead of relation name
                     showAlert(message: "Please fill all required nominee details and select a valid relation")
                     return
                 }
                 
+                let documentId = (nomineedocumentType3 == "Aadhaar") ? documentId3.text?
+                                                    .components(separatedBy: " ")
+                                                    .last ?? "" : documentId3.text
+                
                 // Add Nominee 1 basic details
                 parameters["NOMINEE_3Prefix"] = "Mr." // or get from a prefix field if you have
                 parameters["NOMINEE_3DocumentType"] = nomineedocumentType3 ?? ""
-                parameters["NOMINEE_3DocumentExpiryDate"] = "" // Add if you have expiry date field
+                parameters["NOMINEE_3DocumentExpiryDate"] = formatDateForAPI(licenceDatefield3.text ?? "") // Add if you have expiry date field
                 parameters["NOMINEE_3NomineePanNoAadhar"] = documentId
                 parameters["NOMINEE_3Name"] = nomineeName
                 parameters["NOMINEE_3MobileNo"] = nomineeMobile3.text ?? ""
@@ -3368,7 +4068,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     parameters["NOMINEE_3GuardianPrefix"] = "Mr."
                     parameters["NOMINEE_3GuardianName"] = minorNameTxt3.text ?? ""
                     parameters["NOMINEE_3GuardianDocumentType"] = guardiandocumentType3 ?? ""
-                    parameters["NOMINEE_3GuardianDocumentExpiryDate"] = ""
+                    parameters["NOMINEE_3GuardianDocumentExpiryDate"] = formatDateForAPI(guardianlicenceDatefield3.text ?? "")
                     parameters["NOMINEE_3GDocumentIDNumberADhar"] = guardianIdTxt3.text ?? ""
                     parameters["NOMINEE_3GMobileNo"] = guardianMobileTxt3.text ?? ""
                     parameters["NOMINEE_3GEmail"] = guardianEmailTxt3.text ?? ""
@@ -3475,14 +4175,21 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     func validateNomineeData() -> Bool {
         if nomineeCount >= 1 && !nominee1Stack.isHidden {
             // Check required fields
-            if nomineeNameTxt1.text?.isEmpty ?? true {
-                showAlert(message: "Please select Document Type")
-                return false
-            }
+//            if nomineeNameTxt1.text?.isEmpty ?? true {
+//                showAlert(message: "Please select Document Type")
+//                return false
+//            }
+//            
+//            if documentId1.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter Document ID")
+//                return false
+//            }
             
-            if documentId1.text?.isEmpty ?? true {
-                showAlert(message: "Please enter Document ID")
-                return false
+            if (nomineedocumentType1 == "Driving Licence" || nomineedocumentType1 == "Passport") && documentId1.text != "" {
+                if licenceDatefield1.text?.isEmpty ?? true {
+                    showAlert(message: "Please select licence expiry date")
+                    return false
+                }
             }
             
             if nomineeNameTxt1.text?.isEmpty ?? true {
@@ -3493,43 +4200,47 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 showAlert(message: "Please select nominee date of birth")
                 return false
             }
-            if nomineeMobile1.text?.isEmpty ?? true {
-                showAlert(message: "Please enter Mobile Number")
+            if let dobError = dobValidationError(nomineeDob1.text ?? "") {
+                showAlert(message: "Nominee 1: \(dobError)")
                 return false
             }
+//            if nomineeMobile1.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter Mobile Number")
+//                return false
+//            }
+//            
+//            if nomineeEmail1.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter E-mail")
+//                return false
+//            }
+//            
+//            if !addressSameAsApplicantBtn1.isSelected {
+//                
+//                if addressTxtFirst1.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter Address1")
+//                    return false
+//                }
+//                
+//                if pinCodeLbl1.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter Pin Code")
+//                    return false
+//                }
+//                
+//                if cityTxt1.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter City")
+//                    return false
+//                }
+//                
+//                if stateTxt1.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter State")
+//                    return false
+//                }
+//            }
             
-            if nomineeEmail1.text?.isEmpty ?? true {
-                showAlert(message: "Please enter E-mail")
-                return false
-            }
-            
-            if !addressSameAsApplicantBtn1.isSelected {
-                
-                if addressTxtFirst1.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter Address1")
-                    return false
-                }
-                
-                if pinCodeLbl1.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter Pin Code")
-                    return false
-                }
-                
-                if cityTxt1.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter City")
-                    return false
-                }
-                
-                if stateTxt1.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter State")
-                    return false
-                }
-            }
-            
-            if shareTxt1.text?.isEmpty ?? true {
-                showAlert(message: "Please enter share percentage")
-                return false
-            }
+//            if shareTxt1.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter share percentage")
+//                return false
+//            }
             guard let relationText = relationLbl1.text,
                   !relationText.isEmpty,
                   relationText != "Select Relation" else {
@@ -3564,7 +4275,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             }
             
             if nominee1IsMinor == "Y" {
-                if minorNameTxt1.text?.isEmpty ?? true {
+                // Guardian – same rule as nominee: only Name and Date of Birth are mandatory
+                if minorNameTxt1.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true {
                     showAlert(message: "Please enter guardian name for Nominee 1")
                     return false
                 }
@@ -3573,73 +4285,26 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     showAlert(message: "Please select guardian date of birth for Nominee 1")
                     return false
                 }
-                
-                if guardianIdTxt1.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter guardian document ID for Nominee 1")
+                if let dobError = dobValidationError(guardianDobTxt1.text ?? "") {
+                    showAlert(message: "Guardian of Nominee 1: \(dobError)")
                     return false
                 }
                 
-                if guardianMobileTxt1.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter guardian mobile number for Nominee 1")
+                // Optional fields – checked only if the user filled them
+                if let mobile = guardianMobileTxt1.text, !mobile.isEmpty, mobile.count != 10 {
+                    showAlert(message: "Please enter a valid 10-digit mobile number for guardian")
                     return false
                 }
                 
-                if let mobile = guardianMobileTxt1.text, !mobile.isEmpty {
-                    if mobile.count != 10 {
-                        showAlert(message: "Please enter a valid 10-digit mobile number for guardian")
-                        return false
-                    }
-                }
-                
-                if guardianEmailTxt1.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter guardian email for Nominee 1")
+                if let email = guardianEmailTxt1.text, !email.isEmpty, !isValidEmail(email) {
+                    showAlert(message: "Please enter a valid email address for guardian")
                     return false
                 }
                 
-                if let email = guardianEmailTxt1.text, !email.isEmpty {
-                    if !isValidEmail(email) {
-                        showAlert(message: "Please enter a valid email address for guardian")
-                        return false
-                    }
-                }
-                
-                // Guardian Relation validation
-                guard let guardianRelationText = guardianLbl1.text,
-                      !guardianRelationText.isEmpty,
-                      guardianRelationText != "Select Relation" else {
-                    showAlert(message: "Please select guardian relation for Nominee 1")
+                if !nomineeSameAsBtn1.isSelected,
+                   let pincode = guardianPinCodeTxt1.text, !pincode.isEmpty, pincode.count != 6 {
+                    showAlert(message: "Please enter a valid 6-digit pincode for guardian")
                     return false
-                }
-                
-                // Guardian Address validation (if not same as nominee)
-                if !nomineeSameAsBtn1.isSelected {
-                    if guardianAddressTxtFirst1.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian address line 1")
-                        return false
-                    }
-                    
-                    if guardianPinCodeTxt1.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian pin code")
-                        return false
-                    }
-                    
-                    if let pincode = guardianPinCodeTxt1.text, !pincode.isEmpty {
-                        if pincode.count != 6 {
-                            showAlert(message: "Please enter a valid 6-digit pincode for guardian")
-                            return false
-                        }
-                    }
-                    
-                    if guardianCityTxt1.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian city")
-                        return false
-                    }
-                    
-                    if guardianStateTxt1.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian state")
-                        return false
-                    }
-                    
                 }
             }
             
@@ -3648,14 +4313,21 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         // Validation for Nominee 2
         if nomineeCount >= 2 && !nominee2Stack.isHidden {
             // Check required fields
-            if nomineeNameTxt2.text?.isEmpty ?? true {
-                showAlert(message: "Please select Document Type")
-                return false
-            }
+//            if nomineeNameTxt2.text?.isEmpty ?? true {
+//                showAlert(message: "Please select Document Type")
+//                return false
+//            }
+//            
+//            if documentId2.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter Document ID")
+//                return false
+//            }
             
-            if documentId2.text?.isEmpty ?? true {
-                showAlert(message: "Please enter Document ID")
-                return false
+            if (nomineedocumentType2 == "Driving Licence" || nomineedocumentType2 == "Passport") && documentId2.text != "" {
+                if licenceDatefield2.text?.isEmpty ?? true {
+                    showAlert(message: "Please select licence expiry date")
+                    return false
+                }
             }
             
             if nomineeNameTxt2.text?.isEmpty ?? true {
@@ -3666,43 +4338,48 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 showAlert(message: "Please select nominee date of birth")
                 return false
             }
-            if nomineeMobile2.text?.isEmpty ?? true {
-                showAlert(message: "Please enter Mobile Number")
+            if let dobError = dobValidationError(nomineeDob2.text ?? "") {
+                showAlert(message: "Nominee 2: \(dobError)")
                 return false
             }
             
-            if nomineeEmail2.text?.isEmpty ?? true {
-                showAlert(message: "Please enter E-mail")
-                return false
-            }
+//            if nomineeMobile2.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter Mobile Number")
+//                return false
+//            }
+//            
+//            if nomineeEmail2.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter E-mail")
+//                return false
+//            }
+//            
+//            if !addressSameAsApplicantBtn2.isSelected {
+//                
+//                if addressTxtFirst2.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter Address1")
+//                    return false
+//                }
+//                
+//                if pinCodeLbl2.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter Pin Code")
+//                    return false
+//                }
+//                
+//                if cityTxt2.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter City")
+//                    return false
+//                }
+//                
+//                if stateTxt2.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter State")
+//                    return false
+//                }
+//            }
             
-            if !addressSameAsApplicantBtn2.isSelected {
-                
-                if addressTxtFirst2.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter Address1")
-                    return false
-                }
-                
-                if pinCodeLbl2.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter Pin Code")
-                    return false
-                }
-                
-                if cityTxt2.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter City")
-                    return false
-                }
-                
-                if stateTxt2.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter State")
-                    return false
-                }
-            }
-            
-            if shareTxt2.text?.isEmpty ?? true {
-                showAlert(message: "Please enter share percentage")
-                return false
-            }
+//            if shareTxt2.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter share percentage")
+//                return false
+//            }
             guard let relationText = relationLbl2.text,
                   !relationText.isEmpty,
                   relationText != "Select Relation" else {
@@ -3737,7 +4414,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             }
             
             if nominee2IsMinor == "Y" {
-                if minorNameTxt2.text?.isEmpty ?? true {
+                // Guardian – same rule as nominee: only Name and Date of Birth are mandatory
+                if minorNameTxt2.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true {
                     showAlert(message: "Please enter guardian name for Nominee 2")
                     return false
                 }
@@ -3746,75 +4424,26 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     showAlert(message: "Please select guardian date of birth for Nominee 2")
                     return false
                 }
-                
-                if guardianIdTxt2.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter guardian document ID for Nominee 2")
+                if let dobError = dobValidationError(guardianDobTxt2.text ?? "") {
+                    showAlert(message: "Guardian of Nominee 2: \(dobError)")
                     return false
                 }
                 
-                if guardianMobileTxt2.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter guardian mobile number for Nominee 2")
+                // Optional fields – checked only if the user filled them
+                if let mobile = guardianMobileTxt2.text, !mobile.isEmpty, mobile.count != 10 {
+                    showAlert(message: "Please enter a valid 10-digit mobile number for guardian")
                     return false
                 }
                 
-                if let mobile = guardianMobileTxt2.text, !mobile.isEmpty {
-                    if mobile.count != 10 {
-                        showAlert(message: "Please enter a valid 10-digit mobile number for guardian")
-                        return false
-                    }
-                }
-                
-                if guardianEmailTxt2.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter guardian email for Nominee 2")
+                if let email = guardianEmailTxt2.text, !email.isEmpty, !isValidEmail(email) {
+                    showAlert(message: "Please enter a valid email address for guardian")
                     return false
                 }
                 
-                if let email = guardianEmailTxt2.text, !email.isEmpty {
-                    if !isValidEmail(email) {
-                        showAlert(message: "Please enter a valid email address for guardian")
-                        return false
-                    }
-                }
-                
-                guard let guardianRelationText = guardianLbl2.text,
-                      !guardianRelationText.isEmpty,
-                      guardianRelationText != "Select Relation" else {
-                    showAlert(message: "Please select guardian relation for Nominee 2")
+                if !nomineeSameAsBtn2.isSelected,
+                   let pincode = guardianPinCodeTxt2.text, !pincode.isEmpty, pincode.count != 6 {
+                    showAlert(message: "Please enter a valid 6-digit pincode for guardian")
                     return false
-                }
-                
-                if !nomineeSameAsBtn2.isSelected {
-                    if guardianAddressTxtFirst2.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian address line 1")
-                        return false
-                    }
-                    
-                    //                    if guardianAddressTxtSecond2.text?.isEmpty ?? true {
-                    //                        showAlert(message: "Please enter guardian address line 2")
-                    //                        return false
-                    //                    }
-                    
-                    if guardianPinCodeTxt2.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian pin code")
-                        return false
-                    }
-                    
-                    if let pincode = guardianPinCodeTxt2.text, !pincode.isEmpty {
-                        if pincode.count != 6 {
-                            showAlert(message: "Please enter a valid 6-digit pincode for guardian")
-                            return false
-                        }
-                    }
-                    
-                    if guardianCityTxt2.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian city")
-                        return false
-                    }
-                    
-                    if guardianStateTxt2.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian state")
-                        return false
-                    }
                 }
             }
             
@@ -3823,14 +4452,21 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         // Validation for Nominee 3
         if nomineeCount >= 3 && !nominee3Stack.isHidden {
             // Check required fields
-            if nomineeNameTxt3.text?.isEmpty ?? true {
-                showAlert(message: "Please select Document Type")
-                return false
-            }
+//            if nomineeNameTxt3.text?.isEmpty ?? true {
+//                showAlert(message: "Please select Document Type")
+//                return false
+//            }
+//            
+//            if documentId3.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter Document ID")
+//                return false
+//            }
             
-            if documentId3.text?.isEmpty ?? true {
-                showAlert(message: "Please enter Document ID")
-                return false
+            if (nomineedocumentType3 == "Driving Licence" || nomineedocumentType3 == "Passport") && documentId3.text != "" {
+                if licenceDatefield3.text?.isEmpty ?? true {
+                    showAlert(message: "Please select licence expiry date")
+                    return false
+                }
             }
             
             if nomineeNameTxt3.text?.isEmpty ?? true {
@@ -3841,43 +4477,48 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 showAlert(message: "Please select nominee date of birth")
                 return false
             }
-            if nomineeMobile3.text?.isEmpty ?? true {
-                showAlert(message: "Please enter Mobile Number")
+            if let dobError = dobValidationError(nomineeDob3.text ?? "") {
+                showAlert(message: "Nominee 3: \(dobError)")
                 return false
             }
             
-            if nomineeEmail3.text?.isEmpty ?? true {
-                showAlert(message: "Please enter E-mail")
-                return false
-            }
+//            if nomineeMobile3.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter Mobile Number")
+//                return false
+//            }
+//            
+//            if nomineeEmail3.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter E-mail")
+//                return false
+//            }
+//            
+//            if !addressSameAsApplicantBtn3.isSelected {
+//                
+//                if addressTxtFirst3.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter Address1")
+//                    return false
+//                }
+//                
+//                if pinCodeLbl3.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter Pin Code")
+//                    return false
+//                }
+//                
+//                if cityTxt3.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter City")
+//                    return false
+//                }
+//                
+//                if stateTxt3.text?.isEmpty ?? true {
+//                    showAlert(message: "Please enter State")
+//                    return false
+//                }
+//            }
             
-            if !addressSameAsApplicantBtn3.isSelected {
-                
-                if addressTxtFirst3.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter Address1")
-                    return false
-                }
-                
-                if pinCodeLbl3.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter Pin Code")
-                    return false
-                }
-                
-                if cityTxt3.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter City")
-                    return false
-                }
-                
-                if stateTxt3.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter State")
-                    return false
-                }
-            }
-            
-            if shareTxt3.text?.isEmpty ?? true {
-                showAlert(message: "Please enter share percentage")
-                return false
-            }
+//            if shareTxt3.text?.isEmpty ?? true {
+//                showAlert(message: "Please enter share percentage")
+//                return false
+//            }
             guard let relationText = relationLbl3.text,
                   !relationText.isEmpty,
                   relationText != "Select Relation" else {
@@ -3911,7 +4552,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 }
             }
             if nominee3IsMinor == "Y" {
-                if minorNameTxt3.text?.isEmpty ?? true {
+                // Guardian – same rule as nominee: only Name and Date of Birth are mandatory
+                if minorNameTxt3.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true {
                     showAlert(message: "Please enter guardian name for Nominee 3")
                     return false
                 }
@@ -3920,86 +4562,131 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     showAlert(message: "Please select guardian date of birth for Nominee 3")
                     return false
                 }
-                
-                if guardianIdTxt3.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter guardian document ID for Nominee 3")
+                if let dobError = dobValidationError(guardianDobTxt3.text ?? "") {
+                    showAlert(message: "Guardian of Nominee 3: \(dobError)")
                     return false
                 }
                 
-                if guardianMobileTxt3.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter guardian mobile number for Nominee 3")
+                // Optional fields – checked only if the user filled them
+                if let mobile = guardianMobileTxt3.text, !mobile.isEmpty, mobile.count != 10 {
+                    showAlert(message: "Please enter a valid 10-digit mobile number for guardian")
                     return false
                 }
                 
-                if let mobile = guardianMobileTxt3.text, !mobile.isEmpty {
-                    if mobile.count != 10 {
-                        showAlert(message: "Please enter a valid 10-digit mobile number for guardian")
-                        return false
-                    }
-                }
-                
-                if guardianEmailTxt3.text?.isEmpty ?? true {
-                    showAlert(message: "Please enter guardian email for Nominee 3")
+                if let email = guardianEmailTxt3.text, !email.isEmpty, !isValidEmail(email) {
+                    showAlert(message: "Please enter a valid email address for guardian")
                     return false
                 }
                 
-                if let email = guardianEmailTxt3.text, !email.isEmpty {
-                    if !isValidEmail(email) {
-                        showAlert(message: "Please enter a valid email address for guardian")
-                        return false
-                    }
-                }
-                
-                guard let guardianRelationText = guardianLbl3.text,
-                      !guardianRelationText.isEmpty,
-                      guardianRelationText != "Select Relation" else {
-                    showAlert(message: "Please select guardian relation for Nominee 3")
+                if !nomineeSameAsBtn3.isSelected,
+                   let pincode = guardianPinCodeTxt3.text, !pincode.isEmpty, pincode.count != 6 {
+                    showAlert(message: "Please enter a valid 6-digit pincode for guardian")
                     return false
-                }
-                
-                if !nomineeSameAsBtn3.isSelected {
-                    if guardianAddressTxtFirst3.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian address line 1")
-                        return false
-                    }
-                    
-                    //                    if guardianAddressTxtSecond3.text?.isEmpty ?? true {
-                    //                        showAlert(message: "Please enter guardian address line 2")
-                    //                        return false
-                    //                    }
-                    
-                    if guardianPinCodeTxt3.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian pin code")
-                        return false
-                    }
-                    
-                    if let pincode = guardianPinCodeTxt3.text, !pincode.isEmpty {
-                        if pincode.count != 6 {
-                            showAlert(message: "Please enter a valid 6-digit pincode for guardian")
-                            return false
-                        }
-                    }
-                    
-                    if guardianCityTxt3.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian city")
-                        return false
-                    }
-                    
-                    if guardianStateTxt3.text?.isEmpty ?? true {
-                        showAlert(message: "Please enter guardian state")
-                        return false
-                    }
                 }
             }
         }
         
         return true
     }
+//    private var aadhaarLast4Digits1 = ""
+    @IBAction func aadhaarLast4Changed1(_ sender: UITextField) {
+
+//        let digits = sender.text?.filter { $0.isNumber } ?? ""
+//
+//        aadhaarLast4Digits1 = String(digits.suffix(4))
+//
+//        if aadhaarLast4Digits1.isEmpty {
+//            sender.text = ""
+//        } else {
+//            sender.text = "XXXX XXXX \(aadhaarLast4Digits1)"
+//        }
+    }
+    
 }
 
 extension NomineeVC: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        // DOB fields: digits only, "/" added automatically -> DD/MM/YYYY (max 10 chars)
+        if textField == nomineeDob1 || textField == nomineeDob2 || textField == nomineeDob3 ||
+            textField == guardianDobTxt1 || textField == guardianDobTxt2 || textField == guardianDobTxt3 {
+            let current = textField.text ?? ""
+            guard let textRange = Range(range, in: current) else { return false }
+            let updated = current.replacingCharacters(in: textRange, with: string)
+            let digits = String(updated.filter { $0.isNumber }.prefix(8))
+
+            var formatted = ""
+            for (index, char) in digits.enumerated() {
+                if index == 2 || index == 4 { formatted.append("/") }
+                formatted.append(char)
+            }
+            textField.text = formatted
+            return false
+        }
+        
+        
+        if textField == documentId1 || textField == documentId2 || textField == documentId3{
+            if self.nomineedocumentType1 == "Aadhaar" || self.nomineedocumentType2 == "Aadhaar" || self.nomineedocumentType3 == "Aadhaar"{
+//                guard textField == aadhaarLast4TextField else {
+//                        return true
+//                    }
+
+                // Current displayed text
+                        let currentText = textField.text ?? ""
+
+                        // Extract only the existing 4 digits
+                        let currentDigits = currentText
+                            .components(separatedBy: " ")
+                            .last ?? ""
+
+                        var newDigits = currentDigits
+
+                        // Backspace
+                        if string.isEmpty {
+
+                            guard !newDigits.isEmpty else {
+                                textField.text = ""
+                                return false
+                            }
+
+                            newDigits.removeLast()
+
+                        } else {
+
+                            // Only numbers
+                            guard string.allSatisfy({ $0.isNumber }) else {
+                                return false
+                            }
+
+                            // Maximum 4 digits
+                            guard newDigits.count < 4 else {
+                                return false
+                            }
+
+                            newDigits.append(contentsOf: string)
+                        }
+
+                        // Update display
+                        if newDigits.isEmpty {
+                            textField.text = ""
+                        } else {
+                            textField.text = "XXXX XXXX \(newDigits)"
+                        }
+
+                        // Cursor at the end
+                        DispatchQueue.main.async {
+                            let end = textField.endOfDocument
+                            textField.selectedTextRange = textField.textRange(
+                                from: end,
+                                to: end
+                            )
+                        }
+
+                        return false
+            }
+        }
+        
         
         // Handle mobile number fields - only digits, max 10 digits
         if textField == nomineeMobile1 || textField == nomineeMobile2 || textField == nomineeMobile3 ||
@@ -4064,7 +4751,58 @@ extension NomineeVC: UITextFieldDelegate {
         return true
     }
     
+    /// Validates a DOB field; clears it and hides guardian fields if invalid.
+    private func dobError(for textField: UITextField) -> String? {
+        let text = textField.text ?? ""
+        guard !text.isEmpty, let error = dobValidationError(text) else { return nil }
+        textField.text = ""
+        let index = textField == nomineeDob1 ? 1 : (textField == nomineeDob2 ? 2 : 3)
+        toggleGuardianFields(for: index, show: false)
+        return error
+    }
+
     func textFieldDidEndEditing(_ textField: UITextField) {
+
+        // Guardian DOB – same format rules as nominee DOB
+        if textField == guardianDobTxt1 || textField == guardianDobTxt2 || textField == guardianDobTxt3 {
+            if let text = textField.text, !text.isEmpty, let error = dobValidationError(text) {
+                textField.text = ""
+                showAlert(message: "Guardian: \(error)")
+            }
+            return
+        }
+        
+        if textField == nomineeDob1 {
+                if let error = dobError(for: textField) {
+                    showAlert(message: error)
+                    return
+                }
+                updateNomineeMinorStatus(
+                    for: "nomineeDOB1",
+                    date: textField.text ?? ""
+                )
+
+            } else if textField == nomineeDob2 {
+                if let error = dobError(for: textField) {
+                    showAlert(message: error)
+                    return
+                }
+                updateNomineeMinorStatus(
+                    for: "nomineeDOB2",
+                    date: textField.text ?? ""
+                )
+
+            } else if textField == nomineeDob3 {
+                if let error = dobError(for: textField) {
+                    showAlert(message: error)
+                    return
+                }
+                updateNomineeMinorStatus(
+                    for: "nomineeDOB3",
+                    date: textField.text ?? ""
+                )
+            }
+        
         // Ensure final text is uppercase for non-email fields
         if textField == nomineeEmail1 || textField == nomineeEmail2 || textField == nomineeEmail3 ||
             textField == guardianEmailTxt1 || textField == guardianEmailTxt2 || textField == guardianEmailTxt3 {

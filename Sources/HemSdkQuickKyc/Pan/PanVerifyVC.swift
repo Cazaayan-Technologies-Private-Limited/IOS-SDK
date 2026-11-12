@@ -27,10 +27,14 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                 CoreDataHelper.deleteAllUserIds(entityName: "MobileUser")
                 
                 // Navigate to login screen
-                let loginStoryboard = UIStoryboard(name: "Main", bundle: Bundle.module)
+                // CRASH FIX: there is no "Main" storyboard inside the SDK – NewAccountVC lives in DashboardVC.storyboard
+                let loginStoryboard = UIStoryboard(name: "DashboardVC", bundle: Bundle.module)
                 if let loginViewController = loginStoryboard.instantiateViewController(withIdentifier: "NewAccountVC") as? NewAccountVC {
                     if let window = UIApplication.shared.windows.first {
-                        window.rootViewController = loginViewController
+                        // Wrap in a navigation controller so the login screen can push the next screens
+                        let nav = UINavigationController(rootViewController: loginViewController)
+                        nav.isNavigationBarHidden = true
+                        window.rootViewController = nav
                         UIView.transition(with: window, duration: 0.5, options: [.transitionFlipFromRight], animations: nil, completion: nil)
                         window.makeKeyAndVisible()
                     }
@@ -144,6 +148,7 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
             }
         }
         DOBTF.delegate = self // Set delegate
+        DOBTF.keyboardType = .numberPad
         print("Email ID: \(emailID ?? "")")
         emailTF.text = emailID
         emailTF.isEnabled = false
@@ -202,20 +207,32 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField == DOBTF {
-            // Present the CalendarVC
-            let storyboard = UIStoryboard(name: "Nominee", bundle: Bundle.module)
-            if let vc = storyboard.instantiateViewController(identifier: "calenderVC") as? calenderVC {
-                vc.modalPresentationStyle = .overCurrentContext
-                vc.identifier = "To"
-                vc.delegate = self // Assign the delegate
-                vc.modalTransitionStyle = .crossDissolve
-                present(vc, animated: true)
-            }
-            
-            return false
-        }
+//        if textField == DOBTF {
+//            // Present the CalendarVC
+//            let storyboard = UIStoryboard(name: "Nominee", bundle: Bundle.module)
+//            if let vc = storyboard.instantiateViewController(identifier: "calenderVC") as? calenderVC {
+//                vc.modalPresentationStyle = .overCurrentContext
+//                vc.identifier = "To"
+//                vc.delegate = self // Assign the delegate
+//                vc.modalTransitionStyle = .crossDissolve
+//                present(vc, animated: true)
+//            }
+//            
+//            return false
+//        }
         return true
+    }
+    
+    @IBAction func DateBtnPress(_ sender: Any) {
+        // Present the CalendarVC
+        let storyboard = UIStoryboard(name: "Nominee", bundle: Bundle.module)
+        if let vc = storyboard.instantiateViewController(identifier: "calenderVC") as? calenderVC {
+            vc.modalPresentationStyle = .overCurrentContext
+            vc.identifier = "To"
+            vc.delegate = self // Assign the delegate
+            vc.modalTransitionStyle = .crossDissolve
+            present(vc, animated: true)
+        }
     }
     
     @IBAction func BackBtn(_ sender: Any) {
@@ -737,6 +754,44 @@ class PanVerifyVC: UIViewController,@MainActor PanVerifyPopupVCDelegate,@MainAct
                 
                 let updatedText = text.replacingCharacters(in: textRange, with: uppercasedString)
                 textField.text = updatedText
+            }
+            return false
+        }
+        
+        if textField == DOBTF {
+            guard let currentText = textField.text, let textRange = Range(range, in: currentText) else { return false }
+            // Replace selected text
+            var newText = currentText.replacingCharacters( in: textRange, with: string )
+            // Keep only numbers
+            newText = newText.filter { $0.isNumber }
+            // Maximum 8 digits: DDMMYYYY
+            if newText.count > 8 { return false }
+            // Format as DD/MM/YYYY
+            var formattedText = ""
+            for (index, character) in newText.enumerated() {
+                if index == 2 || index == 4 {
+                    formattedText.append("/")
+                }
+                formattedText.append(character)
+            }
+            textField.text = formattedText
+            // Validate only when complete
+            if newText.count == 8 {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "dd/MM/yyyy"
+                formatter.locale = Locale(identifier: "en_US_POSIX"); formatter.timeZone = TimeZone(secondsFromGMT: 0); formatter.isLenient = false
+                if formatter.date(from: formattedText) == nil {
+                    // Invalid date
+//                    textField.layer.borderColor = UIColor.red.cgColor;
+//                    textField.layer.borderWidth = 1.0
+                } else {
+                    // Valid date
+//                    textField.layer.borderColor = UIColor.systemGreen.cgColor;
+//                    textField.layer.borderWidth = 1.0
+                }
+            } else {
+                // Not complete yet
+                textField.layer.borderWidth = 0
             }
             return false
         }

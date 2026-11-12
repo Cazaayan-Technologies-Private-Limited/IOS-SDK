@@ -29,11 +29,17 @@ class RunningAccountVC: UIViewController {
         super.viewDidLoad()
         tableView.register(UINib(nibName: "customTVC", bundle: Bundle.module), forCellReuseIdentifier: "customTVC")
         
+//        runningList = [
+//             RunningAccount(id: "0", name: "Select"),
+//             RunningAccount(id: "30", name: "30 Days"),
+//             RunningAccount(id: "90", name: "90 Days")
+//         ]
+        
         runningList = [
              RunningAccount(id: "0", name: "Select"),
-             //RunningAccount(id: "30", name: "30 Days"),
-             RunningAccount(id: "90", name: "90 Days")
-         ]
+             RunningAccount(id: "1", name: "30 Days"),
+             RunningAccount(id: "2", name: "90 Days")
+         ]                  //by sayantan
         
         holderview.layer.cornerRadius = 10
         tableView.reloadData()

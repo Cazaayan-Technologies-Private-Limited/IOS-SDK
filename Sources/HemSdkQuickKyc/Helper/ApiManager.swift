@@ -522,7 +522,7 @@ func apiCall(
     isLoader: Bool = true,
     completion: @MainActor @Sendable @escaping (Result<[String: Any], Error>) -> Void
 ) {
-    let prefixURL = "https://signup.hemnxt.com:84/V4.0.0/api/"
+    let prefixURL = T5Launcher.baseURL //"http://uatkyc.hemsecurities.com:98/V4.0.0/api/" //"https://signup.hemnxt.com:84/V4.0.0/api/"
     let completeURLString = prefixURL + url
     print("\(completeURLString)")
     guard let url = URL(string: completeURLString) else {

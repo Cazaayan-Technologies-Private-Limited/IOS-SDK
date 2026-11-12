@@ -1203,14 +1203,20 @@ class WebviewAutoSubmitVC: UIViewController, WKNavigationDelegate {
         <head>
         <meta name="viewport"
               content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <style>
+            body { margin: 0; background: #ffffff; font-family: -apple-system, sans-serif; }
+            .loading { position: fixed; top: 50%; left: 0; right: 0; text-align: center; color: #555; }
+        </style>
         </head>
         <body>
-        <form id="URL" name="URL" method="POST" enctype="multipart/form-data" action="https://esign.egov.proteantech.in/nsdl-esp/authenticate/esign-doc/">
-            <input type="text" name="msg" value='\(xmlMsg)'/>
-            <input type="text" name="txn" value="\(txn)"/>
-            <input type="text" name="ReturnURL" value="\(ReturnURL)"/>
-            <input type="text" name="CompanyName" value="\(CompanyName)"/>
-            <input type="text" name="CompanyName" value="\(EsignType)"/>
+        <div class="loading">Redirecting to eSign, please wait...</div>
+        <!-- Hidden fields: values are still posted, but nothing is shown on screen -->
+        <form id="URL" name="URL" method="POST" enctype="multipart/form-data" action="https://esign.egov.proteantech.in/nsdl-esp/authenticate/esign-doc/" style="display:none">
+            <input type="hidden" name="msg" value="\(xmlMsg.htmlAttributeEscaped)"/>
+            <input type="hidden" name="txn" value="\(txn.htmlAttributeEscaped)"/>
+            <input type="hidden" name="ReturnURL" value="\(ReturnURL.htmlAttributeEscaped)"/>
+            <input type="hidden" name="CompanyName" value="\(CompanyName.htmlAttributeEscaped)"/>
+            <input type="hidden" name="CompanyName" value="\(EsignType.htmlAttributeEscaped)"/>
         </form>
         <script type="text/javascript">
             window.onload = function() {
@@ -1222,6 +1228,23 @@ class WebviewAutoSubmitVC: UIViewController, WKNavigationDelegate {
         """
         webView.loadHTMLString(htmlString, baseURL: nil)
         print("html: \(htmlString)")
+    }
+    
+    // When eSign posts back to our ReturnURL, that page also contains the XML in
+    // input fields. Hide them (values stay readable for extractNSDLResponse()).
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        guard !ReturnURL.isEmpty,
+              let url = webView.url?.absoluteString,
+              url.contains(ReturnURL) else { return }
+        
+        let js = """
+        (function() {
+            var style = document.createElement('style');
+            style.innerHTML = 'input, textarea, form { display: none !important; }';
+            document.head ? document.head.appendChild(style) : document.body.appendChild(style);
+        })();
+        """
+        webView.evaluateJavaScript(js, completionHandler: nil)
     }
     
     func webView(_ webView: WKWebView,
@@ -1376,7 +1399,7 @@ extension WebviewAutoSubmitVC {
             let url = "NSDLEsign/ValidateIsDDPIEsignDone"
             print("📤 DDPI API Call")
             
-            apiCall(url: url, method: "POST", parameters: parameters, view: self.view) { result in
+            apiCall(url: url, method: "POST", parameters: parameters, view: self.view, isLoader: false) { result in
                 switch result {
                 case .success(let json):
                     print("📩 DDPI Response:", json)
@@ -1500,5 +1523,17 @@ extension WebviewAutoSubmitVC {
                 }
             }
         }
+    }
+}
+
+// Escapes text so it can sit safely inside an HTML attribute value.
+// The browser decodes it back before posting, so the server receives the original text.
+private extension String {
+    var htmlAttributeEscaped: String {
+        self.replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+            .replacingOccurrences(of: "'", with: "&#39;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
     }
 }

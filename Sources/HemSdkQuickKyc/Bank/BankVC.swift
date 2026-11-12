@@ -108,6 +108,43 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
         SIXTHAPI(userID: fetchedUserId ?? "")
         upiIDBtn.backgroundColor = .documentBackground
         upiIDBtn.isHidden = true
+        
+        setupKeyboardDismiss()
+    }
+    
+    // MARK: - Keyboard dismiss
+    
+    /// Number-pad keyboards have no Return key, so add a "Done" bar
+    /// and let the user tap anywhere outside the fields to close the keyboard.
+    private func setupKeyboardDismiss() {
+        // 1. Tap outside any text field closes the keyboard
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false   // buttons still receive their taps
+        view.addGestureRecognizer(tap)
+        
+        // 2. "Done" button above the keyboard for every field
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(dismissKeyboard))
+        done.tintColor = .appPrimary
+        toolbar.items = [flexible, done]
+        
+        [AccountNumberTF, ConfirmAccountNumberTF, IFSCTF, MICRTF].forEach {
+            $0?.inputAccessoryView = toolbar
+        }
+        
+        // 3. Return key on the IFSC keyboard also closes it
+        IFSCTF.returnKeyType = .done
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     //    override func viewWillAppear(_ animated: Bool) {
@@ -236,6 +273,11 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
     }
     
     @IBAction func BackBtn(_ sender: UIButton) {
+        if rejection == "Rejection" {
+            // Rejection flow → just go back (UPI screen / Rejection screen)
+            navigationController?.popViewController(animated: true)
+            return
+        }
         //delegate?.reloadPageData()
         let storyboard = UIStoryboard(name: "TradingandDemat", bundle: Bundle.module)
                   let vc = storyboard.instantiateViewController(identifier: "TradingandDematVC") as! TradingandDematVC
@@ -498,10 +540,14 @@ extension BankVC{
                                     let alert = UIAlertController(title: "Message", message: errorMessage, preferredStyle: .alert)
                                     
                                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                                        let storyboard = UIStoryboard(name: "ApplicationForm", bundle: nil)
-                                        let vc = storyboard.instantiateViewController(identifier: "ApplicationFormVC") as? ApplicationFormVC
-                                        
-                                        self.navigationController?.pushViewController(vc! , animated: true)
+                                        // CRASH FIX: there is no "ApplicationForm" storyboard in the SDK
+                                        // (and it used bundle: nil + vc!), so tapping OK crashed the app.
+                                        if self.rejection == "Rejection" {
+                                            // Came from Rejection screen → go back there
+                                            self.popToRejectionScreen()
+                                        }
+                                        // Normal flow: stay on this screen so the user can
+                                        // enter another bank account.
                                     }))
                                     
                                     self.present(alert, animated: true, completion: nil)
@@ -1001,9 +1047,9 @@ extension BankVC{
     
     func navigateToNextPage() {
         if rejection == "Rejection" {
-            print("Rejection detected. Popping out the current screen.")
+            print("Rejection detected. Going back to the Rejection screen.")
             delegate?.reloadPageData()
-            self.navigationController?.popViewController(animated: true)
+            popToRejectionScreen()       // skips the UPI screen if it is in between
             return
         }
         
