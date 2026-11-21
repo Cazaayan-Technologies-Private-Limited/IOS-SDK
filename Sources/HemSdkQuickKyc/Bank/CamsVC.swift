@@ -27,6 +27,8 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
     var PANName: String?
     var EmailId: String?
     var CAMSfipid: String?
+    /// Last error shown by the 10s CAMS polling – prevents the same alert every tick
+    private var lastPollingAlert: String?
     
     enum ComingFrom {
            case bankVC
@@ -56,6 +58,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
             }
         } else {
             print("User ID is not fetched yet.")
+            self.showBankAlert(message: "Your session details could not be found. Please log in again.")
         }
     }
     
@@ -77,7 +80,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                     if success {
                         self.ValidateToken()
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 print("No tokens available. Please reload the tokens.")
@@ -101,12 +104,23 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                                 print("api is running")
                                 // self.ViewTradingBankDPClientData()
                             }
+                        case "999992":
+                            CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+                            CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W", in: self.view) { success in
+                                if success {
+                                    self.ValidateToken()
+                                } else {
+                                    self.showBankTokenError(api: "ValidateToken")
+                                }
+                            }
                         default:
-                            print("Unhandled error code: \(errorCode)")
+                            self.showBankApiError(jsonResponse, api: "ValidateToken")
                         }
+                    } else {
+                        self.showBankMissingCode(jsonResponse, api: "ValidateToken")
                     }
                 case .failure(let error):
-                    print("Login API call failed: \(error.localizedDescription)")
+                    self.showBankNetworkError(error, api: "ValidateToken")
                 }
             }
         }
@@ -129,7 +143,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                         // Retry SIXTHAPI after token regeneration
                         self.camsCalling()
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 
@@ -159,6 +173,9 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                 switch result {
                 case .success(let jsonResponse):
                     print("callingCams Response: \(jsonResponse)")
+                    if (jsonResponse["ErrorCode"] as? String) == "000000" || (jsonResponse["ErrorCode"] as? String) == "000001" {
+                        self.lastPollingAlert = nil   // healthy again → allow future errors to show
+                    }
                     
                     if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
@@ -178,10 +195,21 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                                         self.navigateToNominationVC()
                                     }
                                 }
+                        case "999992":
+                            // Expired token while polling → regenerate silently, next tick retries
+                            CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+                            CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W", in: self.view) { success in
+                                if !success { self.showPollingAlert(BankAlertText.tokenFailed) }
+                            }
                         default:
-                            break
+                            // Polling runs every 10s – show each distinct error only once
+                            print("❌ ValidateIsCAMSDone returned ErrorCode \(errorCode): \(jsonResponse)")
+                            self.showPollingAlert(self.bankApiMessage(jsonResponse))
                         }
                         
+                    } else {
+                        print("❌ ValidateIsCAMSDone response has no ErrorCode: \(jsonResponse)")
+                        self.showPollingAlert(self.bankApiMessage(jsonResponse, fallback: BankAlertText.missingCode))
                     }                   //by sayantan
                     
 //                    if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000001" {
@@ -196,6 +224,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                     
                 case .failure(let error):
                     print("camsCalling failed: \(error.localizedDescription)")
+                    self.showPollingAlert(self.bankNetworkMessage(error), title: "Network Error")
                 }
             }
         }
@@ -215,7 +244,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                         // Retry SIXTHAPI after token regeneration
                         self.SIXTHAPI(userID: userID)
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 print("No tokens available. Please reload the tokens.")
@@ -247,7 +276,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                                     if success {
                                         self.SIXTHAPI(userID: userID)
                                     } else {
-                                        print("Token generation failed.")
+                                        self.showBankTokenError(api: #function)
                                     }
                                 }
                             }
@@ -270,11 +299,13 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                             }
                             
                         default:
-                            print("Unhandled error code: \(errorCode)")
+                            self.showBankApiError(jsonResponse, api: "GetActiveApplicationCL")
                         }
+                    } else {
+                        self.showBankMissingCode(jsonResponse, api: "GetActiveApplicationCL")
                     }
                 case .failure(let error):
-                    print("SIXTHAPI API call failed: \(error.localizedDescription)")
+                    self.showBankNetworkError(error, api: "GetActiveApplicationCL")
                 }
             }
         }
@@ -332,11 +363,13 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
     }
     
     func showAlert(message: String, completion: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-            completion?()
-        }))
-        self.present(alert, animated: true, completion: nil)
+        showBankAlert(message: message, onOK: completion)
+    }
+    
+    private func showPollingAlert(_ message: String, title: String = "Alert") {
+        guard message != lastPollingAlert else { return }
+        lastPollingAlert = message
+        showBankAlert(title: title, message: message)
     }
 }
 

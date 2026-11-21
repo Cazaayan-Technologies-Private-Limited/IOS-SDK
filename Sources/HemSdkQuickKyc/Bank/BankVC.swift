@@ -166,6 +166,7 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
                 self.ValidateToken()
             } else {
                 print("No UserID or SessionID found.")
+                self.showBankAlert(message: "Your session details could not be found. Please log in again.")
             }
         }
     }
@@ -263,9 +264,7 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
     
     
     func showAlert(message: String) {
-        let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        showBankAlert(message: message)
     }
     
     @IBAction func homeBtn(_ sender: UIButton) {
@@ -462,7 +461,7 @@ extension BankVC{
                         // Retry SIXTHAPI after token regeneration
                         self.SaveTradingBankDPClientData(accountnumber: accountnumber)
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 print("No tokens available. Please reload the tokens.")
@@ -494,7 +493,13 @@ extension BankVC{
                 switch result {
                 case .success(let jsonResponse):
                     print("SaveTradingBankDPClientData Response: \(jsonResponse)")
-                    if let errorCode = jsonResponse["ErrorCode"] as? String, let errorMessage = jsonResponse["ErrorMessage"] as? String {
+                    // ErrorMessage may be missing – fall back to a generic text instead of ignoring the response
+                    let errorMessage = self.bankApiMessage(jsonResponse)
+                    guard let errorCode = jsonResponse["ErrorCode"] as? String else {
+                        self.showBankMissingCode(jsonResponse, api: "SaveTradingBankDPClientData")
+                        return
+                    }
+                    do {
                         switch errorCode {
                         case "999992":
                             DispatchQueue.main.async {
@@ -504,7 +509,7 @@ extension BankVC{
                                     if success {
                                         self.SaveTradingBankDPClientData(accountnumber: accountnumber)
                                     } else {
-                                        print("Token generation failed.")
+                                        self.showBankTokenError(api: #function)
                                     }
                                 }
                             }
@@ -534,34 +539,27 @@ extension BankVC{
                             }
                             
                         case "531009":
-                            DispatchQueue.main.async {
-                                if let errorMessage = jsonResponse["ErrorMessage"] as? String {
-                                    
-                                    let alert = UIAlertController(title: "Message", message: errorMessage, preferredStyle: .alert)
-                                    
-                                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                                        // CRASH FIX: there is no "ApplicationForm" storyboard in the SDK
-                                        // (and it used bundle: nil + vc!), so tapping OK crashed the app.
-                                        if self.rejection == "Rejection" {
-                                            // Came from Rejection screen → go back there
-                                            self.popToRejectionScreen()
-                                        }
-                                        // Normal flow: stay on this screen so the user can
-                                        // enter another bank account.
-                                    }))
-                                    
-                                    self.present(alert, animated: true, completion: nil)
+                            // Message shown even if ErrorMessage is missing (fallback text)
+                            self.showBankAlert(title: "Message", message: errorMessage) {
+                                // CRASH FIX: there is no "ApplicationForm" storyboard in the SDK
+                                // (and it used bundle: nil + vc!), so tapping OK crashed the app.
+                                if self.rejection == "Rejection" {
+                                    // Came from Rejection screen → go back there
+                                    self.popToRejectionScreen()
                                 }
+                                // Normal flow: stay on this screen so the user can
+                                // enter another bank account.
                             }
-                            
+
                         case "904000":
-                            self.showAlert(message: errorMessage)
+                            self.showBankAlert(message: errorMessage)
                         default:
-                            print("Unhandled error code: \(errorCode)")
+                            self.showBankApiError(jsonResponse, api: "SaveTradingBankDPClientData",
+                                                  fallback: "We could not save your bank details. Please try again.")
                         }
                     }
                 case .failure(let error):
-                    print("Login API call failed: \(error.localizedDescription)")
+                    self.showBankNetworkError(error, api: "SaveTradingBankDPClientData")
                 }
             }
         }
@@ -604,6 +602,10 @@ extension BankVC{
                                     self.isIFSCVerified = true
                                     self.MICRTF.isEnabled = true
                                     
+                                    if (self.micr ?? "").trimmingCharacters(in: .whitespaces).isEmpty {
+                                        self.showBankAlert(message: "MICR code is not available for this IFSC. Please enter the 9-digit MICR code manually.")
+                                    }
+                                    
                                    
                                 }
                             } else {
@@ -614,12 +616,12 @@ extension BankVC{
                         
                     case "111111":
                         DispatchQueue.main.async {
-                            self.handleInvalidIFSC()
+                            self.handleInvalidIFSC(errorMessage: self.bankApiMessage(jsonResponse, fallback: "The IFSC code you entered is invalid. Please check and enter a valid IFSC code."))
                         }
                         
                     default:
                         DispatchQueue.main.async {
-                            self.handleInvalidIFSC(errorMessage: errorMessage ?? "Invalid IFSC code. Please try again.")
+                            self.handleInvalidIFSC(errorMessage: self.bankApiMessage(jsonResponse, fallback: errorMessage ?? "Invalid IFSC code. Please try again."))
                         }
                         print("Unhandled error code: \(errorCode)")
                     }
@@ -630,17 +632,10 @@ extension BankVC{
                     }
                 }
             case .failure(let error):
-                DispatchQueue.main.async {
-                    self.isIFSCVerified = false
-                    let errorAlert = UIAlertController(
-                        title: "Network Error",
-                        message: "Failed to verify IFSC code. Please check your connection and try again.",
-                        preferredStyle: .alert
-                    )
-                    errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self.present(errorAlert, animated: true)
-                }
-                print("API call failed: \(error.localizedDescription)")
+                self.isIFSCVerified = false
+                print("IFSCSearchWithoutBankName failed: \(error.localizedDescription)")
+                self.showBankAlert(title: "Network Error",
+                                   message: "Failed to verify IFSC code. Please check your connection and try again.")
             }
         }
     }
@@ -656,16 +651,8 @@ extension BankVC{
         self.MICRTF.isEnabled = false
         
         // ✅ SHOW ALERT IMMEDIATELY FOR INVALID IFSC
-        let invalidIFSCAlert = UIAlertController(
-            title: "Invalid IFSC Code",
-            message: errorMessage,
-            preferredStyle: .alert
-        )
-        invalidIFSCAlert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-            // Keep the IFSC code so user can correct it
-            // Optionally you can clear it: self.IFSCTF.text = ""
-        })
-        self.present(invalidIFSCAlert, animated: true)
+        // Keep the IFSC code so user can correct it
+        self.showBankAlert(title: "Invalid IFSC Code", message: errorMessage)
         
         // Add red border to show error visually
 //        self.IFSCTF.layer.borderColor = UIColor.red.cgColor
@@ -688,7 +675,7 @@ extension BankVC{
                         // Retry SIXTHAPI after token regeneration
                         self.SIXTHAPI(userID: userID)
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 print("No tokens available. Please reload the tokens.")
@@ -720,7 +707,7 @@ extension BankVC{
                                         // Retry SIXTHAPI after token regeneration
                                         self.SIXTHAPI(userID: userID)
                                     } else {
-                                        print("Token generation failed.")
+                                        self.showBankTokenError(api: #function)
                                     }
                                 }
                             }
@@ -743,11 +730,13 @@ extension BankVC{
                                 print("Final → connectToCams.isHidden = \(self.connectToCams.isHidden)")
                             }
                         default:
-                            print("Unhandled error code: \(errorCode)")
+                            self.showBankApiError(jsonResponse, api: "GetActiveApplicationCL")
                         }
+                    } else {
+                        self.showBankMissingCode(jsonResponse, api: "GetActiveApplicationCL")
                     }
                 case .failure(let error):
-                    print("SIXTHAPI API call failed: \(error.localizedDescription)")
+                    self.showBankNetworkError(error, api: "GetActiveApplicationCL")
                 }
             }
         }
@@ -799,7 +788,7 @@ extension BankVC{
                         // Retry SIXTHAPI after token regeneration
                         self.ValidateToken()
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 print("No tokens available. Please reload the tokens.")
@@ -823,12 +812,24 @@ extension BankVC{
                                 print("api is running")
                                 self.ViewTradingBankDPClientData()
                             }
+                        case "999992":
+                            // Expired token → regenerate and retry instead of showing an error
+                            CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+                            CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W", in: self.view) { success in
+                                if success {
+                                    self.ValidateToken()
+                                } else {
+                                    self.showBankTokenError(api: "ValidateToken")
+                                }
+                            }
                         default:
-                            print("Unhandled error code: \(errorCode)")
+                            self.showBankApiError(jsonResponse, api: "ValidateToken")
                         }
+                    } else {
+                        self.showBankMissingCode(jsonResponse, api: "ValidateToken")
                     }
                 case .failure(let error):
-                    print("Login API call failed: \(error.localizedDescription)")
+                    self.showBankNetworkError(error, api: "ValidateToken")
                 }
             }
         }
@@ -851,7 +852,7 @@ extension BankVC{
                         // Retry SIXTHAPI after token regeneration
                         self.redirectCams()
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 print("No tokens available. Please reload the tokens.")
@@ -904,6 +905,9 @@ extension BankVC{
                                         self.navigationController?.pushViewController(vc, animated: true)
                                     }
                                 }
+                            } else {
+                                // Success code but clienttrnxid / redirectionurl missing
+                                self.showBankMissingData(jsonResponse, api: "RequestCAMS", field: "clienttrnxid/redirectionurl")
                             }
                         case "999992":
                             CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
@@ -917,11 +921,13 @@ extension BankVC{
                                 }
                             }
                         default:
-                            print("Unhandled error code: \(errorCode)")
+                            self.showBankApiError(jsonResponse, api: "RequestCAMS")
                         }
+                    } else {
+                        self.showBankMissingCode(jsonResponse, api: "RequestCAMS")
                     }
                 case .failure(let error):
-                    print("Login API call failed: \(error.localizedDescription)")
+                    self.showBankNetworkError(error, api: "RequestCAMS")
                 }
             }
         }
@@ -936,7 +942,7 @@ extension BankVC{
                         // Call SIXTHAPI after tokenMobile API call is successful
                         self.ViewTradingBankDPClientData()
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 print("No tokens available. Please reload the tokens.")
@@ -964,11 +970,13 @@ extension BankVC{
                                 self.updateUI(with: jsonResponse)
                             }
                         default:
-                            print("Unhandled error code: \(errorCode)")
+                            self.showBankApiError(jsonResponse, api: "ViewTradingBankDPClientData")
                         }
+                    } else {
+                        self.showBankMissingCode(jsonResponse, api: "ViewTradingBankDPClientData")
                     }
                 case .failure(let error):
-                    print("Login API call failed: \(error.localizedDescription)")
+                    self.showBankNetworkError(error, api: "ViewTradingBankDPClientData")
                 }
             }
         }

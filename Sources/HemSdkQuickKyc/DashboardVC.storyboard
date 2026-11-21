@@ -2918,6 +2918,8 @@
                         <outlet property="RequestBtn" destination="pk2-zS-wW3" id="8Wk-v0-gXK"/>
                         <outlet property="buttonView" destination="SiV-TV-tTm" id="0EG-LS-Z1A"/>
                         <outlet property="numberView" destination="txs-b2-at2" id="O0f-uQ-54J"/>
+                        <outlet property="formScrollView" destination="k6q-Xf-7Cr" id="frm-Sc-V01"/>
+                        <outlet property="logoImageView" destination="od6-CT-n5l" id="lgo-Im-V02"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PPD-9o-gXI" sceneMemberID="firstResponder"/>

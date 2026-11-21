@@ -198,6 +198,13 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
     @IBOutlet weak var numberView: UIView!
     @IBOutlet weak var homeBtn: UIButton!
     @IBOutlet weak var buttonView: UIView!
+    /// Mobile number form (scroll view) – hidden while the TxnId is being validated
+    @IBOutlet weak var formScrollView: UIScrollView!
+    /// Hem Nxt logo shown while loading
+    @IBOutlet weak var logoImageView: UIImageView!
+    
+    /// Makes sure the skip-OTP login chain starts only once
+    private var hasStartedLoginFlow = false
     
 
     var selectedData: [String: Any]?
@@ -248,24 +255,51 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
         
         //let hardcodedTxnId = "13192c07-6eb0-450d-aa07-f103d2d7db89"
         //let phoneNumber = "7666188609"
-        validateTxnIdAPI(txnId: txnId ?? "", phoneNumber: mobileNumber ?? "")
-        
-        if let data = selectedData,
-              let mobile = data["MobileNo"] as? String,
-              !mobile.isEmpty {
-               print("Received data: \(data)")
-               
-               self.mobileNumber = mobile
-               self.NumberTF.text = mobile
-               self.NumberTF.isEnabled = false
-               
-               // ✅ CALL API ON LOAD
-               initiateLoginAPI(phoneNumber: mobile)
-           }
+        // Start exactly one flow:
+        //  1. TxnId given           → validate it (skip-OTP if valid, else mobile + OTP form)
+        //  2. Only mobile given     → InitiateLogin → validate the new TxnId
+        //  3. Nothing given         → show mobile + OTP form straight away
+        if let txn = txnId, !txn.isEmpty {
+            validateTxnIdAPI(txnId: txn, phoneNumber: mobileNumber ?? "")
+        } else if let data = selectedData,
+                  let mobile = data["MobileNo"] as? String,
+                  !mobile.isEmpty {
+            print("Received data: \(data)")
+            self.mobileNumber = mobile
+            self.NumberTF.text = mobile
+            self.NumberTF.isEnabled = false
+            initiateLoginAPI(phoneNumber: mobile)
+        } else {
+            print("[HemSDK] No TxnId – showing mobile number + OTP flow")
+            showMobileLoginForm(prefill: mobileNumber)
+        }
         self.navigationItem.hidesBackButton = true
         view.backgroundColor = .appBackground
         NumberTF.delegate = self
         setupPhonePrefix()
+    }
+    
+    /// Skip-OTP is not possible → show the mobile number form so the user
+    /// continues with the normal OTP flow (Request OTP → MobileOTPVC).
+    func showMobileLoginForm(prefill: String? = nil, message: String? = nil) {
+        hasStartedLoginFlow = false
+        logoImageView?.isHidden = true
+        formScrollView?.isHidden = false
+        NumberTF.isEnabled = true
+        let number = prefill ?? mobileNumber
+        if let number = number, number.count == 10 {
+            NumberTF.text = number
+        }
+        if let message = message, !message.isEmpty {
+            showAlert(message: message)
+        }
+    }
+    
+    /// Same as showMobileLoginForm, safe to call from URLSession (background) callbacks
+    nonisolated private func fallbackToOTPFlow(prefill: String? = nil, message: String? = nil) {
+        Task { @MainActor in
+            self.showMobileLoginForm(prefill: prefill, message: message)
+        }
     }
     
     func setupPhonePrefix() {
@@ -383,7 +417,6 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
     func initiateLoginAPI(phoneNumber: String) {
         
         let url = URL(string: T5Launcher.baseURL + "OTPManagement/InitiateLogin")!
-        //let url = URL(string: "https://signup.hemnxt.com:84/V4.0.0/api/OTPManagement/InitiateLogin")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -398,11 +431,11 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             
-            // ✅ PRINT EVERYTHING
             print("-------- INITIATE LOGIN API --------")
             
             if let error = error {
                 print("Error:", error.localizedDescription)
+                self.fallbackToOTPFlow(prefill: phoneNumber)      // fallback → OTP flow
                 return
             }
             
@@ -412,30 +445,21 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             guard let data = data else {
                 print("No Data Received")
+                self.fallbackToOTPFlow(prefill: phoneNumber)
                 return
             }
             
             print("Raw Response:", String(data: data, encoding: .utf8) ?? "")
             
-            do {
-                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                    
-                    print("Parsed JSON:", json)
-                    
-                    if let txnId = json["TxnId"] as? String {
-                        
-                        print("TxnId:", txnId)
-                        
-                        DispatchQueue.main.async {
-                            self.validateTxnIdAPI(txnId: txnId, phoneNumber: phoneNumber)
-                        }
-                        
-                    } else {
-                        print("TxnId not found in response ❌")
-                    }
+            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let txnId = json["TxnId"] as? String, !txnId.isEmpty {
+                print("TxnId:", txnId)
+                DispatchQueue.main.async {
+                    self.validateTxnIdAPI(txnId: txnId, phoneNumber: phoneNumber)
                 }
-            } catch {
-                print("JSON Parsing Error:", error)
+            } else {
+                print("TxnId not found in response ❌ – falling back to OTP flow")
+                self.fallbackToOTPFlow(prefill: phoneNumber)
             }
             
         }.resume()
@@ -444,7 +468,6 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
     func validateTxnIdAPI(txnId: String, phoneNumber: String) {
         
         let url = URL(string: T5Launcher.baseURL+"OTPManagement/ValidateTxnId")!
-        //let url = URL(string: "https://signup.hemnxt.com:84/V4.0.0/api/OTPManagement/ValidateTxnId")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -463,48 +486,52 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             if let error = error {
                 print("Error:", error.localizedDescription)
+                self.fallbackToOTPFlow(prefill: phoneNumber)      // fallback → OTP flow
                 return
             }
             
-            if let response = response as? HTTPURLResponse {
-                print("Status Code:", response.statusCode)
-            }
+            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+            print("Status Code:", statusCode)
             
             guard let data = data else {
                 print("No Data Received")
+                self.fallbackToOTPFlow(prefill: phoneNumber)
                 return
             }
             
-            // ✅ PRINT RAW RESPONSE
             print("Raw Response:", String(data: data, encoding: .utf8) ?? "")
             
-            do {
-                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                    
-                    print("Parsed JSON:", json)
-                    
-                    DispatchQueue.main.async {
-                        
-                        print("Txn Validated ✅")
-                        self.checkMobilenoExsistAPI()
-                        // ✅ Get MobileNo from response
-                        if let mobile = json["MobileNo"] as? String {
-                            
-                            print("Mobile from API:", mobile)
-                            
-                            self.mobileNumber = mobile
-                            self.txnId = txnId
-                            
-                            // ✅ Set in textfield
-                            self.NumberTF.text = mobile
-                            
-                            // ✅ Disable editing
-                            self.NumberTF.isEnabled = false
-                        }
-                    }
-                }
-            } catch {
-                print("JSON Parsing Error:", error)
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                print("ValidateTxnId: invalid JSON – falling back to OTP flow")
+                self.fallbackToOTPFlow(prefill: phoneNumber)
+                return
+            }
+            
+            // Valid TxnId = HTTP 2xx, no error code (or "000000"), and a mobile number returned
+            let errorCode = json["ErrorCode"] as? String
+            let mobile = (json["MobileNo"] as? String)?.trimmingCharacters(in: .whitespaces) ?? ""
+            let isValid = (200...299).contains(statusCode)
+                && (errorCode == nil || errorCode == "000000")
+                && !mobile.isEmpty
+            
+            guard isValid else {
+                print("[HemSDK] TxnId NOT valid (ErrorCode: \(errorCode ?? "nil")) – showing mobile + OTP flow")
+                self.fallbackToOTPFlow(prefill: phoneNumber)
+                return
+            }
+            
+            DispatchQueue.main.async {
+                guard !self.hasStartedLoginFlow else { return }   // never run the chain twice
+                self.hasStartedLoginFlow = true
+                
+                print("Txn Validated ✅  Mobile from API:", mobile)
+                // Set the number FIRST, then check it (before, the check ran with an empty number)
+                self.mobileNumber = mobile
+                self.txnId = txnId
+                self.NumberTF.text = mobile
+                self.NumberTF.isEnabled = false
+                
+                self.checkMobilenoExsistAPI()       // skip-OTP flow continues as before
             }
             
         }.resume()
@@ -532,6 +559,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             if let error = error {
                 print("Error:", error.localizedDescription)
+                self.fallbackToOTPFlow()   // fallback → OTP flow
                 return
             }
             
@@ -541,6 +569,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             guard let data = data else {
                 print("No Data Received")
+                self.fallbackToOTPFlow()
                 return
             }
             
@@ -563,8 +592,12 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
                                 self.callInsertClientRegisterApi(phonenumber: self.mobileNumber ?? "")
                             }
                             default:
-                                print("error")
+                                print("CheckMobileNumberExists failed – falling back to OTP flow")
+                                let serverMessage = json["ErrorMessage"] as? String
+                                self.fallbackToOTPFlow(message: serverMessage)
                             }
+                    } else {
+                        self.fallbackToOTPFlow()
                     }
                     
                     DispatchQueue.main.async {
@@ -589,6 +622,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
                 }
             } catch {
                 print("JSON Parsing Error:", error)
+                self.fallbackToOTPFlow()
             }
             
         }.resume()

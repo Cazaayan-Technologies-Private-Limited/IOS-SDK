@@ -86,10 +86,13 @@ class UPIVC: UIViewController {
                 self.fetchedUserId = userId
                 self.fetchedSessionID = sessionID
                 self.decodeArray = decodeByteArrayString
+                // Token regeneration reads mobiledecodeArray – make sure it is set
+                if (self.mobiledecodeArray ?? "").isEmpty { self.mobiledecodeArray = decodeByteArrayString }
                 print("UserID: \(userId), SessionID: \(sessionID)")
                 SIXTHAPI(userID: fetchedUserId ?? "")
             } else {
                 print("No UserID or SessionID found.")
+                self.showBankAlert(message: "Your session details could not be found. Please log in again.")
             }
         }
         continueBtn.layer.cornerRadius = 10
@@ -281,7 +284,7 @@ class UPIVC: UIViewController {
                     if success {
                         self.getUpiDetails()
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 return
@@ -327,14 +330,19 @@ class UPIVC: UIViewController {
                                             message: "Received invalid UPI URL from server."
                                         )
                                     }
+                                } else {
+                                    // Success code but no UpiLink in the response
+                                    self.showBankMissingData(jsonResponse, api: "RequestToReversePennyDrop", field: "UpiLink")
                                 }
                             }
                         default:
-                            print("Unhandled error code: \(errorCode)")
+                            self.showBankApiError(jsonResponse, api: "RequestToReversePennyDrop")
                         }
+                    } else {
+                        self.showBankMissingCode(jsonResponse, api: "RequestToReversePennyDrop")
                     }
                 case .failure(let error):
-                    print("❌ API call failed: \(error.localizedDescription)")
+                    self.showBankNetworkError(error, api: "RequestToReversePennyDrop")
                 }
             }
         }
@@ -357,7 +365,7 @@ class UPIVC: UIViewController {
                         // Retry SIXTHAPI after token regeneration
                         self.startUpi()
                     } else {
-                        print("Token generation failed.")
+                        self.showBankTokenError(api: #function)
                     }
                 }
                 print("No tokens available. Please reload the tokens.")
@@ -385,7 +393,7 @@ class UPIVC: UIViewController {
                     if let errorCode = jsonResponse["ErrorCode"] as? String {
                         switch errorCode {
                         case "000000":
-                            print("Unhandled error code: \(errorCode)")
+                            print("ValidateIsReversePennyDropDone success: \(errorCode)")
                             DispatchQueue.main.async {
                                    if self.isRejectionFlow {
                                        // UPI verification done → back to Rejection list (it refreshes)
@@ -399,11 +407,13 @@ class UPIVC: UIViewController {
                                    self.SIXTHAPI(userID: self.fetchedUserId ?? "")
                                }
                         default:
-                            print("Unhandled error code: \(errorCode)")
+                            self.showBankApiError(jsonResponse, api: "ValidateIsReversePennyDropDone")
                         }
+                    } else {
+                        self.showBankMissingCode(jsonResponse, api: "ValidateIsReversePennyDropDone")
                     }
                 case .failure(let error):
-                    print("Login API call failed: \(error.localizedDescription)")
+                    self.showBankNetworkError(error, api: "ValidateIsReversePennyDropDone")
                 }
             }
         }
@@ -421,7 +431,7 @@ class UPIVC: UIViewController {
                         if success {
                             self.SIXTHAPI(userID: userID)
                         } else {
-                            print("Token generation failed.")
+                            self.showBankTokenError(api: #function)
                         }
                     }
                     return
@@ -460,7 +470,7 @@ class UPIVC: UIViewController {
                                         if success {
                                             self.SIXTHAPI(userID: userID)
                                         } else {
-                                            print("Token generation failed.")
+                                            self.showBankTokenError(api: #function)
                                         }
                                     }
                                 }
@@ -513,11 +523,13 @@ class UPIVC: UIViewController {
                                 }
                                 
                             default:
-                                print("Unhandled error code: \(errorCode)")
+                                self.showBankApiError(jsonResponse, api: "GetActiveApplicationCL")
                             }
+                        } else {
+                            self.showBankMissingCode(jsonResponse, api: "GetActiveApplicationCL")
                         }
                     case .failure(let error):
-                        print("SIXTHAPI API call failed: \(error.localizedDescription)")
+                        self.showBankNetworkError(error, api: "GetActiveApplicationCL")
                     }
                 }
             }
@@ -581,7 +593,7 @@ class UPIVC: UIViewController {
                             // Retry SIXTHAPI after token regeneration
                             self.redirectCams()
                         } else {
-                            print("Token generation failed.")
+                            self.showBankTokenError(api: #function)
                         }
                     }
                     print("No tokens available. Please reload the tokens.")
@@ -634,6 +646,9 @@ class UPIVC: UIViewController {
                                             self.navigationController?.pushViewController(vc, animated: true)
                                         }
                                     }
+                                } else {
+                                    // Success code but clienttrnxid / redirectionurl missing
+                                    self.showBankMissingData(jsonResponse, api: "RequestCAMS", field: "clienttrnxid/redirectionurl")
                                 }
                             case "999992":
                                 CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
@@ -647,25 +662,20 @@ class UPIVC: UIViewController {
                                     }
                                 }
                             default:
-                                print("Unhandled error code: \(errorCode)")
+                                self.showBankApiError(jsonResponse, api: "RequestCAMS")
                             }
+                        } else {
+                            self.showBankMissingCode(jsonResponse, api: "RequestCAMS")
                         }
                     case .failure(let error):
-                        print("Login API call failed: \(error.localizedDescription)")
+                        self.showBankNetworkError(error, api: "RequestCAMS")
                     }
                 }
             }
         }
     
     func showAlert(title: String, message: String) {
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
+        showBankAlert(title: title, message: message)
     }
     
     //    func openUPIApps(upiLink: String) {
@@ -1259,7 +1269,7 @@ extension UIViewController {
 //                        // Retry SIXTHAPI after token regeneration
 //                        self.getUpiDetails()
 //                    } else {
-//                        print("Token generation failed.")
+//                        self.showBankTokenError(api: #function)
 //                    }
 //                }
 //                print("No tokens available. Please reload the tokens.")
@@ -1356,7 +1366,7 @@ extension UIViewController {
 //                        // Retry SIXTHAPI after token regeneration
 //                        self.startUpi()
 //                    } else {
-//                        print("Token generation failed.")
+//                        self.showBankTokenError(api: #function)
 //                    }
 //                }
 //                print("No tokens available. Please reload the tokens.")
@@ -1410,7 +1420,7 @@ extension UIViewController {
 ////                        // Retry SIXTHAPI after token regeneration
 ////                        self.SIXTHAPI(userID: userID)
 ////                    } else {
-////                        print("Token generation failed.")
+////                        self.showBankTokenError(api: #function)
 ////                    }
 ////                }
 ////                print("No tokens available. Please reload the tokens.")
@@ -1446,7 +1456,7 @@ extension UIViewController {
 ////                                        // Retry SIXTHAPI after token regeneration
 ////                                        self.SIXTHAPI(userID: userID)
 ////                                    } else {
-////                                        print("Token generation failed.")
+////                                        self.showBankTokenError(api: #function)
 ////                                    }
 ////                                }
 ////                            }
@@ -1518,7 +1528,7 @@ extension UIViewController {
 //                        if success {
 //                            self.SIXTHAPI(userID: userID)
 //                        } else {
-//                            print("Token generation failed.")
+//                            self.showBankTokenError(api: #function)
 //                        }
 //                    }
 //                    return
@@ -1557,7 +1567,7 @@ extension UIViewController {
 //                                        if success {
 //                                            self.SIXTHAPI(userID: userID)
 //                                        } else {
-//                                            print("Token generation failed.")
+//                                            self.showBankTokenError(api: #function)
 //                                        }
 //                                    }
 //                                }
@@ -1674,7 +1684,7 @@ extension UIViewController {
 //                            // Retry SIXTHAPI after token regeneration
 //                            self.redirectCams()
 //                        } else {
-//                            print("Token generation failed.")
+//                            self.showBankTokenError(api: #function)
 //                        }
 //                    }
 //                    print("No tokens available. Please reload the tokens.")
