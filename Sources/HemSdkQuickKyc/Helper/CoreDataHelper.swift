@@ -234,6 +234,31 @@ import CoreData
         self.managedContext = context
     }
     
+    /// Container created by the SDK itself (when the host app did not call configure)
+    @MainActor private static var sdkContainer: NSPersistentContainer?
+    
+    /// Sets up Core Data from the SDK's own TokenModel if the host app did not call
+    /// `configure(context:)`. Host apps (e.g. Flutter) no longer need any Core Data code.
+    /// If the host app already configured a context, that one is kept.
+    @MainActor static func configureIfNeeded() {
+        guard managedContext == nil else { return }
+        guard let modelURL = Bundle.module.url(forResource: "TokenModel", withExtension: "momd"),
+              let model = NSManagedObjectModel(contentsOf: modelURL) else {
+            print("❌ CoreDataHelper: TokenModel.momd not found in the SDK bundle")
+            return
+        }
+        let container = NSPersistentContainer(name: "TokenModel", managedObjectModel: model)
+        container.loadPersistentStores { _, error in                    // synchronous for SQLite
+            if let error = error {
+                print("❌ CoreDataHelper: Core Data failed to load – \(error.localizedDescription)")
+            }
+        }
+        guard !container.persistentStoreCoordinator.persistentStores.isEmpty else { return }
+        sdkContainer = container
+        managedContext = container.viewContext
+        print("✅ CoreDataHelper configured by the SDK (TokenModel)")
+    }
+    
     // MARK: - Token Management
     
     @MainActor public static func saveTokenIds(_ tokenIds: [String], entityName: String) {

@@ -79,6 +79,9 @@ public class T5Launcher {
         onSDKClose: (([String: String]) -> Void)? = nil
     ) {
         
+        // Core Data (tokens / user id) – set up automatically if the host app didn't do it
+        CoreDataHelper.configureIfNeeded()
+        
         self.onSDKClose = onSDKClose
         self.launchTransactionId = transactionId
         self.launchMobileNumber = mobileNumber
