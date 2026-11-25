@@ -256,9 +256,9 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
         //let hardcodedTxnId = "13192c07-6eb0-450d-aa07-f103d2d7db89"
         //let phoneNumber = "7666188609"
         // Start exactly one flow:
-        //  1. TxnId given           → validate it (skip-OTP if valid, else mobile + OTP form)
+        //  1. TxnId given           → validate it → skip-OTP flow (any error → alert, SDK closes)
         //  2. Only mobile given     → InitiateLogin → validate the new TxnId
-        //  3. Nothing given         → show mobile + OTP form straight away
+        //  3. Nothing given         → error alert, SDK closes
         if let txn = txnId, !txn.isEmpty {
             validateTxnIdAPI(txnId: txn, phoneNumber: mobileNumber ?? "")
         } else if let data = selectedData,
@@ -270,8 +270,8 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             self.NumberTF.isEnabled = false
             initiateLoginAPI(phoneNumber: mobile)
         } else {
-            print("[HemSDK] No TxnId – showing mobile number + OTP flow")
-            showMobileLoginForm(prefill: mobileNumber)
+            print("[HemSDK] No TxnId – showing error")
+            showTxnErrorAndClose(message: "Transaction ID is missing. Please try again.")
         }
         self.navigationItem.hidesBackButton = true
         view.backgroundColor = .appBackground
@@ -279,26 +279,59 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
         setupPhonePrefix()
     }
     
-    /// Skip-OTP is not possible → show the mobile number form so the user
-    /// continues with the normal OTP flow (Request OTP → MobileOTPVC).
-    func showMobileLoginForm(prefill: String? = nil, message: String? = nil) {
-        hasStartedLoginFlow = false
-        logoImageView?.isHidden = true
-        formScrollView?.isHidden = false
-        NumberTF.isEnabled = true
-        let number = prefill ?? mobileNumber
-        if let number = number, number.count == 10 {
-            NumberTF.text = number
-        }
-        if let message = message, !message.isEmpty {
-            showAlert(message: message)
+    /// TxnId flow failed → show the error and close the SDK when the user taps OK.
+    /// (The mobile number + OTP form stays hidden; only the skip-OTP flow is used.)
+    private var isShowingTxnError = false
+    /// Error that arrived before the screen was on display – shown in viewDidAppear
+    private var pendingTxnError: String?
+    /// True once this screen is fully on display (alerts can only be shown after that)
+    private var hasAppeared = false
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        hasAppeared = true
+        if let message = pendingTxnError {
+            pendingTxnError = nil
+            showTxnErrorAndClose(message: message)
         }
     }
     
-    /// Same as showMobileLoginForm, safe to call from URLSession (background) callbacks
-    nonisolated private func fallbackToOTPFlow(prefill: String? = nil, message: String? = nil) {
+    func showTxnErrorAndClose(message: String) {
+        guard !isShowingTxnError else { return }      // never stack two alerts
+        // An alert can only be shown once this screen is on display.
+        // (Don't use isBeingPresented here – it is still true inside viewDidAppear.)
+        guard hasAppeared, view.window != nil else {
+            print("[HemSDK] Screen not visible yet – alert will show in viewDidAppear")
+            pendingTxnError = message
+            return
+        }
+        // Something else is on top (e.g. another alert) → show ours on top of it
+        let presenter: UIViewController = presentedViewController ?? self
+        print("[HemSDK] Showing error alert:", message)
+        isShowingTxnError = true
+        hasStartedLoginFlow = false
+        
+        let alert = UIAlertController(title: "Alert", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            self.isShowingTxnError = false
+            // Tell the host app why the SDK closed, then close it
+            T5Launcher.onSDKClose?(["STATUS": "FAILED", "MESSAGE": message])
+            if let nav = self.navigationController, nav.presentingViewController != nil {
+                nav.dismiss(animated: true)
+            } else {
+                self.dismiss(animated: true)
+            }
+        })
+        presenter.present(alert, animated: true)
+    }
+    
+    /// Same as showTxnErrorAndClose, safe to call from URLSession (background) callbacks.
+    /// Uses the server's message when there is one, otherwise the fallback text.
+    nonisolated private func failTxnFlow(serverMessage: String? = nil, fallback: String) {
+        let text = serverMessage?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let message = text.isEmpty ? fallback : text
         Task { @MainActor in
-            self.showMobileLoginForm(prefill: prefill, message: message)
+            self.showTxnErrorAndClose(message: message)
         }
     }
     
@@ -435,7 +468,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             if let error = error {
                 print("Error:", error.localizedDescription)
-                self.fallbackToOTPFlow(prefill: phoneNumber)      // fallback → OTP flow
+                self.failTxnFlow(fallback: "Unable to verify your details. Please check your internet connection and try again.")
                 return
             }
             
@@ -445,21 +478,22 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             guard let data = data else {
                 print("No Data Received")
-                self.fallbackToOTPFlow(prefill: phoneNumber)
+                self.failTxnFlow(fallback: "Unable to verify your details. Please try again.")
                 return
             }
             
             print("Raw Response:", String(data: data, encoding: .utf8) ?? "")
             
-            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let txnId = json["TxnId"] as? String, !txnId.isEmpty {
+            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+            if let txnId = json?["TxnId"] as? String, !txnId.isEmpty {
                 print("TxnId:", txnId)
                 DispatchQueue.main.async {
                     self.validateTxnIdAPI(txnId: txnId, phoneNumber: phoneNumber)
                 }
             } else {
-                print("TxnId not found in response ❌ – falling back to OTP flow")
-                self.fallbackToOTPFlow(prefill: phoneNumber)
+                print("TxnId not found in response ❌")
+                let serverMessage = json?["ErrorMessage"] as? String
+                self.failTxnFlow(serverMessage: serverMessage, fallback: "Unable to verify your details. Please try again.")
             }
             
         }.resume()
@@ -486,7 +520,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             if let error = error {
                 print("Error:", error.localizedDescription)
-                self.fallbackToOTPFlow(prefill: phoneNumber)      // fallback → OTP flow
+                self.failTxnFlow(fallback: "Unable to verify your details. Please check your internet connection and try again.")
                 return
             }
             
@@ -495,15 +529,15 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             guard let data = data else {
                 print("No Data Received")
-                self.fallbackToOTPFlow(prefill: phoneNumber)
+                self.failTxnFlow(fallback: "Unable to verify your details. Please try again.")
                 return
             }
             
             print("Raw Response:", String(data: data, encoding: .utf8) ?? "")
             
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-                print("ValidateTxnId: invalid JSON – falling back to OTP flow")
-                self.fallbackToOTPFlow(prefill: phoneNumber)
+                print("ValidateTxnId: invalid JSON")
+                self.failTxnFlow(fallback: "Unable to verify your details. Please try again.")
                 return
             }
             
@@ -515,8 +549,10 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
                 && !mobile.isEmpty
             
             guard isValid else {
-                print("[HemSDK] TxnId NOT valid (ErrorCode: \(errorCode ?? "nil")) – showing mobile + OTP flow")
-                self.fallbackToOTPFlow(prefill: phoneNumber)
+                print("[HemSDK] TxnId NOT valid (ErrorCode: \(errorCode ?? "nil")) – showing error")
+                let serverMessage = json["ErrorMessage"] as? String
+                self.failTxnFlow(serverMessage: serverMessage,
+                                 fallback: "Invalid or expired transaction. Please try again.")
                 return
             }
             
@@ -559,7 +595,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             if let error = error {
                 print("Error:", error.localizedDescription)
-                self.fallbackToOTPFlow()   // fallback → OTP flow
+                self.failTxnFlow(fallback: "Unable to verify your details. Please check your internet connection and try again.")
                 return
             }
             
@@ -569,7 +605,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
             
             guard let data = data else {
                 print("No Data Received")
-                self.fallbackToOTPFlow()
+                self.failTxnFlow(fallback: "Unable to verify your details. Please try again.")
                 return
             }
             
@@ -592,12 +628,12 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
                                 self.callInsertClientRegisterApi(phonenumber: self.mobileNumber ?? "")
                             }
                             default:
-                                print("CheckMobileNumberExists failed – falling back to OTP flow")
+                                print("CheckMobileNumberExists failed – showing error")
                                 let serverMessage = json["ErrorMessage"] as? String
-                                self.fallbackToOTPFlow(message: serverMessage)
+                                self.failTxnFlow(serverMessage: serverMessage, fallback: "Unable to verify your details. Please try again.")
                             }
                     } else {
-                        self.fallbackToOTPFlow()
+                        self.failTxnFlow(fallback: "Unable to verify your details. Please try again.")
                     }
                     
                     DispatchQueue.main.async {
@@ -622,7 +658,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
                 }
             } catch {
                 print("JSON Parsing Error:", error)
-                self.fallbackToOTPFlow()
+                self.failTxnFlow(fallback: "Unable to verify your details. Please try again.")
             }
             
         }.resume()
@@ -812,7 +848,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
                                 if finalStatus == "3" && isPdfGenerated == "0" {
                                     DispatchQueue.main.async {
                                         
-                                        self.showAlert(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.")
+                                        self.showAlertAndCloseSDK(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.", status: "UNDER_VERIFICATION")
                                         //                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
                                         //                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
                                         //                                    vc.PanNo = PanNo
@@ -825,7 +861,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
                                 if finalStatus == "4" && isPdfGenerated == "0" {
                                     DispatchQueue.main.async {
                                         
-                                        self.showAlert(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.")
+                                        self.showAlertAndCloseSDK(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.", status: "UNDER_VERIFICATION")
                                         //                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
                                         //                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
                                         //                                    vc.PanNo = PanNo
@@ -860,7 +896,7 @@ class NewAccountVC: UIViewController, UITextFieldDelegate,@MainActor mobileOtpDe
 //                                            vc.RegId = RegId
 //                                            self.navigationController?.pushViewController(vc, animated: true)
 //                                        }
-                                        self.showAlert(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.")
+                                        self.showAlertAndCloseSDK(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.", status: "UNDER_VERIFICATION")
                                     }
                                     return
                                 }

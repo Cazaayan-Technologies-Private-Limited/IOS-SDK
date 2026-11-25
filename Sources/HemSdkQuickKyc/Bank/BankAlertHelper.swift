@@ -57,6 +57,14 @@ extension UIViewController {
         return BankAlertText.networkError
     }
 
+    /// Small reference line added under every error alert, e.g. "Ref: ValidateIsReversePennyDropDone · 900004".
+    /// The user sees the problem, and from a client screenshot/video we can see which API / code failed.
+    func bankRef(_ api: String, _ detail: String? = nil) -> String {
+        var ref = "\n\nRef: \(api)"
+        if let detail = detail, !detail.isEmpty { ref += " · \(detail)" }
+        return ref
+    }
+
     /// Shows a single-button alert. Safe to call while another alert is on screen
     /// (it is stacked on top instead of being dropped).
     /// Identical messages already on screen are not shown twice.
@@ -98,30 +106,31 @@ extension UIViewController {
     func showBankApiError(_ json: [String: Any], api: String, fallback: String = BankAlertText.genericError) {
         let code = json["ErrorCode"] as? String ?? "nil"
         print("❌ \(api) returned ErrorCode \(code): \(json)")
-        showBankAlert(message: bankApiMessage(json, fallback: fallback))
+        showBankAlert(message: bankApiMessage(json, fallback: fallback) + bankRef(api, code))
     }
 
     /// Alert for a response that has no `ErrorCode` at all.
     func showBankMissingCode(_ json: [String: Any], api: String) {
         print("❌ \(api) response has no ErrorCode: \(json)")
-        showBankAlert(message: bankApiMessage(json, fallback: BankAlertText.missingCode))
+        showBankAlert(message: bankApiMessage(json, fallback: BankAlertText.missingCode) + bankRef(api, "No ErrorCode"))
     }
 
     /// Alert for a success response that is missing a required field.
     func showBankMissingData(_ json: [String: Any], api: String, field: String) {
         print("❌ \(api) success response missing \(field): \(json)")
-        showBankAlert(message: BankAlertText.missingData)
+        showBankAlert(message: BankAlertText.missingData + bankRef(api, "Missing \(field)"))
     }
 
     /// Alert for a transport failure (no internet, timeout, bad JSON, ...).
     func showBankNetworkError(_ error: Error, api: String) {
         print("❌ \(api) failed: \(error.localizedDescription)")
-        showBankAlert(title: "Network Error", message: bankNetworkMessage(error))
+        let nsError = error as NSError
+        showBankAlert(title: "Network Error", message: bankNetworkMessage(error) + bankRef(api, "\(nsError.domain == NSURLErrorDomain ? "URLError" : "Error") \(nsError.code)"))
     }
 
     /// Alert for token regeneration failure.
     func showBankTokenError(api: String) {
         print("❌ Token generation failed (\(api))")
-        showBankAlert(message: BankAlertText.tokenFailed)
+        showBankAlert(message: BankAlertText.tokenFailed + bankRef(api, "Token"))
     }
 }

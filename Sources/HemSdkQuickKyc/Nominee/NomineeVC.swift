@@ -483,6 +483,23 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             default:
                 print("⚠️ Unknown relation identifier: \(identifier)")
             }
+            
+            // "Others" → show the extra input; anything else → hide and clear it
+            let keyMap = ["nomineeRelation1": "N1", "nomineeRelation2": "N2", "nomineeRelation3": "N3",
+                          "guardianRelation1": "G1", "guardianRelation2": "G2", "guardianRelation3": "G3"]
+            if let key = keyMap[identifier] {
+                let isOthers = self.isOthersRelation(type)
+                print("[Others] \(key): selected '\(type)' → Others = \(isOthers)")
+                self.otherRelationSelected[key] = isOthers
+                if !isOthers { self.otherRelationFields[key]?.text = "" }
+                self.updateOtherRelationVisibility()
+                if isOthers {
+                    // after the picker closes, scroll to the input and focus it
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                        self.revealOtherRelationField(key)
+                    }
+                }
+            }
         }
     }
     
@@ -783,6 +800,11 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
     var EmailId: String?
     var digiIdentifier: String?
     var relationID1:String?
+    
+    // MARK: "Others" relationship – extra input (N1-N3 = nominee, G1-G3 = guardian)
+    private var otherRelationRows: [String: UIView] = [:]
+    private var otherRelationFields: [String: UITextField] = [:]
+    private var otherRelationSelected: [String: Bool] = [:]
     var relationID2:String?
     var relationID3:String?
     var guardianRelationID1: String?
@@ -874,13 +896,13 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         nomineeFieldsHide()
         
         nominee1Stack.isLayoutMarginsRelativeArrangement = true
-        nominee1Stack.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 16)
+        nominee1Stack.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 16, right: 16)   // bottom space below the last field
         
         nominee2Stack.isLayoutMarginsRelativeArrangement = true
-        nominee2Stack.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 16)
+        nominee2Stack.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 16, right: 16)   // bottom space below the last field
         
         nominee3Stack.isLayoutMarginsRelativeArrangement = true
-        nominee3Stack.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 16)
+        nominee3Stack.layoutMargins = UIEdgeInsets(top: 10, left: 16, bottom: 16, right: 16)   // bottom space below the last field
         
         toggleGuardianFields(for: 1, show: false)
         toggleGuardianFields(for: 2, show: false)
@@ -978,6 +1000,8 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         
         shareTxt3.delegate = self
         shareTxt3.returnKeyType = .done
+        
+        setupOtherRelationFields()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -1269,6 +1293,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 view.isHidden = true
             }
         }
+        updateOtherRelationVisibility()   // keep "Others" inputs correct after expand/collapse
         
     }
     
@@ -1302,6 +1327,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 view.isHidden = true
             }
         }
+        updateOtherRelationVisibility()   // keep "Others" inputs correct after expand/collapse
         
     }
     
@@ -1335,6 +1361,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 view.isHidden = true
             }
         }
+        updateOtherRelationVisibility()   // keep "Others" inputs correct after expand/collapse
         
     }
     
@@ -1700,6 +1727,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         default:
             break
         }
+        updateOtherRelationVisibility()   // guardian "Others" input follows the guardian section
     }
     
     private func fillGuardianFields(data: [String: Any], index: Int) {
@@ -2145,6 +2173,16 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         
         addNomineeBtn.isHidden = (nomineeCount >= 3)
         setProceedVisible(nomineeCount > 0)   // saved nominees exist -> show Proceed
+        
+        // Fill the "Others" relationship inputs from the saved data
+        // (async: guardian relation labels are filled asynchronously in populateNomineeData)
+        let savedNominees = nomineeDetailsArray
+        DispatchQueue.main.async {
+            for (index, data) in savedNominees.prefix(3).enumerated() {
+                self.applyOtherRelation(from: data, nominee: index + 1)
+            }
+            self.updateOtherRelationVisibility()
+        }
 
         // Expand the first nominee if there are saved details
         if nomineeCount >= 1 && !nominee1Stack.isHidden {
@@ -2789,6 +2827,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         guardianVerifyBtn1.isEnabled = false
         guardianVerifyBtn2.isEnabled = false
         guardianVerifyBtn3.isEnabled = false
+        updateOtherRelationVisibility()   // also locks the "Others" inputs
     }
     
     func SIXTHAPI(userID:String){
@@ -3328,6 +3367,37 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             return
         }
         
+        if nomineeCount >= 1 && !nominee1Stack.isHidden {
+            if let dob = nomineeDob1.text, let age = calculateAge(from: dob) {
+                nominee1IsMinor = age < 18 ? "Y" : "N"
+            }
+        }
+        
+        if nomineeCount >= 2 && !nominee2Stack.isHidden {
+            if let dob = nomineeDob2.text, let age = calculateAge(from: dob) {
+                nominee2IsMinor = age < 18 ? "Y" : "N"
+            }
+        }
+        
+        if nomineeCount >= 3 && !nominee3Stack.isHidden {
+            if let dob = nomineeDob3.text, let age = calculateAge(from: dob) {
+                nominee3IsMinor = age < 18 ? "Y" : "N"
+            }
+        }
+        
+        // Checks run in the same order as the screen:
+        // 1) each nominee's fields top to bottom (incl. its % of Share), then its guardian
+        // 2) total % of Share = 100 (needs all nominees)
+        // 3) same PAN/ID or name on two nominees (compares nominees)
+        guard validateNomineeData() else {
+            return
+        }
+        
+        // Validate allocation
+        if !validateNomineeAllocation() {
+            return
+        }
+        
         // Validate PAN and Name duplicates from the actual UI fields
         var panSet = Set<String>()
         var nameSet = Set<String>()
@@ -3383,28 +3453,6 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             if !name.isEmpty { nameSet.insert(name) }
         }
         
-        if nomineeCount >= 1 && !nominee1Stack.isHidden {
-            if let dob = nomineeDob1.text, let age = calculateAge(from: dob) {
-                nominee1IsMinor = age < 18 ? "Y" : "N"
-            }
-        }
-        
-        if nomineeCount >= 2 && !nominee2Stack.isHidden {
-            if let dob = nomineeDob2.text, let age = calculateAge(from: dob) {
-                nominee2IsMinor = age < 18 ? "Y" : "N"
-            }
-        }
-        
-        if nomineeCount >= 3 && !nominee3Stack.isHidden {
-            if let dob = nomineeDob3.text, let age = calculateAge(from: dob) {
-                nominee3IsMinor = age < 18 ? "Y" : "N"
-            }
-        }
-        
-        // Validate allocation
-        if !validateNomineeAllocation() {
-            return
-        }
         insertUpdateNomineeDetailsWebWithFullParams()
     }
     
@@ -3874,6 +3922,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 parameters["NOMINEE_1DOB"] = formatDateForAPI(nomineeDOB)
                 parameters["NOMINEE_1AddressSameAsApplicant"] = addressSameAsApplicantBtn1.isSelected ? 1 : 0
                 parameters["NOMINEE_1Relation"] = relationId
+                parameters["NOMINEE_1Oth_Relationship"] = otherRelationValue("N1")
                 parameters["NOMINEE_1Percentage"] = sharePercentage
                 parameters["NOMINEE_1NomineeMinor"] = nominee1IsMinor
                 
@@ -3907,6 +3956,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     parameters["NOMINEE_1GEmail"] = guardianEmailTxt1.text ?? ""
                     parameters["NOMINEE_1GuardianDOB"] = formatDateForAPI(guardianDobTxt1.text ?? "")
                     parameters["NOMINEE_1GuardianRelation"] = guardianRelationID1 ?? ""
+                    parameters["NOMINEE_1GOth_Relationship"] = otherRelationValue("G1")
                     parameters["NOMINEE_1SameAsNominee"] = nomineeSameAsBtn1.isSelected ? 1 : 0
                     
                     // Add guardian address
@@ -3958,6 +4008,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 parameters["NOMINEE_2DOB"] = formatDateForAPI(nomineeDOB)
                 parameters["NOMINEE_2AddressSameAsApplicant"] = addressSameAsApplicantBtn2.isSelected ? 1 : 0
                 parameters["NOMINEE_2Relation"] = relationId
+                parameters["NOMINEE_2Oth_Relationship"] = otherRelationValue("N2")
                 parameters["NOMINEE_2Percentage"] = sharePercentage
                 parameters["NOMINEE_2NomineeMinor"] = nominee2IsMinor
                 
@@ -3991,6 +4042,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     parameters["NOMINEE_2GEmail"] = guardianEmailTxt2.text ?? ""
                     parameters["NOMINEE_2GuardianDOB"] = formatDateForAPI(guardianDobTxt2.text ?? "")
                     parameters["NOMINEE_2GuardianRelation"] = guardianRelationID2 ?? ""
+                    parameters["NOMINEE_2GOth_Relationship"] = otherRelationValue("G2")
                     parameters["NOMINEE_2SameAsNominee"] = nomineeSameAsBtn2.isSelected ? 1 : 0
                     
                     // Add guardian address
@@ -4041,6 +4093,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                 parameters["NOMINEE_3DOB"] = formatDateForAPI(nomineeDOB)
                 parameters["NOMINEE_3AddressSameAsApplicant"] = addressSameAsApplicantBtn3.isSelected ? 1 : 0
                 parameters["NOMINEE_3Relation"] = relationId
+                parameters["NOMINEE_3Oth_Relationship"] = otherRelationValue("N3")
                 parameters["NOMINEE_3Percentage"] = sharePercentage
                 parameters["NOMINEE_3NomineeMinor"] = nominee3IsMinor
                 
@@ -4074,6 +4127,7 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     parameters["NOMINEE_3GEmail"] = guardianEmailTxt3.text ?? ""
                     parameters["NOMINEE_3GuardianDOB"] = formatDateForAPI(guardianDobTxt3.text ?? "")
                     parameters["NOMINEE_3GuardianRelation"] = guardianRelationID3 ?? ""
+                    parameters["NOMINEE_3GOth_Relationship"] = otherRelationValue("G3")
                     parameters["NOMINEE_3SameAsNominee"] = nomineeSameAsBtn3.isSelected ? 1 : 0
                     
                     // Add guardian address
@@ -4172,8 +4226,32 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
             }
         }
     }
+    /// PAN check for a nominee / guardian Document ID.
+    /// Blank is allowed; if something is entered for document type PAN it must look like ABCDE1234F.
+    func panFormatError(type: String?, id: String?) -> String? {
+        guard (type ?? "").trimmingCharacters(in: .whitespaces).uppercased() == "PAN" else { return nil }
+        let pan = (id ?? "").trimmingCharacters(in: .whitespaces).uppercased()
+        guard !pan.isEmpty else { return nil }
+        let isValid = pan.range(of: "^[A-Z]{5}[0-9]{4}[A-Z]$", options: .regularExpression) != nil
+        return isValid ? nil : "Please enter a valid PAN (e.g. ABCDE1234F)"
+    }
+
+    /// Nominees taken into account by the checks (same rule as validateNomineeAllocation)
+    func activeNomineeCountForValidation() -> Int {
+        var count = 0
+        if nomineeCount >= 1 && !nominee1Stack.isHidden { count += 1 }
+        if nomineeCount >= 2 && !nominee2Stack.isHidden { count += 1 }
+        if nomineeCount >= 3 && !nominee3Stack.isHidden { count += 1 }
+        return count
+    }
+
     func validateNomineeData() -> Bool {
         if nomineeCount >= 1 && !nominee1Stack.isHidden {
+            // Document type PAN: ID may be left blank, but if entered it must be a valid PAN
+            if let panError = panFormatError(type: nomineedocumentType1, id: documentId1.text) {
+                showAlert(message: "Nominee 1: \(panError)")
+                return false
+            }
             // Check required fields
 //            if nomineeNameTxt1.text?.isEmpty ?? true {
 //                showAlert(message: "Please select Document Type")
@@ -4241,14 +4319,22 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
 //                showAlert(message: "Please enter share percentage")
 //                return false
 //            }
-            guard let relationText = relationLbl1.text,
-                  !relationText.isEmpty,
-                  relationText != "Select Relation" else {
-                showAlert(message: "Please select nominee relation for Nominee 1")
-                return false
+            // Validate mobile if provided
+            if let mobile = nomineeMobile1.text, !mobile.isEmpty {
+                if mobile.count != 10 {
+                    showAlert(message: "Please enter a valid 10-digit mobile number")
+                    return false
+                }
             }
-            
-            
+
+            // Validate email if provided
+            if let email = nomineeEmail1.text, !email.isEmpty {
+                if !isValidEmail(email) {
+                    showAlert(message: "Please enter a valid email address")
+                    return false
+                }
+            }
+
             if !addressSameAsApplicantBtn1.isSelected {
                 if let pincode = pinCodeTxt1.text, !pincode.isEmpty {
                     if pincode.count != 6 {
@@ -4257,21 +4343,37 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     }
                 }
             }
-            
-            // Validate mobile if provided
-            if let mobile = nomineeMobile1.text, !mobile.isEmpty {
-                if mobile.count != 10 {
-                    showAlert(message: "Please enter a valid 10-digit mobile number")
-                    return false
-                }
+
+            // Relationship (after address, same order as on screen)
+            guard let relationText = relationLbl1.text,
+                  !relationText.isEmpty,
+                  relationText != "Select Relation" else {
+                showAlert(message: "Please select nominee relation for Nominee 1")
+                return false
             }
-            
-            // Validate email if provided
-            if let email = nomineeEmail1.text, !email.isEmpty {
-                if !isValidEmail(email) {
-                    showAlert(message: "Please enter a valid email address")
-                    return false
-                }
+            if otherRelationSelected["N1"] == true, otherRelationValue("N1").isEmpty {
+                showAlert(message: "Please enter the relationship for Nominee 1")
+                return false
+            }
+            // % of Share (field below Relationship) – same rules as validateNomineeAllocation()
+            let share1 = Int(shareTxt1.text ?? "") ?? 0
+            if share1 > 100 {
+                showAlert(message: "Nominee 1 allocation cannot exceed 100%")
+                return false
+            }
+            if share1 < 0 {
+                showAlert(message: "Nominee 1 allocation cannot be negative")
+                return false
+            }
+            // % of Share is mandatory (*) → ask for it here, before the guardian fields
+            if (shareTxt1.text ?? "").trimmingCharacters(in: .whitespaces).isEmpty {
+                showAlert(message: "Please enter % of share for Nominee 1")
+                return false
+            }
+            // Only one nominee → the total is already known here: same rule/message as validateNomineeAllocation()
+            if activeNomineeCountForValidation() == 1 && share1 != 100 {
+                showAlert(message: "Single nominee allocation must be 100%.\nCurrent total: \(share1)%")
+                return false
             }
             
             if nominee1IsMinor == "Y" {
@@ -4289,18 +4391,26 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     showAlert(message: "Guardian of Nominee 1: \(dobError)")
                     return false
                 }
-                
+                if let panError = panFormatError(type: guardiandocumentType1, id: guardianIdTxt1.text) {
+                    showAlert(message: "Guardian of Nominee 1: \(panError)")
+                    return false
+                }
                 // Optional fields – checked only if the user filled them
                 if let mobile = guardianMobileTxt1.text, !mobile.isEmpty, mobile.count != 10 {
                     showAlert(message: "Please enter a valid 10-digit mobile number for guardian")
                     return false
                 }
-                
+
                 if let email = guardianEmailTxt1.text, !email.isEmpty, !isValidEmail(email) {
                     showAlert(message: "Please enter a valid email address for guardian")
                     return false
                 }
-                
+
+                if otherRelationSelected["G1"] == true, otherRelationValue("G1").isEmpty {
+                    showAlert(message: "Please enter the guardian's relationship for Nominee 1")
+                    return false
+                }
+
                 if !nomineeSameAsBtn1.isSelected,
                    let pincode = guardianPinCodeTxt1.text, !pincode.isEmpty, pincode.count != 6 {
                     showAlert(message: "Please enter a valid 6-digit pincode for guardian")
@@ -4312,6 +4422,11 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         
         // Validation for Nominee 2
         if nomineeCount >= 2 && !nominee2Stack.isHidden {
+            // Document type PAN: ID may be left blank, but if entered it must be a valid PAN
+            if let panError = panFormatError(type: nomineedocumentType2, id: documentId2.text) {
+                showAlert(message: "Nominee 2: \(panError)")
+                return false
+            }
             // Check required fields
 //            if nomineeNameTxt2.text?.isEmpty ?? true {
 //                showAlert(message: "Please select Document Type")
@@ -4380,23 +4495,6 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
 //                showAlert(message: "Please enter share percentage")
 //                return false
 //            }
-            guard let relationText = relationLbl2.text,
-                  !relationText.isEmpty,
-                  relationText != "Select Relation" else {
-                showAlert(message: "Please select nominee relation for Nominee 1")
-                return false
-            }
-            
-            
-            
-            if let pincode = pinCodeTxt2.text, !pincode.isEmpty {
-                if pincode.count != 6 {
-                    showAlert(message: "Please enter a valid 6-digit pincode")
-                    return false
-                }
-            }
-            
-            
             // Validate mobile if provided
             if let mobile = nomineeMobile2.text, !mobile.isEmpty {
                 if mobile.count != 10 {
@@ -4404,13 +4502,47 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     return false
                 }
             }
-            
+
             // Validate email if provided
             if let email = nomineeEmail2.text, !email.isEmpty {
                 if !isValidEmail(email) {
                     showAlert(message: "Please enter a valid email address")
                     return false
                 }
+            }
+
+            if let pincode = pinCodeTxt2.text, !pincode.isEmpty {
+                if pincode.count != 6 {
+                    showAlert(message: "Please enter a valid 6-digit pincode")
+                    return false
+                }
+            }
+
+            // Relationship (after address, same order as on screen)
+            guard let relationText = relationLbl2.text,
+                  !relationText.isEmpty,
+                  relationText != "Select Relation" else {
+                showAlert(message: "Please select nominee relation for Nominee 2")
+                return false
+            }
+            if otherRelationSelected["N2"] == true, otherRelationValue("N2").isEmpty {
+                showAlert(message: "Please enter the relationship for Nominee 2")
+                return false
+            }
+            // % of Share (field below Relationship) – same rules as validateNomineeAllocation()
+            let share2 = Int(shareTxt2.text ?? "") ?? 0
+            if share2 > 100 {
+                showAlert(message: "Nominee 2 allocation cannot exceed 100%")
+                return false
+            }
+            if share2 < 0 {
+                showAlert(message: "Nominee 2 allocation cannot be negative")
+                return false
+            }
+            // % of Share is mandatory (*) → ask for it here, before the guardian fields
+            if (shareTxt2.text ?? "").trimmingCharacters(in: .whitespaces).isEmpty {
+                showAlert(message: "Please enter % of share for Nominee 2")
+                return false
             }
             
             if nominee2IsMinor == "Y" {
@@ -4428,18 +4560,26 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     showAlert(message: "Guardian of Nominee 2: \(dobError)")
                     return false
                 }
-                
+                if let panError = panFormatError(type: guardiandocumentType2, id: guardianIdTxt2.text) {
+                    showAlert(message: "Guardian of Nominee 2: \(panError)")
+                    return false
+                }
                 // Optional fields – checked only if the user filled them
                 if let mobile = guardianMobileTxt2.text, !mobile.isEmpty, mobile.count != 10 {
                     showAlert(message: "Please enter a valid 10-digit mobile number for guardian")
                     return false
                 }
-                
+
                 if let email = guardianEmailTxt2.text, !email.isEmpty, !isValidEmail(email) {
                     showAlert(message: "Please enter a valid email address for guardian")
                     return false
                 }
-                
+
+                if otherRelationSelected["G2"] == true, otherRelationValue("G2").isEmpty {
+                    showAlert(message: "Please enter the guardian's relationship for Nominee 2")
+                    return false
+                }
+
                 if !nomineeSameAsBtn2.isSelected,
                    let pincode = guardianPinCodeTxt2.text, !pincode.isEmpty, pincode.count != 6 {
                     showAlert(message: "Please enter a valid 6-digit pincode for guardian")
@@ -4451,6 +4591,11 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
         
         // Validation for Nominee 3
         if nomineeCount >= 3 && !nominee3Stack.isHidden {
+            // Document type PAN: ID may be left blank, but if entered it must be a valid PAN
+            if let panError = panFormatError(type: nomineedocumentType3, id: documentId3.text) {
+                showAlert(message: "Nominee 3: \(panError)")
+                return false
+            }
             // Check required fields
 //            if nomineeNameTxt3.text?.isEmpty ?? true {
 //                showAlert(message: "Please select Document Type")
@@ -4519,14 +4664,22 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
 //                showAlert(message: "Please enter share percentage")
 //                return false
 //            }
-            guard let relationText = relationLbl3.text,
-                  !relationText.isEmpty,
-                  relationText != "Select Relation" else {
-                showAlert(message: "Please select nominee relation for Nominee 1")
-                return false
+            // Validate mobile if provided
+            if let mobile = nomineeMobile3.text, !mobile.isEmpty {
+                if mobile.count != 10 {
+                    showAlert(message: "Please enter a valid 10-digit mobile number")
+                    return false
+                }
             }
-            
-            
+
+            // Validate email if provided
+            if let email = nomineeEmail3.text, !email.isEmpty {
+                if !isValidEmail(email) {
+                    showAlert(message: "Please enter a valid email address")
+                    return false
+                }
+            }
+
             if !addressSameAsApplicantBtn3.isSelected {
                 if let pincode = pinCodeTxt3.text, !pincode.isEmpty {
                     if pincode.count != 6 {
@@ -4535,21 +4688,32 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     }
                 }
             }
-            
-            // Validate mobile if provided
-            if let mobile = nomineeMobile3.text, !mobile.isEmpty {
-                if mobile.count != 10 {
-                    showAlert(message: "Please enter a valid 10-digit mobile number")
-                    return false
-                }
+
+            // Relationship (after address, same order as on screen)
+            guard let relationText = relationLbl3.text,
+                  !relationText.isEmpty,
+                  relationText != "Select Relation" else {
+                showAlert(message: "Please select nominee relation for Nominee 3")
+                return false
             }
-            
-            // Validate email if provided
-            if let email = nomineeEmail3.text, !email.isEmpty {
-                if !isValidEmail(email) {
-                    showAlert(message: "Please enter a valid email address")
-                    return false
-                }
+            if otherRelationSelected["N3"] == true, otherRelationValue("N3").isEmpty {
+                showAlert(message: "Please enter the relationship for Nominee 3")
+                return false
+            }
+            // % of Share (field below Relationship) – same rules as validateNomineeAllocation()
+            let share3 = Int(shareTxt3.text ?? "") ?? 0
+            if share3 > 100 {
+                showAlert(message: "Nominee 3 allocation cannot exceed 100%")
+                return false
+            }
+            if share3 < 0 {
+                showAlert(message: "Nominee 3 allocation cannot be negative")
+                return false
+            }
+            // % of Share is mandatory (*) → ask for it here, before the guardian fields
+            if (shareTxt3.text ?? "").trimmingCharacters(in: .whitespaces).isEmpty {
+                showAlert(message: "Please enter % of share for Nominee 3")
+                return false
             }
             if nominee3IsMinor == "Y" {
                 // Guardian – same rule as nominee: only Name and Date of Birth are mandatory
@@ -4566,18 +4730,26 @@ class NomineeVC: UIViewController, @MainActor SelectionDelegate, @MainActor Vert
                     showAlert(message: "Guardian of Nominee 3: \(dobError)")
                     return false
                 }
-                
+                if let panError = panFormatError(type: guardiandocumentType3, id: guardianIdTxt3.text) {
+                    showAlert(message: "Guardian of Nominee 3: \(panError)")
+                    return false
+                }
                 // Optional fields – checked only if the user filled them
                 if let mobile = guardianMobileTxt3.text, !mobile.isEmpty, mobile.count != 10 {
                     showAlert(message: "Please enter a valid 10-digit mobile number for guardian")
                     return false
                 }
-                
+
                 if let email = guardianEmailTxt3.text, !email.isEmpty, !isValidEmail(email) {
                     showAlert(message: "Please enter a valid email address for guardian")
                     return false
                 }
-                
+
+                if otherRelationSelected["G3"] == true, otherRelationValue("G3").isEmpty {
+                    showAlert(message: "Please enter the guardian's relationship for Nominee 3")
+                    return false
+                }
+
                 if !nomineeSameAsBtn3.isSelected,
                    let pincode = guardianPinCodeTxt3.text, !pincode.isEmpty, pincode.count != 6 {
                     showAlert(message: "Please enter a valid 6-digit pincode for guardian")
@@ -4979,5 +5151,195 @@ extension NomineeVC: UITextFieldDelegate {
         ]
         
         return relationMap[id] ?? "Select Relation"
+    }
+
+    // MARK: - "Others" relationship input
+    
+    private func isOthersRelation(_ text: String?) -> Bool {
+        let value = (text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        return value == "others" || value == "other"
+    }
+    
+    /// Text to send to the API (empty when "Others" is not selected)
+    private func otherRelationValue(_ key: String) -> String {
+        guard otherRelationSelected[key] == true else { return "" }
+        return otherRelationFields[key]?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    }
+    
+    /// Relation value label + its dropdown button, per key
+    private func relationControls(for key: String) -> (label: UILabel?, button: UIButton?) {
+        switch key {
+        case "N1": return (relationLbl1, relationBtn1)
+        case "N2": return (relationLbl2, relationBtn2)
+        case "N3": return (relationLbl3, relationBtn3)
+        case "G1": return (guardianLbl1, guardianRelationBtn1)
+        case "G2": return (guardianLbl2, guardianRelationBtn2)
+        case "G3": return (guardianLbl3, guardianRelationBtn3)
+        default:   return (nil, nil)
+        }
+    }
+    
+    /// The row (arranged subview of the nearest vertical stack) that holds the given view.
+    /// Prefers the nominee stacks; falls back to any vertical UIStackView.
+    private func stackRow(containing view: UIView?) -> (row: UIView, stack: UIStackView)? {
+        let nomineeStacks: [UIStackView?] = [nominee1Stack, nominee2Stack, nominee3Stack]
+        var fallback: (UIView, UIStackView)?
+        var current = view
+        while let v = current, let parent = v.superview {
+            if let stack = parent as? UIStackView, stack.axis == .vertical,
+               stack.arrangedSubviews.contains(v) {
+                if nomineeStacks.contains(where: { $0 === stack }) { return (v, stack) }
+                if fallback == nil { fallback = (v, stack) }
+            }
+            current = parent
+        }
+        return fallback
+    }
+    
+    private func setupOtherRelationFields() {
+        for key in ["N1", "N2", "N3", "G1", "G2", "G3"] {
+            _ = ensureOtherRelationRow(key)
+        }
+    }
+    
+    /// Creates (once) the "Relationship (Others) *" label + text field right below the dropdown
+    @discardableResult
+    private func ensureOtherRelationRow(_ key: String) -> UIView? {
+        if let row = otherRelationRows[key], row.superview != nil { return row }
+        
+        let controls = relationControls(for: key)
+        guard let anchor = stackRow(containing: controls.label ?? controls.button),
+              let index = anchor.stack.arrangedSubviews.firstIndex(of: anchor.row) else {
+            print("⚠️ [Others] \(key): dropdown is not inside a vertical stack – cannot add input")
+            return nil
+        }
+        // Copy the look of an existing text field in the same form
+        let template: UITextField? = anchor.stack.arrangedSubviews
+            .compactMap { $0 as? UITextField }.first
+        
+        let titleLabel = UILabel()
+        titleLabel.font = template?.font ?? .systemFont(ofSize: 15)
+        titleLabel.textColor = .label
+        titleLabel.numberOfLines = 0
+        let title = NSMutableAttributedString(
+            string: key.hasPrefix("G") ? "Guardian Relationship (Others)" : "Relationship (Others)",
+            attributes: [.foregroundColor: UIColor.label])
+        title.append(NSAttributedString(string: " *", attributes: [.foregroundColor: UIColor.systemRed]))
+        titleLabel.attributedText = title
+        
+        let field = UITextField()
+        field.placeholder = "Enter Relationship"
+        field.font = template?.font ?? .systemFont(ofSize: 15)
+        field.textColor = template?.textColor ?? .label
+        field.backgroundColor = template?.backgroundColor ?? .white
+        field.borderStyle = template?.borderStyle ?? .roundedRect
+        if let t = template {
+            field.layer.cornerRadius = t.layer.cornerRadius
+            field.layer.borderWidth = t.layer.borderWidth
+            field.layer.borderColor = t.layer.borderColor
+        }
+        if field.borderStyle == .none && field.layer.borderWidth == 0 {
+            // make sure the box is visible
+            field.layer.borderWidth = 1
+            field.layer.borderColor = UIColor.systemGray4.cgColor
+        }
+        field.autocapitalizationType = .words
+        field.returnKeyType = .done
+        field.delegate = self
+        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+        field.leftViewMode = .always
+        let templateHeight = template?.constraints.first(where: {
+            $0.firstAttribute == .height && $0.secondItem == nil })?.constant
+        let height = max(templateHeight ?? 45, 40)
+        field.heightAnchor.constraint(equalToConstant: height).isActive = true
+        
+        let row = UIStackView(arrangedSubviews: [titleLabel, field])
+        row.axis = .vertical
+        row.spacing = 8
+        row.isHidden = true
+        
+        anchor.stack.insertArrangedSubview(row, at: index + 1)
+        otherRelationRows[key] = row
+        otherRelationFields[key] = field
+        if otherRelationSelected[key] == nil { otherRelationSelected[key] = false }
+        print("✅ [Others] \(key): input added below the dropdown (stack index \(index + 1))")
+        return row
+    }
+    
+    /// Show the input only when "Others" is picked AND its dropdown is on screen
+    /// (nominee card expanded / guardian section shown). Locked with the dropdown.
+    private func updateOtherRelationVisibility() {
+        for key in ["N1", "N2", "N3", "G1", "G2", "G3"] {
+            let selected = otherRelationSelected[key] ?? false
+            guard let row = selected ? ensureOtherRelationRow(key) : otherRelationRows[key] else { continue }
+            let controls = relationControls(for: key)
+            let dropdown: UIView? = controls.label ?? controls.button
+            let anchor = stackRow(containing: dropdown)
+            
+            // The dropdown is "visible" when it and every parent up to the screen are not hidden
+            var dropdownVisible = true
+            var v = dropdown
+            while let current = v, current !== view {
+                if current.isHidden { dropdownVisible = false; break }
+                v = current.superview
+            }
+            let show = selected && dropdownVisible
+            
+            if show, let anchor = anchor {
+                // Always keep the input directly BELOW its dropdown
+                let stack = anchor.stack
+                if row.superview !== stack ||
+                    stack.arrangedSubviews.firstIndex(of: row) != (stack.arrangedSubviews.firstIndex(of: anchor.row) ?? -2) + 1 {
+                    stack.removeArrangedSubview(row)
+                    row.removeFromSuperview()
+                    let index = (stack.arrangedSubviews.firstIndex(of: anchor.row) ?? stack.arrangedSubviews.count - 1) + 1
+                    stack.insertArrangedSubview(row, at: index)
+                }
+            }
+            
+            row.isHidden = !show          // set every time – other code may unhide stack rows
+            otherRelationFields[key]?.isEnabled = (controls.button?.isEnabled ?? true)
+                && (controls.label?.isEnabled ?? true)
+            
+            if selected {
+                view.layoutIfNeeded()
+                let frame = row.convert(row.bounds, to: view)
+                print("[Others] \(key): show=\(show) dropdownVisible=\(dropdownVisible) " +
+                      "rowHidden=\(row.isHidden) frame=\(frame) " +
+                      "index=\(anchor.flatMap { $0.stack.arrangedSubviews.firstIndex(of: row) } ?? -1) " +
+                      "dropdownIndex=\(anchor.flatMap { $0.stack.arrangedSubviews.firstIndex(of: $0.row) } ?? -1)")
+            }
+        }
+        view.layoutIfNeeded()
+    }
+    
+    /// Scroll so the user can see the new input
+    private func revealOtherRelationField(_ key: String) {
+        guard let field = otherRelationFields[key], let row = otherRelationRows[key], !row.isHidden else { return }
+        var scroll: UIView? = field.superview
+        while let v = scroll, !(v is UIScrollView) { scroll = v.superview }
+        if let scrollView = scroll as? UIScrollView {
+            let rect = field.convert(field.bounds, to: scrollView).insetBy(dx: 0, dy: -60)
+            scrollView.scrollRectToVisible(rect, animated: true)
+        }
+        field.becomeFirstResponder()
+    }
+    
+    /// Fill the "Others" input from saved nominee data
+    private func applyOtherRelation(from data: [String: Any], nominee n: Int) {
+        func text(_ keys: [String]) -> String {
+            for k in keys {
+                if let v = data[k] as? String, !v.trimmingCharacters(in: .whitespaces).isEmpty { return v }
+            }
+            return ""
+        }
+        let nomineeOther = text(["Oth_Relationship", "OthRelationship", "NOMINEE_\(n)Oth_Relationship"])
+        let guardianOther = text(["GOth_Relationship", "GOthRelationship", "NOMINEE_\(n)GOth_Relationship"])
+        
+        let nKey = "N\(n)", gKey = "G\(n)"
+        otherRelationSelected[nKey] = isOthersRelation(relationControls(for: nKey).label?.text) || !nomineeOther.isEmpty
+        otherRelationFields[nKey]?.text = nomineeOther
+        otherRelationSelected[gKey] = isOthersRelation(relationControls(for: gKey).label?.text) || !guardianOther.isEmpty
+        otherRelationFields[gKey]?.text = guardianOther
     }
 }

@@ -739,7 +739,7 @@ extension MobileOTPVC{
                             if finalStatus == "3" && isPdfGenerated == "0" {
                                 DispatchQueue.main.async {
                                     
-                                    self.showAlert(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.")
+                                    self.showAlertAndCloseSDK(message: "Your application is currently under verification. We appreciate your patience and will update you shortly.", status: "UNDER_VERIFICATION")
                                     //                                    let storyboard = UIStoryboard(name: "EsignStatusVC", bundle: Bundle.module)
                                     //                                    let vc = storyboard.instantiateViewController(identifier: "ApplicationStatic1VC") as! ApplicationStatic1VC
                                     //                                    vc.PanNo = PanNo

@@ -11273,12 +11273,13 @@
                         <outlet property="guardianPinCodeTxt2" destination="ydi-Dw-mc6" id="5Cu-e2-m6m"/>
                         <outlet property="guardianPinCodeTxt3" destination="zVw-hk-usi" id="7Mw-92-xg8"/>
                         <outlet property="guardianRelationBtn1" destination="MZP-2I-Dtd" id="yKp-dV-Hbh"/>
+                        <outlet property="guardianRelationBtn2" destination="L6C-5o-ied" id="bR2-Gd-Ot2"/>
                         <outlet property="guardianRelationBtn3" destination="Vut-dI-Opj" id="njN-OK-uJP"/>
                         <outlet property="guardianRelationLbl1" destination="Vje-PZ-Fxg" id="zVV-QJ-a5j"/>
                         <outlet property="guardianRelationLbl2" destination="sFE-If-4Pj" id="SeN-Wq-Jvc"/>
                         <outlet property="guardianRelationLbl3" destination="zlE-HB-ngD" id="GyS-vC-qg8"/>
-                        <outlet property="guardianRelationView1" destination="uTe-8d-DJE" id="Uno-jN-ued"/>
-                        <outlet property="guardianRelationView2" destination="6gM-Vv-Xft" id="ka3-7h-Ruz"/>
+                        <outlet property="guardianRelationView1" destination="6gM-Vv-Xft" id="Uno-jN-ued"/>
+                        <outlet property="guardianRelationView2" destination="uTe-8d-DJE" id="ka3-7h-Ruz"/>
                         <outlet property="guardianRelationView3" destination="Hjf-NA-wPT" id="dGc-Xs-coP"/>
                         <outlet property="guardianStateLbl1" destination="ehL-YI-y1z" id="Zzn-SV-16g"/>
                         <outlet property="guardianStateLbl2" destination="UQT-VM-kV4" id="P71-bh-fab"/>

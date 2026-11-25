@@ -38,9 +38,14 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        camsWebView.navigationDelegate = self   // report page load failures
         if let urlStr = redirectionUrl, let url = URL(string: urlStr) {
             let request = URLRequest(url: url)
             camsWebView.load(request)
+        } else {
+            // Earlier: blank screen with no message
+            print("❌ CAMS redirection URL invalid: \(redirectionUrl ?? "nil")")
+            showBankAlert(message: "Unable to open the bank verification page. Please try again or add your bank details manually." + bankRef("RequestCAMS", "Invalid redirectionurl"))
         }
         
         navigationItem.hidesBackButton = true
@@ -58,7 +63,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
             }
         } else {
             print("User ID is not fetched yet.")
-            self.showBankAlert(message: "Your session details could not be found. Please log in again.")
+            self.showBankAlert(message: "Your session details could not be found. Please log in again." + self.bankRef("CamsVC", "Session"))
         }
     }
     
@@ -199,17 +204,17 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                             // Expired token while polling → regenerate silently, next tick retries
                             CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
                             CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: self.fetchedUserId ?? "", SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W", in: self.view) { success in
-                                if !success { self.showPollingAlert(BankAlertText.tokenFailed) }
+                                if !success { self.showPollingAlert(BankAlertText.tokenFailed + self.bankRef("ValidateIsCAMSDone", "Token")) }
                             }
                         default:
                             // Polling runs every 10s – show each distinct error only once
                             print("❌ ValidateIsCAMSDone returned ErrorCode \(errorCode): \(jsonResponse)")
-                            self.showPollingAlert(self.bankApiMessage(jsonResponse))
+                            self.showPollingAlert(self.bankApiMessage(jsonResponse) + self.bankRef("ValidateIsCAMSDone", errorCode))
                         }
                         
                     } else {
                         print("❌ ValidateIsCAMSDone response has no ErrorCode: \(jsonResponse)")
-                        self.showPollingAlert(self.bankApiMessage(jsonResponse, fallback: BankAlertText.missingCode))
+                        self.showPollingAlert(self.bankApiMessage(jsonResponse, fallback: BankAlertText.missingCode) + self.bankRef("ValidateIsCAMSDone", "No ErrorCode"))
                     }                   //by sayantan
                     
 //                    if let errorCode = jsonResponse["ErrorCode"] as? String, errorCode == "000001" {
@@ -224,7 +229,7 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
                     
                 case .failure(let error):
                     print("camsCalling failed: \(error.localizedDescription)")
-                    self.showPollingAlert(self.bankNetworkMessage(error), title: "Network Error")
+                    self.showPollingAlert(self.bankNetworkMessage(error) + self.bankRef("ValidateIsCAMSDone", "\((error as NSError).code)"), title: "Network Error")
                 }
             }
         }
@@ -373,3 +378,24 @@ class CamsVC: UIViewController, @MainActor ReloadPageDelegate {
     }
 }
 
+// MARK: - CAMS page load errors
+extension CamsVC: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        showCamsPageError(error)
+    }
+    
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        showCamsPageError(error)
+    }
+    
+    private func showCamsPageError(_ error: Error) {
+        let nsError = error as NSError
+        // Not real failures: -999 load cancelled (redirect / new load),
+        // -1002 / WebKit 101 / 102 = app-callback URL at the end of the CAMS flow or interrupted frame load
+        if nsError.code == NSURLErrorCancelled || nsError.code == NSURLErrorUnsupportedURL { return }
+        if nsError.domain == "WebKitErrorDomain" && (nsError.code == 101 || nsError.code == 102) { return }
+        print("❌ CAMS page failed to load: \(nsError.domain) \(nsError.code) \(nsError.localizedDescription)")
+        showBankAlert(title: "Network Error",
+                      message: "Unable to load the bank verification page. Please check your internet connection and try again." + bankRef("CAMS page", "\(nsError.code)"))
+    }
+}

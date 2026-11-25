@@ -200,6 +200,15 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     var EmailId: String?
     var decodeArray:String?
     var isPdfGenerated: String?
+    /// Rows hidden only because they were empty (see compactEmptyRows)
+    var compactedRows = Set<ObjectIdentifier>()
+    /// Income Proof box open/closed (header tap toggles it)
+    var incomeProofExpanded = true
+    /// Rows of the Current Signature box hidden only while it is closed
+    var signatureHiddenRows: [UIView] = []
+    /// Upload / Verify visibility saved when the Income Proof box is closed
+    var savedIncomeUploadHidden = true
+    var savedIncomeVerifyHidden = true
     var userId: String?
     var transactionId: String?
     var selectedClientImage: UIImage?
@@ -377,6 +386,7 @@ class DocumentVC: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var stackView1: UIStackView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        shrinkDocumentCollectionViews()
         CoreDataHelper.fetchUserId(entityName: "MobileUser") { [weak self] userId, sessionID , decodeByteArrayString in
             guard let self = self else { return }
             
@@ -1906,53 +1916,58 @@ extension DocumentVC {
         //            sender.isSelected = true
         //            IncomeProof(shouldShow: true)
         //        }
-        IncomeProof(shouldShow: true)
+        // Tap toggles collapse / expand (was always "show", so the box never collapsed)
+        if incomeProofExpanded {
+            // Remember Upload / Verify exactly as they are now, so opening the box again
+            // shows the same state (re-calculating it showed both buttons wrongly)
+            savedIncomeUploadHidden = incomeProofuploadBtn.isHidden
+            savedIncomeVerifyHidden = incomeProofVerifyBtn.isHidden
+        }
+        incomeProofExpanded.toggle()
+        IncomeProof(shouldShow: incomeProofExpanded)
+        if incomeProofExpanded {
+            incomeProofuploadBtn.isHidden = savedIncomeUploadHidden
+            incomeProofVerifyBtn.isHidden = savedIncomeVerifyHidden
+        } else {
+            incomeProofuploadBtn.isHidden = true   // Upload button is not part of IncomeProof()
+            incomeProofVerifyBtn.isHidden = true
+        }
     }
     
     @IBAction func BankProofBtn(_ sender: UIButton) {
-        if sender.isSelected {
-            sender.isSelected = false
-            BankProof(shouldShow: false)
-        } else {
-            sender.isSelected = true
-            BankProof(shouldShow: true)
-        }
+        // Toggle from what is on screen (was sender.isSelected, which starts "closed" while the
+        // box is already open → the 1st tap did nothing)
+        let isOpen = !(BPLabel1?.isHidden ?? true)
+        sender.isSelected = !isOpen
+        BankProof(shouldShow: !isOpen)
     }
     @IBAction func CurrentSignatureBtn(_ sender: UIButton) {
-        if sender.isSelected {
-            sender.isSelected = false
-            CurrentSignature(shouldShow: false)
-        } else {
-            sender.isSelected = true
-            CurrentSignature(shouldShow: true)
-        }
+        // Toggle from what is on screen (was sender.isSelected, which starts "closed" while the
+        // box is already open → the 1st tap did nothing)
+        let isOpen = !(CSLabel1?.isHidden ?? true)
+        sender.isSelected = !isOpen
+        CurrentSignature(shouldShow: !isOpen)
     }
     @IBAction func PAN_CopyBtn(_ sender: UIButton) {
-        if sender.isSelected {
-            sender.isSelected = false
-            PANCopy(shouldShow: false)
-        } else {
-            sender.isSelected = true
-            PANCopy(shouldShow: true)
-        }
+        // Toggle from what is on screen (was sender.isSelected, which starts "closed" while the
+        // box is already open → the 1st tap did nothing)
+        let isOpen = !(PCLabel1?.isHidden ?? true)
+        sender.isSelected = !isOpen
+        PANCopy(shouldShow: !isOpen)
     }
     @IBAction func ClientPhotoBtn(_ sender: UIButton) {
-        if sender.isSelected {
-            sender.isSelected = false
-            ClientPhoto(shouldShow: false)
-        } else {
-            sender.isSelected = true
-            ClientPhoto(shouldShow: true)
-        }
+        // Toggle from what is on screen (was sender.isSelected, which starts "closed" while the
+        // box is already open → the 1st tap did nothing)
+        let isOpen = !(CPLabel1?.isHidden ?? true)
+        sender.isSelected = !isOpen
+        ClientPhoto(shouldShow: !isOpen)
     }
     @IBAction func DematImageBtn(_ sender: UIButton) {
-        if sender.isSelected {
-            sender.isSelected = false
-            DematImage(shouldShow: false)
-        } else {
-            sender.isSelected = true
-            DematImage(shouldShow: true)
-        }
+        // Toggle from what is on screen (was sender.isSelected, which starts "closed" while the
+        // box is already open → the 1st tap did nothing)
+        let isOpen = !(DILabel1?.isHidden ?? true)
+        sender.isSelected = !isOpen
+        DematImage(shouldShow: !isOpen)
     }
     @IBAction func NomineeDetail1Btn(_ sender: UIButton) {
         if sender.isSelected {
@@ -1985,7 +2000,7 @@ extension DocumentVC {
 }
 
 extension DocumentVC {
-    func ValidateToken() {
+    func ValidateToken(retried: Bool = false) {
         
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") {
             [self] tokenId in
@@ -2025,6 +2040,25 @@ extension DocumentVC {
                         case "000000":
                             DispatchQueue.main.async {
                                 print("api is running")
+                            }
+                        case "000001" where !retried:
+                            // Old/used token (or logged in on another device): get a fresh token once.
+                            // GenerateToken answers 999993 if the session is gone → "Session Expired".
+                            DispatchQueue.main.async {
+                                CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+                                CoreDataHelper.generateToken(
+                                    decodeByteArrayToString: self.mobiledecodeArray ?? "",
+                                    USERID: self.fetchedUserId ?? "",
+                                    SessionId: self.fetchedSessionID ?? "",
+                                    entityName: "TokenMobile", deviceType: "W",
+                                    in: self.view
+                                ) { success in
+                                    if success {
+                                        self.ValidateToken(retried: true)
+                                    } else {
+                                        print("Token generation failed.")
+                                    }
+                                }
                             }
                         case "999992":
                             DispatchQueue.main.async {
@@ -5426,6 +5460,8 @@ extension DocumentVC {
     //    }
     
     func IncomeProof(shouldShow: Bool) {
+        // re-check empty rows after this function (and its async parts) has set Upload / Verify
+        defer { DispatchQueue.main.async { self.compactEmptyRows() } }
         
         IPLabel1.isHidden = !shouldShow
         IpView1.isHidden = !shouldShow
@@ -5451,8 +5487,8 @@ extension DocumentVC {
             yearBtn.isHidden = true
         }
         
-        // Collection view visibility
-        if imageUrls.isEmpty {
+        // Collection view visibility (also hidden when the box is collapsed)
+        if imageUrls.isEmpty || !shouldShow {
             IPCollectionView.isHidden = true
             IPDocumentView.isHidden = true
         } else {
@@ -5474,6 +5510,8 @@ extension DocumentVC {
     }
     
     func counts(shouldShow: Bool) {
+        // re-check empty rows after this function (and its async parts) has set Upload / Verify
+        defer { DispatchQueue.main.async { self.compactEmptyRows() } }
         switch incomeproofDocumenttype {
         case "PDF":
             DispatchQueue.main.async { [self] in
@@ -5555,6 +5593,8 @@ extension DocumentVC {
     }
     
     func BankProof(shouldShow: Bool) {
+        // re-check empty rows after this function (and its async parts) has set Upload / Verify
+        defer { DispatchQueue.main.async { self.compactEmptyRows() } }
         BPLabel1.isHidden = !shouldShow
         BPView1.isHidden = !shouldShow
         BPlabel2.isHidden = !shouldShow
@@ -5588,6 +5628,8 @@ extension DocumentVC {
     }
     
     func bpcounts(shouldShow: Bool) {
+        // re-check empty rows after this function (and its async parts) has set Upload / Verify
+        defer { DispatchQueue.main.async { self.compactEmptyRows() } }
         print("documenttype:-\(bankproofDocumentType ?? "empty")")
         switch bankproofDocumentType {
         case "PDF":
@@ -5644,6 +5686,18 @@ extension DocumentVC {
     
     func CurrentSignature(shouldShow: Bool) {
         CSLabel1.isHidden = !shouldShow
+        // The "Draw Signature" row (no outlet) was never hidden → closed box stayed taller.
+        // Hide any such extra row on close and bring it back on open.
+        if !shouldShow {
+            for row in currentSignatureBtn.arrangedSubviews.dropFirst()
+            where !row.isHidden && row !== CSLabel1 && row !== CSStackView1 && row !== CSDocumentView {
+                row.isHidden = true
+                signatureHiddenRows.append(row)
+            }
+        } else {
+            signatureHiddenRows.forEach { $0.isHidden = false }
+            signatureHiddenRows.removeAll()
+        }
         
         // Check if signature exists and is verified from the API response
         if let signatureVerifyStatus = SignatureImage_Verify {
@@ -6033,13 +6087,18 @@ extension DocumentVC {
         if let cachedImage = imageCache.object(forKey: urlString as NSString) {
             DispatchQueue.main.async {
                 imageView.image = cachedImage
+                imageView.enclosingCollectionCell?.setNeedsLayout()   // re-place the ✕
             }
             return
         }
         
         // Reset the image view to a placeholder while loading
         DispatchQueue.main.async {
-            imageView.image = UIImage(named: "pdf")
+            // The SDK's images are in Bundle.module – UIImage(named:) alone looks in the host
+            // app's bundle, finds nothing and leaves the cell blank (seen for a rejected PDF).
+            imageView.image = UIImage(named: "pdf", in: .module, compatibleWith: nil)
+                ?? UIImage(systemName: "doc.richtext")
+            imageView.enclosingCollectionCell?.setNeedsLayout()   // re-place the ✕
             // imageView.image = UIImage(systemName: "pdf") // Placeholder image
         }
         
@@ -6101,7 +6160,16 @@ extension DocumentVC {
                     return
                 }
                 
-                if let data = data, let image = UIImage(data: data) {
+                // A PDF document comes back as PDF data, not an image → draw its first page
+                var downloaded: UIImage? = nil
+                if let data = data {
+                    downloaded = UIImage(data: data)
+                    if downloaded == nil, let pdf = PDFDocument(data: data), let page = pdf.page(at: 0) {
+                        downloaded = page.thumbnail(of: CGSize(width: 300, height: 400), for: .mediaBox)
+                        print("📄 Showing PDF first page as thumbnail")
+                    }
+                }
+                if let image = downloaded {
                     // Cache the image
                     self.imageCache.setObject(
                         image, forKey: urlString as NSString)
@@ -6113,11 +6181,13 @@ extension DocumentVC {
                            imageViewIdentifier == identifier
                         {
                             imageView.image = image
+                            imageView.enclosingCollectionCell?.setNeedsLayout()   // re-place the ✕
                             print(
                                 "Updated image for identifier: \(imageViewIdentifier)"
                             )
                             print("imageUrls.isEmpty:: \(self.imageUrls.isEmpty)")
-                            self.IncomeProof(shouldShow: true) //by sayantan for cams doc image dispaly
+                            // keep the user's collapse/expand choice (was always true → re-opened the box)
+                            self.IncomeProof(shouldShow: self.incomeProofExpanded) //by sayantan for cams doc image dispaly
                         } else {
                             print(
                                 "Mismatch in identifiers or nil identifier for image view."
@@ -6734,7 +6804,8 @@ extension DocumentVC: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        // No blank band above/below the thumbnails (was 10 top + 10 bottom)
+        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     }
     func collectionView(
         _ collectionView: UICollectionView,
@@ -6756,8 +6827,77 @@ extension DocumentVC: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         //let width = 200
-        let height = (collectionView.frame.height - 20) / 1
+        // Same thumbnail size as before (180 pt high) – only the empty space around it is removed
+        let height = min(documentCellHeight, collectionView.frame.height)
         return CGSize(width: 200, height: height)
+    }
+}
+
+// MARK: - Less blank space around the document thumbnails
+extension DocumentVC {
+    /// Thumbnail height that was used before (200 pt collection view – 20 pt insets)
+    var documentCellHeight: CGFloat { 180 }
+
+    /// Collection views were 200 pt high with 10 pt insets top & bottom. Now they are exactly
+    /// as high as the thumbnail, so the image keeps its size and the empty band goes away.
+    func shrinkDocumentCollectionViews() {
+        for cv in [incomeProofCollectionView, BpCollectionView, DICollectionView] {
+            guard let cv = cv else { continue }
+            if let h = cv.constraints.first(where: { $0.firstAttribute == .height && $0.secondItem == nil }) {
+                h.constant = documentCellHeight
+            }
+        }
+    }
+
+    /// Empty message label / Verify area under the thumbnails used to leave ~120 pt of blank
+    /// space. Hide them while they have nothing to show; show them again when they do.
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        compactEmptyRows()
+        tightenCollapsedBoxes()
+    }
+
+    /// A closed box shows only its header row, but kept the 16 pt bottom margin (+ the header's own
+    /// space) → big empty band. Use no bottom margin while only the header is visible.
+    func tightenCollapsedBoxes() {
+        let boxes: [UIStackView?] = [IncomeProof, BankProof, currentSignatureBtn, PANCopy, ClientPhoto, DematImage]
+        for case let box? in boxes {
+            let visibleRows = box.arrangedSubviews.filter { !$0.isHidden }.count
+            let bottom: CGFloat = visibleRows <= 1 ? 0 : 16
+            if box.layoutMargins.bottom != bottom {
+                var margins = box.layoutMargins
+                margins.bottom = bottom
+                box.layoutMargins = margins
+            }
+        }
+    }
+
+    func compactEmptyRows() {
+        let incomeOpen = incomeProofExpanded
+        let bankOpen = !(BPLabel1?.isHidden ?? false)
+        let rows: [(UIView?, Bool, Bool)] = [   // (row, is empty, its box is open)
+            (incomeProofmsg, (incomeProofmsg?.text ?? "").trimmingCharacters(in: .whitespaces).isEmpty, incomeOpen),
+            (bankMsg, (bankMsg?.text ?? "").trimmingCharacters(in: .whitespaces).isEmpty, bankOpen),
+            (IPDocumentView, incomeProofVerifyBtn?.isHidden ?? true, incomeOpen),
+            (BPDocumentView, bankProofVerifyBtn?.isHidden ?? true, bankOpen),
+        ]
+        for (row, isEmpty, boxOpen) in rows {
+            guard let row = row else { continue }
+            let key = ObjectIdentifier(row)
+            if !boxOpen {
+                compactedRows.remove(key)        // collapsed box: leave it to the box's own code
+                continue
+            }
+            if isEmpty && !row.isHidden {
+                row.isHidden = true
+                compactedRows.insert(key)        // hidden by us
+            } else if !isEmpty && row.isHidden && compactedRows.contains(key) {
+                row.isHidden = false             // has content again → show
+                compactedRows.remove(key)
+            } else if !row.isHidden {
+                compactedRows.remove(key)        // the screen's own code shows it
+            }
+        }
     }
 }
 

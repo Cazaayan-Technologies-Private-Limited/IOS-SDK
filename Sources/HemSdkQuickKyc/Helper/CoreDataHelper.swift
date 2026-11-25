@@ -442,64 +442,13 @@ static func fetchUserId(entityName: String, completion: @escaping (String?, Stri
                             completion(false)
                         }
                     case "999993":
-                        
                         print("SessionId Expired. Error Code: \(errorCode)")
-                        
-                        // Handle session expiration
+                        // Shared handler: shows "Session Expired" and logs out inside the SDK.
+                        // (Old code here never showed its alert and replaced the host app's window.)
+                        let message = jsonResponse["ErrorMessage"] as? String
                         DispatchQueue.main.async {
-                            
-                            let alertController = UIAlertController(title: "Session Expired",
-                                                                    message: "Your session has expired. Please log in again.",
-                                                                    preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-                                // Clear stored user data or session tokens
-                                UserDefaults.standard.set(false, forKey: "isLoggedIn")
-                                UserDefaults.standard.removeObject(forKey: "EmailAddress")
-                                UserDefaults.standard.removeObject(forKey: "UserType")
-                                UserDefaults.standard.removeObject(forKey: "userId")
-                                UserDefaults.standard.removeObject(forKey: "loginName")
-                                UserDefaults.standard.removeObject(forKey: "BranchCode")
-                                CoreDataHelper.deleteAllUserIds(entityName: "MobileUser")
-                                
-                                // Navigate to login screen
-                                let storyboard = UIStoryboard(name: "DashboardVC", bundle: Bundle.module)
-                                if let loginVC = storyboard.instantiateViewController(withIdentifier: "NewAccountVC") as? NewAccountVC {
-                                    
-                                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                       let window = windowScene.windows.first {
-                                        
-                                        window.rootViewController = loginVC
-                                        UIView.transition(
-                                            with: window,
-                                            duration: 0.5,
-                                            options: .transitionFlipFromRight,
-                                            animations: nil
-                                        )
-                                        window.makeKeyAndVisible()
-                                    }
-                                }
-                                
-                                completion(false)
-                            }
-                            
-                            alertController.addAction(okAction)
-                            
-                            // ✅ INLINE top-most VC detection
-                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                               let window = windowScene.windows.first {
-
-                                let storyboard = UIStoryboard(name: "DashboardVC", bundle: Bundle.module)
-                                if let loginVC = storyboard.instantiateViewController(withIdentifier: "NewAccountVC") as? NewAccountVC {
-
-                                    let navController = UINavigationController(rootViewController: loginVC)
-                                    navController.navigationBar.isHidden = true
-
-                                    window.rootViewController = navController
-                                    window.makeKeyAndVisible()
-                                }
-                            } else {
-                                print("❌ Unable to find window to present alert")
-                            }
+                            SessionExpiryHandler.handle(message: message)
+                            completion(false)
                         }
                     default:
                         print("Unhandled error code: \(errorCode)")

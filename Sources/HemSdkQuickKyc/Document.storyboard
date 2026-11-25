@@ -3212,9 +3212,11 @@
                                                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
-                                                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VaU-03-nXr">
-                                                                                <rect key="frame" x="153" y="2.5" width="75" height="35"/>
-                                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VaU-03-nXr">
+                                                                                <rect key="frame" x="170" y="2" width="50" height="46"/>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="width" constant="50" id="sG1-wd-50a"/>
+                                                                                </constraints>
                                                                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
                                                                                 <color key="tintColor" systemColor="systemGreenColor"/>
                                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -3236,6 +3238,9 @@
                                                                             <constraint firstItem="FnT-C8-let" firstAttribute="leading" secondItem="YU9-18-qON" secondAttribute="leading" constant="8" id="BGK-n9-L5t"/>
                                                                             <constraint firstAttribute="bottom" secondItem="b8u-XO-nIv" secondAttribute="bottom" id="CIk-9d-qXT"/>
                                                                             <constraint firstAttribute="height" constant="50" id="OJ6-JO-Vih"/>
+                                                                            <constraint firstItem="VaU-03-nXr" firstAttribute="top" secondItem="YU9-18-qON" secondAttribute="top" constant="2" id="sG2-tp-02a"/>
+                                                                            <constraint firstAttribute="bottom" secondItem="VaU-03-nXr" secondAttribute="bottom" constant="2" id="sG3-bt-02a"/>
+                                                                            <constraint firstItem="VaU-03-nXr" firstAttribute="leading" secondItem="FnT-C8-let" secondAttribute="trailing" constant="20" id="sG4-ld-20a"/>
                                                                             <constraint firstAttribute="trailing" secondItem="b8u-XO-nIv" secondAttribute="trailing" constant="8" id="cNv-8H-fRk"/>
                                                                             <constraint firstItem="FnT-C8-let" firstAttribute="top" secondItem="YU9-18-qON" secondAttribute="top" id="d4b-FD-hu7"/>
                                                                             <constraint firstItem="b8u-XO-nIv" firstAttribute="top" secondItem="YU9-18-qON" secondAttribute="top" id="o7q-VE-KE8"/>

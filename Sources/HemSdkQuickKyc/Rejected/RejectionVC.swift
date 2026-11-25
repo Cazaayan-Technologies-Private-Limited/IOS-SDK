@@ -51,6 +51,7 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
                 self.decodeArray = decodeByteArrayString
                 print("UserID: \(userId), SessionID: \(sessionID)")
                 self.SIXTHAPI()
+                self.ValidateToken()        // session check (e.g. logged in on another device)
             } else {
                 print("No UserID or SessionID found.")
             }
@@ -58,6 +59,15 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
         view.backgroundColor = .appBackground
         setupRejectionList()
         submitBtn.isHidden = true   // shown only when every item is rectified
+    }
+    
+    private var hasAppearedOnce = false
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if hasAppearedOnce, fetchedUserId != nil {
+            ValidateToken()                 // came back from Bank / Documents → session still valid?
+        }
+        hasAppearedOnce = true
     }
     
     // MARK: - Rejection list UI
@@ -173,7 +183,15 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
     
     @objc private func rectifyTapped(_ sender: UIButton) {
         guard sender.tag < rejectionList.count else { return }
-        let name = itemName(rejectionList[sender.tag])
+        // Session check first – if the session expired, the shared handler shows
+        // "Session Expired" and the screen is not opened
+        let tag = sender.tag
+        ValidateToken { [weak self] in self?.openRectifyItem(at: tag) }
+    }
+    
+    private func openRectifyItem(at index: Int) {
+        guard index < rejectionList.count else { return }
+        let name = itemName(rejectionList[index])
         itemBeingRectified = name
         
         switch name {
@@ -197,6 +215,7 @@ class RejectionVC: UIViewController ,@MainActor ReloadPageDelegate, @MainActor d
         let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
         guard let vc = storyboard.instantiateViewController(withIdentifier: "UPIVC") as? UPIVC else {
             print("❌ UPIVC not found in Bank.storyboard")
+            showAlert(message: "Unable to open the Bank Details screen. Please try again." + bankRef("RejectionVC", "UPIVC not found"))
             return
         }
         let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
@@ -468,7 +487,7 @@ extension RejectionVC{
         }
     }
     
-    func ValidateToken(){
+    func ValidateToken(onValid: (@MainActor @Sendable () -> Void)? = nil, retried: Bool = false){
         CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { [self] tokenId in
             guard let tokenId = tokenId else {
                 // Handle the case where no tokens are available
@@ -480,7 +499,7 @@ extension RejectionVC{
                 ) { success in
                     if success {
                         // Retry SIXTHAPI after token regeneration
-                        self.ValidateToken()
+                        self.ValidateToken(onValid: onValid, retried: retried)
                     } else {
                         print("Token generation failed.")
                     }
@@ -504,13 +523,37 @@ extension RejectionVC{
                         case "000000":
                             DispatchQueue.main.async {
                                 print("api is running")
+                                onValid?()
+                            }
+                        case "000001", "999992":
+                            // Token not valid any more (old/used token, or logged in on another device).
+                            // Get a fresh token once: GenerateToken answers 999993 if the session itself
+                            // is gone → apiCall shows "Session Expired". Otherwise continue as before.
+                            print("ValidateToken \(errorCode) → refreshing token (retried: \(retried))")
+                            guard !retried else { DispatchQueue.main.async { onValid?() }; return }
+                            DispatchQueue.main.async {
+                                CoreDataHelper.deleteAllTokens(entityName: "TokenMobile")
+                                CoreDataHelper.generateToken(
+                                    decodeByteArrayToString: self.decodeArray ?? "",
+                                    USERID: self.fetchedUserId ?? "",
+                                    SessionId: self.fetchedSessionID ?? "",
+                                    entityName: "TokenMobile", deviceType: "W", in: self.view
+                                ) { success in
+                                    if success {
+                                        self.ValidateToken(onValid: onValid, retried: true)
+                                    } else {
+                                        print("Token generation failed.")
+                                    }
+                                }
                             }
                         default:
                             print("Unhandled error code: \(errorCode)")
+                            DispatchQueue.main.async { onValid?() }     // same as before: don't block
                         }
                     }
                 case .failure(let error):
                     print("Login API call failed: \(error.localizedDescription)")
+                    DispatchQueue.main.async { onValid?() }             // same as before: don't block
                 }
             }
         }

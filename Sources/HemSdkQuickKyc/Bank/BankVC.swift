@@ -166,7 +166,7 @@ class BankVC: UIViewController, UITextFieldDelegate, @MainActor ReloadPageDelega
                 self.ValidateToken()
             } else {
                 print("No UserID or SessionID found.")
-                self.showBankAlert(message: "Your session details could not be found. Please log in again.")
+                self.showBankAlert(message: "Your session details could not be found. Please log in again." + self.bankRef("BankVC", "Session"))
             }
         }
     }
@@ -431,7 +431,7 @@ extension BankVC{
         showAlert(message: message) // Use the showAlert function to show the error message
     }
     func showPennyDropAlert() {
-        let alert = UIAlertController(title: "Alert", message: "Bank account could not be verified. Proceed with the same bank account or provide another account details.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Alert", message: "Bank account could not be verified. Proceed with the same bank account or provide another account details." + bankRef("SaveTradingBankDPClientData", "000002"), preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
             
@@ -540,7 +540,7 @@ extension BankVC{
                             
                         case "531009":
                             // Message shown even if ErrorMessage is missing (fallback text)
-                            self.showBankAlert(title: "Message", message: errorMessage) {
+                            self.showBankAlert(title: "Message", message: errorMessage + self.bankRef("SaveTradingBankDPClientData", "531009")) {
                                 // CRASH FIX: there is no "ApplicationForm" storyboard in the SDK
                                 // (and it used bundle: nil + vc!), so tapping OK crashed the app.
                                 if self.rejection == "Rejection" {
@@ -552,7 +552,7 @@ extension BankVC{
                             }
 
                         case "904000":
-                            self.showBankAlert(message: errorMessage)
+                            self.showBankAlert(message: errorMessage + self.bankRef("SaveTradingBankDPClientData", "904000"))
                         default:
                             self.showBankApiError(jsonResponse, api: "SaveTradingBankDPClientData",
                                                   fallback: "We could not save your bank details. Please try again.")
@@ -603,39 +603,39 @@ extension BankVC{
                                     self.MICRTF.isEnabled = true
                                     
                                     if (self.micr ?? "").trimmingCharacters(in: .whitespaces).isEmpty {
-                                        self.showBankAlert(message: "MICR code is not available for this IFSC. Please enter the 9-digit MICR code manually.")
+                                        self.showBankAlert(message: "MICR code is not available for this IFSC. Please enter the 9-digit MICR code manually." + self.bankRef("IFSCSearchWithoutBankName", "MICR empty"))
                                     }
                                     
                                    
                                 }
                             } else {
                                 // ❌ BankList is empty - This means IFSC is invalid
-                                self.handleInvalidIFSC()
+                                self.handleInvalidIFSC(errorMessage: "The IFSC code you entered is invalid. Please check and enter a valid IFSC code." + self.bankRef("IFSCSearchWithoutBankName", "BankList empty"))
                             }
                         }
                         
                     case "111111":
                         DispatchQueue.main.async {
-                            self.handleInvalidIFSC(errorMessage: self.bankApiMessage(jsonResponse, fallback: "The IFSC code you entered is invalid. Please check and enter a valid IFSC code."))
+                            self.handleInvalidIFSC(errorMessage: self.bankApiMessage(jsonResponse, fallback: "The IFSC code you entered is invalid. Please check and enter a valid IFSC code.") + self.bankRef("IFSCSearchWithoutBankName", "111111"))
                         }
                         
                     default:
                         DispatchQueue.main.async {
-                            self.handleInvalidIFSC(errorMessage: self.bankApiMessage(jsonResponse, fallback: errorMessage ?? "Invalid IFSC code. Please try again."))
+                            self.handleInvalidIFSC(errorMessage: self.bankApiMessage(jsonResponse, fallback: errorMessage ?? "Invalid IFSC code. Please try again.") + self.bankRef("IFSCSearchWithoutBankName", errorCode))
                         }
                         print("Unhandled error code: \(errorCode)")
                     }
                 } else {
                     // ❌ No ErrorCode in response
                     DispatchQueue.main.async {
-                        self.handleInvalidIFSC(errorMessage: "Invalid IFSC code format")
+                        self.handleInvalidIFSC(errorMessage: "Invalid IFSC code format" + self.bankRef("IFSCSearchWithoutBankName", "No ErrorCode"))
                     }
                 }
             case .failure(let error):
                 self.isIFSCVerified = false
                 print("IFSCSearchWithoutBankName failed: \(error.localizedDescription)")
                 self.showBankAlert(title: "Network Error",
-                                   message: "Failed to verify IFSC code. Please check your connection and try again.")
+                                   message: "Failed to verify IFSC code. Please check your connection and try again." + self.bankRef("IFSCSearchWithoutBankName", "\((error as NSError).code)"))
             }
         }
     }
@@ -916,7 +916,7 @@ extension BankVC{
                                     
                                 } else {
                                     DispatchQueue.main.async {
-                                        self.showAlert(message: "Token refresh failed. Please try again.")
+                                        self.showAlert(message: "Token refresh failed. Please try again." + self.bankRef("RequestCAMS", "999992"))
                                     }
                                 }
                             }

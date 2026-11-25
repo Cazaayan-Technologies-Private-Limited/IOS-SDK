@@ -67,6 +67,10 @@ public class T5Launcher {
     
     @MainActor public static var onSDKClose: (([String: String]) -> Void)?
 
+    /// Values the SDK was opened with (used to log in again after "session expired")
+    @MainActor static var launchTransactionId: String?
+    @MainActor static var launchMobileNumber: String?
+
     
     @MainActor public static func show(
         from presenter: UIViewController,
@@ -76,6 +80,8 @@ public class T5Launcher {
     ) {
         
         self.onSDKClose = onSDKClose
+        self.launchTransactionId = transactionId
+        self.launchMobileNumber = mobileNumber
         
         let storyboard = UIStoryboard(name: "DashboardVC", bundle: Bundle.module)
         

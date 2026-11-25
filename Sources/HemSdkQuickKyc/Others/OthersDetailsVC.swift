@@ -1367,6 +1367,45 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
         
         fatherNameTF.delegate = self
         fatherNameTF.returnKeyType = .done
+        
+        markMandatoryLabels()   // red * on required fields (same as saveNnext validation)
+    }
+    
+    // MARK: - Mandatory "*" on labels
+    
+    /// Labels for the fields checked in saveNnext()
+    private let mandatoryLabelTexts = [
+        "Father Name/Spouse Name",
+        "Marital Status",
+        "Occupation",
+        "Annual Income",
+        "Trading Experience",
+        "Running Account Authorization",
+        "DDPI"
+    ]
+    
+    private func markMandatoryLabels() {
+        markMandatory(in: view)
+    }
+    
+    /// Finds the labels by their text and adds a red " *" (safe to call more than once)
+    private func markMandatory(in root: UIView) {
+        for sub in root.subviews {
+            if let label = sub as? UILabel,
+               let text = label.text,
+               mandatoryLabelTexts.contains(text) {
+                let attributed = NSMutableAttributedString(
+                    string: text,
+                    attributes: [.font: label.font as Any, .foregroundColor: label.textColor ?? UIColor.label]
+                )
+                attributed.append(NSAttributedString(
+                    string: " *",
+                    attributes: [.font: label.font as Any, .foregroundColor: UIColor.systemRed]
+                ))
+                label.attributedText = attributed
+            }
+            markMandatory(in: sub)
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -1431,17 +1470,23 @@ class OtherDetailsVC: UIViewController, @MainActor MaritatlSelectionDelegate ,@M
     }
     
     @IBAction func BackBtn(_ sender: UIButton) {
+        // Back from Personal → "Bank Account Details" (Verify with UPI / Add Bank Manually),
+        // same as Android. Earlier this opened the manual "Bank Details" form (BankVC).
         let storyboard = UIStoryboard(name: "Bank", bundle: Bundle.module)
-        let vc = storyboard.instantiateViewController(identifier: "BankVC") as! BankVC
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "UPIVC") as? UPIVC else {
+            print("❌ UPIVC not found in Bank.storyboard")
+            return
+        }
         let savedPAN = UserDefaults.standard.string(forKey: "PanNo")
         let finalPAN = (savedPAN?.isEmpty == false) ? savedPAN : self.panNo
         
         let regId = UserDefaults.standard.string(forKey: "RegId")
         let regIdFinal = (regId?.isEmpty == false) ? regId : self.regId
         vc.panNo = finalPAN
+        vc.PanNo = finalPAN
         vc.regId = regIdFinal
+        vc.RegId = regIdFinal
         self.navigationController?.pushViewController(vc, animated: true)
-        
     }
     
     @IBAction func annualIncomebtn(_ sender: UIButton) {
@@ -2260,6 +2305,29 @@ extension OtherDetailsVC{
                 print("No matching education name found for ID: \(annualIDString)")
             }
         }
+        
+        // Restore saved values when coming back to this screen. Earlier Marital Status and
+        // Trading Experience were never read from ViewOtherData, so they showed empty.
+        // Values may come as Int or String (e.g. "Marital_Status": 1, "InvestmentExperience": 0).
+        func value(_ key: String) -> String? {
+            if let s = response[key] as? String { return s.trimmingCharacters(in: .whitespaces) }
+            if let n = response[key] as? NSNumber { return n.stringValue }
+            return nil
+        }
+        let hasSavedData = !(value("FatherSpouseName") ?? "").isEmpty
+        
+        if let status = value("Marital_Status"), status == "1" || status == "2" {
+            maritalStatus = status
+        }
+        if hasSavedData, let experience = value("InvestmentExperience"), !experience.isEmpty {
+            // 0…30 are valid choices; only restored when the form was saved before
+            tradingExperience = experience
+            TradingExperienceBtn.setTitle(experience, for: .normal)
+        }
+        if let savedDDPI = value("DDPI") ?? value("IsDDPI"), savedDDPI == "Y" || savedDDPI == "N" {
+            ddpi = savedDDPI
+        }
+        print("↩️ Restored – Marital: \(maritalStatus ?? "nil"), TradingExp: \(tradingExperience ?? "nil"), DDPI: \(ddpi ?? "nil")")
         
         if maritalStatus == "1" {
             marriedBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)

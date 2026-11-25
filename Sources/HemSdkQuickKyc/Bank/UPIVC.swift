@@ -47,6 +47,12 @@ class UPIVC: UIViewController {
     weak var delegate: ReloadPageDelegate?
     private var isRejectionFlow: Bool { rejection == "Rejection" }
     
+    /// true while ValidateIsReversePennyDropDone is running (prevents a double call)
+    private var isValidatingRPD = false
+    
+    /// Message shown when the ₹1 UPI verification (reverse penny drop) did not succeed
+    private let rpdFailedMessage = "Bank verification through UPI was not successful. Please try again, or choose \"Add Bank Manually\" to continue."
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -92,7 +98,7 @@ class UPIVC: UIViewController {
                 SIXTHAPI(userID: fetchedUserId ?? "")
             } else {
                 print("No UserID or SessionID found.")
-                self.showBankAlert(message: "Your session details could not be found. Please log in again.")
+                self.showBankAlert(message: "Your session details could not be found. Please log in again." + self.bankRef("UPIVC", "Session"))
             }
         }
         continueBtn.layer.cornerRadius = 10
@@ -133,6 +139,10 @@ class UPIVC: UIViewController {
         
         // Check if we have a pending payment to verify
         if let upiLink = upiLink, !upiLink.isEmpty {
+            guard !isValidatingRPD else {
+                print("⏳ RPD validation already running – skipped")
+                return
+            }
             print("✅ Pending payment detected, validating...")
             // Directly call startUpi to validate payment
             startUpi()
@@ -267,6 +277,7 @@ class UPIVC: UIViewController {
                 self.getUpiDetails()
             } else {
                 print("No UserID or SessionID found.")
+                self.showBankAlert(message: "Your session details could not be found. Please log in again." + self.bankRef("UPIVC", "Session"))
             }
         }
     }
@@ -315,6 +326,12 @@ class UPIVC: UIViewController {
                             print("✅ Stored TxnId: \(self.reversePennyDropTxnId ?? "nil")")
                             print("✅ Stored Id: \(self.reversePennyDropId ?? "nil")")
                             
+                            // Without the transaction id the RPD result can never be validated
+                            if (self.reversePennyDropTxnId ?? "").isEmpty {
+                                self.showBankMissingData(jsonResponse, api: "RequestToReversePennyDrop", field: "transactionid")
+                                return
+                            }
+                            
                             DispatchQueue.main.async {
                                 if let upiLink = jsonResponse["UpiLink"] as? String {
                                     print("UPI LINK = \(upiLink)")
@@ -327,7 +344,7 @@ class UPIVC: UIViewController {
                                     } else {
                                         self.showAlert(
                                             title: "Invalid UPI Link",
-                                            message: "Received invalid UPI URL from server."
+                                            message: "Received invalid UPI URL from server." + self.bankRef("RequestToReversePennyDrop", "UpiLink")
                                         )
                                     }
                                 } else {
@@ -385,8 +402,10 @@ class UPIVC: UIViewController {
             ]
             print(parameters)
             let Url = "PennyDrop/ValidateIsReversePennyDropDone"
+            self.isValidatingRPD = true
             
             apiCall(url: Url, method: "POST", parameters: parameters as [String : Any], view: self.view) { result in
+                self.isValidatingRPD = false
                 switch result {
                 case .success(let jsonResponse):
                     print("ValidateIsReversePennyDropDone Response: \(jsonResponse)")
@@ -403,13 +422,21 @@ class UPIVC: UIViewController {
                                        return
                                    }
 
-                                   // Refresh latest status from API
-                                   self.SIXTHAPI(userID: self.fetchedUserId ?? "")
+                                   // Refresh latest status from API.
+                                   // afterRPD: true → if the bank is still not APPROVED, tell the user.
+                                   self.upiLink = nil
+                                   self.SIXTHAPI(userID: self.fetchedUserId ?? "", afterRPD: true)
                                }
                         default:
-                            self.showBankApiError(jsonResponse, api: "ValidateIsReversePennyDropDone")
+                            // RPD failed / not done → clear the pending link (so it is not re-checked
+                            // on every app switch), re-enable the options and show the reason.
+                            self.upiLink = nil
+                            self.enableBankOptions()
+                            self.showBankApiError(jsonResponse, api: "ValidateIsReversePennyDropDone", fallback: self.rpdFailedMessage)
                         }
                     } else {
+                        self.upiLink = nil
+                        self.enableBankOptions()
                         self.showBankMissingCode(jsonResponse, api: "ValidateIsReversePennyDropDone")
                     }
                 case .failure(let error):
@@ -419,7 +446,7 @@ class UPIVC: UIViewController {
         }
     }
  
-    func SIXTHAPI(userID:String){
+    func SIXTHAPI(userID:String, afterRPD: Bool = false){
             CoreDataHelper.fetchAndRemoveFirstToken(entityName: "TokenMobile") { tokenId in
                 guard let tokenId = tokenId else {
                     CoreDataHelper.generateToken(
@@ -429,7 +456,7 @@ class UPIVC: UIViewController {
                         entityName: "TokenMobile", deviceType: "W", in: self.view
                     ) { success in
                         if success {
-                            self.SIXTHAPI(userID: userID)
+                            self.SIXTHAPI(userID: userID, afterRPD: afterRPD)
                         } else {
                             self.showBankTokenError(api: #function)
                         }
@@ -448,6 +475,9 @@ class UPIVC: UIViewController {
                     switch result {
                     case .success(let jsonResponse):
                         print("GetActiveApplicationCL: \(jsonResponse)")
+                        if afterRPD {
+                            print("🔎 [RPD] status after verification – BankDpTradStatus: \(jsonResponse["BankDpTradStatus"] as? String ?? "nil"), IsPennyDrop: \(jsonResponse["IsPennyDrop"] as? String ?? "nil")")
+                        }
                         
                         let bankDpTradStatus = jsonResponse["BankDpTradStatus"] as? String ?? ""
                         self.isDerivative = jsonResponse["IsDerivative"] as? String ?? ""
@@ -468,7 +498,7 @@ class UPIVC: UIViewController {
                                     print("All TokenMobile entries deleted due to error code 999992")
                                     CoreDataHelper.generateToken(decodeByteArrayToString: self.mobiledecodeArray ?? "", USERID: userID, SessionId: self.fetchedSessionID ?? "", entityName: "TokenMobile", deviceType: "W",in: self.view) { success in
                                         if success {
-                                            self.SIXTHAPI(userID: userID)
+                                            self.SIXTHAPI(userID: userID, afterRPD: afterRPD)
                                         } else {
                                             self.showBankTokenError(api: #function)
                                         }
@@ -494,7 +524,7 @@ class UPIVC: UIViewController {
                                     else if bankDpTradStatus.uppercased() == "APPROVED" {
                                         self.addBankBtn.isEnabled = false
                                         self.payButton.isEnabled = false
-                                        self.addBankBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
+                                        self.showAddBankManuallySelected()
                                         self.continueBtn.isHidden = false
                                         self.continueBtn.tag = 1
                                     }
@@ -505,7 +535,7 @@ class UPIVC: UIViewController {
                                             self.camsClickCount == "1" {
                                         self.addBankBtn.isEnabled = false
                                         self.payButton.isEnabled = false
-                                        self.addBankBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
+                                        self.showAddBankManuallySelected()
                                         self.continueBtn.isHidden = false
                                         self.continueBtn.tag = 2
                                     }
@@ -516,9 +546,21 @@ class UPIVC: UIViewController {
                                             self.camsClickCount == "2" {
                                         self.addBankBtn.isEnabled = false
                                         self.payButton.isEnabled = false
-                                        self.addBankBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
+                                        self.showAddBankManuallySelected()
                                         self.continueBtn.isHidden = false
                                         self.continueBtn.tag = 3
+                                    }
+                                    
+                                    // Came back from the UPI app and the bank is still not approved
+                                    // → RPD did not succeed. Earlier nothing was shown here.
+                                    if afterRPD && bankDpTradStatus.uppercased() != "APPROVED" {
+                                        if !self.continueBtn.isHidden {
+                                            // CAMS cases: options are locked, Continue is the way forward
+                                            self.showBankAlert(message: "Bank verification through UPI was not successful. Please tap Continue to proceed." + self.bankRef("RPD", "BankDpTradStatus \(bankDpTradStatus.isEmpty ? "empty" : bankDpTradStatus)"))
+                                        } else {
+                                            self.enableBankOptions()
+                                            self.showBankAlert(message: self.rpdFailedMessage + self.bankRef("RPD", "BankDpTradStatus \(bankDpTradStatus.isEmpty ? "empty" : bankDpTradStatus)"))
+                                        }
                                     }
                                 }
                                 
@@ -657,7 +699,7 @@ class UPIVC: UIViewController {
                                         
                                     } else {
                                         DispatchQueue.main.async {
-                                            self.showAlert(title: "Alert", message: "Token refresh failed. Please try again.")
+                                            self.showAlert(title: "Alert", message: "Token refresh failed. Please try again." + self.bankRef("RequestCAMS", "999992"))
                                         }
                                     }
                                 }
@@ -676,6 +718,36 @@ class UPIVC: UIViewController {
     
     func showAlert(title: String, message: String) {
         showBankAlert(title: title, message: message)
+    }
+    
+    /// Opens the chosen UPI app; shows an alert if iOS could not open it.
+    private func openUPIApp(_ url: URL) {
+        UIApplication.shared.open(url) { [weak self] opened in
+            guard !opened, let self = self else { return }
+            print("❌ Could not open UPI app: \(url.scheme ?? "")")
+            self.upiLink = nil
+            self.showBankAlert(message: "Unable to open the selected UPI app. Please try another UPI app or choose \"Add Bank Manually\"." + self.bankRef("UPI app", url.scheme ?? ""))
+        }
+    }
+    
+    /// Bank already added (manually) → only "Add Bank Manually" is shown as selected,
+    /// "Verify with UPI" is un-selected (same as Android). Earlier both radios looked selected.
+    private func showAddBankManuallySelected() {
+        upiBtn.isSelected = false
+        upiBtn.setImage(UIImage(systemName: "circle"), for: .normal)
+        addBankBtn.setImage(UIImage(systemName: "circle.circle.fill"), for: .normal)
+        addBankBtn.layer.borderWidth = 1          // bordered box like Android
+        addBankBtn.layer.borderColor = UIColor.appBorder.cgColor
+        addBankBtn.layer.cornerRadius = 10
+        // Inner space so the radio icon doesn't touch the border (button has no configuration,
+        // so the legacy insets are used; iOS 15+ only marks this as deprecated)
+        addBankBtn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    }
+    
+    /// Lets the user retry UPI or choose "Add Bank Manually" again.
+    private func enableBankOptions() {
+        payButton.isEnabled = true
+        addBankBtn.isEnabled = true
     }
     
     //    func openUPIApps(upiLink: String) {
@@ -796,7 +868,7 @@ class UPIVC: UIViewController {
                 print("✅ Working Google Pay URL:", gpayURL)
                 alert.addAction(
                     UIAlertAction(title: "Google Pay", style: .default) { _ in
-                        UIApplication.shared.open(gpayURL)
+                        self.openUPIApp(gpayURL)
                     }
                 )
                 break
@@ -817,7 +889,7 @@ class UPIVC: UIViewController {
                 title: "PhonePe",
                 style: .default
             ) { _ in
-                UIApplication.shared.open(phonepeURL)
+                self.openUPIApp(phonepeURL)
             }
             
             phonepeAction.setValue(
@@ -861,7 +933,7 @@ class UPIVC: UIViewController {
                     title: "Paytm",
                     style: .default
                 ) { _ in
-                    UIApplication.shared.open(paytmURL)
+                    self.openUPIApp(paytmURL)
                 }
 
                 paytmAction.setValue(
@@ -884,7 +956,7 @@ class UPIVC: UIViewController {
                     title: "Amazon Pay",
                     style: .default
                 ) { _ in
-                    UIApplication.shared.open(amazonURL)
+                    self.openUPIApp(amazonURL)
                 }
 
                 alert.addAction(amazonAction)
@@ -902,7 +974,7 @@ class UPIVC: UIViewController {
                     title: "BHIM",
                     style: .default
                 ) { _ in
-                    UIApplication.shared.open(bhimURL)
+                    self.openUPIApp(bhimURL)
                 }
 
                 alert.addAction(bhimAction)
@@ -920,7 +992,7 @@ class UPIVC: UIViewController {
                     title: "CRED",
                     style: .default
                 ) { _ in
-                    UIApplication.shared.open(credURL)
+                    self.openUPIApp(credURL)
                 }
 
                 credAction.setValue(
@@ -932,8 +1004,19 @@ class UPIVC: UIViewController {
             }
             
         }
+        // No UPI app could be opened → earlier an empty sheet (only Cancel) was shown
+        // and the pending link stayed set. Tell the user instead.
+        if alert.actions.isEmpty {
+            self.upiLink = nil
+            showBankAlert(message: "No UPI app was found on this device. Please install a UPI app (Google Pay, PhonePe, Paytm, etc.) or choose \"Add Bank Manually\"." + bankRef("UPI apps", "None found"))
+            return
+        }
+        
         alert.addAction(
-            UIAlertAction(title: "Cancel", style: .cancel)
+            UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+                // User did not pay → don't validate when the app becomes active again
+                self?.upiLink = nil
+            }
         )
         
         // iPad support

@@ -568,6 +568,19 @@ func apiCall(
             }
             do {
                 if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                    // Session check for every screen: GenerateToken (sent with the login SessionId)
+                    // returns 999993 when the session is no longer valid – e.g. the same user
+                    // logged in on another device. This is the only reliable "session expired" signal.
+                    // (ValidateToken 000001 is NOT used: it also happens for an old/used token,
+                    //  e.g. on the PAN screen the first time. Screens refresh the token instead,
+                    //  and the refresh – GenerateToken – tells us if the session is really gone.)
+                    let code = jsonResponse["ErrorCode"] as? String
+                    if url.absoluteString.hasSuffix("TokenAuthentication/GenerateToken")
+                        && SessionExpiryHandler.isSessionExpired(code) {
+                        print("🔒 Session no longer valid (GenerateToken → \(code ?? "nil"))")
+                        SessionExpiryHandler.handle(message: "Your session has expired or you have logged in on another device. Please log in again.")
+                        return      // the screen must not continue with an invalid session
+                    }
                     completion(.success(jsonResponse))
                 } else {
                     let error = NSError(
